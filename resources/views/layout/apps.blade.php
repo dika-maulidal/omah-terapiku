@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Klinik Medishina</title>
+    <title>Omah Terapiku</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/logo.png')}}">
 	<link rel="stylesheet" href="{{asset('vendor/chartist/css/chartist.min.css')}}">
@@ -42,8 +42,13 @@
                 {{-- <h3 class="brand-title">Klinik Medishina</h3> --}}
                 {{-- <h2 class="logo-compact">Klinik Medishina</h2> --}}
                  <img class="logo-abbr" src="{{asset('images/logo.png')}}" alt="">
-                 <img class="logo-compact" src="{{asset('images/logo-text.png')}}" alt=""> 
-                <img class="brand-title" src="{{asset('images/logo-text.png')}}" alt="">  
+                <span class="logo-compact font-w800 font-italic" style="color: #32b893; font-size: 16px;">
+        OT
+    </span>
+                <h3 class="brand-title font-w800 font-italic mb-0" style="font-size: 18px; text-transform: uppercase; letter-spacing: 0.5px;">
+        <span style="color: #000000;">OMAH</span>
+        <span style="color: #32b893;">TERAPIKU</span>
+    </h3>
             </a>
 
             <div class="nav-control">

@@ -87,13 +87,13 @@ class PasienController extends Controller
             $extension = $request->file('file')->getClientOriginalExtension();
             $fileName = $pasien->no_rm.'.'.$extension;
             $request->file('file')->move('images/pasien/',$fileName);
-            $pasien->general_uncent = $fileName;
+            
+            // DIPERBAIKI: general_uncent -> general_consent
+            $pasien->general_consent = $fileName;
             $pasien->save();
         }
 
-
         return redirect()->route('pasien')->with('sukses','Data berhasil ditambahkan');
-
     }
 
     function update(Request $request,$id){
@@ -112,12 +112,13 @@ class PasienController extends Controller
             $extension = $request->file('file')->getClientOriginalExtension();
             $fileName = $data->no_rm.'.'.$extension;
             $request->file('file')->move('images/pasien/',$fileName);
+            
+            // DIPERBAIKI: general_uncent -> general_consent
             $data->update([
-                'general_uncent' => $fileName
+                'general_consent' => $fileName
             ]);
         }
         return redirect()->route('pasien')->with('sukses','Data berhasil diperbaharui');
-
     }
 
     function delete(Request $request,$id)
