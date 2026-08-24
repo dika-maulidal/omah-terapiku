@@ -42,10 +42,10 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-black font-w500">Poli*</label>
+                        <label class="text-black font-w500">Omah Terapiku*</label>
                         <select name="poli" class="form-control">
                             @foreach ($poli as $item)
-                                <option value="{{$item->nama}}" {{$item->nama=='Poli Gigi' ? 'selected' : ''}}>{{$item->nama}}</option>
+                                <option value="{{$item->nama}}">{{$item->nama}}</option>
                             @endforeach
                         </select>
                         @error('poli')
@@ -95,7 +95,7 @@
                                 <th>KODE</th>
                                 <th>Nama Tindakan</th>
                                 <th>Harga</th>
-                                <th>Poli</th>
+                                <th>Omah Terapiku</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -153,7 +153,7 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label class="text-black font-w500">Poli*</label>
+                                                                    <label class="text-black font-w500">Omah Terapiku*</label>
                                                                     <select name="poli" class="form-control">
                                                                         @foreach ($poli as $item)
                                                                             @if ($item->nama == $row->poli)

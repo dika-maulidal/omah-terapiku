@@ -6,14 +6,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\IcdController;
-use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PasienController;
-use App\Http\Controllers\PembayaranController;
-use App\Http\Controllers\PengeluaranObatController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\PoliController;
 use App\Http\Controllers\RekamController;
-use App\Http\Controllers\RekamGigiController;
 use App\Http\Controllers\RekamPemeriksaanController;
 use App\Http\Controllers\TindakanController;
 
@@ -27,16 +23,14 @@ Route::get('test', function () {
 	return "Event has been sent!";
 });
 
-Route::get('/odontogram/{id}', [RekamGigiController::class, 'odontogram'])->name('odontogram');
-
 Route::get('/loaddata', [RekamPemeriksaanController::class, 'insertToTableNew'])->name('loaddata');
 
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/poliklinik', [PoliController::class, 'index'])->name('poli');
-    Route::post('/poliklinik', [PoliController::class, 'store'])->name('poli.store');
-    Route::post('/poliklinik/{id}/update', [PoliController::class, 'update'])->name('poli.update');
-    Route::get('/poliklinik/{id}/delete', [PoliController::class, 'delete'])->name('poli.delete');
+    Route::get('/omahterapiku', [PoliController::class, 'index'])->name('omahterapiku');
+    Route::post('/omahterapiku', [PoliController::class, 'store'])->name('omahterapiku.store');
+    Route::post('/omahterapiku/{id}/update', [PoliController::class, 'update'])->name('omahterapiku.update');
+    Route::get('/omahterapiku/{id}/delete', [PoliController::class, 'delete'])->name('omahterapiku.delete');
 
     Route::get('/getDokter', [DokterController::class, 'getDokter'])->name('getDokter');
 
@@ -50,27 +44,19 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/petugas', [PetugasController::class, 'index'])->name('petugas');
     Route::post('/petugas/store', [PetugasController::class, 'store'])->name('petugas.store');
     Route::post('/petugas/{id}/update', [PetugasController::class, 'update'])->name('petugas.update');
-    Route::get('/petugas/{id}/delete', [DokterController::class, 'delete'])->name('petugas.delete');
+    Route::get('/petugas/{id}/delete', [PetugasController::class, 'delete'])->name('petugas.delete');
 
     Route::get('/getNoRM', [PasienController::class, 'getLastRM'])->name('getNoRM');
 
-    Route::get('/pasien', [PasienController::class, 'index'])->name('pasien');
-    Route::get('/pasien/add', [PasienController::class, 'add'])->name('pasien.add');
-    Route::get('/pasien/{id}/edit', [PasienController::class, 'edit'])->name('pasien.edit');
-    Route::get('/pasien/{id}/delete', [PasienController::class, 'delete'])->name('pasien.delete');
-    Route::get('/pasien/json', [PasienController::class, 'json'])->name('pasien.json');
-    Route::get('/pasien/{id}/file', [PasienController::class, 'file'])->name('pasien.file');
+    Route::get('/penerima-manfaat', [PasienController::class, 'index'])->name('penerima-manfaat');
+    Route::get('/penerima-manfaat/add', [PasienController::class, 'add'])->name('penerima-manfaat.add');
+    Route::get('/penerima-manfaat/{id}/edit', [PasienController::class, 'edit'])->name('penerima-manfaat.edit');
+    Route::get('/penerima-manfaat/{id}/delete', [PasienController::class, 'delete'])->name('penerima-manfaat.delete');
+    Route::get('/penerima-manfaat/json', [PasienController::class, 'json'])->name('penerima-manfaat.json');
+    Route::get('/penerima-manfaat/{id}/file', [PasienController::class, 'file'])->name('penerima-manfaat.file');
 
-    Route::post('/pasien/store', [PasienController::class, 'store'])->name('pasien.store');
-    Route::post('/pasien/{id}/update', [PasienController::class, 'update'])->name('pasien.update');
-
-    Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
-
-    Route::get('/obat/json', [ObatController::class, 'data'])->name('obat.data');
-    Route::get('/obat', [ObatController::class, 'index'])->name('obat');
-    Route::post('/obat/store', [ObatController::class, 'store'])->name('obat.store');
-    Route::post('/obat/{id}/update', [ObatController::class, 'update'])->name('obat.update');
-    Route::get('/obat/{id}/delete', [ObatController::class, 'delete'])->name('obat.delete');
+    Route::post('/penerima-manfaat/store', [PasienController::class, 'store'])->name('penerima-manfaat.store');
+    Route::post('/penerima-manfaat/{id}/update', [PasienController::class, 'update'])->name('penerima-manfaat.update');
 
     Route::get('/icd/json', [IcdController::class, 'data'])->name('icd.data');
     Route::get('/icd', [IcdController::class, 'index'])->name('icd');
@@ -94,27 +80,13 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/rekam/{id}/delete', [RekamController::class, 'delete'])->name('rekam.delete');
     Route::post('/rekam/pasien/{id}/update', [RekamController::class, 'update'])->name('rekam.update');
 
-    Route::get('/rekam/gigi/{id}', [RekamGigiController::class, 'index'])->name('rekam.gigi.add');
-    Route::post('/rekam/gigi/{id}/store', [RekamGigiController::class, 'store'])->name('rekam.gigi.store');
-    Route::get('/rekam/gigi/{id}/delete', [RekamGigiController::class, 'delete'])->name('rekam.gigi.delete');
-    Route::get('/rekam/gigi/{id}/odontogram', [RekamGigiController::class, 'odontogram'])->name('rekam.gigi.odontogram');
-
     Route::post('/rekam/pemeriksaan/update', [RekamPemeriksaanController::class, 'pemeriksaan'])->name('pemeriksaan.update');
     Route::post('/rekam/tindakan/update', [RekamPemeriksaanController::class, 'tindakan'])->name('tindakan.update');
     Route::post('/rekam/diagnosa/update', [RekamPemeriksaanController::class, 'diagnosa'])->name('diagnosa.update');
-    Route::post('/rekam/resep-obat/update', [RekamPemeriksaanController::class, 'resep'])->name('resep.update');
 
     Route::get('/rekam/diagnosa/delete/{id}', [RekamPemeriksaanController::class, 'diagnosa_delete'])->name('rekam.diagnosa.delete');
 
     Route::get('/rekam/status/{id}/{status}/update', [RekamController::class, 'rekam_status'])->name('rekam.status');
-
-
-    Route::get('/rekam/pasien/resep', [RekamController::class, 'detail'])->name('rekam.upload');
-
-    Route::get('/obat/resep', [PengeluaranObatController::class, 'resep'])->name('obat.resep');
-    Route::get('/obat/resep/pengeluaran/{id}', [PengeluaranObatController::class, 'pengeluaran'])->name('obat.pengeluaran');
-    Route::post('/obat/pengeluaran/store', [PengeluaranObatController::class, 'store'])->name('obat.pengeluaran.store');
-    Route::get('/obat/riwayat', [PengeluaranObatController::class, 'riwayat'])->name('obat.riwayat');
 
 
     Route::get('/rekam/file/{id}/{type}', [RekamPemeriksaanController::class, 'file'])->name('pem.file');

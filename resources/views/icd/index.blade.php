@@ -57,10 +57,10 @@
     <div class="col-xl-12">
         <div class="card">
             <div class="card-body">
-                {{-- <div class="form-group col-lg-6" style="float: left">
+                <div class="form-group col-lg-6" style="float: left">
                     <a href="javascript:void(0)" class="btn btn-primary mr-3" data-toggle="modal" data-target="#addOrderModal">+Tambah ICD</a>
 
-                </div> --}}
+                </div>
                 <div class="form-group col-lg-6" style="float: right">
                     <form method="get" action="{{ url()->current() }}">
                         <div class="input-group">
@@ -84,7 +84,7 @@
                                 <th>Kode</th>
                                 <th>Nama (Ind)</th>
                                 <th>Nama (Eng)</th>
-                                {{-- <th>Aksi</th> --}}
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -94,7 +94,7 @@
                                     <td>{{$row->code}}</td>
                                     <td>{{$row->name_id}}</td>
                                     <td>{{$row->name_en}}</td>
-                                    {{-- <td>
+                                    <td>
                                         <div class="d-flex">
                                             <a href="javascript:void(0)" data-toggle="modal" data-target="#editPoli{{$row->code}}" 
                                                 class="btn btn-primary shadow btn-xs sharp mr-1"><i class="fa fa-pencil"></i></a>
@@ -134,7 +134,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </td> --}}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

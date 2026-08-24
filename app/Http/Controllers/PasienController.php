@@ -9,7 +9,6 @@ use DataTables;
 // use Image;
 use App\Models\Rekam;
 use App\Models\RekamGigi;
-use App\Models\PengeluaranObat;
 
 class PasienController extends Controller
 {
@@ -18,6 +17,9 @@ class PasienController extends Controller
         // return DataTables::of(Icd::query())->toJson();
         if ($request->ajax()) {
             return DataTables::of(Pasien::query())
+                    ->editColumn('cara_bayar', function () {
+                        return 'Gratis, tidak dipungut biaya';
+                    })
                     ->addColumn('action',function($data){
                         $button = '<a href="javascript:void(0)" 
                             data-id="'.$data->id.'"
@@ -31,6 +33,9 @@ class PasienController extends Controller
                     ->toJson();
         }
         return DataTables::of(Pasien::query())
+        ->editColumn('cara_bayar', function () {
+            return 'Gratis, tidak dipungut biaya';
+        })
         ->addColumn('action',function($data){
             $button = '<a href="javascript:void(0)" 
                 data-id="'.$data->id.'"
@@ -74,12 +79,12 @@ class PasienController extends Controller
         $this->validate($request,[
             'nama' => 'required',
             'no_hp' => 'required',
-            'cara_bayar' => 'required',
             'jk' => 'required',
             'no_rm' => 'required|unique:pasien',
             'no_bpjs' => 'unique:pasien'
         ]);
 
+        $request->merge(['cara_bayar' => 'Gratis']);
         $pasien = Pasien::create($request->all());
         if ($request->hasFile('file')) {
             $originName = $request->file('file')->getClientOriginalName();
@@ -93,7 +98,7 @@ class PasienController extends Controller
             $pasien->save();
         }
 
-        return redirect()->route('pasien')->with('sukses','Data berhasil ditambahkan');
+        return redirect()->route('penerima-manfaat')->with('sukses','Data berhasil ditambahkan');
     }
 
     function update(Request $request,$id){
@@ -101,10 +106,10 @@ class PasienController extends Controller
             'nama' => 'required',
             'no_hp' => 'required',
             'jk' => 'required',
-            'cara_bayar' => 'required',
             'file' => 'mimes:jpg,png,jpeg'
         ]);
         $data = Pasien::find($id);
+        $request->merge(['cara_bayar' => 'Gratis']);
         $data->update($request->all());
         if ($request->hasFile('file')) {
             $originName = $request->file('file')->getClientOriginalName();
@@ -118,7 +123,7 @@ class PasienController extends Controller
                 'general_consent' => $fileName
             ]);
         }
-        return redirect()->route('pasien')->with('sukses','Data berhasil diperbaharui');
+        return redirect()->route('penerima-manfaat')->with('sukses','Data berhasil diperbaharui');
     }
 
     function delete(Request $request,$id)
@@ -128,9 +133,8 @@ class PasienController extends Controller
        if($suk){
             Rekam::where('pasien_id',$id)->delete();
             RekamGigi::where('pasien_id',$id)->delete();
-            PengeluaranObat::where('pasien_id',$id)->delete();
        }
-        return redirect()->route('pasien')->with('sukses','Data berhasil dihapus');
+        return redirect()->route('penerima-manfaat')->with('sukses','Data berhasil dihapus');
     } 
 
     function getLastRM(Request $request)

@@ -26,9 +26,16 @@
                         style="display: block;">{{$message}}</div>
                         @enderror
                     </div>
+                    <div class="form-group">
+                        <label class="text-black font-w500">NIP (Login)*</label>
+                        <input type="text" name="nip" required class="form-control">
+                        @error('nip')
+                        <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                        @enderror
+                    </div>
                     
                     <div class="form-group">
-                        <label class="text-black font-w500">No HP (Login)*</label>
+                        <label class="text-black font-w500">No HP</label>
                         <input type="text" name="phone" required class="form-control">
                         @error('phone')
                         <div class="invalid-feedback animated fadeInUp"
@@ -49,7 +56,6 @@
                         <select name="role" class="form-control">
                             <option value="1">Admin</option>
                             <option value="2">Pendaftaran</option>
-                            <option value="4">Apotek</option>
                         </select>
                         @error('role')
                         <div class="invalid-feedback animated fadeInUp"
@@ -96,6 +102,7 @@
                                 
                                 <th>No</th>
                                 <th>Nama</th>
+                                <th>NIP</th>
                                 <th>No. HP</th>
                                 <th>Role</th>
                                 <th>Status</th>
@@ -109,6 +116,7 @@
                                         {{$key+1}}
                                     </td>
                                     <td>{{$row->name}}</td>
+                                    <td>{{$row->nip ?: '-'}}</td>
                                     <td>{{$row->phone}}</td>
                                     <td>{{$row->role_display()}}</td>
                                     <td>{{$row->status_display()}}</td>
@@ -182,9 +190,16 @@
                                                                     style="display: block;">{{$message}}</div>
                                                                     @enderror
                                                                 </div>
+                                                                <div class="form-group">
+                                                                    <label class="text-black font-w500">NIP (Login)*</label>
+                                                                    <input type="text" name="nip" value="{{$row->nip}}" required class="form-control">
+                                                                    @error('nip')
+                                                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                                                    @enderror
+                                                                </div>
                                                                 
                                                                 <div class="form-group">
-                                                                    <label class="text-black font-w500">No HP (Login)*</label>
+                                                                    <label class="text-black font-w500">No HP</label>
                                                                     <input type="text" name="phone" required class="form-control" value="{{$row->phone}}">
                                                                     @error('phone')
                                                                     <div class="invalid-feedback animated fadeInUp"
@@ -197,7 +212,6 @@
                                                                     <select name="role" class="form-control">
                                                                         <option value="1" {{$row->role==1 ? 'selected' : ''}}>Admin</option>
                                                                         <option value="2" {{$row->role==2 ? 'selected' : ''}}>Petugas Registrasi</option>
-                                                                        <option value="4" {{$row->role==4 ? 'selected' : ''}}>Apotek</option>
                                                                     </select>
                                                                     @error('role')
                                                                     <div class="invalid-feedback animated fadeInUp"

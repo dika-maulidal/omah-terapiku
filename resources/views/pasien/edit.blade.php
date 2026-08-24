@@ -4,8 +4,8 @@
     <div class="mr-auto">
         <h2 class="text-black font-w600">Edit Pasien</h2>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{Route('pasien')}}">Data Pasien</a></li>
-            <li class="breadcrumb-item active"><a href="#">Edit Data Pasein</a></li>
+            <li class="breadcrumb-item"><a href="{{Route('penerima-manfaat')}}">Data Penerima Manfaat</a></li>
+            <li class="breadcrumb-item active"><a href="#">Edit Data Penerima Manfaat</a></li>
         </ol>
     </div>
 </div>
@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="basic-form">
-                    <form action="{{Route('pasien.update',$data->id)}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{Route('penerima-manfaat.update',$data->id)}}" method="POST" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">No.RM*</label>
@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Nama Pasien*</label>
+                            <label class="col-sm-2 col-form-label">Nama Penerima Manfaat*</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="nama" required 
                                 value="{{old('nama') ? old('nama') : $data->nama}}">
@@ -231,22 +231,11 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Cara Bayar *</label>
+                            <label class="col-sm-2 col-form-label">Layanan</label>
                             <div class="col-sm-4">
-                                <div class="form-check">
-                                    <input type="radio" name="cara_bayar" class="form-check-input" 
-                                    value="Umum/Mandiri" {{$data->cara_bayar=="Umum/Mandiri" ? 'checked' : ''}}>
-                                    <label class="form-check-label">Umum/Mandiri</label>     
+                                <div class="alert alert-success mb-0" role="alert">
+                                    Layanan terapi gratis dan tidak dipungut biaya.
                                 </div>
-                                <div class="form-check">
-                                    <input type="radio" name="cara_bayar" class="form-check-input"
-                                    value="Jaminan Kesehatan" {{$data->cara_bayar=="Jaminan Kesehatan" ? 'checked' : ''}}>
-                                    <label class="form-check-label">Jaminan Kesehatan</label>   
-                                </div>
-                                @error('cara_bayar')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
-                                @enderror
                             </div>
                             <label class="col-sm-2 col-form-label" id="no_bpjs_label">No. BPJS/KTP</label>
                             <div class="col-sm-4">

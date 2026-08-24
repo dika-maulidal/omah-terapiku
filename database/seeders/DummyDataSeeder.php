@@ -16,6 +16,7 @@ class DummyDataSeeder extends Seeder
             ['email' => 'admin@rekammedis.local'],
             [
                 'name' => 'Administrator',
+                'nip' => '199001012026011001',
                 'phone' => '081234567890',
                 'password' => Hash::make('password'), // password: password
                 'role' => 1,
@@ -28,6 +29,7 @@ class DummyDataSeeder extends Seeder
             ['email' => 'registrasi@rekammedis.local'],
             [
                 'name' => 'Petugas Registrasi',
+                'nip' => '199101012026011002',
                 'phone' => '081234567891',
                 'password' => Hash::make('password'),
                 'role' => 2,
@@ -40,6 +42,7 @@ class DummyDataSeeder extends Seeder
             ['email' => 'dokter@rekammedis.local'],
             [
                 'name' => 'Dokter',
+                'nip' => '199201012026011003',
                 'phone' => '081234567892',
                 'password' => Hash::make('password'),
                 'role' => 3,
@@ -60,16 +63,5 @@ class DummyDataSeeder extends Seeder
             ]
         );
 
-        // 4. Petugas Obat
-        User::updateOrCreate(
-            ['email' => 'obat@rekammedis.local'],
-            [
-                'name' => 'Petugas Obat',
-                'phone' => '081234567893',
-                'password' => Hash::make('password'),
-                'role' => 4,
-                'status' => 1,
-            ]
-        );
     }
 }

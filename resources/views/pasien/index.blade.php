@@ -5,13 +5,13 @@
         <h2 class="text-black font-w600">Data Pasien</h2>
     </div>
     <div>
-        <a href="{{Route('pasien.add')}}" class="btn btn-primary mr-3">+Pasien Baru</a>
+        <a href="{{Route('penerima-manfaat.add')}}" class="btn btn-primary mr-3">+Pasien Baru</a>
         <a href="#" class="btn btn-outline-primary"><i class="las la-calendar-plus scale5 mr-3"></i>Filter Date</a>
 
     </div>
 </div> --}}
 <div class="mr-auto">
-    <h2 class="text-black font-w600">Data Pasien</h2>
+    <h2 class="text-black font-w600">Data Penerima Manfaat</h2>
 </div>
 
 <div class="row">
@@ -19,7 +19,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-group col-lg-6" style="float: left">
-                    <a href="{{Route('pasien.add')}}" class="btn btn-primary mr-3">+Pasien Baru</a>
+                    <a href="{{Route('penerima-manfaat.add')}}" class="btn btn-primary mr-3">+Penerima Manfaat Baru</a>
                 </div>
                 <div class="form-group col-lg-6" style="float: right">
                     <form method="get" action="{{ url()->current() }}">
@@ -41,12 +41,12 @@
                             <tr>
                                 <th>#</th>
                                 <th>No. RM</th>
-                                <th>Nama Pasien</th>
+                                <th>Nama Penerima Manfaat</th>
                                 <th>TTL</th>
                                 <th>Alamat</th>
                                 <th>JK</th>
                                 <th>No. HP</th>
-                                <th>Pengobatan</th>
+                                <th>Status Layanan</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -62,18 +62,16 @@
                                    <td>{{$row->alamat_lengkap}}</td>
                                    <td>{{$row->jk}}</td>
                                    <td>{{$row->no_hp}}</td>
-                                   <td>{{$row->cara_bayar}}
-                                           <br>{{$row->no_bpjs}}
-                                   </td>
+                                   <td>Gratis, tidak dipungut biaya</td>
                                    <td>
                                       {!! $row->statusPasien() !!}
                                    </td>
                                    <td>                                           
                                     <a href="{{Route('rekam.detail',$row->id)}}" class="btn btn-primary shadow btn-xs sharp mr-1">
                                        <i class="fa fa-eye"></i></a>
-                                    <a href="{{Route('pasien.edit',$row->id)}}" class="btn btn-info shadow btn-xs sharp mr-1">
+                                    <a href="{{Route('penerima-manfaat.edit',$row->id)}}" class="btn btn-info shadow btn-xs sharp mr-1">
                                         <i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('pasien.delete',$row->id)}}"
+                                    <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('penerima-manfaat.delete',$row->id)}}"
                                      r-name="{{$row->nama}}" r-id="{{$row->id}}"><i class="fa fa-trash"></i></a>
 
                                </td>

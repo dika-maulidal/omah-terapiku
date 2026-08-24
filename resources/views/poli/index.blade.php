@@ -1,7 +1,7 @@
 @extends('layout.apps')
 @section('content')
 <div class="mr-auto">
-    <h2 class="text-black font-w600">Poliklinik</h2>
+    <h2 class="text-black font-w600">Omah Terapiku</h2>
 </div>
     
 <!-- Add -->
@@ -9,21 +9,28 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Poli Baru</h5>
+                <h5 class="modal-title">Omah Terapiku Baru</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{Route('poli.store')}}" method="POST">
+                <form action="{{Route('omahterapiku.store')}}" method="POST">
                     {{ csrf_field() }}
                     <div class="form-group">
-                        <label class="text-black font-w500">Nama Poli*</label>
+                        <label class="text-black font-w500">Nama Omah Terapiku*</label>
                         <input type="text" name="nama" required class="form-control">
                         @error('nama')
                         <div class="invalid-feedback animated fadeInUp"
                         style="display: block;">{{$message}}</div>
                         @enderror
                        
+                    </div>
+                    <div class="form-group">
+                        <label class="text-black font-w500">Alamat</label>
+                        <textarea name="alamat" class="form-control" rows="3"></textarea>
+                        @error('alamat')
+                        <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                        @enderror
                     </div>
                     
                     <div class="form-group">
@@ -40,7 +47,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-group col-lg-6" style="float: left">
-                    <a href="javascript:void(0)" class="btn btn-primary mr-3" data-toggle="modal" data-target="#addOrderModal">+Tambah Poli</a>
+                    <a href="javascript:void(0)" class="btn btn-primary mr-3" data-toggle="modal" data-target="#addOrderModal">+Tambah Omah Terapiku</a>
 
                 </div>
                 <div class="form-group col-lg-6" style="float: right">
@@ -63,7 +70,8 @@
                             <tr>
                                 
                                 <th>No</th>
-                                <th>Nama Poli</th>
+                                <th>Nama Omah Terapiku</th>
+                                <th>Alamat</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -75,27 +83,32 @@
                                         {{$key+1}}
                                     </td>
                                     <td>{{$row->nama}}</td>
+                                    <td>{{$row->alamat ?: '-'}}</td>
                                     <td>{{$row->status_display()}}</td>
                                     <td>
                                         <div class="d-flex">
                                             <a href="javascript:void(0)" data-toggle="modal" data-target="#editPoli{{$row->id}}" class="btn btn-primary shadow btn-xs sharp mr-1"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('poli.delete',$row->id)}}"
+                                            <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('omahterapiku.delete',$row->id)}}"
                                              r-name="{{$row->nama}}" r-id="{{$row->id}}"><i class="fa fa-trash"></i></a>
 
                                             <div class="modal fade" id="editPoli{{$row->id}}">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title">Edit Poli</h5>
+                                                                    <h5 class="modal-title">Edit Omah Terapiku</h5>
                                                             <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="{{Route('poli.update',$row->id)}}" method="POST">
+                                                            <form action="{{Route('omahterapiku.update',$row->id)}}" method="POST">
                                                                 {{ csrf_field() }}
                                                                 <div class="form-group">
-                                                                    <label class="text-black font-w500">Nama Poli*</label>
+                                                                    <label class="text-black font-w500">Nama Omah Terapiku*</label>
                                                                     <input type="text" name="nama" value="{{$row->nama}}" required class="form-control">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="text-black font-w500">Alamat</label>
+                                                                    <textarea name="alamat" class="form-control" rows="3">{{$row->alamat}}</textarea>
                                                                 </div>
                                                                 
                                                                 <div class="form-group">

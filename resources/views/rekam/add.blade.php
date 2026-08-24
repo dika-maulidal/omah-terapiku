@@ -4,7 +4,7 @@
     <div class="mr-auto">
         <h2 class="text-black font-w600">Rekam Medis Baru</h2>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{Route('pasien')}}">Rekam Medis</a></li>
+            <li class="breadcrumb-item"><a href="{{Route('penerima-manfaat')}}">Rekam Medis</a></li>
             <li class="breadcrumb-item active"><a href="#">Tambah Pasien Periksa</a></li>
         </ol>
     </div>
@@ -28,10 +28,10 @@
                             <tr>
                                 <th>#</th>
                                 <th>No. RM</th>
-                                <th>Nama Pasien</th>
+                                <th>Nama Penerima Manfaat</th>
                                 <th>Tgl Lahir</th>
                                 <th>No. HP</th>
-                                <th>Cara Bayar</th>
+                                <th>Status Layanan</th>
                                 <th>No BPJS/KTP</th>
                             </tr>
                         </thead>
@@ -63,7 +63,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Nama Pasien*</label>
+                            <label class="col-sm-2 col-form-label">Nama Penerima Manfaat*</label>
                             <div class="col-sm-5 ">
                                 <input type="hidden" class="form-control " id="pasien_id"
                                 name="pasien_id" value="{{old('pasien_id')}}">
@@ -82,13 +82,11 @@
                                 style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
-                            <label class="col-sm-2 col-form-label">Cara Bayar*</label>
+                            <label class="col-sm-2 col-form-label">Layanan</label>
                             <div class="col-sm-3">
-                                <select name="cara_bayar" id="cara_bayar" required class="form-control">
-                                    <option value=""></option>
-                                    <option value="Umum/Mandiri" {{old('cara_bayar')=="Umum/Mandiri" ? 'selected' : ''}}>Umum/Mandiri</option>
-                                    <option value="Jaminan Kesehatan" {{old('cara_bayar')=="Jaminan Kesehatan" ? 'selected' : ''}}>Jaminan Kesehatan</option>
-                                </select>
+                                <div class="alert alert-success mb-0" role="alert">
+                                    Gratis, tidak dipungut biaya.
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -102,8 +100,8 @@
                                             <span><i class="mdi mdi-help-circle-outline"></i></span>
                                         </div>
                                         <div class="media-body">
-                                            <p class="mb-0"><i>Jika tidak ada nama pasien / bpjs, silahkan lakukan tambah data dulu.</i>
-                                                <a href="{{Route('pasien.add')}}">  klik disini !!</a>
+                                            <p class="mb-0"><i>Jika nama penerima manfaat belum tersedia, silahkan lakukan tambah data dulu.</i>
+                                                <a href="{{Route('penerima-manfaat.add')}}">  klik disini !!</a>
                                                 </p>
                                         </div>
                                     </div>
@@ -126,10 +124,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Poli Tujuan*</label>
+                            <label class="col-sm-2 col-form-label">Omah Terapiku Tujuan*</label>
                             <div class="col-sm-4">
                                 <select name="poli" id="poli" class="form-control" required>
-                                    <option value="">--Pilih Poli--</option>
+                                    <option value="">--Pilih Omah Terapiku--</option>
                                     @foreach ($poli as $item)
                                         @if (old('poli') == $item->nama)
                                             <option value="{{$item->nama}}" selected>{{$item->nama}}</option>
@@ -182,7 +180,7 @@
             select: false,
             pageLength: 5,
             lengthChange:false ,
-            ajax: "{{ route('pasien.json') }}",
+            ajax: "{{ route('penerima-manfaat.json') }}",
             columns: [
                 {data: 'action', name: 'action'},
                 {data: 'no_rm', name: 'no_rm'},
@@ -219,10 +217,8 @@
         var id = $(this).data('id');
         var nama = $(this).data('nama');
         var no = $(this).data('no');
-        var metode = $(this).data('metode');
         $("#pasien_nama").val(nama);
         $("#pasien_id").val(id);
-        $("#cara_bayar").val(metode).change();
 
         $("#modalPasien").modal('hide');
         

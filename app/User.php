@@ -10,7 +10,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     protected $fillable = [
-        'name', 'email', 'password','phone','email','role','status'
+        'name', 'nip', 'email', 'password', 'phone', 'role', 'status'
     ];
 
     function status_display(){
@@ -27,9 +27,6 @@ class User extends Authenticatable
                 break;
             case 3:
                 return 'Dokter';
-                break;
-            case 4:
-                return 'Apotek';
                 break;
             default:
                 return '';

@@ -19,10 +19,6 @@ class Rekam extends Model
         return $this->tindakan_file != null ? asset('images/pemeriksaan/'.$this->tindakan_file) : null;
     }
 
-    function gigi(){
-      return  RekamGigi::where('rekam_id',$this->id)->get();
-    }
-
     function diagnosa(){
         return  RekamDiagnosa::where('rekam_id',$this->id)->get();
       }
@@ -77,7 +73,7 @@ class Rekam extends Model
             break;
             case 3:
                 return '<span class="badge badge-warning light" style="width:100px">
-                           Di Apotek
+                           Menunggu Pembayaran
                         </span>';
             break;
             case 4:

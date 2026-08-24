@@ -4,7 +4,7 @@
     <div class="mr-auto">
         <h2 class="text-black font-w600">Rekam Medis Baru</h2>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{Route('pasien')}}">Rekam Medis</a></li>
+            <li class="breadcrumb-item"><a href="{{Route('penerima-manfaat')}}">Rekam Medis</a></li>
             <li class="breadcrumb-item active"><a href="#">Tambah Pasien Periksa</a></li>
         </ol>
     </div>
@@ -28,21 +28,19 @@
                             <tr>
                                 <th>#</th>
                                 <th>No. RM</th>
-                                <th>Nama Pasien</th>
+                                <th>Nama Penerima Manfaat</th>
                                 <th>Tgl Lahir</th>
                                 <th>No. HP</th>
-                                <th>Cara Bayar</th>
+                                <th>Status Layanan</th>
                                 <th>No BPJS/KTP</th>
                             </tr>
                         </thead>
-                        
                     </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="row">
     <div class="col-xl-12">
@@ -72,17 +70,17 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Nama Pasien*</label>
-                            <div class="col-sm-5 ">
-                                <input type="hidden" class="form-control " id="pasien_id"
+                            <label class="col-sm-2 col-form-label">Nama Penerima Manfaat*</label>
+                            <div class="col-sm-5">
+                                <input type="hidden" class="form-control" id="pasien_id"
                                 name="pasien_id" value="{{$data->pasien_id}}">
                                 <div class="input-group transparent-append">
                                     <input type="text" id="pasien_nama" class="form-control"
-                                      data-toggle="modal" data-target="#modalPasien" value="{{$data->pasien->nama}}"
+                                      data-toggle="modal" data-target="#modalPasien" value="{{$data->pasien->nama ?? ''}}"
                                      name="pasien_nama" placeholder="Pilih Pasien..">
-                                    <div class="input-group-append show-pass"  data-toggle="modal" data-target="#modalPasien">
+                                    <div class="input-group-append show-pass" data-toggle="modal" data-target="#modalPasien">
                                         <span class="input-group-text"> 
-                                            <a href="javascript:void(0)"  data-toggle="modal" data-target="#modalPasien"><i class="fa fa-search"></i></a>
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#modalPasien"><i class="fa fa-search"></i></a>
                                         </span>
                                     </div>
                                 </div>
@@ -91,13 +89,11 @@
                                 style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
-                            <label class="col-sm-2 col-form-label">Cara Bayar*</label>
+                            <label class="col-sm-2 col-form-label">Layanan</label>
                             <div class="col-sm-3">
-                                <select name="cara_bayar" id="cara_bayar" required class="form-control">
-                                    <option value=""></option>
-                                    <option value="Umum/Mandiri" {{$data->cara_bayar=="Umum/Mandiri" ? 'selected' : ''}}>Umum/Mandiri</option>
-                                    <option value="Jaminan Kesehatan" {{$data->cara_bayar=="Jaminan Kesehatan" ? 'selected' : ''}}>Jaminan Kesehatan</option>
-                                </select>
+                                <div class="alert alert-success mb-0" role="alert">
+                                    Gratis, tidak dipungut biaya.
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -111,14 +107,13 @@
                                             <span><i class="mdi mdi-help-circle-outline"></i></span>
                                         </div>
                                         <div class="media-body">
-                                            <p class="mb-0"><i>Jika tidak ada nama pasien / bpjs, silahkan lakukan tambah data dulu.</i>
-                                                <a href="{{Route('pasien.add')}}">  klik disini !!</a>
-                                                </p>
+                                            <p class="mb-0"><i>Jika nama penerima manfaat belum tersedia, silahkan lakukan tambah data dulu.</i>
+                                                <a href="{{Route('penerima-manfaat.add')}}"> klik disini !!</a>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                           
                         </div>
 
                         <div class="form-group row">
@@ -126,7 +121,6 @@
                             <div class="col-sm-10">
                                 <textarea name="keluhan" required class="form-control"
                                 rows="4">{{$data->keluhan}}</textarea>
-                                {{-- <input type="text" name="keluhan" required class="form-control"> --}}
                                 @error('keluhan')
                                 <div class="invalid-feedback animated fadeInUp"
                                 style="display: block;">{{$message}}</div>
@@ -135,18 +129,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Poli Tujuan*</label>
+                            <label class="col-sm-2 col-form-label">Omah Terapiku Tujuan*</label>
                             <div class="col-sm-4">
                                 <select name="poli" id="poli" class="form-control" required>
-                                    <option value="">--Pilih Poli--</option>
+                                    <option value="">--Pilih Omah Terapiku--</option>
                                     @foreach ($poli as $item)
-                                        @if ($data->poli == $item->nama)
-                                            <option value="{{$item->nama}}" selected>{{$item->nama}}</option>
-
-                                        @else 
-                                            <option value="{{$item->nama}}">{{$item->nama}}</option>
-
-                                        @endif
+                                        <option value="{{$item->nama}}" {{$data->poli == $item->nama ? 'selected' : ''}}>{{$item->nama}}</option>
                                     @endforeach
                                 </select>
                                 @error('poli')
@@ -157,8 +145,11 @@
 
                             <label class="col-sm-2 col-form-label">Pilih Dokter*</label>
                             <div class="col-sm-4">
-                                <select name="dokter_id" id="dokter_id" class="form-control">
-                                  <option value="{{$data->dokter_id}}">{{$data->dokter->nama}}</option>
+                                <select name="dokter_id" id="dokter_id" class="form-control" required>
+                                    <option value="">--Pilih Dokter--</option>
+                                    @if(isset($data->dokter))
+                                        <option value="{{$data->dokter_id}}" selected>{{$data->dokter->nama}}</option>
+                                    @endif
                                 </select>
                                 @error('dokter_id')
                                 <div class="invalid-feedback animated fadeInUp"
@@ -171,8 +162,6 @@
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">UPDATE</button>
                         </div>
-
-                        
                     </form>
                 </div>
             </div>
@@ -180,6 +169,7 @@
     </div>
 </div>
 @endsection
+
 @section('script')
 <script>
     $(function () {
@@ -187,11 +177,11 @@
             processing: true,
             serverSide: true,
             searching: true,
-            paging:true,
+            paging: true,
             select: false,
             pageLength: 5,
-            lengthChange:false ,
-            ajax: "{{ route('pasien.json') }}",
+            lengthChange: false,
+            ajax: "{{ route('penerima-manfaat.json') }}",
             columns: [
                 {data: 'action', name: 'action'},
                 {data: 'no_rm', name: 'no_rm'},
@@ -202,30 +192,42 @@
                 {data: 'no_bpjs', name: 'no_bpjs'}              
             ]
         });
-        
     });
 
-    $( document ).ready(function() {
-        $("#poli").change(function(e) {
+    $(document).ready(function() {
+        function loadDokter(selectedDokterId = null) {
             var poli = $("#poli").val();
-            if (poli == '') return false;
-            $.get(
-                "{{ route('getDokter') }}",
-                {
-                    poli: poli
-                },
-                function(data) {
-                    var string = '';
-                    $.each(data.data, function(index, value) {
-                        string = string + `<option value="` + value.id + `">` + value.nama + `</option>`;
-                    })
-                    $("#dokter_id").html(string);
+            if (!poli) {
+                $("#dokter_id").html('<option value="">--Pilih Dokter--</option>');
+                return;
+            }
 
-                }
-            );
-         });
+            $.get("{{ route('getDokter') }}", { poli: poli }, function(response) {
+                var string = '<option value="">--Pilih Dokter--</option>';
+                var listDokter = response.data ? response.data : response;
+
+                $.each(listDokter, function(index, value) {
+                    var isSelected = (selectedDokterId && selectedDokterId == value.id) ? 'selected' : '';
+                    string += `<option value="${value.id}" ${isSelected}>${value.nama}</option>`;
+                });
+
+                $("#dokter_id").html(string);
+            });
+        }
+
+        // Trigger saat Poli diubah
+        $("#poli").on("change", function() {
+            loadDokter();
+        });
+
+        // Trigger otomatis saat pertama kali dibuka untuk mengambil daftar dokter di poli tersebut
+        var initialDokterId = "{{ $data->dokter_id }}";
+        if ($("#poli").val() !== '') {
+            loadDokter(initialDokterId);
+        }
     });
-     $(document).on("click", ".pilihPasien", function () {
+
+    $(document).on("click", ".pilihPasien", function () {
         var id = $(this).data('id');
         var nama = $(this).data('nama');
         var no = $(this).data('no');
@@ -235,8 +237,7 @@
         $("#cara_bayar").val(metode).change();
 
         $("#modalPasien").modal('hide');
-        
-        toastr.success("Pasien "+nama+" telah dipilih", "Sukses",{timeOut: 3000})
+        toastr.success("Pasien " + nama + " telah dipilih", "Sukses", {timeOut: 3000});
     });
 </script>
 @endsection

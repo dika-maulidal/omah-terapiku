@@ -6,29 +6,6 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardQuery 
 {
-    public function totalObat()
-    {
-        return Obat::count();
-    }
-
-    public function totalObatKeluar(){
-        return PengeluaranObat::count();
-    }
-
-    public function totalObatKeluarSum(){
-        return PengeluaranObat::sum('jumlah');
-    }
-
-    public function obatHariini(){
-        return PengeluaranObat::whereDate('created_at', date('Y-m-d'))->count();
-    }
-
-    public function permintaanObat(){
-        return Rekam::latest()
-                    ->where('status', 3)
-                    ->get();
-    }
-
     public function perikaHariini()
     {
         $user = auth()->user();
@@ -119,11 +96,6 @@ class DashboardQuery
                     LEFT JOIN rekam r ON r.id = a.rekam_id
                     where a.diagnosa is not null
                     and r.tgl_rekam LIKE "%'.$filterBulan.'%"
-
-                    union all
-                    select diagnosa
-                    from rekam_gigi 
-                    where created_at LIKE "%'.$filterBulan.'%"
                 ) sc
                 group by diagnosa
             ) aa 
@@ -144,11 +116,6 @@ class DashboardQuery
                     LEFT JOIN rekam r ON r.id = a.rekam_id
                     where a.diagnosa is not null
                     and r.tgl_rekam LIKE "%'.$filter.'%"
-
-                    union all
-                    select diagnosa
-                    from rekam_gigi 
-                    where created_at LIKE "%'.$filter.'%"
                 ) sc
                 group by diagnosa
             ) aa 

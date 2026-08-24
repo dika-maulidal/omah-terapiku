@@ -34,11 +34,7 @@
                                                     <h6 class="mb-1">{{$notif->data['no_rekam']}}</h6>
                                                     <h6 class="mb-1">{{$notif->data['message']}}</h6>
                                                     <small class="d-block">{{\Carbon\Carbon::parse($notif->data['created_at'])->format('d/m/Y H:i:s')}}</small>
-                                                    @if (auth()->user()->role_display()=="Apotek")
-                                                        <a href="{{Route('obat.pengeluaran',$notif->data['id_rekam'])}}">Klik Proses</a>
-                                                    @else
-                                                        <a href="{{Route('rekam.detail',$notif->data['id_pasien'])}}">Klik Proses</a>
-                                                    @endif
+                                                    <a href="{{Route('rekam.detail',$notif->data['id_pasien'])}}">Klik Proses</a>
                                                 </div>
                                             </div>
                                         </li>

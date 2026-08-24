@@ -21,11 +21,11 @@ class AuthController extends Controller
 
     public function auth(Request $request)
     {
-        $credentials = $request->only('phone', 'password');
+        $credentials = $request->only('nip', 'password');
         if(Auth::attempt($credentials)){
     		return redirect('/dashboard')->with('sukses','Selamat, Anda berhasil masuk aplikasi');
     	}else{
-    		return redirect('/')->with('gagal','mohon masukkan password dengan benar');
+            return redirect('/')->with('gagal','mohon masukkan NIP dan password dengan benar');
     	}
     }
 

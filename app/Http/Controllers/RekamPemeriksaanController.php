@@ -8,8 +8,17 @@ use Illuminate\Http\Request;
 use App\Models\RekamDiagnosa;
 class RekamPemeriksaanController extends Controller
 {
+    private function ensureClinicalRole()
+    {
+        if (!in_array(auth()->user()->role_display(), ['Admin', 'Dokter'])) {
+            abort(403);
+        }
+    }
+
     public function pemeriksaan(Request $request)
     {
+        $this->ensureClinicalRole();
+
         $this->validate($request,[
             'rekam_id' => 'required',
             'pasien_id' => 'required',
@@ -48,6 +57,8 @@ class RekamPemeriksaanController extends Controller
 
     public function diagnosa(Request $request)
     {
+        $this->ensureClinicalRole();
+
         $this->validate($request,[
             'rekam_id' => 'required',
             'pasien_id' => 'required',
@@ -72,6 +83,8 @@ class RekamPemeriksaanController extends Controller
 
     public function tindakan(Request $request)
     {
+        $this->ensureClinicalRole();
+
         $this->validate($request,[
             'rekam_id' => 'required',
             'pasien_id' => 'required',
@@ -97,24 +110,6 @@ class RekamPemeriksaanController extends Controller
 
         return redirect()->route('rekam.detail',$request->pasien_id)
                 ->with('sukses','Tindakan Berhasil diperbaharui');
-
-    }
-
-    public function resep(Request $request)
-    {
-        $this->validate($request,[
-            'rekam_id' => 'required',
-            'pasien_id' => 'required',
-            'resep_obat' => 'required',
-        ]);
-
-        $rekam = Rekam::find($request->rekam_id);
-        $rekam->update([
-            'resep_obat' => $request->resep_obat
-        ]);
-
-        return redirect()->route('rekam.detail',$request->pasien_id)
-                ->with('sukses','Resep Obat Berhasil diperbaharui');
 
     }
 

@@ -18,6 +18,7 @@ class PetugasController extends Controller
     {
         $this->validate($request,[
             'name' => 'required',
+            'nip' => 'required|unique:users,nip',
             'phone' => 'required|unique:users',
             'password' => 'required',
             'role' => 'required'
@@ -26,6 +27,7 @@ class PetugasController extends Controller
         try {
             $user = User::create([
                 'name' => $request->name,
+                'nip' => $request->nip,
                 'phone' => $request->phone,
                 'password' => bcrypt($request->password),
                 'role' => $request->role,
@@ -46,14 +48,15 @@ class PetugasController extends Controller
     {
         $this->validate($request,[
             'name' => 'required',
+            'nip' => 'required|unique:users,nip,'.$id,
             'phone' => 'required',
-            'password' => 'required'
         ]);
         DB::beginTransaction();
         try {
             $user = User::find($id);
             $user->update([
                 'name' => $request->name,
+                'nip' => $request->nip,
                 'phone' => $request->phone,
                 'role' => $request->role,
                 'status' => 1

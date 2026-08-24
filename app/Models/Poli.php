@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Poli extends Model
 {
     protected $table = "poli";
-    protected $fillable = ["nama","status"];
+    protected $fillable = ["nama", "alamat", "status"];
 
     function status_display(){
         return $this->status ==1 ? 'Aktif' :'Tidak Aktif';

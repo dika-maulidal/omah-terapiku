@@ -183,22 +183,6 @@
                     </div>`;
 
                     $("#antrian-list-notif").append(listPeriksaDokter);
-            }else if(role=="Apotek"){
-                var listPermintaanObat = `
-                    <div class="d-flex pb-3 border-bottom mb-3 align-items-end">
-                        <div class="mr-auto">
-                            <p class="text-black font-w600 mb-2"><a href="#">`+data.no_rekam+`</a></p>
-                            <ul>
-                                <li><i class="las la-clock"></i>Time : `+data.created_at+`</li>
-                                <li><i class="las la-clock"></i>No Rekam : `+data.no_rekam+`</li>
-                                <li><i class="las la-user"></i>`+data.message+`</li>
-                            </ul>
-                        </div>
-                        <a href="`+data.link+`" 
-                            class="btn-rounded btn-primary btn-xs"><i class="fa fa-user-md"></i> Berikan Obat</a>
-                    </div>`;
-
-                    $("#obat-list-notif").append(listPermintaanObat);
             }
         
 

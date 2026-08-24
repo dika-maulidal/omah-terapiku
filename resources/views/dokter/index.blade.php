@@ -1,7 +1,7 @@
 @extends('layout.apps')
 @section('content')
 <div class="mr-auto">
-    <h2 class="text-black font-w600">Dokter</h2>
+    <h2 class="text-black font-w600">Data Terapis</h2>
 </div>
 
 
@@ -10,7 +10,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Dokter Baru</h5>
+                <h5 class="modal-title">Terapis Baru</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>
@@ -26,7 +26,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-black font-w500">Nama Dokter*</label>
+                        <label class="text-black font-w500">Nama Terapis*</label>
                         <input type="text" name="nama" required class="form-control">
                         @error('nama')
                         <div class="invalid-feedback animated fadeInUp"
@@ -34,7 +34,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-black font-w500">Poli*</label>
+                        <label class="text-black font-w500">Omah Terapiku*</label>
                         <select name="poli" class="form-control">
                             @foreach ($poli as $item)
                                 <option value="{{$item->nama}}">{{$item->nama}}</option>
@@ -84,7 +84,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-group col-lg-6" style="float: left">
-                    <a href="javascript:void(0)" class="btn btn-primary mr-3" data-toggle="modal" data-target="#addOrderModal">+Tambah Dokter</a>
+                    <a href="javascript:void(0)" class="btn btn-primary mr-3" data-toggle="modal" data-target="#addOrderModal">+Tambah Terapis</a>
 
                 </div>
                 <div class="form-group col-lg-6" style="float: right">
@@ -108,10 +108,10 @@
                                 
                                 <th>No</th>
                                 <th>NIP</th>
-                                <th>Nama Dokter</th>
+                                <th>Nama Terapis</th>
                                 <th>No. HP</th>
                                 <th>Alamat</th>
-                                <th>Poli</th>
+                                <th>Omah Terapiku</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -122,7 +122,7 @@
                                     <td>
                                         {{$key+1}}
                                     </td>
-                                    <td>{{$row->nip}}</td>
+                                    <td>{{$row->user->nip ?? '-'}}</td>
                                     <td>{{$row->nama}}</td>
                                     <td>{{$row->no_hp}}</td>
                                     <td>{{$row->alamat}}</td>
@@ -141,7 +141,7 @@
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title">Ganti Password Login Dokter</h5>
+                                                            <h5 class="modal-title">Ganti Password Login Terapis</h5>
                                                             <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                                                             </button>
                                                         </div>
@@ -182,7 +182,7 @@
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title">Edit Dokter</h5>
+                                                                    <h5 class="modal-title">Edit Terapis</h5>
                                                             <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                                                             </button>
                                                         </div>
@@ -191,7 +191,7 @@
                                                                 {{ csrf_field() }}
                                                                 <div class="form-group">
                                                                     <label class="text-black font-w500">NIP</label>
-                                                                    <input type="text" name="nip" class="form-control">
+                                                                    <input type="text" name="nip" value="{{$row->user->nip ?? ''}}" class="form-control">
                                                                     @error('nip')
                                                                     <div class="invalid-feedback animated fadeInUp"
                                                                     style="display: block;">{{$message}}</div>
@@ -206,7 +206,7 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label class="text-black font-w500">Poli*</label>
+                                                                    <label class="text-black font-w500">Omah Terapiku*</label>
                                                                     <select name="poli" class="form-control">
                                                                         @foreach ($poli as $item)
                                                                             @if ($item->nama == $row->poli)

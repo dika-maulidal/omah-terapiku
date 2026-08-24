@@ -90,7 +90,7 @@
                                                     data-target="#addDiagnosa">
                                                         <span class="input-group-text"> 
                                                             <a href="javascript:void(0)"  data-toggle="modal"
-                                                            data-target="#modalObat"><i class="fa fa-search"></i></a>
+                                                            data-target="#addDiagnosa"><i class="fa fa-search"></i></a>
                                                         </span>
                                                     </div>
                                                 </div>
