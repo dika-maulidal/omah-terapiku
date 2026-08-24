@@ -208,12 +208,12 @@
         <form action="{{Route('login.auth')}}" method="POST">
             {{ csrf_field() }}
 
-            <!-- Input NIP -->
+            <!-- Input Username / Nama -->
             <div class="form-group">
-                <label class="form-label">NIP</label>
+                <label class="form-label">Username / Nama</label>
                 <div class="input-group-custom">
-                    <i class="fa-solid fa-id-card input-icon-left"></i>
-                    <input type="text" name="nip" class="form-control-custom" placeholder="Masukkan NIP" required value="{{ old('nip') }}">
+                    <i class="fa-solid fa-user input-icon-left"></i>
+                    <input type="text" name="username" class="form-control-custom" placeholder="Masukkan Username atau Nama" required value="{{ old('username', old('name', old('nip'))) }}" autofocus>
                 </div>
             </div>
 

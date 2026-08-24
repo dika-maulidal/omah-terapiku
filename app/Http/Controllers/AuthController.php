@@ -21,12 +21,29 @@ class AuthController extends Controller
 
     public function auth(Request $request)
     {
-        $credentials = $request->only('nip', 'password');
-        if(Auth::attempt($credentials)){
-    		return redirect('/dashboard')->with('sukses','Selamat, Anda berhasil masuk aplikasi');
-    	}else{
-            return redirect('/')->with('gagal','mohon masukkan NIP dan password dengan benar');
-    	}
+        $loginInput = $request->input('username') ?? $request->input('name') ?? $request->input('nip');
+        $password = $request->input('password');
+
+        if (!$loginInput || !$password) {
+            return redirect('/')->with('gagal', 'Mohon masukkan Nama/Username dan password');
+        }
+
+        // Coba login berdasarkan name
+        if (Auth::attempt(['name' => $loginInput, 'password' => $password])) {
+            return redirect('/dashboard')->with('sukses', 'Selamat, Anda berhasil masuk aplikasi');
+        }
+
+        // Coba login berdasarkan email
+        if (Auth::attempt(['email' => $loginInput, 'password' => $password])) {
+            return redirect('/dashboard')->with('sukses', 'Selamat, Anda berhasil masuk aplikasi');
+        }
+
+        // Fallback login berdasarkan NIP
+        if (Auth::attempt(['nip' => $loginInput, 'password' => $password])) {
+            return redirect('/dashboard')->with('sukses', 'Selamat, Anda berhasil masuk aplikasi');
+        }
+
+        return redirect('/')->with('gagal', 'Mohon periksa Nama/Username dan password dengan benar')->withInput();
     }
 
     public function logout()

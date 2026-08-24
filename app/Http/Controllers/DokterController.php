@@ -16,7 +16,7 @@ class DokterController extends Controller
     {
         $datas = Dokter::with('user')->get();
         $poli = Poli::all();
-        return view('dokter.index', compact('datas', 'poli'));
+        return view('terapis.index', compact('datas', 'poli'));
     }
 
     public function store(Request $request)

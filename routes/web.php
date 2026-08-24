@@ -33,12 +33,18 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/omahterapiku/{id}/delete', [PoliController::class, 'delete'])->name('omahterapiku.delete');
 
     Route::get('/getDokter', [DokterController::class, 'getDokter'])->name('getDokter');
+    Route::get('/getTerapis', [DokterController::class, 'getDokter'])->name('getTerapis');
 
     Route::get('/dokter', [DokterController::class, 'index'])->name('dokter');
+    Route::get('/terapis', [DokterController::class, 'index'])->name('terapis');
     Route::post('/dokter/store', [DokterController::class, 'store'])->name('dokter.store');
+    Route::post('/terapis/store', [DokterController::class, 'store'])->name('terapis.store');
     Route::post('/dokter/{id}/update', [DokterController::class, 'update'])->name('dokter.update');
+    Route::post('/terapis/{id}/update', [DokterController::class, 'update'])->name('terapis.update');
     Route::get('/dokter/{id}/delete', [DokterController::class, 'delete'])->name('dokter.delete');
+    Route::get('/terapis/{id}/delete', [DokterController::class, 'delete'])->name('terapis.delete');
     Route::post('/dokter/{id}/gantipassword', [DokterController::class, 'updatepassword'])->name('dokter.gantipassword');
+    Route::post('/terapis/{id}/gantipassword', [DokterController::class, 'updatepassword'])->name('terapis.gantipassword');
 
     Route::post('/gantipassword/{id}', [AuthController::class, 'updatepassword'])->name('gantipassword');
     Route::get('/petugas', [PetugasController::class, 'index'])->name('petugas');

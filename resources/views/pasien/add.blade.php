@@ -19,15 +19,23 @@
                        
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Nama Penerima Manfaat*</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input type="text" class="form-control" name="nama" 
-                               id="nama"  required value="{{old('nama')}}">
+                               id="nama" required value="{{old('nama')}}">
                                 @error('nama')
                                 <div class="invalid-feedback animated fadeInUp"
                                 style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
-                            
+                            <label class="col-sm-2 col-form-label">NIK</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="nik" maxlength="16"
+                                id="nik" placeholder="Masukkan 16 digit NIK" value="{{old('nik')}}">
+                                @error('nik')
+                                <div class="invalid-feedback animated fadeInUp"
+                                style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">No.RM*</label>
@@ -261,10 +269,22 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">File General Uncent</label>
+                            <label class="col-sm-2 col-form-label">File Kartu Keluarga (KK)</label>
                             <div class="col-sm-10">
-                                <input type="file" name="file">
-                                @error('file')
+                                <input type="file" class="form-control-file" name="file_kk" accept=".jpg,.jpeg,.png,.pdf">
+                                <small class="text-muted d-block mt-1">Format: JPG, JPEG, PNG, PDF (Maks. 10MB)</small>
+                                @error('file_kk')
+                                <div class="invalid-feedback animated fadeInUp"
+                                style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Surat Resume / Riwayat Berobat</label>
+                            <div class="col-sm-10">
+                                <input type="file" class="form-control-file" name="file_resume" accept=".jpg,.jpeg,.png,.pdf">
+                                <small class="text-muted d-block mt-1">Format: JPG, JPEG, PNG, PDF (Maks. 10MB) - Berkas rekam medis / resume berobat sebelumnya jika ada</small>
+                                @error('file_resume')
                                 <div class="invalid-feedback animated fadeInUp"
                                 style="display: block;">{{$message}}</div>
                                 @enderror

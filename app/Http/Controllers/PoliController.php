@@ -10,7 +10,7 @@ class PoliController extends Controller
     public function index(Request $request)
     {
         $datas = Poli::all();
-        return view('poli.index',compact('datas'));
+        return view('omahterapiku.index',compact('datas'));
     }
 
     public function store(Request $request)

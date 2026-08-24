@@ -198,7 +198,7 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label class="text-black font-w500">Nama Dokter*</label>
+                                                                    <label class="text-black font-w500">Nama Terapis*</label>
                                                                     <input type="text" name="nama" value="{{$row->nama}}" required class="form-control">
                                                                     @error('nama')
                                                                     <div class="invalid-feedback animated fadeInUp"

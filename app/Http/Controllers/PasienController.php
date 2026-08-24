@@ -54,6 +54,7 @@ class PasienController extends Controller
                 ->when($request->keyword, function ($query) use ($request) {
                     $query->where('no_rm', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('nama', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('nik', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('no_bpjs', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('no_hp', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('alamat_lengkap', 'LIKE', "%{$request->keyword}%");
@@ -81,22 +82,30 @@ class PasienController extends Controller
             'no_hp' => 'required',
             'jk' => 'required',
             'no_rm' => 'required|unique:pasien',
-            'no_bpjs' => 'unique:pasien'
+            'no_bpjs' => 'nullable|unique:pasien',
+            'nik' => 'nullable|unique:pasien,nik',
+            'file_kk' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240',
+            'file_resume' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240'
         ]);
 
         $request->merge(['cara_bayar' => 'Gratis']);
         $pasien = Pasien::create($request->all());
-        if ($request->hasFile('file')) {
-            $originName = $request->file('file')->getClientOriginalName();
-            $fileName = pathinfo($originName, PATHINFO_FILENAME);
-            $extension = $request->file('file')->getClientOriginalExtension();
-            $fileName = $pasien->no_rm.'.'.$extension;
-            $request->file('file')->move('images/pasien/',$fileName);
-            
-            // DIPERBAIKI: general_uncent -> general_consent
-            $pasien->general_consent = $fileName;
-            $pasien->save();
+
+        if ($request->hasFile('file_kk')) {
+            $extension = $request->file('file_kk')->getClientOriginalExtension();
+            $fileNameKk = $pasien->no_rm.'_kk.'.$extension;
+            $request->file('file_kk')->move(public_path('images/pasien/'), $fileNameKk);
+            $pasien->file_kk = $fileNameKk;
         }
+
+        if ($request->hasFile('file_resume')) {
+            $extension = $request->file('file_resume')->getClientOriginalExtension();
+            $fileNameResume = $pasien->no_rm.'_resume.'.$extension;
+            $request->file('file_resume')->move(public_path('images/pasien/'), $fileNameResume);
+            $pasien->file_resume = $fileNameResume;
+        }
+
+        $pasien->save();
 
         return redirect()->route('penerima-manfaat')->with('sukses','Data berhasil ditambahkan');
     }
@@ -106,23 +115,30 @@ class PasienController extends Controller
             'nama' => 'required',
             'no_hp' => 'required',
             'jk' => 'required',
-            'file' => 'mimes:jpg,png,jpeg'
+            'nik' => 'nullable|unique:pasien,nik,'.$id,
+            'file_kk' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240',
+            'file_resume' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240'
         ]);
         $data = Pasien::find($id);
         $request->merge(['cara_bayar' => 'Gratis']);
         $data->update($request->all());
-        if ($request->hasFile('file')) {
-            $originName = $request->file('file')->getClientOriginalName();
-            $fileName = pathinfo($originName, PATHINFO_FILENAME);
-            $extension = $request->file('file')->getClientOriginalExtension();
-            $fileName = $data->no_rm.'.'.$extension;
-            $request->file('file')->move('images/pasien/',$fileName);
-            
-            // DIPERBAIKI: general_uncent -> general_consent
-            $data->update([
-                'general_consent' => $fileName
-            ]);
+
+        if ($request->hasFile('file_kk')) {
+            $extension = $request->file('file_kk')->getClientOriginalExtension();
+            $fileNameKk = $data->no_rm.'_kk.'.$extension;
+            $request->file('file_kk')->move(public_path('images/pasien/'), $fileNameKk);
+            $data->file_kk = $fileNameKk;
         }
+
+        if ($request->hasFile('file_resume')) {
+            $extension = $request->file('file_resume')->getClientOriginalExtension();
+            $fileNameResume = $data->no_rm.'_resume.'.$extension;
+            $request->file('file_resume')->move(public_path('images/pasien/'), $fileNameResume);
+            $data->file_resume = $fileNameResume;
+        }
+
+        $data->save();
+
         return redirect()->route('penerima-manfaat')->with('sukses','Data berhasil diperbaharui');
     }
 

@@ -27,6 +27,15 @@
                                 style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
+                            <label class="col-sm-2 col-form-label">NIK</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="nik" maxlength="16"
+                                placeholder="Masukkan 16 digit NIK" value="{{old('nik') ? old('nik') : $data->nik}}">
+                                @error('nik')
+                                <div class="invalid-feedback animated fadeInUp"
+                                style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Nama Penerima Manfaat*</label>
@@ -248,21 +257,54 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">File General Uncent</label>
+                            <label class="col-sm-2 col-form-label">File Kartu Keluarga (KK)</label>
                             <div class="col-sm-10">
-                                <input type="file" name="file">
-                                @error('file')
+                                <input type="file" class="form-control-file" name="file_kk" accept=".jpg,.jpeg,.png,.pdf">
+                                <small class="text-muted d-block mt-1">Format: JPG, JPEG, PNG, PDF (Maks. 10MB)</small>
+                                @error('file_kk')
                                 <div class="invalid-feedback animated fadeInUp"
                                 style="display: block;">{{$message}}</div>
                                 @enderror
-                               
+                                @if ($data->file_kk)
+                                    <div class="mt-2">
+                                        @if (Str::endsWith(strtolower($data->file_kk), ['.jpg', '.jpeg', '.png']))
+                                            <a href="{{$data->getFileKk()}}" target="_blank">
+                                                <img height="100px" class="img-thumbnail" src="{{$data->getFileKk()}}" alt="File KK">
+                                            </a>
+                                        @else
+                                            <a href="{{$data->getFileKk()}}" target="_blank" class="btn btn-xs btn-info">
+                                                <i class="fa fa-file"></i> Lihat Berkas KK
+                                            </a>
+                                        @endif
+                                        <small class="text-muted d-block mt-1">Upload file jika ingin mengupdate berkas KK</small>
+                                    </div>
+                                @endif
                             </div>
-                            @if ($data->general_uncent)
-                                <div>
-                                    <img height="120px" src="{{$data->getGeneralUncent()}}" alt="" srcset="">
-                                </div>
-                            @endif
-                            <i>Upload File Jika Ingin Mengupdate file General uncent</i>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Surat Resume / Riwayat Berobat</label>
+                            <div class="col-sm-10">
+                                <input type="file" class="form-control-file" name="file_resume" accept=".jpg,.jpeg,.png,.pdf">
+                                <small class="text-muted d-block mt-1">Format: JPG, JPEG, PNG, PDF (Maks. 10MB) - Berkas rekam medis / resume berobat sebelumnya</small>
+                                @error('file_resume')
+                                <div class="invalid-feedback animated fadeInUp"
+                                style="display: block;">{{$message}}</div>
+                                @enderror
+                                @if ($data->file_resume)
+                                    <div class="mt-2">
+                                        @if (Str::endsWith(strtolower($data->file_resume), ['.jpg', '.jpeg', '.png']))
+                                            <a href="{{$data->getFileResume()}}" target="_blank">
+                                                <img height="100px" class="img-thumbnail" src="{{$data->getFileResume()}}" alt="Surat Resume">
+                                            </a>
+                                        @else
+                                            <a href="{{$data->getFileResume()}}" target="_blank" class="btn btn-xs btn-info">
+                                                <i class="fa fa-file"></i> Lihat Berkas Resume
+                                            </a>
+                                        @endif
+                                        <small class="text-muted d-block mt-1">Upload file jika ingin mengupdate berkas resume</small>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                         <hr>
                         <div class="form-group">

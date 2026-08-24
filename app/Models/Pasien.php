@@ -12,6 +12,7 @@ class Pasien extends Model
     protected $fillable = [
         "no_rm",
         "nama",
+        "nik",
         "tmp_lahir",
         "tgl_lahir",
         "jk",
@@ -30,13 +31,18 @@ class Pasien extends Model
         "no_bpjs",
         "deleted_at",
         "alergi",
-        "general_consent" // DIPERBAIKI: general_uncent -> general_consent
+        "file_kk",
+        "file_resume"
     ];
 
-    // DIPERBAIKI: getGeneralUncent -> getGeneralConsent
-    public function getGeneralConsent()
+    public function getFileKk()
     {
-        return $this->general_consent != null ? asset('images/pasien/' . $this->general_consent) : null;
+        return $this->file_kk != null ? asset('images/pasien/' . $this->file_kk) : null;
+    }
+
+    public function getFileResume()
+    {
+        return $this->file_resume != null ? asset('images/pasien/' . $this->file_resume) : null;
     }
 
     public function rekamGigi()

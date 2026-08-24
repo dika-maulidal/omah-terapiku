@@ -47,16 +47,26 @@
                 </li>
             @endif
             @if (auth()->user()->role_display()=='Admin')
-                <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                    <i class="flaticon-381-notepad"></i>
-                    <span class="nav-text">Master Data</span>
-                </a>
-                <ul aria-expanded="false">
-                    <li><a href="{{Route('tindakan')}}">Tindakan</a></li>
-                    <li><a href="{{Route('petugas')}}">Petugas</a></li>
-                    <li><a href="{{Route('dokter')}}">Data Terapis</a></li>
-                    <li><a href="{{Route('icd')}}">ICD</a></li>
-                </ul>
+                <li class="nav-label">Master Data</li>
+                <li><a href="{{Route('tindakan')}}" class="ai-icon" aria-expanded="false">
+                        <i class="flaticon-381-notepad-1"></i>
+                        <span class="nav-text">Tindakan</span>
+                    </a>
+                </li>
+                <li><a href="{{Route('petugas')}}" class="ai-icon" aria-expanded="false">
+                        <i class="flaticon-381-user-9"></i>
+                        <span class="nav-text">Petugas</span>
+                    </a>
+                </li>
+                <li><a href="{{Route('terapis')}}" class="ai-icon" aria-expanded="false">
+                        <i class="flaticon-381-user-7"></i>
+                        <span class="nav-text">Data Terapis</span>
+                    </a>
+                </li>
+                <li><a href="{{Route('icd')}}" class="ai-icon" aria-expanded="false">
+                        <i class="flaticon-381-layer-1"></i>
+                        <span class="nav-text">ICD</span>
+                    </a>
                 </li>
             @endif
            

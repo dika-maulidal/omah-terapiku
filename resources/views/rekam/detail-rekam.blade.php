@@ -27,6 +27,7 @@
 
                                     <h3 class="fs-18 font-w600 mb-1"><a href="javascript:void(0)"
                                          class="text-black">{{$pasien->nama}}</a></h3>
+                                    <h4 class="fs-14 font-w600 mb-1 text-primary">NIK: {{$pasien->nik ?? '-'}}</h4>
                                     <h4 class="fs-14 font-w600 mb-1">{{$pasien->tmp_lahir.", ".$pasien->tgl_lahir}}</h4>
                                     @php
                                         $b_day = \Carbon\Carbon::parse($pasien->tgl_lahir); // Tanggal Lahir
@@ -97,7 +98,24 @@
                                             Alergi
                                         </span>
                                         <div class="col-8 p-0">
-                                           <p>{{$pasien->alergi}}</p>
+                                           <p>{{$pasien->alergi ?: '-'}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-3 align-items-center">
+                                        <span class="fs-12 col-6 p-0 text-black">
+                                            <svg class="mr-2" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="19" height="19" fill="#5FBF91"/>
+                                            </svg>
+                                            File KK
+                                        </span>
+                                        <div class="col-8 p-0">
+                                          @if ($pasien->file_kk != null)
+                                            <a style="width: 120px"
+                                            class="btn-rounded btn-info btn-xs " href="{{$pasien->getFileKk()}}" 
+                                            target="_blank">Lihat KK</a>
+                                          @else 
+                                            <span class="text-muted">Belum Tersedia</span>
+                                          @endif
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center">
@@ -105,18 +123,16 @@
                                             <svg class="mr-2" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <rect width="19" height="19" fill="#5FBF91"/>
                                             </svg>
-                                            File General
+                                            Surat Resume
                                         </span>
                                         <div class="col-8 p-0">
-                                          @if ($pasien->general_uncent != null)
+                                          @if ($pasien->file_resume != null)
                                             <a style="width: 120px"
-                                            class="btn-rounded btn-info btn-xs " href="{{$pasien->getGeneralUncent()}}" 
-                                            target="__BLANK" view>Lihat Data</a>
-
+                                            class="btn-rounded btn-info btn-xs " href="{{$pasien->getFileResume()}}" 
+                                            target="_blank">Lihat Resume</a>
                                           @else 
-                                            Belum Tersedia
+                                            <span class="text-muted">Belum Tersedia</span>
                                           @endif
-                                           
                                         </div>
                                     </div>
                                 </div>
