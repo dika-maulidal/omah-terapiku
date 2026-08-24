@@ -1,0 +1,578 @@
+/* ==========================================================================
+   OMAH TERAPIKU - BRAND COLOR THEME & MODERN SIDEBAR SYSTEM
+   ========================================================================== */
+
+:root {
+    /* Brand Colors from Logo */
+    --ot-navy: #2e4b82;          /* Deep Navy Blue */
+    --ot-navy-hover: #213761;
+    --ot-navy-light: #eef3fb;
+    --ot-navy-glow: rgba(46, 75, 130, 0.2);
+
+    --ot-cyan: #29b6f6;          /* Cerulean / Sky Blue */
+    --ot-cyan-hover: #0288d1;
+    --ot-cyan-light: #e1f5fe;
+
+    --ot-yellow: #f5a623;        /* Warm Yellow / Amber */
+    --ot-yellow-hover: #d98f18;
+    --ot-yellow-light: #fff8e7;
+
+    --ot-green: #4caf50;         /* Leaf Green */
+    --ot-green-hover: #388e3c;
+    --ot-green-light: #e8f5e9;
+
+    --ot-red: #e53935;           /* Coral Red */
+    --ot-red-hover: #c62828;
+    --ot-red-light: #ffebee;
+
+    --ot-purple: #8e64a9;
+    --ot-purple-light: #f3e5f5;
+
+    --primary: #2e4b82;
+    --primary-hover: #213761;
+}
+
+/* ==========================================================================
+   1. ELIMINATE GREEN BARS & OLD HIGHLIGHTS ON SIDEBAR
+   ========================================================================== */
+.deznav .metismenu > li > a:before,
+.deznav .metismenu > li:before,
+.deznav .metismenu > li.mm-active > a:before,
+.deznav .metismenu li a:before,
+[data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu > li > a:before,
+[data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a:before,
+[data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu > li:hover > a:before,
+[data-sidebar-style="compact"] .deznav .metismenu li a:before,
+[data-sidebar-style="mini"] .deznav .metismenu > li > a:before {
+    display: none !important;
+    content: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    left: -9999px !important;
+}
+
+/* ==========================================================================
+   2. SIDEBAR LAYOUT & ACTIVE ANIMATIONS
+   ========================================================================== */
+.deznav {
+    background: #ffffff !important;
+    border-right: 1px solid #edf2f7;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.02) !important;
+}
+
+.deznav .metismenu {
+    padding: 10px 0 20px 0 !important;
+}
+
+/* Category Labels */
+.deznav .metismenu .nav-label {
+    padding: 16px 24px 6px 24px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.8px;
+    color: #8fa0bc !important;
+    text-transform: uppercase;
+    border: none !important;
+    margin: 6px 0 2px 0 !important;
+}
+
+/* Menu Items (Clean Box with Soft Margin & Smooth Transition) */
+.deznav .metismenu > li {
+    margin-bottom: 2px;
+}
+
+.deznav .metismenu > li > a {
+    margin: 3px 12px !important;
+    padding: 11px 16px !important;
+    border-radius: 6px !important;
+    color: #475569 !important;
+    font-size: 13.5px !important;
+    font-weight: 500;
+    border-left: 3px solid transparent !important;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.deznav .metismenu > li > a i {
+    font-size: 17px !important;
+    margin-right: 12px !important;
+    color: #64748b !important;
+    transition: transform 0.22s ease, color 0.22s ease !important;
+}
+
+/* Menu Hover State */
+.deznav .metismenu > li:hover > a,
+.deznav .metismenu > li > a:hover {
+    background-color: #f1f5fb !important;
+    color: var(--ot-navy) !important;
+    transform: translateX(4px) !important;
+    border-left-color: rgba(46, 75, 130, 0.35) !important;
+}
+
+.deznav .metismenu > li:hover > a i,
+.deznav .metismenu > li > a:hover i {
+    color: var(--ot-navy) !important;
+    transform: scale(1.15) !important;
+}
+
+/* Menu Active State */
+.deznav .metismenu > li.mm-active > a {
+    background: #edf3fc !important;
+    color: var(--ot-navy) !important;
+    font-weight: 700 !important;
+    border-left: 3.5px solid var(--ot-navy) !important;
+    box-shadow: 0 2px 8px rgba(46, 75, 130, 0.08) !important;
+}
+
+.deznav .metismenu > li.mm-active > a i {
+    color: var(--ot-navy) !important;
+    transform: scale(1.12) !important;
+}
+
+/* Submenu Styling */
+.deznav .metismenu ul {
+    padding: 4px 0 6px 0 !important;
+}
+
+.deznav .metismenu ul:after {
+    background-color: #cbd5e1 !important;
+}
+
+.deznav .metismenu ul a {
+    margin: 2px 12px !important;
+    padding: 8px 16px 8px 36px !important;
+    border-radius: 4px !important;
+    color: #64748b !important;
+    font-size: 13px !important;
+    font-weight: 500;
+    transition: all 0.2s ease !important;
+}
+
+.deznav .metismenu ul a:hover {
+    background-color: #f1f5fb !important;
+    color: var(--ot-navy) !important;
+    padding-left: 40px !important;
+}
+
+.deznav .metismenu ul a.mm-active {
+    background-color: #edf3fc !important;
+    color: var(--ot-navy) !important;
+    font-weight: 700 !important;
+    padding-left: 40px !important;
+}
+
+/* Clear & Prominent Dropdown Arrow (Chevron: Right > then Down v) */
+.deznav .metismenu .has-arrow:after {
+    border-color: #64748b !important;
+    border-style: solid !important;
+    border-width: 2px 2px 0 0 !important;
+    width: 7px !important;
+    height: 7px !important;
+    right: 22px !important;
+    top: 50% !important;
+    position: absolute !important;
+    opacity: 0.9 !important;
+    transform: translateY(-50%) rotate(45deg) !important;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease !important;
+}
+
+.deznav .metismenu > li:hover > .has-arrow:after,
+.deznav .metismenu .has-arrow:hover:after {
+    border-color: var(--ot-navy) !important;
+    opacity: 1 !important;
+}
+
+.deznav .metismenu .has-arrow[aria-expanded="true"]:after,
+.deznav .metismenu .mm-active > .has-arrow:after {
+    border-color: var(--ot-navy) !important;
+    opacity: 1 !important;
+    transform: translateY(-50%) rotate(135deg) !important;
+}
+
+/* Sidebar Copyright Footer */
+.deznav .copyright {
+    padding: 16px 20px !important;
+    border-top: 1px solid #edf2f7 !important;
+    font-size: 11.5px !important;
+    color: #8fa0bc !important;
+    line-height: 1.5 !important;
+}
+
+.deznav .copyright strong {
+    color: var(--ot-navy) !important;
+    font-weight: 700 !important;
+}
+
+/* Main Page Footer */
+.footer {
+    padding-left: 17.5rem;
+    background-color: transparent !important;
+    border-top: 1px solid #edf2f7 !important;
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+}
+
+.footer .copyright {
+    padding: 0 !important;
+    text-align: center !important;
+}
+
+.footer .copyright p {
+    color: #8fa0bc !important;
+    font-size: 12.5px !important;
+    margin: 0 !important;
+    font-weight: 500 !important;
+}
+
+.footer .copyright a {
+    color: var(--ot-navy) !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease !important;
+}
+
+.footer .copyright a:hover {
+    color: var(--ot-yellow) !important;
+    text-decoration: underline !important;
+}
+
+/* ==========================================================================
+   3. HEADER, HAMBURGER MENU & NOTIFICATION BOX
+   ========================================================================== */
+.nav-header {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* Hamburger Menu Colors & Animation (Override all data attributes) */
+.hamburger,
+.nav-control .hamburger {
+    cursor: pointer !important;
+}
+
+.hamburger .line,
+.nav-header .hamburger .line,
+.nav-control .hamburger .line,
+.nav-header .nav-control .hamburger .line,
+[data-headerbg] .nav-header .hamburger .line,
+[data-headerbg] .nav-header .hamburger.is-active .line,
+[data-headerbg] .hamburger .line,
+[data-primary] .hamburger .line,
+[data-primary] .nav-header .hamburger .line,
+[data-primary][data-sidebar-style] .menu-toggle .nav-header .nav-control .hamburger .line,
+[data-sidebar-style] .nav-header .hamburger .line,
+[data-sidebar-style] .nav-header .hamburger.is-active .line {
+    background: var(--ot-navy) !important;
+    background-color: var(--ot-navy) !important;
+    height: 3px !important;
+    border-radius: 2px !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.hamburger:hover .line,
+.nav-header .hamburger:hover .line,
+.nav-control .hamburger:hover .line {
+    background: var(--ot-yellow) !important;
+    background-color: var(--ot-yellow) !important;
+}
+
+.hamburger.is-active .line,
+.nav-header .hamburger.is-active .line,
+.nav-control .hamburger.is-active .line {
+    background: var(--ot-navy) !important;
+    background-color: var(--ot-navy) !important;
+}
+
+/* Notification Dropdown & Box */
+.notification_dropdown .nav-link svg path {
+    fill: var(--ot-navy) !important;
+    transition: fill 0.2s ease;
+}
+
+.notification_dropdown .nav-link:hover svg path {
+    fill: var(--ot-yellow) !important;
+}
+
+.notification_dropdown .dropdown-menu {
+    border-radius: 6px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 10px 30px rgba(46, 75, 130, 0.12) !important;
+    min-width: 320px !important;
+    max-width: 360px !important;
+    padding: 0 !important;
+    overflow: hidden;
+    background-color: #ffffff !important;
+}
+
+.notification_dropdown .dropdown-header {
+    background: #edf3fc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding: 12px 18px !important;
+}
+
+.notification_dropdown .timeline {
+    padding: 12px 14px !important;
+    margin: 0 !important;
+}
+
+.notification_dropdown .timeline:before {
+    background-color: #e2e8f0 !important;
+}
+
+.notification_dropdown .timeline-panel {
+    border-radius: 4px !important;
+    padding: 10px 12px !important;
+    margin-bottom: 10px !important;
+    border: 1px solid #edf2f7 !important;
+    background-color: #fafbfc !important;
+    transition: all 0.2s ease !important;
+}
+
+.notification_dropdown .timeline-panel:hover {
+    background-color: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 3px 10px rgba(46, 75, 130, 0.08) !important;
+    transform: translateY(-1px);
+}
+
+.notification_dropdown .timeline-panel h6 {
+    color: #1e293b !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+}
+
+.notification_dropdown .timeline-panel small {
+    color: #64748b !important;
+}
+
+.media svg path,
+.card-body svg path[fill="#007A64"] {
+    fill: var(--ot-navy) !important;
+}
+
+/* ==========================================================================
+   4. BUTTONS
+   ========================================================================== */
+.btn {
+    border-radius: 4px !important;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background-color: var(--ot-navy) !important;
+    border-color: var(--ot-navy) !important;
+    color: #ffffff !important;
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: var(--ot-navy-hover) !important;
+    border-color: var(--ot-navy-hover) !important;
+    color: #ffffff !important;
+}
+
+.btn-info {
+    background-color: var(--ot-cyan) !important;
+    border-color: var(--ot-cyan) !important;
+    color: #ffffff !important;
+}
+.btn-info:hover {
+    background-color: var(--ot-cyan-hover) !important;
+    border-color: var(--ot-cyan-hover) !important;
+}
+
+.btn-warning {
+    background-color: var(--ot-yellow) !important;
+    border-color: var(--ot-yellow) !important;
+    color: #ffffff !important;
+}
+.btn-warning:hover {
+    background-color: var(--ot-yellow-hover) !important;
+    border-color: var(--ot-yellow-hover) !important;
+}
+
+.btn-success {
+    background-color: var(--ot-green) !important;
+    border-color: var(--ot-green) !important;
+    color: #ffffff !important;
+}
+.btn-success:hover {
+    background-color: var(--ot-green-hover) !important;
+    border-color: var(--ot-green-hover) !important;
+}
+
+/* ==========================================================================
+   5. CARDS & FORMS
+   ========================================================================== */
+.card {
+    border-radius: 4px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+}
+
+.card-header {
+    border-radius: 0 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.form-control {
+    border-radius: 4px !important;
+    border: 1px solid #ced4da !important;
+}
+
+.form-control:focus {
+    border-color: var(--ot-navy) !important;
+    box-shadow: 0 0 0 0.2rem rgba(46, 75, 130, 0.25) !important;
+}
+
+/* ==========================================================================
+   6. BADGES
+   ========================================================================== */
+.badge {
+    border-radius: 3px !important;
+    font-weight: 600;
+}
+
+.badge-primary {
+    background-color: var(--ot-navy) !important;
+    color: #ffffff !important;
+}
+.badge-info {
+    background-color: var(--ot-cyan) !important;
+    color: #ffffff !important;
+}
+.badge-warning {
+    background-color: var(--ot-yellow) !important;
+    color: #ffffff !important;
+}
+.badge-success {
+    background-color: var(--ot-green) !important;
+    color: #ffffff !important;
+}
+
+.badge.light {
+    border: 1px solid transparent;
+}
+.badge-primary.light {
+    background-color: var(--ot-navy-light) !important;
+    color: var(--ot-navy) !important;
+}
+.badge-success.light {
+    background-color: var(--ot-green-light) !important;
+    color: var(--ot-green) !important;
+}
+.badge-warning.light {
+    background-color: var(--ot-yellow-light) !important;
+    color: #b7791f !important;
+}
+.badge-danger.light {
+    background-color: var(--ot-red-light) !important;
+    color: var(--ot-red) !important;
+}
+.badge-info.light {
+    background-color: var(--ot-cyan-light) !important;
+    color: #0288d1 !important;
+}
+
+/* DataTables Pagination */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: var(--ot-navy) !important;
+    border-color: var(--ot-navy) !important;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   7. PRELOADER - BRAND PALETTE HARMONY
+   ========================================================================== */
+#preloader {
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+    left: 0 !important;
+    top: 0 !important;
+    background-color: #ffffff !important;
+    z-index: 999999 !important;
+}
+
+.sk-three-bounce {
+    background-color: transparent !important;
+}
+
+.sk-three-bounce .sk-child,
+[data-primary] .sk-three-bounce .sk-child {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 4px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* 3 Brand Colors from Logo */
+.sk-three-bounce .sk-bounce1,
+[data-primary] .sk-three-bounce .sk-bounce1 {
+    background-color: var(--ot-navy) !important;   /* Deep Navy Blue */
+}
+
+.sk-three-bounce .sk-bounce2,
+[data-primary] .sk-three-bounce .sk-bounce2 {
+    background-color: var(--ot-cyan) !important;   /* Sky Cyan Blue */
+}
+
+.sk-three-bounce .sk-bounce3,
+[data-primary] .sk-three-bounce .sk-bounce3 {
+    background-color: var(--ot-yellow) !important; /* Golden Amber */
+}
+
+/* ==========================================================================
+   8. SEARCH BAR & SEARCH ICON ENHANCEMENT
+   ========================================================================== */
+.input-group button.gp-search,
+.input-group .input-group-btn button.gp-search,
+.input-group-btn > .btn.gp-search,
+.input-group-append > .btn {
+    height: 100% !important;
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 16px !important;
+    background-color: var(--ot-navy) !important;
+    border-color: var(--ot-navy) !important;
+    color: #ffffff !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+    transition: all 0.2s ease !important;
+}
+
+.input-group button.gp-search:hover,
+.input-group .input-group-btn button.gp-search:hover,
+.input-group-btn > .btn.gp-search:hover {
+    background-color: var(--ot-yellow) !important;
+    border-color: var(--ot-yellow) !important;
+    color: #ffffff !important;
+}
+
+/* Normal & Clear Search Icon Size */
+.input-group i.fa-search,
+.input-group .ace-icon.fa-search,
+button.gp-search i,
+button.gp-search i.fa-search,
+.gp-search i.ace-icon,
+.search-area i,
+.flaticon-381-search,
+.flaticon-381-search-2 {
+    font-size: 16px !important;
+    line-height: 1 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    color: inherit !important;
+}
+
+/* Align search input text field */
+.input-group input.form-control.gp-search {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-right: none !important;
+    height: 44px !important;
+    font-size: 13.5px !important;
+}

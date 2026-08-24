@@ -16,7 +16,7 @@ class PoliController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'nama' => 'required|unique:poli',
+            'nama' => 'required|unique:omahterapiku,nama',
             'alamat' => 'nullable|string',
         ]);
         Poli::create($request->all());
@@ -26,7 +26,7 @@ class PoliController extends Controller
     public function update(Request $request,$id)
     {
         $this->validate($request,[
-            'nama' => 'required',
+            'nama' => 'required|unique:omahterapiku,nama,'.$id,
             'alamat' => 'nullable|string',
         ]);
         $data = Poli::find($id);

@@ -13,6 +13,7 @@
     <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
+    <link href="{{asset('css/brand-theme.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('vendor/toastr/css/toastr.min.css')}}">
     <link href="{{asset('vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
     <style>
@@ -28,10 +29,11 @@
         letter-spacing: 0.8px;
         border-top: none !important;
         border: none !important;
-        color: #969ba0 !important;
+        color: #8fa0bc !important;
     }
     </style>
     @yield('header')
+    @stack('styles')
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -49,16 +51,14 @@
      
         <div class="nav-header">
             <a href="#" class="brand-logo">
-                {{-- <h3 class="brand-title">Klinik Medishina</h3> --}}
-                {{-- <h2 class="logo-compact">Klinik Medishina</h2> --}}
-                 <img class="logo-abbr" src="{{asset('images/logo.png')}}" alt="">
-                <span class="logo-compact font-w800 font-italic" style="color: #32b893; font-size: 16px;">
-        OT
-    </span>
-                <h3 class="brand-title font-w800 font-italic mb-0" style="font-size: 18px; text-transform: uppercase; letter-spacing: 0.5px;">
-        <span style="color: #000000;">OMAH</span>
-        <span style="color: #32b893;">TERAPIKU</span>
-    </h3>
+                <img class="logo-abbr" src="{{asset('images/logo.png')}}" alt="Omah Terapiku" style="max-height: 48px;">
+                <span class="logo-compact font-w800 font-italic" style="color: #2e4b82; font-size: 16px;">
+                    OT
+                </span>
+                <h3 class="brand-title font-w800 font-italic mb-0" style="font-size: 17px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <span style="color: #2e4b82;">OMAH</span>
+                    <span style="color: #f5a623;">TERAPIKU</span>
+                </h3>
             </a>
 
             <div class="nav-control">
@@ -216,5 +216,6 @@
 		// })(jQuery);
 	</script>
     @yield('script')
+    @stack('scripts')
 </body>
 </html>

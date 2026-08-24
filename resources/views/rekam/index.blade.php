@@ -30,7 +30,7 @@
                         </li>
                         <li class="nav-item ">
                             <a href="{{Route('rekam',['tab'=>5])}}" class="nav-link {{Request('tab')==5 ? 'active' :''}}">
-                                <i class="la la-envelope mr-2"></i> Selesai Diperiksa</a>
+                                <i class="fa fa-check-circle mr-2"></i> Selesai Diperiksa</a>
                         </li>
                     @endif
                     

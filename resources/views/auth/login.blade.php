@@ -14,16 +14,23 @@
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('vendor/toastr/css/toastr.min.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --ot-navy: #2e4b82;
+            --ot-navy-hover: #213761;
+            --ot-cyan: #29b6f6;
+            --ot-yellow: #f5a623;
+        }
+
         * {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
             box-sizing: border-box;
         }
 
         body {
-            background: linear-gradient(135deg, #094754 0%, #0d6e80 40%, #128fa5 75%, #19b2ca 100%);
+            background: linear-gradient(135deg, #182c4f 0%, #2e4b82 50%, #3b63a6 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -34,11 +41,12 @@
 
         .login-card {
             background: #ffffff;
-            border-radius: 26px;
-            box-shadow: 0 20px 45px rgba(4, 47, 56, 0.25);
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 15px 35px rgba(24, 44, 79, 0.25);
             width: 100%;
             max-width: 410px;
-            padding: 40px 32px 36px 32px;
+            padding: 38px 32px 34px 32px;
             text-align: center;
         }
 
@@ -46,36 +54,42 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .main-logo {
-            max-height: 75px;
+            max-height: 80px;
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0 4px 10px rgba(13, 110, 128, 0.2));
+            filter: drop-shadow(0 4px 8px rgba(46, 75, 130, 0.18));
         }
 
         .login-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
-            color: #0f2c35;
-            margin-bottom: 6px;
+            color: #1e293b;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .login-subtitle-main {
-            font-size: 14.5px;
+            font-size: 15px;
             font-weight: 700;
-            color: #0d6e80;
+            color: var(--ot-navy);
             margin: 0 0 2px 0;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.4px;
+        }
+
+        .login-subtitle-main span {
+            color: var(--ot-yellow);
         }
 
         .login-subtitle-sub {
             font-size: 12.5px;
             font-weight: 500;
             color: #64748b;
-            margin: 0 0 26px 0;
+            margin: 0 0 24px 0;
         }
 
         .form-group {
@@ -86,7 +100,7 @@
         .form-label {
             font-size: 13px;
             font-weight: 600;
-            color: #1e293b;
+            color: #334155;
             margin-bottom: 6px;
             display: block;
         }
@@ -117,77 +131,65 @@
         }
 
         .input-icon-right:hover {
-            color: #0d6e80;
+            color: var(--ot-navy);
         }
 
         .form-control-custom {
             width: 100%;
-            height: 48px;
+            height: 46px;
             padding: 10px 42px 10px 40px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 14px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 13.5px;
             color: #1e293b;
             background-color: #f8fafc;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         .form-control-custom:focus {
             background-color: #ffffff;
-            border-color: #0d6e80;
+            border-color: var(--ot-navy);
             outline: none;
-            box-shadow: 0 0 0 3.5px rgba(13, 110, 128, 0.15);
+            box-shadow: 0 0 0 3px rgba(46, 75, 130, 0.2);
         }
 
         .form-control-custom::placeholder {
             color: #94a3b8;
-            font-size: 13.5px;
+            font-size: 13px;
         }
 
         .btn-submit {
             width: 100%;
-            height: 48px;
-            background: linear-gradient(90deg, #095968 0%, #118c9f 100%);
+            height: 46px;
+            background: linear-gradient(90deg, #2e4b82 0%, #3a62a3 100%);
             border: none;
-            border-radius: 12px;
+            border-radius: 4px;
             color: #ffffff;
-            font-size: 15px;
+            font-size: 14.5px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            box-shadow: 0 8px 18px rgba(13, 110, 128, 0.25);
+            transition: all 0.25s ease;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(46, 75, 130, 0.25);
+            letter-spacing: 0.3px;
         }
 
         .btn-submit:hover {
-            opacity: 0.96;
+            background: linear-gradient(90deg, #213761 0%, #2e4b82 100%);
+            box-shadow: 0 6px 16px rgba(46, 75, 130, 0.35);
             transform: translateY(-1px);
-            box-shadow: 0 10px 22px rgba(13, 110, 128, 0.35);
         }
 
         .btn-submit:active {
             transform: translateY(0);
         }
 
-        .footer-links {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .link-item {
-            font-size: 13px;
-            color: #64748b;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .link-item:hover {
-            color: #095968;
+        .login-copyright {
+            margin-top: 24px;
+            font-size: 11.5px;
+            color: #94a3b8;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 14px;
         }
     </style>
 </head>
@@ -201,7 +203,7 @@
         </div>
 
         <h2 class="login-title">Login Masuk</h2>
-        <p class="login-subtitle-main">Omah Terapiku</p>
+        <p class="login-subtitle-main">OMAH <span>TERAPIKU</span></p>
         <p class="login-subtitle-sub">Dinas Sosial Provinsi Jawa Timur</p>
 
         <!-- Form Login -->
@@ -229,14 +231,12 @@
 
             <!-- Tombol Masuk -->
             <button type="submit" class="btn-submit">Masuk</button>
-
-            <!-- Link Lupa Password -->
-            <div class="footer-links">
-                <a href="#" class="link-item">
-                    <i class="fa-solid fa-key" style="font-size: 11px;"></i> Lupa Password?
-                </a>
-            </div>
         </form>
+
+        <!-- Copyright Footer -->
+        <div class="login-copyright">
+            Omah Terapiku © {{ date('Y') }} All Rights Reserved
+        </div>
     </div>
 
     <!-- JavaScript Dependencies -->

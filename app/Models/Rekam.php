@@ -37,19 +37,19 @@ class Rekam extends Model
     function status_rekams(){
         switch ($this->status) {
             case 1:
-                return "<span class='badge badge-rounded badge-danger'>Belum Diperiksa</span>";
+                return "<span class='badge badge-rounded badge-warning'><i class='fa fa-clock-o mr-1'></i> Antrian</span>";
                 break;
             case 2:
-                return "<span class='badge badge-rounded badge-danger'>Belum Diperiksa</span>";
+                return "<span class='badge badge-rounded badge-info'><i class='fa fa-stethoscope mr-1'></i> Belum Diperiksa</span>";
                 break;
             case 3:
-                return "<span class='badge badge-rounded badge-primary'>Sudah Diperiksa</span>";
+                return "<span class='badge badge-rounded badge-primary'><i class='fa fa-user-md mr-1'></i> Sudah Diperiksa</span>";
                 break;
             case 4:
-                return "<span class='badge badge-rounded badge-primary'>Selesai</span>";
+                return "<span class='badge badge-rounded badge-success'><i class='fa fa-check-circle mr-1'></i> Selesai</span>";
                 break;
             case 5:
-                return "<span class='badge badge-rounded badge-primary'>Selesai</span>";
+                return "<span class='badge badge-rounded badge-success'><i class='fa fa-check-circle mr-1'></i> Selesai</span>";
                 break;
             default:
                 # code...
@@ -61,30 +61,30 @@ class Rekam extends Model
         switch ($this->status) {
             case 1:
                 return '<span class="badge badge-outline-warning">
-                            <i class="fa fa-circle text-warning mr-1"></i>
+                            <i class="fa fa-clock-o text-warning mr-1"></i>
                              Antrian
                         </span>';
             break;
             case 2:
                 return '<span class="badge badge-info light">
-                            <i class="fa fa-circle text-info mr-1"></i>
+                            <i class="fa fa-stethoscope text-info mr-1"></i>
                             Pemeriksaan
                         </span>';
             break;
             case 3:
-                return '<span class="badge badge-warning light" style="width:100px">
-                           Menunggu Pembayaran
+                return '<span class="badge badge-warning light" style="min-width:100px">
+                           <i class="fa fa-hourglass-half text-warning mr-1"></i> Menunggu
                         </span>';
             break;
             case 4:
-                return '<span class="badge badge-danger light">
-                            <i class="fa fa-circle text-danger mr-1"></i>
-                            Pembayaran
+                return '<span class="badge badge-success light">
+                            <i class="fa fa-check-circle text-success mr-1"></i>
+                            Selesai
                         </span>';
             break;
             case 5:
-                return '<span class="badge badge-primary light" style="width:100px">
-                            <i class="fa fa-check text-primary mr-1"></i>
+                return '<span class="badge badge-success light" style="min-width:95px">
+                            <i class="fa fa-check-circle text-success mr-1"></i>
                             Selesai
                         </span>';
             break;
