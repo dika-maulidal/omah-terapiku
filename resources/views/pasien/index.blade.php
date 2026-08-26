@@ -48,7 +48,7 @@
                                 <th>No. HP</th>
                                 <th>Status Layanan</th>
                                 <th>Status</th>
-                                <th>Aksi</th>
+                                 <th style="min-width: 125px; text-align: center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,15 +66,20 @@
                                    <td>
                                       {!! $row->statusPasien() !!}
                                    </td>
-                                   <td>                                           
-                                    <a href="{{Route('rekam.detail',$row->id)}}" class="btn btn-primary shadow btn-xs sharp mr-1">
-                                       <i class="fa fa-eye"></i></a>
-                                    <a href="{{Route('penerima-manfaat.edit',$row->id)}}" class="btn btn-info shadow btn-xs sharp mr-1">
-                                        <i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('penerima-manfaat.delete',$row->id)}}"
-                                     r-name="{{$row->nama}}" r-id="{{$row->id}}"><i class="fa fa-trash"></i></a>
-
-                               </td>
+                                   <td style="white-space: nowrap;">
+                                       <div class="d-flex align-items-center justify-content-center">
+                                           <a href="{{Route('rekam.detail',$row->id)}}" class="btn btn-primary shadow btn-xs sharp mr-1" title="Lihat Rekam Medis">
+                                               <i class="fa fa-eye"></i>
+                                           </a>
+                                           <a href="{{Route('penerima-manfaat.edit',$row->id)}}" class="btn btn-info shadow btn-xs sharp mr-1" title="Edit Data Pasien">
+                                               <i class="fa fa-pencil"></i>
+                                           </a>
+                                           <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('penerima-manfaat.delete',$row->id)}}"
+                                               r-name="{{$row->nama}}" r-id="{{$row->id}}" title="Hapus Data Pasien">
+                                               <i class="fa fa-trash"></i>
+                                           </a>
+                                       </div>
+                                   </td>
                                 </tr>
                             @endforeach
                         </tbody>
