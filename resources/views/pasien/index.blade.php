@@ -1,16 +1,6 @@
 @extends('layout.apps')
 @section('content')
-{{-- <div class="form-head align-items-center d-flex mb-sm-4 mb-3">
-    <div class="mr-auto">
-        <h2 class="text-black font-w600">Data Pasien</h2>
-    </div>
-    <div>
-        <a href="{{Route('penerima-manfaat.add')}}" class="btn btn-primary mr-3">+Pasien Baru</a>
-        <a href="#" class="btn btn-outline-primary"><i class="las la-calendar-plus scale5 mr-3"></i>Filter Date</a>
-
-    </div>
-</div> --}}
-<div class="mr-auto">
+<div class="mr-auto mb-3">
     <h2 class="text-black font-w600">Data Penerima Manfaat</h2>
 </div>
 
@@ -19,7 +9,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-group col-lg-6" style="float: left">
-                    <a href="{{Route('penerima-manfaat.add')}}" class="btn btn-primary mr-3">+Penerima Manfaat Baru</a>
+                    <a href="{{Route('penerima-manfaat.add')}}" class="btn btn-primary mr-2">+Penerima Manfaat Baru</a>
+                    <a href="{{Route('penerima-manfaat.export-csv', ['keyword' => request('keyword')])}}" class="btn btn-success" title="Download data penerima manfaat ke CSV">
+                        <i class="fa fa-file-excel-o mr-1"></i> Export CSV
+                    </a>
                 </div>
                 <div class="form-group col-lg-6" style="float: right">
                     <form method="get" action="{{ url()->current() }}">
@@ -48,7 +41,7 @@
                                 <th>No. HP</th>
                                 <th>Status Layanan</th>
                                 <th>Status</th>
-                                 <th style="min-width: 125px; text-align: center;">Aksi</th>
+                                <th style="min-width: 125px; text-align: center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

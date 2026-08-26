@@ -22,33 +22,40 @@ class RekamController extends Controller
     {
         $user = auth()->user();
         $role = $user->role_display();
-        $rekams = Rekam::latest()
+        $rekams = Rekam::latest('rekam.created_at')
                     ->select('rekam.*')
                     ->leftJoin('pasien', function($join) {
                         $join->on('rekam.pasien_id', '=', 'pasien.id');
                     })
                     ->when($request->keyword, function ($query) use ($request) {
-                        $query->where('rekam.tgl_rekam', 'LIKE', "%{$request->keyword}%")
-                                ->orwhere('rekam.cara_bayar', 'LIKE', "%{$request->keyword}%")
-                                ->orwhere('pasien.nama', 'LIKE', "%{$request->keyword}%")
-                                ->orwhere('pasien.no_bpjs', 'LIKE', "%{$request->keyword}%")
-                                ->orwhere('pasien.no_rm', 'LIKE', "%{$request->keyword}%");
+                        $query->where(function ($q) use ($request) {
+                            $q->where('rekam.tgl_rekam', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('rekam.no_rekam', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('rekam.cara_bayar', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('pasien.nama', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('pasien.no_bpjs', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('pasien.no_rm', 'LIKE', "%{$request->keyword}%");
+                        });
                     })
-                    ->when($role, function ($query) use ($role, $user) {
-                        if ($role == "Dokter") {
-                            $dokterId = Dokter::where('user_id', $user->id)->where('status', 1)->first()->id;
-                            $query->where('dokter_id', '=', $dokterId);
+                    ->when($role == "Dokter", function ($query) use ($user) {
+                        $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
+                        if ($dokter) {
+                            $query->where('rekam.dokter_id', '=', $dokter->id);
                         }
                     })
-                    ->when($request->tab, function ($query) use ($request) {
-                        if (auth()->user()->role_display() == "Dokter" && $request->tab == 5) {
-                            $query->whereIn('status', [3, 4, 5]);
-                        } else {
-                            if ($request->tab == 5) {
-                                $query->whereIn('status', [4, 5]);
+                    ->when($request->filled('status') || $request->filled('tab'), function ($query) use ($request, $role) {
+                        $status = $request->status ?? $request->tab;
+                        if ($status === 'all') {
+                            return;
+                        }
+                        if ($status == '5') {
+                            if ($role == "Dokter") {
+                                $query->whereIn('rekam.status', [3, 4, 5]);
                             } else {
-                                $query->where('status', '=', "$request->tab");
+                                $query->whereIn('rekam.status', [4, 5]);
                             }
+                        } else {
+                            $query->where('rekam.status', '=', $status);
                         }
                     })
                     ->paginate(10);

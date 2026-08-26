@@ -45,6 +45,11 @@ class Pasien extends Model
         return $this->file_resume != null ? asset('images/pasien/' . $this->file_resume) : null;
     }
 
+    public function rekams()
+    {
+        return $this->hasMany(Rekam::class, 'pasien_id');
+    }
+
     public function rekamGigi()
     {
         return RekamGigi::where('pasien_id', $this->id)->get();
@@ -87,6 +92,21 @@ class Pasien extends Model
                             Pasien Lama
                         </span>';
             }
+        }
+    }
+
+    public function getStatusPasienTextAttribute()
+    {
+        $lastData = Carbon::createFromFormat('Y-m-d H:i:s', '2023-05-22 18:00:00');
+
+        $rekam = Rekam::where('pasien_id', $this->id)
+                      ->whereIn('status', [4, 5])
+                      ->count();
+
+        if ($rekam > 0) {
+            return 'Sudah Periksa';
+        } else {
+            return ($this->created_at && $this->created_at > $lastData) ? 'Pasien Baru' : 'Pasien Lama';
         }
     }
 }

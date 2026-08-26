@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/getNoRM', [PasienController::class, 'getLastRM'])->name('getNoRM');
 
     Route::get('/penerima-manfaat', [PasienController::class, 'index'])->name('penerima-manfaat');
+    Route::get('/penerima-manfaat/export-csv', [PasienController::class, 'exportCsv'])->name('penerima-manfaat.export-csv');
     Route::get('/penerima-manfaat/add', [PasienController::class, 'add'])->name('penerima-manfaat.add');
     Route::get('/penerima-manfaat/{id}/edit', [PasienController::class, 'edit'])->name('penerima-manfaat.edit');
     Route::get('/penerima-manfaat/{id}/delete', [PasienController::class, 'delete'])->name('penerima-manfaat.delete');

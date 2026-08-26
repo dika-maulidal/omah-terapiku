@@ -59,7 +59,101 @@ class PasienController extends Controller
                         ->orWhere('no_hp', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('alamat_lengkap', 'LIKE', "%{$request->keyword}%");
                 })->paginate(10);
-        return view('pasien.index',compact('datas'));
+        return view('pasien.index', compact('datas'));
+    }
+
+    public function exportCsv(Request $request)
+    {
+        $datas = Pasien::whereNull('deleted_at')
+                ->when($request->keyword, function ($query) use ($request) {
+                    $query->where('no_rm', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('nama', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('nik', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('no_bpjs', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('no_hp', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('alamat_lengkap', 'LIKE', "%{$request->keyword}%");
+                })
+                ->orderBy('id', 'asc')
+                ->get();
+
+        $filename = 'data-penerima-manfaat-' . date('Y-m-d_His') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $columns = [
+            'No',
+            'No. RM',
+            'NIK',
+            'Nama Penerima Manfaat',
+            'Tempat Lahir',
+            'Tanggal Lahir',
+            'Jenis Kelamin',
+            'Alamat Lengkap',
+            'Kelurahan',
+            'Kecamatan',
+            'Kabupaten',
+            'Kode Pos',
+            'Agama',
+            'Status Menikah',
+            'Pendidikan',
+            'Pekerjaan',
+            'Kewarganegaraan',
+            'No. HP',
+            'Status Layanan',
+            'No. BPJS/KTP',
+            'Alergi',
+            'Status Pemeriksaan',
+            'Tanggal Terdaftar',
+        ];
+
+        $callback = function () use ($datas, $columns) {
+            $file = fopen('php://output', 'w');
+
+            // UTF-8 BOM for Microsoft Excel compatibility
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            // Header row
+            fputcsv($file, $columns);
+
+            $index = 1;
+            foreach ($datas as $row) {
+                fputcsv($file, [
+                    $index++,
+                    $row->no_rm ?? '-',
+                    $row->nik ? "'" . $row->nik : '-',
+                    $row->nama ?? '-',
+                    $row->tmp_lahir ?? '-',
+                    $row->tgl_lahir ? Carbon::parse($row->tgl_lahir)->format('d/m/Y') : '-',
+                    $row->jk ?? '-',
+                    $row->alamat_lengkap ?? '-',
+                    $row->kelurahan ?? '-',
+                    $row->kecamatan ?? '-',
+                    $row->kabupaten ?? '-',
+                    $row->kodepos ?? '-',
+                    $row->agama ?? '-',
+                    $row->status_menikah ?? '-',
+                    $row->pendidikan ?? '-',
+                    $row->pekerjaan ?? '-',
+                    $row->kewarganegaraan ?? 'WNI',
+                    $row->no_hp ? "'" . $row->no_hp : '-',
+                    'Gratis, tidak dipungut biaya',
+                    $row->no_bpjs ? "'" . $row->no_bpjs : '-',
+                    $row->alergi ?? '-',
+                    $row->status_pasien_text,
+                    $row->created_at ? $row->created_at->format('d/m/Y H:i') : '-',
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     function add(Request $request){

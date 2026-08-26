@@ -18,7 +18,7 @@ class DummyDataSeeder extends Seeder
                 'name' => 'Administrator',
                 'nip' => '199001012026011001',
                 'phone' => '081234567890',
-                'password' => Hash::make('password'), // password: password
+                'password' => Hash::make('password'),
                 'role' => 1,
                 'status' => 1,
             ]
@@ -50,11 +50,10 @@ class DummyDataSeeder extends Seeder
             ]
         );
 
-        // Otomatis menautkan profil Dokter dengan user_id milik akun Dokter di atas
+        // Otomatis menautkan profil Dokter dengan user_id milik akun Dokter di atas (TANPA kolom nip)
         Dokter::updateOrCreate(
             ['user_id' => $dokterUser->id],
             [
-                'nip' => '199001012026011001',
                 'nama' => 'dr. Omah Terapiku',
                 'no_hp' => '081234567892',
                 'alamat' => 'Surabaya',
@@ -62,6 +61,5 @@ class DummyDataSeeder extends Seeder
                 'status' => 1,
             ]
         );
-
     }
 }

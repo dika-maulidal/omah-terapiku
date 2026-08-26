@@ -214,27 +214,37 @@
 }
 
 .footer .copyright {
-    padding: 0 !important;
-    text-align: center !important;
+    padding: 16px 20px !important;
+    background-color: #ffffff !important;
+    border-top: 1px solid #eef2f7 !important;
 }
 
 .footer .copyright p {
-    color: #8fa0bc !important;
     font-size: 12.5px !important;
-    margin: 0 !important;
+    color: #64748b !important;
     font-weight: 500 !important;
+    margin: 0 !important;
 }
 
 .footer .copyright a {
     color: var(--ot-navy) !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
     text-decoration: none !important;
     transition: color 0.2s ease !important;
 }
 
 .footer .copyright a:hover {
     color: var(--ot-yellow) !important;
-    text-decoration: underline !important;
+}
+
+/* Ensure content body does not get cut off by footer */
+.content-body {
+    min-height: calc(100vh - 120px) !important;
+    padding-bottom: 40px !important;
+}
+
+.container-fluid {
+    padding-bottom: 20px !important;
 }
 
 /* ==========================================================================
@@ -352,11 +362,29 @@
 }
 
 /* ==========================================================================
-   4. BUTTONS
+   4. BUTTONS (Modern Soft Rounded Corners)
    ========================================================================== */
 .btn {
-    border-radius: 4px !important;
+    border-radius: 10px !important;
     font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(46, 75, 130, 0.15) !important;
+}
+
+.btn-sm {
+    border-radius: 8px !important;
+}
+
+.btn-xs {
+    border-radius: 7px !important;
+}
+
+.btn-rounded {
+    border-radius: 50px !important;
 }
 
 .btn-primary {
@@ -401,35 +429,101 @@
 }
 
 /* ==========================================================================
-   5. CARDS & FORMS
+   5. CARDS, FORMS & SURFACES (Modern Soft Curved System)
    ========================================================================== */
 .card {
-    border-radius: 4px !important;
-    border: 1px solid #e2e8f0 !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+    border-radius: 16px !important;
+    border: 1px solid #edf2f9 !important;
+    box-shadow: 0 4px 20px -2px rgba(46, 75, 130, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
+    background-color: #ffffff !important;
+    transition: transform 0.22s ease, box-shadow 0.22s ease !important;
+    position: relative;
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px -3px rgba(46, 75, 130, 0.08), 0 3px 8px -1px rgba(0, 0, 0, 0.03) !important;
 }
 
 .card-header {
-    border-radius: 0 !important;
-    border-bottom: 1px solid #e2e8f0 !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+    border-bottom: 1px solid #f1f5fb !important;
+    background-color: #ffffff !important;
+    padding: 1.25rem 1.5rem !important;
+}
+
+.card-header.border-0 {
+    border-bottom: none !important;
+}
+
+.card-body {
+    padding: 1.5rem !important;
+}
+
+.card-footer {
+    border-bottom-left-radius: 16px !important;
+    border-bottom-right-radius: 16px !important;
+    border-top: 1px solid #f1f5fb !important;
+    background-color: #fafbfd !important;
+    padding: 1rem 1.5rem !important;
 }
 
 .form-control {
-    border-radius: 4px !important;
-    border: 1px solid #ced4da !important;
+    border-radius: 10px !important;
+    border: 1px solid #e2e8f0 !important;
+    transition: all 0.2s ease !important;
 }
 
 .form-control:focus {
     border-color: var(--ot-navy) !important;
-    box-shadow: 0 0 0 0.2rem rgba(46, 75, 130, 0.25) !important;
+    box-shadow: 0 0 0 0.2rem rgba(46, 75, 130, 0.15) !important;
+}
+
+.modal-content {
+    border-radius: 18px !important;
+    border: none !important;
+    box-shadow: 0 20px 45px rgba(46, 75, 130, 0.18) !important;
+    overflow: hidden;
+}
+
+.modal-header {
+    border-top-left-radius: 18px !important;
+    border-top-right-radius: 18px !important;
+}
+
+.modal-footer {
+    border-bottom-left-radius: 18px !important;
+    border-bottom-right-radius: 18px !important;
+}
+
+.alert {
+    border-radius: 12px !important;
+}
+
+.progress {
+    border-radius: 10px !important;
+    background-color: #eef2f7 !important;
+    overflow: hidden;
+}
+
+.progress-bar {
+    border-radius: 10px !important;
 }
 
 /* ==========================================================================
-   6. BADGES
+   6. BADGES (Modern Rounded Pill & Soft Tags)
    ========================================================================== */
 .badge {
-    border-radius: 3px !important;
+    border-radius: 8px !important;
     font-weight: 600;
+    padding: 0.4em 0.75em !important;
+    letter-spacing: 0.2px;
+}
+
+.badge-pill,
+.badge-rounded {
+    border-radius: 50px !important;
+    padding: 0.35em 0.9em !important;
 }
 
 .badge-primary {
@@ -473,11 +567,60 @@
     color: #0288d1 !important;
 }
 
-/* DataTables Pagination */
+/* DataTables Pagination & General Pagination */
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
     background: var(--ot-navy) !important;
     border-color: var(--ot-navy) !important;
     color: #ffffff !important;
+    border-radius: 8px !important;
+}
+
+.pagination .page-item .page-link {
+    border-radius: 8px !important;
+    margin: 0 3px !important;
+    border: 1px solid #e2e8f0 !important;
+    color: var(--ot-navy) !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--ot-navy) !important;
+    border-color: var(--ot-navy) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(46, 75, 130, 0.25) !important;
+}
+
+/* Modern Tables System */
+.table {
+    color: #334155 !important;
+}
+
+.table thead th {
+    border-top: none !important;
+    border-bottom: 2px solid #eef2f7 !important;
+    color: #475569 !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    background-color: #f8fafc !important;
+    padding: 12px 16px !important;
+}
+
+.table tbody tr {
+    transition: background-color 0.15s ease !important;
+}
+
+.table tbody tr:hover {
+    background-color: #f8fafc !important;
+}
+
+.table td {
+    padding: 14px 16px !important;
+    vertical-align: middle !important;
+    border-top: 1px solid #f1f5fb !important;
+    font-size: 13.5px !important;
 }
 
 /* ==========================================================================
@@ -533,14 +676,14 @@
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: 0 16px !important;
+    padding: 0 18px !important;
     background-color: var(--ot-navy) !important;
     border-color: var(--ot-navy) !important;
     color: #ffffff !important;
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
-    border-top-right-radius: 4px !important;
-    border-bottom-right-radius: 4px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
     transition: all 0.2s ease !important;
 }
 
@@ -570,9 +713,372 @@ button.gp-search i.fa-search,
 
 /* Align search input text field */
 .input-group input.form-control.gp-search {
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     border-right: none !important;
     height: 44px !important;
     font-size: 13.5px !important;
 }
+
+/* ==========================================================================
+   9. DASHBOARD COMPONENTS & BRAND NUANCE
+   ========================================================================== */
+
+/* Modern Stat Widget Card with Harmonious Brand Backgrounds */
+.ot-stat-card {
+    border-radius: 14px !important;
+    padding: 16px 18px !important;
+    box-shadow: 0 2px 10px rgba(46, 75, 130, 0.04) !important;
+    transition: all 0.2s ease !important;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.ot-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(46, 75, 130, 0.08) !important;
+}
+
+.ot-stat-icon-wrap {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    background: #ffffff !important;
+}
+
+/* 1. Navy Variant (Primary Brand) */
+.ot-stat-card.ot-navy {
+    background: linear-gradient(135deg, #eef4fc 0%, #e3ecf8 100%) !important;
+    border: 1px solid #d0e0f5 !important;
+}
+.ot-stat-card.ot-navy .ot-stat-title { color: #4a5d7e !important; }
+.ot-stat-card.ot-navy .ot-stat-number { color: #1e3761 !important; }
+.ot-stat-card.ot-navy .ot-stat-icon-wrap {
+    color: var(--ot-navy) !important;
+    box-shadow: 0 2px 8px rgba(46, 75, 130, 0.12) !important;
+}
+.ot-stat-card.ot-navy .ot-stat-footer {
+    border-top: 1px solid rgba(46, 75, 130, 0.1) !important;
+    color: #576d91 !important;
+}
+.ot-stat-card.ot-navy .badge {
+    background-color: var(--ot-navy) !important;
+    color: #ffffff !important;
+}
+
+/* 2. Cyan Variant (Medical/Info) */
+.ot-stat-card.ot-cyan {
+    background: linear-gradient(135deg, #e6f7ff 0%, #d7effd 100%) !important;
+    border: 1px solid #b8e2fa !important;
+}
+.ot-stat-card.ot-cyan .ot-stat-title { color: #2c6e91 !important; }
+.ot-stat-card.ot-cyan .ot-stat-number { color: #0277bd !important; }
+.ot-stat-card.ot-cyan .ot-stat-icon-wrap {
+    color: #0288d1 !important;
+    box-shadow: 0 2px 8px rgba(2, 136, 209, 0.12) !important;
+}
+.ot-stat-card.ot-cyan .ot-stat-footer {
+    border-top: 1px solid rgba(2, 136, 209, 0.1) !important;
+    color: #437e9e !important;
+}
+.ot-stat-card.ot-cyan .badge {
+    background-color: #0288d1 !important;
+    color: #ffffff !important;
+}
+
+/* 3. Yellow/Gold Variant (Secondary Brand) */
+.ot-stat-card.ot-yellow {
+    background: linear-gradient(135deg, #fef8eb 0%, #fdf0d5 100%) !important;
+    border: 1px solid #fae1b2 !important;
+}
+.ot-stat-card.ot-yellow .ot-stat-title { color: #8c651e !important; }
+.ot-stat-card.ot-yellow .ot-stat-number { color: #b7791f !important; }
+.ot-stat-card.ot-yellow .ot-stat-icon-wrap {
+    color: #d98f18 !important;
+    box-shadow: 0 2px 8px rgba(245, 166, 35, 0.15) !important;
+}
+.ot-stat-card.ot-yellow .ot-stat-footer {
+    border-top: 1px solid rgba(245, 166, 35, 0.15) !important;
+    color: #8c651e !important;
+}
+.ot-stat-card.ot-yellow .badge {
+    background-color: #d98f18 !important;
+    color: #ffffff !important;
+}
+
+/* 4. Green Variant (Health/Success) */
+.ot-stat-card.ot-green {
+    background: linear-gradient(135deg, #edf7ee 0%, #def0df 100%) !important;
+    border: 1px solid #c3e6c5 !important;
+}
+.ot-stat-card.ot-green .ot-stat-title { color: #356b38 !important; }
+.ot-stat-card.ot-green .ot-stat-number { color: #2e7d32 !important; }
+.ot-stat-card.ot-green .ot-stat-icon-wrap {
+    color: #2e7d32 !important;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.12) !important;
+}
+.ot-stat-card.ot-green .ot-stat-footer {
+    border-top: 1px solid rgba(46, 125, 50, 0.1) !important;
+    color: #4b784e !important;
+}
+.ot-stat-card.ot-green .badge {
+    background-color: #2e7d32 !important;
+    color: #ffffff !important;
+}
+
+/* 5. Purple Variant */
+.ot-stat-card.ot-purple {
+    background: linear-gradient(135deg, #f5f0fa 0%, #ece2f5 100%) !important;
+    border: 1px solid #ddccee !important;
+}
+.ot-stat-card.ot-purple .ot-stat-title { color: #63457a !important; }
+.ot-stat-card.ot-purple .ot-stat-number { color: #5e35b1 !important; }
+.ot-stat-card.ot-purple .ot-stat-icon-wrap {
+    color: #5e35b1 !important;
+    box-shadow: 0 2px 8px rgba(94, 53, 177, 0.12) !important;
+}
+.ot-stat-card.ot-purple .ot-stat-footer {
+    border-top: 1px solid rgba(94, 53, 177, 0.1) !important;
+    color: #63457a !important;
+}
+.ot-stat-card.ot-purple .badge {
+    background-color: #5e35b1 !important;
+    color: #ffffff !important;
+}
+
+.ot-stat-number {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 2px;
+}
+
+.ot-stat-title {
+    font-size: 12.5px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.ot-stat-footer {
+    margin-top: 10px;
+    padding-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11.5px;
+}
+
+/* Patient Queue & Schedule List Item */
+.ot-schedule-item {
+    background-color: #f8fafc;
+    border: 1px solid #eef2f7;
+    border-radius: 10px !important;
+    padding: 12px 14px !important;
+    margin-bottom: 10px !important;
+    transition: all 0.2s ease !important;
+}
+
+.ot-schedule-item:hover {
+    background-color: #ffffff;
+    border-color: #cbd5e1;
+    box-shadow: 0 3px 10px rgba(46, 75, 130, 0.06) !important;
+}
+
+.ot-patient-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--ot-navy-light);
+    color: var(--ot-navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-right: 12px;
+}
+
+.ot-schedule-item .patient-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+
+.ot-schedule-item .patient-name a {
+    color: #1e293b;
+    text-decoration: none;
+}
+
+.ot-schedule-item .patient-name a:hover {
+    color: var(--ot-navy);
+}
+
+.ot-meta-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+}
+
+.ot-meta-list li {
+    font-size: 11.5px;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+}
+
+.ot-meta-list li i {
+    font-size: 12px;
+    margin-right: 4px;
+    color: #94a3b8;
+}
+
+/* Card Tabs Styling */
+.ot-card-tabs .nav-tabs {
+    border: none !important;
+    background-color: #f1f5f9;
+    padding: 3px;
+    border-radius: 8px;
+    display: inline-flex;
+}
+
+.ot-card-tabs .nav-tabs .nav-item {
+    margin: 0;
+}
+
+.ot-card-tabs .nav-tabs .nav-link {
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 4px 10px !important;
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.ot-card-tabs .nav-tabs .nav-link.active {
+    background-color: var(--ot-navy) !important;
+    color: #ffffff !important;
+    box-shadow: 0 1px 4px rgba(46, 75, 130, 0.2) !important;
+}
+
+/* Top Diagnosa Items (Clean, Full-Width & Responsive) */
+.ot-diagnosa-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ot-diagnosa-item {
+    background-color: #f8fafc;
+    border: 1px solid #edf2f7;
+    border-radius: 8px;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: all 0.15s ease;
+}
+
+.ot-diagnosa-item:hover {
+    background-color: #ffffff;
+    border-color: #cbd5e1;
+}
+
+.ot-rank-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background-color: #e2e8f0;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.ot-diagnosa-item:nth-child(1) .ot-rank-badge {
+    background-color: #fff8e7;
+    color: #d98f18;
+}
+
+.ot-diagnosa-item:nth-child(2) .ot-rank-badge {
+    background-color: #eef3fb;
+    color: #2e4b82;
+}
+
+.ot-diagnosa-item:nth-child(3) .ot-rank-badge {
+    background-color: #e1f5fe;
+    color: #0288d1;
+}
+
+.ot-diagnosa-code {
+    background: var(--ot-navy-light);
+    color: var(--ot-navy);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    letter-spacing: 0.3px;
+}
+
+.ot-diagnosa-name {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #1e293b;
+    word-break: break-word;
+    line-height: 1.3;
+}
+
+.ot-diagnosa-count {
+    background-color: #eef2f7;
+    color: #334155;
+    font-weight: 600;
+    font-size: 11.5px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Stat Highlight Box for Tabs */
+.ot-stat-highlight {
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ot-stat-highlight-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--ot-navy);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+}
+
+

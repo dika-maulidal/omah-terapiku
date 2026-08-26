@@ -1,90 +1,103 @@
 @extends('layout.apps')
 @section('content')
+<div class="mr-auto mb-3">
+    <h2 class="text-black font-w600">Data Rekam Medis</h2>
+</div>
 
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
             <div class="card-body">
-                <ul class="nav nav-tabs" >
-                    <div class="form-group col-lg-6" style="float: left">
-                        <a href="{{Route('rekam.add')}}" class="btn btn-primary mr-3">+Rekam Medis Baru</a>    
+                <div class="row mb-3 align-items-center">
+                    <div class="col-lg-5 col-md-12 mb-2 mb-lg-0">
+                        <a href="{{Route('rekam.add')}}" class="btn btn-primary">+Rekam Medis Baru</a>
                     </div>
-                    <div class="form-group col-lg-6" style="float: right">
+                    <div class="col-lg-7 col-md-12">
                         <form method="get" action="{{ url()->current() }}">
-                            <div class="input-group">
-                                <input type="text" class="form-control gp-search"
-                                 name="keyword" value="{{request('keyword')}}" placeholder="Cari" value="" autocomplete="off">
-                                <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-default no-border btn-sm gp-search">
-                                    <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
-                                    </button>
+                            <div class="row">
+                                <div class="col-sm-5 mb-2 mb-sm-0 pr-sm-1">
+                                    <select name="status" class="form-control" onchange="this.form.submit()">
+                                        <option value="" {{ request('status') == '' && request('tab') == '' ? 'selected' : '' }}>Semua Status</option>
+                                        <option value="1" {{ request('status') == '1' || request('tab') == '1' ? 'selected' : '' }}>Antrian</option>
+                                        <option value="2" {{ request('status') == '2' || request('tab') == '2' ? 'selected' : '' }}>Pemeriksaan</option>
+                                        <option value="3" {{ request('status') == '3' || request('tab') == '3' ? 'selected' : '' }}>Menunggu</option>
+                                        <option value="5" {{ request('status') == '5' || request('tab') == '5' ? 'selected' : '' }}>Selesai</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-7 pl-sm-1">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control gp-search" name="keyword" value="{{request('keyword')}}" placeholder="Cari..." autocomplete="off">
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default no-border btn-sm gp-search">
+                                                <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
-    
                     </div>
-                    @if(auth()->user()->role_display()=="Dokter")
-                        <li class="nav-item">
-                            <a href="{{Route('rekam',['tab'=>2])}}" class="nav-link {{Request('tab')==2 ? 'active' :''}}" >
-                                <i class="la la-user mr-2"></i> Perlu Diperiksa</a>
-                        </li>
-                        <li class="nav-item ">
-                            <a href="{{Route('rekam',['tab'=>5])}}" class="nav-link {{Request('tab')==5 ? 'active' :''}}">
-                                <i class="fa fa-check-circle mr-2"></i> Selesai Diperiksa</a>
-                        </li>
-                    @endif
-                    
-                </ul>
+                </div>
 
                 <div class="table-responsive card-table"> 
                     <table class="table table-responsive-md">
                         <thead>
                             <tr>
-                                
-                                <th>No</th>
+                                <th>#</th>
                                 <th>Tanggal</th>
                                 <th>Nama Penerima Manfaat</th>
                                 <th>Omah Terapiku &<br>Terapis</th>
-                                <th>Keluhan </th>
+                                <th>Keluhan</th>
                                 <th>Status Layanan</th>
                                 <th>Status</th>
-                                <th>Aksi</th>
+                                <th style="min-width: 100px; text-align: center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($rekams as $key=>$row)
+                            @forelse ($rekams as $key => $row)
                                 <tr>
                                     <td align="center">{{ $rekams->firstItem() + $key }}</td>
-                                <td>{{$row->no_rekam}}<br/>{{$row->tgl_rekam}}</td>
-                                <td><a href="{{Route('rekam.detail',$row->pasien_id)}}">{{$row->pasien->nama}}</a></td>
-                                <td>Omah Terapiku: {{$row->poli}}
-                                    <br><strong>{{$row->dokter->nama}}</strong>
-                                </td>
-                                <td>{{$row->keluhan}}</td>
-                                <td>Gratis, tidak dipungut biaya</td>
-                                <td>{!!$row->status_display()!!}</td>
-                                <td>
-                                    <div class="d-flex">
-                                        <a href="{{Route('rekam.detail',$row->pasien_id)}}" class="btn btn-primary shadow btn-xs sharp mr-1"><i class="fa fa-user-md"></i></a>
-                                        @if (auth()->user()->role_display()=="Admin" && $row->status==2)
-                                             <a href="{{Route('rekam.edit',$row->id)}}"  class="btn btn-info shadow btn-xs sharp mr-1">
-                                            <i class="fa fa-pencil"></i></a>
-                                        <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('rekam.delete',$row->id)}}"
-                                         r-name="{{$row->pasien->nama}}" r-id="{{$row->id}}"><i class="fa fa-trash"></i></a>
-                                        @endif
-
-                                       
-                                    </div>
-                                </td>
+                                    <td>{{$row->no_rekam}}<br/>{{$row->tgl_rekam}}</td>
+                                    <td><a href="{{Route('rekam.detail', $row->pasien_id)}}">{{$row->pasien->nama ?? '-'}}</a></td>
+                                    <td>
+                                        Omah Terapiku: {{$row->poli}}
+                                        <br><strong>{{$row->dokter->nama ?? '-'}}</strong>
+                                    </td>
+                                    <td>{{$row->keluhan}}</td>
+                                    <td>Gratis, tidak dipungut biaya</td>
+                                    <td>{!!$row->status_display()!!}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <a href="{{Route('rekam.detail', $row->pasien_id)}}" class="btn btn-primary shadow btn-xs sharp mr-1" title="Lihat Rekam Medis">
+                                                <i class="fa fa-user-md"></i>
+                                            </a>
+                                            @if (auth()->user()->role_display() == "Admin" && $row->status == 2)
+                                                <a href="{{Route('rekam.edit', $row->id)}}" class="btn btn-info shadow btn-xs sharp mr-1" title="Edit Data">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('rekam.delete', $row->id)}}"
+                                                   r-name="{{$row->pasien->nama ?? 'Rekam'}}" r-id="{{$row->id}}" title="Hapus Data">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="8" class="text-center py-4 text-muted">
+                                        Tidak ada data rekam medis yang sesuai.
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
-                        
                     </table>
+
+                    <div class="dataTables_info" id="example_info" role="status" aria-live="polite">
+                        Showing {{$rekams->firstItem() ?? 0}} to {{$rekams->lastItem() ?? 0}} of {{$rekams->total()}} entries
+                    </div>
                     {{ $rekams->appends(request()->except('page'))->links() }}
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -92,30 +105,28 @@
 @endsection
 
 @section('script')
-
 <script>
-        $().ready( function () {
-            $(".delete").click(function() {
-                 var id = $(this).attr('r-id');
-                 var name = $(this).attr('r-name');
-                 var link = $(this).attr('r-link');
+    $().ready( function () {
+        $(".delete").click(function(e) {
+            e.preventDefault();
+            var id = $(this).attr('r-id');
+            var name = $(this).attr('r-name');
+            var link = $(this).attr('r-link');
 
-                 Swal.fire({
-                  title: 'Ingin Menghapus?',
-                  text: "Yakin ingin menghapus data  : "+name+" ini ?" ,
-                  type: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, hapus !'
-                }).then((result) => {
-                  console.log(result);
-                  if (result.value) {
-                      window.location = link;
-                  }
-                });
+            Swal.fire({
+                title: 'Ingin Menghapus?',
+                text: "Yakin ingin menghapus data: " + name + " ini?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, hapus!'
+            }).then((result) => {
+                if (result.value) {
+                    window.location = link;
+                }
             });
-        } );
-    </script>
-    
+        });
+    });
+</script>
 @endsection
