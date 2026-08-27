@@ -62,6 +62,137 @@ class RekamController extends Controller
         return view('rekam.index', compact('rekams'));
     }
 
+    public function exportCsv(Request $request)
+    {
+        $user = auth()->user();
+        $role = $user->role_display();
+
+        $rekams = Rekam::latest('rekam.created_at')
+                    ->select('rekam.*')
+                    ->leftJoin('pasien', function($join) {
+                        $join->on('rekam.pasien_id', '=', 'pasien.id');
+                    })
+                    ->when($request->keyword, function ($query) use ($request) {
+                        $query->where(function ($q) use ($request) {
+                            $q->where('rekam.tgl_rekam', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('rekam.no_rekam', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('rekam.cara_bayar', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('pasien.nama', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('pasien.no_bpjs', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('pasien.no_rm', 'LIKE', "%{$request->keyword}%");
+                        });
+                    })
+                    ->when($role == "Dokter", function ($query) use ($user) {
+                        $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
+                        if ($dokter) {
+                            $query->where('rekam.dokter_id', '=', $dokter->id);
+                        }
+                    })
+                    ->when($request->filled('status') || $request->filled('tab'), function ($query) use ($request, $role) {
+                        $status = $request->status ?? $request->tab;
+                        if ($status === 'all') {
+                            return;
+                        }
+                        if ($status == '5') {
+                            if ($role == "Dokter") {
+                                $query->whereIn('rekam.status', [3, 4, 5]);
+                            } else {
+                                $query->whereIn('rekam.status', [4, 5]);
+                            }
+                        } else {
+                            $query->where('rekam.status', '=', $status);
+                        }
+                    })
+                    ->with(['pasien', 'dokter'])
+                    ->get();
+
+        $filename = 'data-rekam-medis-' . date('Y-m-d_His') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $columns = [
+            'No',
+            'No. Rekam Medis',
+            'Tanggal Rekam',
+            'No. RM',
+            'Nama Penerima Manfaat',
+            'NIK',
+            'No. HP',
+            'Alamat',
+            'Layanan / Poli',
+            'Terapis / Dokter',
+            'Keluhan',
+            'Pemeriksaan',
+            'Tindakan',
+            'Diagnosa (ICD)',
+            'Status Layanan',
+            'Status Pemeriksaan',
+            'Waktu Pendaftaran',
+        ];
+
+        $callback = function () use ($rekams, $columns) {
+            $file = fopen('php://output', 'w');
+
+            // UTF-8 BOM for Microsoft Excel compatibility
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            // Header row
+            fputcsv($file, $columns);
+
+            $index = 1;
+            foreach ($rekams as $row) {
+                // Status text
+                $statusText = 'Antrian';
+                if ($row->status == 2) {
+                    $statusText = 'Pemeriksaan';
+                } elseif ($row->status == 3) {
+                    $statusText = 'Menunggu';
+                } elseif ($row->status == 4 || $row->status == 5) {
+                    $statusText = 'Selesai';
+                }
+
+                // Diagnosa text list
+                $diagnosaList = [];
+                if ($row->diagnosa() && count($row->diagnosa()) > 0) {
+                    foreach ($row->diagnosa() as $diag) {
+                        $diagnosaList[] = ($diag->diagnosa ?? '') . ($diag->nama_diagnosa ? ' - ' . $diag->nama_diagnosa : '');
+                    }
+                }
+                $diagnosaText = count($diagnosaList) > 0 ? implode('; ', $diagnosaList) : '-';
+
+                fputcsv($file, [
+                    $index++,
+                    $row->no_rekam ?? '-',
+                    $row->tgl_rekam ? Carbon::parse($row->tgl_rekam)->format('d/m/Y') : '-',
+                    $row->pasien->no_rm ?? '-',
+                    $row->pasien->nama ?? '-',
+                    $row->pasien && $row->pasien->nik ? "'" . $row->pasien->nik : '-',
+                    $row->pasien && $row->pasien->no_hp ? "'" . $row->pasien->no_hp : '-',
+                    $row->pasien->alamat_lengkap ?? '-',
+                    $row->poli ?? '-',
+                    $row->dokter->nama ?? '-',
+                    $row->keluhan ?? '-',
+                    $row->pemeriksaan ?? '-',
+                    $row->tindakan ?? '-',
+                    $diagnosaText,
+                    $row->cara_bayar ?? 'Gratis',
+                    $statusText,
+                    $row->created_at ? $row->created_at->format('d/m/Y H:i') : '-',
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
     public function add(Request $request)
     {
         $poli = Poli::all();

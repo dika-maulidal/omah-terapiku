@@ -55,6 +55,7 @@ class PasienController extends Controller
                     $query->where('no_rm', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('nama', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('nik', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('desil', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('no_bpjs', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('no_hp', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('alamat_lengkap', 'LIKE', "%{$request->keyword}%");
@@ -69,6 +70,7 @@ class PasienController extends Controller
                     $query->where('no_rm', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('nama', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('nik', 'LIKE', "%{$request->keyword}%")
+                        ->orWhere('desil', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('no_bpjs', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('no_hp', 'LIKE', "%{$request->keyword}%")
                         ->orWhere('alamat_lengkap', 'LIKE', "%{$request->keyword}%");
@@ -103,6 +105,7 @@ class PasienController extends Controller
             'Status Menikah',
             'Pendidikan',
             'Pekerjaan',
+            'Desil',
             'Kewarganegaraan',
             'No. HP',
             'Status Layanan',
@@ -140,6 +143,7 @@ class PasienController extends Controller
                     $row->status_menikah ?? '-',
                     $row->pendidikan ?? '-',
                     $row->pekerjaan ?? '-',
+                    $row->desil ?? '-',
                     $row->kewarganegaraan ?? 'WNI',
                     $row->no_hp ? "'" . $row->no_hp : '-',
                     'Gratis, tidak dipungut biaya',
@@ -178,6 +182,7 @@ class PasienController extends Controller
             'no_rm' => 'required|unique:pasien',
             'no_bpjs' => 'nullable|unique:pasien',
             'nik' => 'nullable|unique:pasien,nik',
+            'desil' => 'nullable|string|max:50',
             'file_kk' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240',
             'file_resume' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240'
         ]);
@@ -210,6 +215,7 @@ class PasienController extends Controller
             'no_hp' => 'required',
             'jk' => 'required',
             'nik' => 'nullable|unique:pasien,nik,'.$id,
+            'desil' => 'nullable|string|max:50',
             'file_kk' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240',
             'file_resume' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240'
         ]);

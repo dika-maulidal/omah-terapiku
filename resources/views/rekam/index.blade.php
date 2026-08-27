@@ -8,35 +8,36 @@
     <div class="col-xl-12">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-3 align-items-center">
-                    <div class="col-lg-5 col-md-12 mb-2 mb-lg-0">
-                        <a href="{{Route('rekam.add')}}" class="btn btn-primary">+Rekam Medis Baru</a>
-                    </div>
-                    <div class="col-lg-7 col-md-12">
-                        <form method="get" action="{{ url()->current() }}">
-                            <div class="row">
-                                <div class="col-sm-5 mb-2 mb-sm-0 pr-sm-1">
-                                    <select name="status" class="form-control" onchange="this.form.submit()">
-                                        <option value="" {{ request('status') == '' && request('tab') == '' ? 'selected' : '' }}>Semua Status</option>
-                                        <option value="1" {{ request('status') == '1' || request('tab') == '1' ? 'selected' : '' }}>Antrian</option>
-                                        <option value="2" {{ request('status') == '2' || request('tab') == '2' ? 'selected' : '' }}>Pemeriksaan</option>
-                                        <option value="3" {{ request('status') == '3' || request('tab') == '3' ? 'selected' : '' }}>Menunggu</option>
-                                        <option value="5" {{ request('status') == '5' || request('tab') == '5' ? 'selected' : '' }}>Selesai</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-7 pl-sm-1">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control gp-search" name="keyword" value="{{request('keyword')}}" placeholder="Cari..." autocomplete="off">
-                                        <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default no-border btn-sm gp-search">
-                                                <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
-                                            </button>
-                                        </div>
+                <div class="form-group col-lg-6" style="float: left">
+                    <a href="{{Route('rekam.add')}}" class="btn btn-primary mr-2">+Rekam Medis Baru</a>
+                    <a href="{{Route('rekam.export-csv', ['keyword' => request('keyword'), 'status' => request('status', request('tab'))])}}" class="btn btn-success" title="Download data rekam medis ke CSV">
+                        <i class="fa fa-file-excel-o mr-1"></i> Export CSV
+                    </a>
+                </div>
+                <div class="form-group col-lg-6" style="float: right">
+                    <form method="get" action="{{ url()->current() }}">
+                        <div class="row">
+                            <div class="col-sm-5 mb-2 mb-sm-0 pr-sm-1">
+                                <select name="status" class="form-control" onchange="this.form.submit()">
+                                    <option value="" {{ request('status') == '' && request('tab') == '' ? 'selected' : '' }}>Semua Status</option>
+                                    <option value="1" {{ request('status') == '1' || request('tab') == '1' ? 'selected' : '' }}>Antrian</option>
+                                    <option value="2" {{ request('status') == '2' || request('tab') == '2' ? 'selected' : '' }}>Pemeriksaan</option>
+                                    <option value="3" {{ request('status') == '3' || request('tab') == '3' ? 'selected' : '' }}>Menunggu</option>
+                                    <option value="5" {{ request('status') == '5' || request('tab') == '5' ? 'selected' : '' }}>Selesai</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-7 pl-sm-1">
+                                <div class="input-group">
+                                    <input type="text" class="form-control gp-search" name="keyword" value="{{request('keyword')}}" placeholder="Cari..." autocomplete="off">
+                                    <div class="input-group-btn">
+                                        <button type="submit" class="btn btn-default no-border btn-sm gp-search">
+                                            <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="table-responsive card-table"> 
@@ -56,7 +57,7 @@
                         <tbody>
                             @forelse ($rekams as $key => $row)
                                 <tr>
-                                    <td align="center">{{ $rekams->firstItem() + $key }}</td>
+                                    <td>{{ $rekams->firstItem() + $key }}</td>
                                     <td>{{$row->no_rekam}}<br/>{{$row->tgl_rekam}}</td>
                                     <td><a href="{{Route('rekam.detail', $row->pasien_id)}}">{{$row->pasien->nama ?? '-'}}</a></td>
                                     <td>
@@ -94,7 +95,7 @@
                     </table>
 
                     <div class="dataTables_info" id="example_info" role="status" aria-live="polite">
-                        Showing {{$rekams->firstItem() ?? 0}} to {{$rekams->lastItem() ?? 0}} of {{$rekams->total()}} entries
+                        Showing {{$rekams->firstItem() ?? 0}} to {{$rekams->perPage() * $rekams->currentPage()}} of {{$rekams->total()}} entries
                     </div>
                     {{ $rekams->appends(request()->except('page'))->links() }}
                 </div>

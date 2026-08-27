@@ -25,6 +25,7 @@ class Pasien extends Model
         "status_menikah",
         "pendidikan",
         "pekerjaan",
+        "desil",
         "kewarganegaraan",
         "no_hp",
         "cara_bayar",

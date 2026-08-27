@@ -78,7 +78,7 @@
                                         </div>
                                     </div>
                                    
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex mb-3 align-items-center">
                                         <span class="fs-12 col-6 p-0 text-black">
                                             <svg class="mr-2" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <rect width="19" height="19" fill="#5FBF91"/>
@@ -88,6 +88,17 @@
                                         <div class="col-8 p-0">
                                            <p>Gratis, tidak dipungut biaya</p>
                                            
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-3 align-items-center">
+                                        <span class="fs-12 col-6 p-0 text-black">
+                                            <svg class="mr-2" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="19" height="19" fill="#5F74BF"/>
+                                            </svg>
+                                            Desil (DTKS/P3KE)
+                                        </span>
+                                        <div class="col-8 p-0">
+                                           <span class="badge badge-primary light font-w600">{{$pasien->desil ?: '-'}}</span>
                                         </div>
                                     </div>
                                     <div class="d-flex mb-3 align-items-center">

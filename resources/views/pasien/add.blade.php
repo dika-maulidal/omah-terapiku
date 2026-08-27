@@ -259,9 +259,30 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Desil (DTKS/P3KE)</label>
+                            <div class="col-sm-4">
+                                <select name="desil" class="form-control" id="desil">
+                                    <option value="">--Pilih Desil--</option>
+                                    <option value="Desil 1" {{ old('desil') == 'Desil 1' ? 'selected' : '' }}>Desil 1 (Sangat Miskin)</option>
+                                    <option value="Desil 2" {{ old('desil') == 'Desil 2' ? 'selected' : '' }}>Desil 2 (Miskin)</option>
+                                    <option value="Desil 3" {{ old('desil') == 'Desil 3' ? 'selected' : '' }}>Desil 3 (Hampir Miskin)</option>
+                                    <option value="Desil 4" {{ old('desil') == 'Desil 4' ? 'selected' : '' }}>Desil 4 (Rentan Miskin)</option>
+                                    <option value="Desil 5" {{ old('desil') == 'Desil 5' ? 'selected' : '' }}>Desil 5</option>
+                                    <option value="Desil 6" {{ old('desil') == 'Desil 6' ? 'selected' : '' }}>Desil 6</option>
+                                    <option value="Desil 7" {{ old('desil') == 'Desil 7' ? 'selected' : '' }}>Desil 7</option>
+                                    <option value="Desil 8" {{ old('desil') == 'Desil 8' ? 'selected' : '' }}>Desil 8</option>
+                                    <option value="Desil 9" {{ old('desil') == 'Desil 9' ? 'selected' : '' }}>Desil 9</option>
+                                    <option value="Desil 10" {{ old('desil') == 'Desil 10' ? 'selected' : '' }}>Desil 10</option>
+                                    <option value="Non-Desil" {{ old('desil') == 'Non-Desil' ? 'selected' : '' }}>Non-Desil / Belum Terdata</option>
+                                </select>
+                                @error('desil')
+                                <div class="invalid-feedback animated fadeInUp"
+                                style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
                             <label class="col-sm-2 col-form-label">Alergi</label>
-                            <div class="col-sm-10">
-                                <textarea name="alergi" class="form-control" rows="1">{{old('alergi')}}</textarea>
+                            <div class="col-sm-4">
+                                <input type="text" name="alergi" class="form-control" placeholder="Riwayat alergi jika ada" value="{{old('alergi')}}">
                                 @error('alergi')
                                 <div class="invalid-feedback animated fadeInUp"
                                 style="display: block;">{{$message}}</div>

@@ -257,6 +257,38 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            @php $currentDesil = old('desil') ? old('desil') : $data->desil; @endphp
+                            <label class="col-sm-2 col-form-label">Desil (DTKS/P3KE)</label>
+                            <div class="col-sm-4">
+                                <select name="desil" class="form-control" id="desil">
+                                    <option value="">--Pilih Desil--</option>
+                                    <option value="Desil 1" {{$currentDesil == "Desil 1" ? 'selected' : ''}}>Desil 1 (Sangat Miskin)</option>
+                                    <option value="Desil 2" {{$currentDesil == "Desil 2" ? 'selected' : ''}}>Desil 2 (Miskin)</option>
+                                    <option value="Desil 3" {{$currentDesil == "Desil 3" ? 'selected' : ''}}>Desil 3 (Hampir Miskin)</option>
+                                    <option value="Desil 4" {{$currentDesil == "Desil 4" ? 'selected' : ''}}>Desil 4 (Rentan Miskin)</option>
+                                    <option value="Desil 5" {{$currentDesil == "Desil 5" ? 'selected' : ''}}>Desil 5</option>
+                                    <option value="Desil 6" {{$currentDesil == "Desil 6" ? 'selected' : ''}}>Desil 6</option>
+                                    <option value="Desil 7" {{$currentDesil == "Desil 7" ? 'selected' : ''}}>Desil 7</option>
+                                    <option value="Desil 8" {{$currentDesil == "Desil 8" ? 'selected' : ''}}>Desil 8</option>
+                                    <option value="Desil 9" {{$currentDesil == "Desil 9" ? 'selected' : ''}}>Desil 9</option>
+                                    <option value="Desil 10" {{$currentDesil == "Desil 10" ? 'selected' : ''}}>Desil 10</option>
+                                    <option value="Non-Desil" {{$currentDesil == "Non-Desil" ? 'selected' : ''}}>Non-Desil / Belum Terdata</option>
+                                </select>
+                                @error('desil')
+                                <div class="invalid-feedback animated fadeInUp"
+                                style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+                            <label class="col-sm-2 col-form-label">Alergi</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="alergi" class="form-control" placeholder="Riwayat alergi jika ada" value="{{old('alergi') ? old('alergi') : $data->alergi}}">
+                                @error('alergi')
+                                <div class="invalid-feedback animated fadeInUp"
+                                style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label">File Kartu Keluarga (KK)</label>
                             <div class="col-sm-10">
                                 <input type="file" class="form-control-file" name="file_kk" accept=".jpg,.jpeg,.png,.pdf">

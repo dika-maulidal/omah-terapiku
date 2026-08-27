@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 
     Route::get('/rekam', [RekamController::class, 'index'])->name('rekam');
+    Route::get('/rekam/export-csv', [RekamController::class, 'exportCsv'])->name('rekam.export-csv');
     Route::get('/rekam/add', [RekamController::class, 'add'])->name('rekam.add');
     Route::get('/rekam/{id}/edit', [RekamController::class, 'edit'])->name('rekam.edit');
 

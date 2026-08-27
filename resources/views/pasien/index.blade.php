@@ -38,6 +38,7 @@
                                 <th>TTL</th>
                                 <th>Alamat</th>
                                 <th>JK</th>
+                                <th>Desil</th>
                                 <th>No. HP</th>
                                 <th>Status Layanan</th>
                                 <th>Status</th>
@@ -54,6 +55,13 @@
                                    <td>{{$row->tmp_lahir}},{{$row->tgl_lahir}}</td>
                                    <td>{{$row->alamat_lengkap}}</td>
                                    <td>{{$row->jk}}</td>
+                                   <td>
+                                       @if ($row->desil)
+                                           <span class="badge badge-primary light font-w600">{{$row->desil}}</span>
+                                       @else
+                                           <span class="text-muted">-</span>
+                                       @endif
+                                   </td>
                                    <td>{{$row->no_hp}}</td>
                                    <td>Gratis, tidak dipungut biaya</td>
                                    <td>
