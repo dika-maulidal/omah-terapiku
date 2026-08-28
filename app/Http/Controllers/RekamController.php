@@ -31,7 +31,8 @@ class RekamController extends Controller
                         $query->where(function ($q) use ($request) {
                             $q->where('rekam.tgl_rekam', 'LIKE', "%{$request->keyword}%")
                                 ->orWhere('rekam.no_rekam', 'LIKE', "%{$request->keyword}%")
-                                ->orWhere('rekam.cara_bayar', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('rekam.poli', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('rekam.layanan_terapi', 'LIKE', "%{$request->keyword}%")
                                 ->orWhere('pasien.nama', 'LIKE', "%{$request->keyword}%")
                                 ->orWhere('pasien.no_bpjs', 'LIKE', "%{$request->keyword}%")
                                 ->orWhere('pasien.no_rm', 'LIKE', "%{$request->keyword}%");
@@ -76,7 +77,8 @@ class RekamController extends Controller
                         $query->where(function ($q) use ($request) {
                             $q->where('rekam.tgl_rekam', 'LIKE', "%{$request->keyword}%")
                                 ->orWhere('rekam.no_rekam', 'LIKE', "%{$request->keyword}%")
-                                ->orWhere('rekam.cara_bayar', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('rekam.poli', 'LIKE', "%{$request->keyword}%")
+                                ->orWhere('rekam.layanan_terapi', 'LIKE', "%{$request->keyword}%")
                                 ->orWhere('pasien.nama', 'LIKE', "%{$request->keyword}%")
                                 ->orWhere('pasien.no_bpjs', 'LIKE', "%{$request->keyword}%")
                                 ->orWhere('pasien.no_rm', 'LIKE', "%{$request->keyword}%");
@@ -125,13 +127,13 @@ class RekamController extends Controller
             'NIK',
             'No. HP',
             'Alamat',
-            'Layanan / Poli',
+            'Omah Terapiku',
+            'Jenis Layanan Terapi',
             'Terapis / Dokter',
             'Keluhan',
             'Pemeriksaan',
             'Tindakan',
             'Diagnosa (ICD)',
-            'Status Layanan',
             'Status Pemeriksaan',
             'Waktu Pendaftaran',
         ];
@@ -176,12 +178,12 @@ class RekamController extends Controller
                     $row->pasien && $row->pasien->no_hp ? "'" . $row->pasien->no_hp : '-',
                     $row->pasien->alamat_lengkap ?? '-',
                     $row->poli ?? '-',
+                    $row->layanan_terapi ?? '-',
                     $row->dokter->nama ?? '-',
                     $row->keluhan ?? '-',
                     $row->pemeriksaan ?? '-',
                     $row->tindakan ?? '-',
                     $diagnosaText,
-                    $row->cara_bayar ?? 'Gratis',
                     $statusText,
                     $row->created_at ? $row->created_at->format('d/m/Y H:i') : '-',
                 ]);
@@ -239,9 +241,13 @@ class RekamController extends Controller
             'tgl_rekam' => 'required',
             'pasien_id' => 'required',
             'pasien_nama' => 'required',
+            'layanan_terapi' => 'required|string',
             'keluhan' => 'required',
             'poli' => 'required',
             'dokter_id' => 'required'
+        ], [
+            'layanan_terapi.required' => 'Jenis Layanan Terapi yang Dituju wajib dipilih.',
+            'pasien_nama.required' => 'Nama Penerima Manfaat wajib dipilih.'
         ]);
 
         $pasien = Pasien::where('id', $request->pasien_id)->first();
@@ -281,9 +287,12 @@ class RekamController extends Controller
             'tgl_rekam' => 'required',
             'pasien_id' => 'required',
             'pasien_nama' => 'required',
+            'layanan_terapi' => 'required|string',
             'keluhan' => 'required',
             'poli' => 'required',
             'dokter_id' => 'required'
+        ], [
+            'layanan_terapi.required' => 'Jenis Layanan Terapi yang Dituju wajib dipilih.'
         ]);
 
         $pasien = Pasien::where('id', $request->pasien_id)->first();

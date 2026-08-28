@@ -6,16 +6,20 @@
         $hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][date('w')];
         $bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][date('n') - 1];
         $tanggalFormatted = $hari . ', ' . date('j') . ' ' . $bulan . ' ' . date('Y');
+
+        $availableYears = $query->getAvailableYears();
+        $allYearsPasienData = $query->getAllYearsPasienData();
+        $statusAntrian = $query->getStatusAntrianData();
     @endphp
 
     <!-- Dashboard Header -->
     <div class="form-head d-flex flex-wrap align-items-center justify-content-between mb-3">
         <div class="mr-auto">
-            <h3 class="text-black font-w600 mb-0" style="font-size: 20px;">Dashboard</h3>
-            <p class="fs-13 text-muted mb-0">Selamat Datang, <strong>{{ auth()->user()->name }}</strong></p>
+            <h3 class="font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700; font-size: 22px;">Dashboard Utama</h3>
+            <p class="fs-13 text-muted mb-0">Selamat Datang, <strong>{{ auth()->user()->name }}</strong> &bull; Sistem Informasi Rekam Medis Omah Terapiku</p>
         </div>
         <div class="mt-2 mt-sm-0">
-            <span class="badge badge-light text-dark font-w500" style="padding: 7px 12px; font-size: 12px; border: 1px solid #e2e8f0; background: #fff;">
+            <span class="badge badge-light text-dark font-w600" style="padding: 8px 16px; font-size: 12.5px; border: 1px solid #e2e8f0; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-radius: 8px;">
                 <i class="fa fa-calendar text-primary mr-1"></i> {{ $tanggalFormatted }}
             </span>
         </div>
@@ -100,13 +104,117 @@
         </div>
     </div>
 
+    <!-- Analytics & Visualisasi Grafik Section (Charts Row) -->
+    <div class="row mb-4">
+        <!-- Kolom Kiri: Grafik Total Penerima Manfaat per Bulan -->
+        <div class="col-xl-8 col-lg-12 mb-3 mb-xl-0">
+            <div class="card h-100 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
+                    <div>
+                        <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
+                            <i class="fa fa-bar-chart text-primary mr-2"></i> Grafik Total Penerima Manfaat per Bulan
+                        </h4>
+                        <p class="fs-12 text-muted mb-0">Tren pendaftaran penerima manfaat berdasarkan bulan</p>
+                    </div>
+                    <div class="d-flex align-items-center mt-2 mt-sm-0" style="gap: 8px;">
+                        <label class="mb-0 text-muted font-w600" style="font-size: 12px;"><i class="fa fa-filter mr-1"></i> Filter Tahun:</label>
+                        <select id="filterTahunPenerima" class="form-control form-control-sm font-w700 text-primary" style="width: 110px; height: 34px; font-size: 12.5px; border-radius: 6px; border-color: #cbd5e1; cursor: pointer;">
+                            @foreach ($availableYears as $yr)
+                                <option value="{{ $yr }}" {{ $yr == date('Y') ? 'selected' : '' }}>Tahun {{ $yr }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body p-3">
+                    <div style="position: relative; height: 260px;">
+                        <canvas id="chartPenerimaManfaat"></canvas>
+                    </div>
+                    <!-- Stat Ringkasan di Bawah Grafik -->
+                    <div class="row text-center mt-3 pt-3" style="border-top: 1px dashed #e2e8f0;">
+                        <div class="col-4">
+                            <small class="text-muted d-block font-w600 fs-12">Total Tahun <span class="badgeYear">{{ date('Y') }}</span></small>
+                            <span class="font-w700 text-primary fs-16" id="statTotalTahun">-</span>
+                        </div>
+                        <div class="col-4" style="border-left: 1px solid #edf2f7; border-right: 1px solid #edf2f7;">
+                            <small class="text-muted d-block font-w600 fs-12">Rata-rata / Bulan</small>
+                            <span class="font-w700 text-success fs-16" id="statRataRata">-</span>
+                        </div>
+                        <div class="col-4">
+                            <small class="text-muted d-block font-w600 fs-12">Bulan Tertinggi</small>
+                            <span class="font-w700 text-info fs-16" id="statTertinggi">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kolom Kanan: Pie / Donut Chart Status Antrian Pasien -->
+        <div class="col-xl-4 col-lg-12">
+            <div class="card h-100 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+                <div class="card-header d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
+                    <div>
+                        <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
+                            <i class="fa fa-pie-chart text-primary mr-2"></i> Status Antrian Pasien
+                        </h4>
+                        <p class="fs-12 text-muted mb-0">Distribusi status pelayanan rekam medis</p>
+                    </div>
+                    <span class="badge badge-primary light font-w600" style="font-size: 11.5px;">
+                        Total: {{ $statusAntrian['total'] }}
+                    </span>
+                </div>
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div style="position: relative; height: 180px;">
+                        <canvas id="chartStatusAntrian"></canvas>
+                    </div>
+                    <!-- Custom Interactive Legend with counts -->
+                    <div class="mt-3 pt-2" style="border-top: 1px dashed #e2e8f0; font-size: 12px;">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded" style="background: #fff8eb; border: 1px solid #ffe8cc;">
+                                    <span class="font-w600 text-warning" style="font-size: 11.5px;">
+                                        <i class="fa fa-circle mr-1"></i> Antrian
+                                    </span>
+                                    <strong class="text-dark">{{ $statusAntrian['antrian'] }}</strong>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded" style="background: #ebf5ff; border: 1px solid #cce5ff;">
+                                    <span class="font-w600 text-primary" style="font-size: 11.5px;">
+                                        <i class="fa fa-circle mr-1"></i> Periksa
+                                    </span>
+                                    <strong class="text-dark">{{ $statusAntrian['pemeriksaan'] }}</strong>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded" style="background: #f5f0ff; border: 1px solid #e0d4fc;">
+                                    <span class="font-w600" style="color: #7367f0; font-size: 11.5px;">
+                                        <i class="fa fa-circle mr-1"></i> Menunggu
+                                    </span>
+                                    <strong class="text-dark">{{ $statusAntrian['menunggu'] }}</strong>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded" style="background: #ebfaf0; border: 1px solid #c3e6cb;">
+                                    <span class="font-w600 text-success" style="font-size: 11.5px;">
+                                        <i class="fa fa-circle mr-1"></i> Selesai
+                                    </span>
+                                    <strong class="text-dark">{{ $statusAntrian['selesai'] }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content Row (Side by Side, Equal Height & Clean Spacing) -->
     <div class="row mb-4">
         <!-- Left Column: Perawatan Hari Ini -->
         <div class="col-xl-6 col-lg-12 mb-3 mb-xl-0">
-            <div class="card h-100 mb-0">
-                <div class="card-header d-flex justify-content-between align-items-center py-3">
-                    <h4 class="fs-15 font-w600 text-black mb-0">
+            <div class="card h-100 mb-0 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+                <div class="card-header d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
+                    <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
                         <i class="fa fa-heartbeat text-primary mr-1"></i> Perawatan Hari Ini
                     </h4>
                     <span class="badge badge-primary light font-w600">
@@ -159,7 +267,7 @@
                             <div class="text-center py-5 text-muted">
                                 <i class="fa fa-calendar-check-o text-muted fs-24 mb-2 d-block"></i>
                                 <p class="fs-13 mb-2">Belum ada pelayanan pasien hari ini.</p>
-                                <a href="{{ Route('rekam') }}" class="btn btn-xs btn-primary">
+                                <a href="{{ Route('rekam') }}" class="btn btn-xs btn-primary font-w600" style="padding: 6px 14px; border-radius: 6px;">
                                     <i class="fa fa-plus mr-1"></i> Ke Rekam Medis
                                 </a>
                             </div>
@@ -171,10 +279,10 @@
 
         <!-- Right Column: Top Diagnosa & Statistik (Side by Side with Perawatan Hari Ini) -->
         <div class="col-xl-6 col-lg-12">
-            <div class="card h-100 mb-0">
-                <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3">
+            <div class="card h-100 mb-0 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
                     <div class="mr-auto">
-                        <h4 class="fs-15 font-w600 text-black mb-0">
+                        <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
                             <i class="fa fa-medkit text-primary mr-1"></i> Top Diagnosa & Statistik
                         </h4>
                     </div>
@@ -198,17 +306,27 @@
                         <div class="tab-pane fade show active" id="MonthlyDiagnosa" role="tabpanel">
                             @php $diagnosaBulan = $query->diagnosaBulanan(); @endphp
                             @if (count($diagnosaBulan) > 0)
-                                <div class="ot-diagnosa-list" style="max-height: 380px; overflow-y: auto; padding-right: 2px;">
+                                <div class="d-flex flex-column" style="gap: 8px;">
                                     @foreach ($diagnosaBulan as $index => $item)
                                         <div class="ot-diagnosa-item">
-                                            <div class="d-flex align-items-center" style="min-width: 0; flex: 1;">
-                                                <span class="ot-rank-badge mr-2">#{{ $index + 1 }}</span>
-                                                <span class="ot-diagnosa-code mr-2">{{ $item->diagnosa }}</span>
-                                                <span class="ot-diagnosa-name text-truncate" title="{{ $item->name_id ?? $item->diagnosa }}">
-                                                    {{ $item->name_id ?? $item->diagnosa }}
+                                            <div class="d-flex align-items-center" style="min-width: 0;">
+                                                <span class="badge badge-primary light font-w600 mr-2" style="font-size: 11px; min-width: 24px; text-align: center;">
+                                                    {{ $index + 1 }}
+                                                </span>
+                                                <div style="min-width: 0;">
+                                                    <span class="badge badge-info light font-w600 mr-1" style="font-size: 11px;">
+                                                        {{ $item->diagnosa }}
+                                                    </span>
+                                                    <span class="fs-12 text-black font-w500 text-truncate d-inline-block" style="max-width: 260px; vertical-align: middle;" title="{{ $item->name_id ?? '-' }}">
+                                                        {{ $item->name_id ?? '-' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-shrink-0 ml-2">
+                                                <span class="badge badge-primary font-w600" style="font-size: 11px;">
+                                                    {{ $item->total }} Kasus
                                                 </span>
                                             </div>
-                                            <span class="ot-diagnosa-count">{{ $item->total }} Kasus</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -224,17 +342,27 @@
                         <div class="tab-pane fade" id="YearlyDiagnosa" role="tabpanel">
                             @php $diagnosaTahun = $query->diagnosaYearly(); @endphp
                             @if (count($diagnosaTahun) > 0)
-                                <div class="ot-diagnosa-list" style="max-height: 380px; overflow-y: auto; padding-right: 2px;">
+                                <div class="d-flex flex-column" style="gap: 8px;">
                                     @foreach ($diagnosaTahun as $index => $item)
                                         <div class="ot-diagnosa-item">
-                                            <div class="d-flex align-items-center" style="min-width: 0; flex: 1;">
-                                                <span class="ot-rank-badge mr-2">#{{ $index + 1 }}</span>
-                                                <span class="ot-diagnosa-code mr-2">{{ $item->diagnosa }}</span>
-                                                <span class="ot-diagnosa-name text-truncate" title="{{ $item->name_id ?? $item->diagnosa }}">
-                                                    {{ $item->name_id ?? $item->diagnosa }}
+                                            <div class="d-flex align-items-center" style="min-width: 0;">
+                                                <span class="badge badge-success light font-w600 mr-2" style="font-size: 11px; min-width: 24px; text-align: center;">
+                                                    {{ $index + 1 }}
+                                                </span>
+                                                <div style="min-width: 0;">
+                                                    <span class="badge badge-info light font-w600 mr-1" style="font-size: 11px;">
+                                                        {{ $item->diagnosa }}
+                                                    </span>
+                                                    <span class="fs-12 text-black font-w500 text-truncate d-inline-block" style="max-width: 260px; vertical-align: middle;" title="{{ $item->name_id ?? '-' }}">
+                                                        {{ $item->name_id ?? '-' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-shrink-0 ml-2">
+                                                <span class="badge badge-success font-w600" style="font-size: 11px;">
+                                                    {{ $item->total }} Kasus
                                                 </span>
                                             </div>
-                                            <span class="ot-diagnosa-count">{{ $item->total }} Kasus</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -286,4 +414,167 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+<script>
+$(document).ready(function() {
+    var allYearsData = {!! json_encode($allYearsPasienData) !!};
+    var bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    var namaBulanLengkap = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    var currentYear = $('#filterTahunPenerima').val() || "{{ date('Y') }}";
+
+    function getYearDataset(year) {
+        return allYearsData[year] || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    }
+
+    function updateSummaryStats(year, data) {
+        var total = data.reduce(function(a, b) { return a + b; }, 0);
+        var avg = (total / 12).toFixed(1);
+        var max = Math.max.apply(Math, data);
+        var maxIndex = data.indexOf(max);
+        var bulanMax = max > 0 ? namaBulanLengkap[maxIndex] + ' (' + max + ')' : '-';
+        
+        $('.badgeYear').text(year);
+        $('#statTotalTahun').text(total + ' Orang');
+        $('#statRataRata').text(avg + ' / bln');
+        $('#statTertinggi').text(bulanMax);
+    }
+
+    // 1. Chart Bar Penerima Manfaat
+    var ctxBar = document.getElementById('chartPenerimaManfaat').getContext('2d');
+    
+    // Gradient Background
+    var gradientFill = ctxBar.createLinearGradient(0, 0, 0, 240);
+    gradientFill.addColorStop(0, 'rgba(46, 75, 130, 0.9)');
+    gradientFill.addColorStop(1, 'rgba(46, 75, 130, 0.2)');
+
+    var initialData = getYearDataset(currentYear);
+    updateSummaryStats(currentYear, initialData);
+
+    var barChart = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: bulanLabels,
+            datasets: [{
+                label: 'Jumlah Penerima Manfaat',
+                data: initialData,
+                backgroundColor: gradientFill,
+                borderColor: '#2e4b82',
+                borderWidth: 1.5,
+                borderRadius: 6,
+                barPercentage: 0.6,
+                categoryPercentage: 0.7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            },
+            tooltips: {
+                backgroundColor: '#1e293b',
+                titleFontSize: 13,
+                bodyFontSize: 12,
+                xPadding: 10,
+                yPadding: 10,
+                displayColors: false,
+                callbacks: {
+                    title: function(tooltipItem) {
+                        var idx = tooltipItem[0].index;
+                        return 'Bulan: ' + namaBulanLengkap[idx] + ' ' + $('#filterTahunPenerima').val();
+                    },
+                    label: function(tooltipItem) {
+                        return ' Total: ' + tooltipItem.yLabel + ' Penerima Manfaat';
+                    }
+                }
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: {
+                        fontColor: '#64748b',
+                        fontSize: 12,
+                        fontStyle: '600'
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        color: '#f1f5f9',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1,
+                        fontColor: '#64748b',
+                        fontSize: 11
+                    }
+                }]
+            }
+        }
+    });
+
+    $('#filterTahunPenerima').on('change', function() {
+        var selectedYear = $(this).val();
+        var newData = getYearDataset(selectedYear);
+        barChart.data.datasets[0].data = newData;
+        barChart.update();
+        updateSummaryStats(selectedYear, newData);
+    });
+
+    // 2. Donut / Pie Chart Status Antrian Pasien
+    var ctxPie = document.getElementById('chartStatusAntrian').getContext('2d');
+    var statusData = {!! json_encode($statusAntrian) !!};
+
+    var pieChart = new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+            labels: ['Antrian', 'Pemeriksaan', 'Menunggu', 'Selesai'],
+            datasets: [{
+                data: [
+                    statusData.antrian,
+                    statusData.pemeriksaan,
+                    statusData.menunggu,
+                    statusData.selesai
+                ],
+                backgroundColor: [
+                    '#ff9f43', // Antrian (Kuning)
+                    '#2e4b82', // Pemeriksaan (Biru Navy)
+                    '#7367f0', // Menunggu (Ungu)
+                    '#28c76f'  // Selesai (Hijau)
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutoutPercentage: 68,
+            legend: {
+                display: false
+            },
+            tooltips: {
+                backgroundColor: '#1e293b',
+                titleFontSize: 13,
+                bodyFontSize: 12,
+                xPadding: 10,
+                yPadding: 10,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.labels[tooltipItem.index] || '';
+                        var val = data.datasets[0].data[tooltipItem.index] || 0;
+                        var total = data.datasets[0].data.reduce(function(a, b) { return a + b; }, 0);
+                        var pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
+                        return ' ' + label + ': ' + val + ' Pasien (' + pct + '%)';
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
 @endsection

@@ -170,4 +170,60 @@ class DashboardQuery
                 })
                 ->get();
     }
+
+    public function getAvailableYears()
+    {
+        $pasienYears = Pasien::selectRaw('YEAR(created_at) as yr')->whereNotNull('created_at')->distinct()->pluck('yr')->toArray();
+        $rekamYears = Rekam::selectRaw('YEAR(tgl_rekam) as yr')->whereNotNull('tgl_rekam')->distinct()->pluck('yr')->toArray();
+        $currentYear = (int)date('Y');
+        $years = array_unique(array_filter(array_merge($pasienYears, $rekamYears, [$currentYear, $currentYear - 1, $currentYear - 2])));
+        rsort($years);
+        return array_values($years);
+    }
+
+    public function getAllYearsPasienData()
+    {
+        $years = $this->getAvailableYears();
+        $dataByYear = [];
+        foreach ($years as $year) {
+            $monthly = [];
+            for ($m = 1; $m <= 12; $m++) {
+                $count = Pasien::whereNull('deleted_at')
+                    ->whereYear('created_at', $year)
+                    ->whereMonth('created_at', $m)
+                    ->count();
+                $monthly[] = $count;
+            }
+            $dataByYear[$year] = $monthly;
+        }
+        return $dataByYear;
+    }
+
+    public function getStatusAntrianData()
+    {
+        $user = auth()->user();
+        $role = $user ? $user->role_display() : '';
+
+        $query = Rekam::query();
+        if ($role == "Dokter") {
+            $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
+            if ($dokter) {
+                $query->where('dokter_id', $dokter->id);
+            }
+        }
+
+        $antrian = (clone $query)->where('status', 1)->count();
+        $pemeriksaan = (clone $query)->where('status', 2)->count();
+        $menunggu = (clone $query)->where('status', 3)->count();
+        $selesai = (clone $query)->whereIn('status', [4, 5])->count();
+        $total = $antrian + $pemeriksaan + $menunggu + $selesai;
+
+        return [
+            'antrian' => $antrian,
+            'pemeriksaan' => $pemeriksaan,
+            'menunggu' => $menunggu,
+            'selesai' => $selesai,
+            'total' => $total
+        ];
+    }
 }

@@ -26,6 +26,10 @@ class Pasien extends Model
         "pendidikan",
         "pekerjaan",
         "desil",
+        "nama_wali",
+        "hubungan_wali",
+        "jenis_disabilitas",
+        "alat_bantu",
         "kewarganegaraan",
         "no_hp",
         "cara_bayar",
@@ -109,5 +113,47 @@ class Pasien extends Model
         } else {
             return ($this->created_at && $this->created_at > $lastData) ? 'Pasien Baru' : 'Pasien Lama';
         }
+    }
+
+    public static function generateNoRM()
+    {
+        $year = date('y');
+        $prefix = 'OTK-' . $year . '-';
+
+        $lastPatient = self::where('no_rm', 'LIKE', $prefix . '%')
+                           ->orderBy('no_rm', 'desc')
+                           ->first();
+
+        $nextNumber = 1;
+        if ($lastPatient) {
+            $parts = explode('-', $lastPatient->no_rm);
+            if (isset($parts[2]) && is_numeric($parts[2])) {
+                $nextNumber = (int)$parts[2] + 1;
+            }
+        }
+
+        $formattedNumber = str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+        $candidate = $prefix . $formattedNumber;
+
+        while (self::where('no_rm', $candidate)->exists()) {
+            $nextNumber++;
+            $formattedNumber = str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+            $candidate = $prefix . $formattedNumber;
+        }
+
+        return $candidate;
+    }
+
+    public function getKategoriUsiaAttribute()
+    {
+        if ($this->tgl_lahir) {
+            try {
+                $age = Carbon::parse($this->tgl_lahir)->diffInYears(Carbon::now());
+                return $age < 18 ? 'Anak' : 'Dewasa';
+            } catch (\Exception $e) {
+                return 'Dewasa';
+            }
+        }
+        return 'Dewasa';
     }
 }

@@ -14,7 +14,7 @@
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('vendor/toastr/css/toastr.min.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -25,7 +25,7 @@
         }
 
         * {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
             box-sizing: border-box;
         }
 
@@ -172,6 +172,10 @@
             margin-top: 8px;
             box-shadow: 0 4px 12px rgba(46, 75, 130, 0.25);
             letter-spacing: 0.3px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-submit:hover {
@@ -184,8 +188,27 @@
             transform: translateY(0);
         }
 
+        .help-admin-link {
+            margin-top: 16px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .help-admin-link a {
+            color: var(--ot-navy);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .help-admin-link a:hover {
+            color: var(--ot-yellow);
+            text-decoration: underline;
+        }
+
         .login-copyright {
-            margin-top: 24px;
+            margin-top: 20px;
             font-size: 11.5px;
             color: #94a3b8;
             border-top: 1px solid #f1f5f9;
@@ -230,12 +253,65 @@
             </div>
 
             <!-- Tombol Masuk -->
-            <button type="submit" class="btn-submit">Masuk</button>
+            <button type="submit" class="btn-submit">
+                <span>Masuk</span>
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
         </form>
+
+        <!-- Kendala Hubungi Admin -->
+        <div class="help-admin-link">
+            <span>Kendala saat login? </span>
+            <a href="javascript:void(0)" data-toggle="modal" data-target="#modalBantuanAdmin">
+                Hubungi Admin
+            </a>
+        </div>
 
         <!-- Copyright Footer -->
         <div class="login-copyright">
             Omah Terapiku © {{ date('Y') }} All Rights Reserved
+        </div>
+    </div>
+
+    <!-- Modal Bantuan Admin -->
+    <div class="modal fade" id="modalBantuanAdmin" tabindex="-1" role="dialog" aria-labelledby="modalBantuanAdminLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="border-radius: 8px; border: none; text-align: left; box-shadow: 0 15px 35px rgba(24, 44, 79, 0.25);">
+                <div class="modal-header" style="background: #edf3fc; border-bottom: 1px solid #e2e8f0; padding: 14px 18px;">
+                    <h5 class="modal-title" id="modalBantuanAdminLabel" style="font-size: 15px; font-weight: 700; color: #2e4b82; margin: 0;">
+                        <i class="fa-solid fa-headset mr-1"></i> Bantuan & Layanan Akun
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4">
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 16px; line-height: 1.5;">
+                        Jika Anda mengalami kendala seperti lupa kata sandi, akun terkunci, atau memerlukan aktivasi hak akses (Dokter, Terapis, Pendaftaran, Admin), silakan hubungi tim pengelola sistem:
+                    </p>
+                    <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px;">
+                        <strong style="font-size: 13px; color: #1e293b; display: block; margin-bottom: 2px;">
+                            <i class="fa-solid fa-user-shield text-primary mr-1"></i> Admin / Pengelola Sistem
+                        </strong>
+                        <span style="font-size: 12px; color: #64748b;">Dinas Sosial Provinsi Jawa Timur</span>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px;">
+                        <strong style="font-size: 13px; color: #1e293b; display: block; margin-bottom: 2px;">
+                            <i class="fa-brands fa-whatsapp text-success mr-1"></i> Kontak Helpdesk / WhatsApp
+                        </strong>
+                        <span style="font-size: 12px; color: #64748b;">Hubungi koordinator IT untuk proses reset password akun</span>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 6px; padding: 12px 14px;">
+                        <strong style="font-size: 13px; color: #1e293b; display: block; margin-bottom: 2px;">
+                            <i class="fa-solid fa-clock text-warning mr-1"></i> Jam Layanan
+                        </strong>
+                        <span style="font-size: 12px; color: #64748b;">Senin – Jumat (08.00 – 16.00 WIB)</span>
+                    </div>
+                </div>
+                <div class="modal-footer py-2 px-3" style="background: #fafbfc; border-top: 1px solid #edf2f7;">
+                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" style="border-radius: 4px; padding: 6px 16px;">Tutup</button>
+                </div>
+            </div>
         </div>
     </div>
 

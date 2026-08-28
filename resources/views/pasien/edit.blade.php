@@ -1,267 +1,254 @@
 @extends('layout.apps')
 @section('content')
-<div class="form-head align-items-center d-flex mb-sm-4 mb-3">
-    <div class="mr-auto">
-        <h2 class="text-black font-w600">Edit Pasien</h2>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{Route('penerima-manfaat')}}">Data Penerima Manfaat</a></li>
-            <li class="breadcrumb-item active"><a href="#">Edit Data Penerima Manfaat</a></li>
-        </ol>
-    </div>
+
+<!-- Header Section -->
+<div class="mr-auto mb-3">
+    <h2 class="font-w700 text-primary" style="color: var(--ot-navy) !important; font-weight: 700; font-size: 22px;">Edit Data Penerima Manfaat</h2>
+    <ol class="breadcrumb" style="background: transparent; padding: 0; margin-top: 4px; font-size: 12.5px;">
+        <li class="breadcrumb-item"><a href="{{Route('penerima-manfaat')}}">Data Penerima Manfaat</a></li>
+        <li class="breadcrumb-item active"><a href="javascript:void(0)">Edit Data: {{ $data->nama }}</a></li>
+    </ol>
 </div>
+
 <div class="row">
     <div class="col-xl-12">
-        <div class="card">
-            <div class="card-body">
+        <div class="card" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+            <div class="card-body p-4">
                 <div class="basic-form">
-                    <form action="{{Route('penerima-manfaat.update',$data->id)}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{Route('penerima-manfaat.update', $data->id)}}" method="POST" enctype="multipart/form-data">
                         {{ csrf_field() }}
+
+                        <!-- BAGIAN 1: IDENTITAS UTAMA -->
+                        <div class="d-flex align-items-center mb-3 pb-2" style="border-bottom: 2px solid #edf2f7;">
+                            <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
+                                <i class="fa fa-id-card text-primary mr-2"></i> 1. Identitas Penerima Manfaat
+                            </h5>
+                        </div>
+
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">No.RM*</label>
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">No. Rekam Medis</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" 
-                                name="no_rm"  readonly
-                                required value="{{old('no_rm') ? old('no_rm') : $data->no_rm}}">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-light text-primary font-w600" style="height: 40px;"><i class="fa fa-id-card-o"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control font-w600" name="no_rm" readonly required value="{{old('no_rm') ? old('no_rm') : $data->no_rm}}" style="background-color: #f8f9fa; color: #1e3d73; height: 40px; font-size: 13px;">
+                                </div>
                                 @error('no_rm')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
-                            <label class="col-sm-2 col-form-label">NIK</label>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">NIK</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="nik" maxlength="16"
-                                placeholder="Masukkan 16 digit NIK" value="{{old('nik') ? old('nik') : $data->nik}}">
+                                <input type="text" class="form-control" name="nik" maxlength="16" placeholder="Masukkan 16 digit NIK" value="{{old('nik') ? old('nik') : $data->nik}}" style="height: 40px; font-size: 13px;">
                                 @error('nik')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Nama Penerima Manfaat*</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="nama" required 
-                                value="{{old('nama') ? old('nama') : $data->nama}}">
-                                @error('nama')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Tempat Lahir</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" name="tmp_lahir"
-                                 value="{{old('tmp_lahir') ? old('tmp_lahir') : $data->tmp_lahir}}">
-                                @error('tmp_lahir')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
-                            <label class="col-sm-2 col-form-label">Tanggal Lahir</label>
-                            <div class="col-sm-4">
-                                <input type="date" class="form-control" name="tgl_lahir" 
-                                value="{{old('tgl_lahir') ? old('tgl_lahir') : $data->tgl_lahir}}">
-                                @error('tgl_lahir')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Jenis Kelamin*</label>
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Nama Penerima Manfaat <span class="text-danger">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="nama" required value="{{old('nama') ? old('nama') : $data->nama}}" style="height: 40px; font-size: 13px;">
+                                @error('nama')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Tempat Lahir</label>
                             <div class="col-sm-4">
-                                <div class="form-check">
-                                    <input type="radio" name="jk" class="form-check-input" 
-                                    value="Laki-Laki" {{$data->jk=="Laki-Laki" ? 'checked' : ''}}>
-                                    <label class="form-check-label">Laki-Laki</label>     
+                                <input type="text" class="form-control" name="tmp_lahir" value="{{old('tmp_lahir') ? old('tmp_lahir') : $data->tmp_lahir}}" style="height: 40px; font-size: 13px;">
+                                @error('tmp_lahir')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Tanggal Lahir</label>
+                            <div class="col-sm-4">
+                                <input type="date" class="form-control" name="tgl_lahir" value="{{old('tgl_lahir') ? old('tgl_lahir') : $data->tgl_lahir}}" style="height: 40px; font-size: 13px;">
+                                @error('tgl_lahir')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Jenis Kelamin <span class="text-danger">*</span></label>
+                            <div class="col-sm-4 d-flex align-items-center" style="gap: 20px;">
+                                <div class="form-check mb-0">
+                                    <input type="radio" name="jk" id="jk_l" class="form-check-input" value="Laki-Laki" {{ (old('jk') ? old('jk') : $data->jk) == "Laki-Laki" ? 'checked' : '' }} required>
+                                    <label class="form-check-label" for="jk_l" style="font-size: 13px; cursor: pointer;">Laki-Laki</label>     
                                 </div>
-                                <div class="form-check">
-                                    <input type="radio" name="jk" class="form-check-input"
-                                    value="Perempuan" {{$data->jk=="Perempuan" ? 'checked' : ''}}>
-                                    <label class="form-check-label">Perempuan</label>   
+                                <div class="form-check mb-0">
+                                    <input type="radio" name="jk" id="jk_p" class="form-check-input" value="Perempuan" {{ (old('jk') ? old('jk') : $data->jk) == "Perempuan" ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="jk_p" style="font-size: 13px; cursor: pointer;">Perempuan</label>   
                                 </div>
                                 @error('jk')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
-                            <label class="col-sm-2 col-form-label">Status Menikah</label>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Status Menikah</label>
                             <div class="col-sm-4">
-                                
-                                <select name="status_menikah" class="form-control">
-                                    <option value="">--Pilih--</option>
-                                    <option value="Belum Menikah" {{$data->status_menikah =="Belum Menikah" ? 'selected' : ''}}>Belum Menikah</option>
-                                    <option value="Menikah" {{$data->status_menikah =="Menikah" ? 'selected' : ''}}>Menikah</option>
-                                    <option value="Duda" {{$data->status_menikah =="Duda" ? 'selected' : ''}}>Duda</option>
-                                    <option value="Janda" {{$data->status_menikah =="Janda" ? 'selected' : ''}}>Janda</option>
+                                @php $currentNikah = old('status_menikah') ? old('status_menikah') : $data->status_menikah; @endphp
+                                <select name="status_menikah" class="form-control" style="height: 40px; font-size: 13px;">
+                                    <option value="">--Pilih Status Menikah--</option>
+                                    <option value="Belum Menikah" {{$currentNikah == "Belum Menikah" ? 'selected' : ''}}>Belum Menikah</option>
+                                    <option value="Menikah" {{$currentNikah == "Menikah" ? 'selected' : ''}}>Menikah</option>
+                                    <option value="Duda" {{$currentNikah == "Duda" ? 'selected' : ''}}>Duda</option>
+                                    <option value="Janda" {{$currentNikah == "Janda" ? 'selected' : ''}}>Janda</option>
                                 </select>
                                 @error('status_menikah')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Agama</label>
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Agama</label>
                             <div class="col-sm-2">
-                                <select name="agama" class="form-control">
-                                    <option value=""></option>
-                                    <option value="Islam" {{$data->agama =="Islam" ? 'selected' : ''}}>Islam</option>
-                                    <option value="Kristen" {{$data->agama =="Kristen" ? 'selected' : ''}}>Kristen</option>
-                                    <option value="Katholik" {{$data->agama =="Katholik" ? 'selected' : ''}}>Katholik</option>
-                                    <option value="Hindu" {{$data->agama =="Hinda" ? 'selected' : ''}}>Hindu</option>
-                                    <option value="Budha" {{$data->agama =="Budha" ? 'selected' : ''}}>Budha</option>
-                                    <option value="Konghucu" {{$data->agama =="Konghucu" ? 'selected' : ''}}>Konghucu</option>
+                                @php $currentAgama = old('agama') ? old('agama') : $data->agama; @endphp
+                                <select name="agama" class="form-control" style="height: 40px; font-size: 13px;">
+                                    <option value="">--Pilih--</option>
+                                    <option value="Islam" {{$currentAgama == "Islam" ? 'selected' : ''}}>Islam</option>
+                                    <option value="Kristen" {{$currentAgama == "Kristen" ? 'selected' : ''}}>Kristen</option>
+                                    <option value="Katholik" {{$currentAgama == "Katholik" ? 'selected' : ''}}>Katholik</option>
+                                    <option value="Hindu" {{$currentAgama == "Hindu" ? 'selected' : ''}}>Hindu</option>
+                                    <option value="Budha" {{$currentAgama == "Budha" ? 'selected' : ''}}>Budha</option>
+                                    <option value="Konghucu" {{$currentAgama == "Konghucu" ? 'selected' : ''}}>Konghucu</option>
                                 </select>
                                 @error('agama')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
-                            <label class="col-sm-2 col-form-label">Pendidikan</label>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Pendidikan</label>
                             <div class="col-sm-2">
-                                <select name="pendidikan" class="form-control">
+                                @php $currentPendidikan = old('pendidikan') ? old('pendidikan') : $data->pendidikan; @endphp
+                                <select name="pendidikan" class="form-control" style="height: 40px; font-size: 13px;">
                                     <option value="">--Pilih--</option>
-                                    <option value="SD" {{$data->pendidikan =="SD" ? 'selected' : ''}}>SD</option>
-                                    <option value="SMP" {{$data->pendidikan =="SMP" ? 'selected' : ''}}>SMP</option>
-                                    <option value="SMA" {{$data->pendidikan =="SMA" ? 'selected' : ''}}>SMA</option>
-                                    <option value="Diploma" {{$data->pendidikan =="Diploma" ? 'selected' : ''}}>Diploma</option>
-                                    <option value="S1" {{$data->pendidikan =="S1" ? 'selected' : ''}}>S1</option>
-                                    <option value="S2" {{$data->pendidikan =="S2" ? 'selected' : ''}}>S2</option>
-                                    <option value="S3" {{$data->pendidikan =="S3" ? 'selected' : ''}}>S3</option>
-                                    <option value="Tidak Sekolah" {{$data->pendidikan =="Tidak Sekolah" ? 'selected' : ''}}>Tidak Sekolah</option>
+                                    <option value="SD" {{$currentPendidikan == "SD" ? 'selected' : ''}}>SD</option>
+                                    <option value="SMP" {{$currentPendidikan == "SMP" ? 'selected' : ''}}>SMP</option>
+                                    <option value="SMA" {{$currentPendidikan == "SMA" ? 'selected' : ''}}>SMA</option>
+                                    <option value="Diploma" {{$currentPendidikan == "Diploma" ? 'selected' : ''}}>Diploma</option>
+                                    <option value="S1" {{$currentPendidikan == "S1" ? 'selected' : ''}}>S1</option>
+                                    <option value="S2" {{$currentPendidikan == "S2" ? 'selected' : ''}}>S2</option>
+                                    <option value="S3" {{$currentPendidikan == "S3" ? 'selected' : ''}}>S3</option>
+                                    <option value="Tidak Sekolah" {{$currentPendidikan == "Tidak Sekolah" ? 'selected' : ''}}>Tidak Sekolah</option>
                                 </select>
                                 @error('pendidikan')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
 
-                            <label class="col-sm-2 col-form-label">Pekerjaan</label>
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Pekerjaan</label>
                             <div class="col-sm-2">
-                                <select name="pekerjaan" class="form-control">
+                                @php $currentPekerjaan = old('pekerjaan') ? old('pekerjaan') : $data->pekerjaan; @endphp
+                                <select name="pekerjaan" class="form-control" style="height: 40px; font-size: 13px;">
                                     <option value="">--Pilih--</option>
-                                    <option value="PNS" {{$data->pekerjaan =="PNS" ? 'selected' : ''}}>PNS</option>
-                                    <option value="Wiraswasta" {{$data->pekerjaan =="Wiraswasta" ? 'selected' : ''}}>Wiraswasta</option>
-                                    <option value="TNI/Polri" {{$data->pekerjaan =="TNI/Polri" ? 'selected' : ''}}>TNI/Polri</option>
-                                    <option value="Pelajar/Mahasiswa" {{$data->pekerjaan =="Pelajar/Mahasiswa" ? 'selected' : ''}}>Pelajar/Mahasiswa</option>
-                                    <option value="Petani" {{$data->pekerjaan =="Petani" ? 'selected' : ''}}>Petani</option>
-                                    <option value="Guru/Pengajar" {{$data->pekerjaan =="Guru/Pengajar" ? 'selected' : ''}}>Guru/Pengajar</option>
-                                    <option value="IRT" {{$data->pekerjaan =="IRT" ? 'selected' : ''}}>IRT</option>
-                                    <option value="Lain-Lain" {{$data->pekerjaan =="Lain-Lain" ? 'selected' : ''}}>Lain-Lain</option>
-                                    
+                                    <option value="PNS" {{$currentPekerjaan == "PNS" ? 'selected' : ''}}>PNS</option>
+                                    <option value="Wiraswasta" {{$currentPekerjaan == "Wiraswasta" ? 'selected' : ''}}>Wiraswasta</option>
+                                    <option value="TNI/Polri" {{$currentPekerjaan == "TNI/Polri" ? 'selected' : ''}}>TNI/Polri</option>
+                                    <option value="Pelajar/Mahasiswa" {{$currentPekerjaan == "Pelajar/Mahasiswa" ? 'selected' : ''}}>Pelajar/Mahasiswa</option>
+                                    <option value="Petani" {{$currentPekerjaan == "Petani" ? 'selected' : ''}}>Petani</option>
+                                    <option value="Guru/Pengajar" {{$currentPekerjaan == "Guru/Pengajar" ? 'selected' : ''}}>Guru/Pengajar</option>
+                                    <option value="IRT" {{$currentPekerjaan == "IRT" ? 'selected' : ''}}>IRT</option>
+                                    <option value="Lain-Lain" {{$currentPekerjaan == "Lain-Lain" ? 'selected' : ''}}>Lain-Lain</option>
                                 </select>
-                                @error('pendidikan')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                @error('pekerjaan')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Alamat Lengkap</label>
-                            <div class="col-sm-10">
-                            
-                                <textarea name="alamat_lengkap" class="form-control" rows="4">
-                                    {{old('alamat_lengkap') ? old('alamat_lengkap') : $data->alamat_lengkap}}</textarea>
-                                @error('alamat_lengkap')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
+                        <!-- BAGIAN 2: KONTAK & ALAMAT DOMISILI -->
+                        <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
+                            <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
+                                <i class="fa fa-map-marker text-primary mr-2"></i> 2. Kontak & Alamat Domisili
+                            </h5>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Kelurahan</label>
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">No. HP <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="kelurahan" value="{{old('kelurahan') ? old('kelurahan') : $data->kelurahan}}">
-                                @error('kelurahan')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
-                            <label class="col-sm-2 col-form-label">Kecamatan</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" name="kecamatan"  value="{{old('kecamatan') ? old('kecamatan') : $data->kecamatan}}">
-                                @error('kecamatan')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Kabupaten</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" name="kabupaten" value="{{old('kabupaten') ? old('kabupaten') : $data->kabupaten}}">
-                                @error('kabupaten')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
-                            <label class="col-sm-2 col-form-label">Kodepos</label>
-                            <div class="col-sm-4">
-                                <input type="number" maxlength="5" class="form-control" name="kodepos" value="{{old('kodepos') ? old('kodepos') : $data->kodepos}}">
-                                @error('kodepos')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">No HP*</label>
-                            <div class="col-sm-4">
-                                <input type="number" class="form-control" name="no_hp" required value="{{old('no_hp') ? old('no_hp') : $data->no_hp}}">
+                                <input type="text" class="form-control" name="no_hp" required placeholder="Contoh: 081234567890" value="{{old('no_hp') ? old('no_hp') : $data->no_hp}}" style="height: 40px; font-size: 13px;">
                                 @error('no_hp')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
-                            <label class="col-sm-3 col-form-label">Kewarganegaraan</label>
-                            <div class="col-sm-3">
-                                <div class="form-check">
-                                    <input type="radio" name="kewarganegaraan" class="form-check-input" 
-                                    value="WNI" checked>
-                                    <label class="form-check-label">WNI</label>     
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" name="kewarganegaraan" class="form-check-input"
-                                    value="WNA">
-                                    <label class="form-check-label">WNA</label>   
-                                </div>
-                                @error('kewarganegaraan')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">No. BPJS / KIS</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="no_bpjs" name="no_bpjs" placeholder="Nomor BPJS atau KTP jika ada" value="{{old('no_bpjs') ? old('no_bpjs') : $data->no_bpjs}}" style="height: 40px; font-size: 13px;">
+                                @error('no_bpjs')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Layanan</label>
-                            <div class="col-sm-4">
-                                <div class="alert alert-success mb-0" role="alert">
-                                    Layanan terapi gratis dan tidak dipungut biaya.
-                                </div>
-                            </div>
-                            <label class="col-sm-2 col-form-label" id="no_bpjs_label">No. BPJS/KTP</label>
-                            <div class="col-sm-4">
-                                <input type="number" class="form-control" id="no_bpjs"
-                                 name="no_bpjs" value="{{old('no_bpjs') ? old('no_bpjs') : $data->no_bpjs}}">
-                                @error('no_bpjs')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Alamat Lengkap</label>
+                            <div class="col-sm-10">
+                                <textarea name="alamat_lengkap" class="form-control" rows="3" placeholder="Alamat jalan, RT/RW, Dusun, dll." style="font-size: 13px;">{{old('alamat_lengkap') ? old('alamat_lengkap') : $data->alamat_lengkap}}</textarea>
+                                @error('alamat_lengkap')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Kelurahan / Desa</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="kelurahan" value="{{old('kelurahan') ? old('kelurahan') : $data->kelurahan}}" style="height: 40px; font-size: 13px;">
+                                @error('kelurahan')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Kecamatan</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="kecamatan" value="{{old('kecamatan') ? old('kecamatan') : $data->kecamatan}}" style="height: 40px; font-size: 13px;">
+                                @error('kecamatan')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Kabupaten / Kota</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="kabupaten" value="{{old('kabupaten') ? old('kabupaten') : $data->kabupaten}}" style="height: 40px; font-size: 13px;">
+                                @error('kabupaten')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Kode Pos</label>
+                            <div class="col-sm-4">
+                                <input type="number" maxlength="5" class="form-control" name="kodepos" value="{{old('kodepos') ? old('kodepos') : $data->kodepos}}" style="height: 40px; font-size: 13px;">
+                                @error('kodepos')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- BAGIAN 3: DATA SOSIAL, DISABILITAS & WALI -->
+                        <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
+                            <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
+                                <i class="fa fa-users text-primary mr-2"></i> 3. Data Sosial, Disabilitas & Wali
+                            </h5>
+                        </div>
+
                         <div class="form-group row">
                             @php $currentDesil = old('desil') ? old('desil') : $data->desil; @endphp
-                            <label class="col-sm-2 col-form-label">Desil (DTKS/P3KE)</label>
-                            <div class="col-sm-4">
-                                <select name="desil" class="form-control" id="desil">
-                                    <option value="">--Pilih Desil--</option>
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Desil (DTKS/P3KE)</label>
+                            <div class="col-sm-10">
+                                <select name="desil" class="form-control" id="desil" style="height: 40px; font-size: 13px;">
+                                    <option value="">--Pilih Tingkat Desil Sosial--</option>
                                     <option value="Desil 1" {{$currentDesil == "Desil 1" ? 'selected' : ''}}>Desil 1 (Sangat Miskin)</option>
                                     <option value="Desil 2" {{$currentDesil == "Desil 2" ? 'selected' : ''}}>Desil 2 (Miskin)</option>
                                     <option value="Desil 3" {{$currentDesil == "Desil 3" ? 'selected' : ''}}>Desil 3 (Hampir Miskin)</option>
@@ -275,75 +262,146 @@
                                     <option value="Non-Desil" {{$currentDesil == "Non-Desil" ? 'selected' : ''}}>Non-Desil / Belum Terdata</option>
                                 </select>
                                 @error('desil')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
-                            <label class="col-sm-2 col-form-label">Alergi</label>
-                            <div class="col-sm-4">
-                                <input type="text" name="alergi" class="form-control" placeholder="Riwayat alergi jika ada" value="{{old('alergi') ? old('alergi') : $data->alergi}}">
-                                @error('alergi')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
                         </div>
+
+                        @php
+                            $currentNamaWali = old('nama_wali') !== null ? old('nama_wali') : $data->nama_wali;
+                            $currentHubunganWali = old('hubungan_wali') !== null ? old('hubungan_wali') : $data->hubungan_wali;
+                            $currentJenisDisabilitas = old('jenis_disabilitas') !== null ? old('jenis_disabilitas') : $data->jenis_disabilitas;
+                            $currentAlatBantu = old('alat_bantu') !== null ? old('alat_bantu') : $data->alat_bantu;
+                        @endphp
+
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">File Kartu Keluarga (KK)</label>
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Nama Wali / Ortu</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="nama_wali" placeholder="Nama lengkap wali / orang tua" value="{{$currentNamaWali}}" style="height: 40px; font-size: 13px;">
+                                @error('nama_wali')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Hubungan dgn Pasien</label>
+                            <div class="col-sm-4">
+                                <select name="hubungan_wali" class="form-control" style="height: 40px; font-size: 13px;">
+                                    <option value="">--Pilih Hubungan--</option>
+                                    <option value="Orang Tua Kandung" {{$currentHubunganWali == 'Orang Tua Kandung' ? 'selected' : ''}}>Orang Tua Kandung</option>
+                                    <option value="Wali" {{$currentHubunganWali == 'Wali' ? 'selected' : ''}}>Wali</option>
+                                    <option value="Pengasuh UPT" {{$currentHubunganWali == 'Pengasuh UPT' ? 'selected' : ''}}>Pengasuh UPT</option>
+                                    <option value="Keluarga / Kerabat" {{$currentHubunganWali == 'Keluarga / Kerabat' ? 'selected' : ''}}>Keluarga / Kerabat</option>
+                                    <option value="Lainnya" {{$currentHubunganWali == 'Lainnya' ? 'selected' : ''}}>Lainnya</option>
+                                </select>
+                                @error('hubungan_wali')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Jenis Disabilitas</label>
+                            <div class="col-sm-4">
+                                <select name="jenis_disabilitas" class="form-control" style="height: 40px; font-size: 13px;">
+                                    <option value="">--Pilih Jenis Disabilitas--</option>
+                                    <option value="Tidak Ada" {{$currentJenisDisabilitas == 'Tidak Ada' ? 'selected' : ''}}>Tidak Ada</option>
+                                    <option value="Fisik" {{$currentJenisDisabilitas == 'Fisik' ? 'selected' : ''}}>Fisik</option>
+                                    <option value="Intelektual" {{$currentJenisDisabilitas == 'Intelektual' ? 'selected' : ''}}>Intelektual</option>
+                                    <option value="Sensorik Netra" {{$currentJenisDisabilitas == 'Sensorik Netra' ? 'selected' : ''}}>Sensorik Netra</option>
+                                    <option value="Sensorik Rungu/Wicara" {{$currentJenisDisabilitas == 'Sensorik Rungu/Wicara' ? 'selected' : ''}}>Sensorik Rungu/Wicara</option>
+                                    <option value="Ganda" {{$currentJenisDisabilitas == 'Ganda' ? 'selected' : ''}}>Ganda</option>
+                                    <option value="Lainnya" {{$currentJenisDisabilitas == 'Lainnya' ? 'selected' : ''}}>Lainnya</option>
+                                </select>
+                                @error('jenis_disabilitas')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Alat Bantu Mobilitas</label>
+                            <div class="col-sm-4">
+                                <select name="alat_bantu" class="form-control" style="height: 40px; font-size: 13px;">
+                                    <option value="">--Pilih Alat Bantu--</option>
+                                    <option value="Tidak Ada" {{$currentAlatBantu == 'Tidak Ada' ? 'selected' : ''}}>Tidak Ada</option>
+                                    <option value="Kursi Roda" {{$currentAlatBantu == 'Kursi Roda' ? 'selected' : ''}}>Kursi Roda</option>
+                                    <option value="Tongkat Ketiak (Crutches)" {{$currentAlatBantu == 'Tongkat Ketiak (Crutches)' ? 'selected' : ''}}>Tongkat Ketiak (Crutches)</option>
+                                    <option value="Walker" {{$currentAlatBantu == 'Walker' ? 'selected' : ''}}>Walker</option>
+                                    <option value="Alat Bantu Dengar" {{$currentAlatBantu == 'Alat Bantu Dengar' ? 'selected' : ''}}>Alat Bantu Dengar</option>
+                                    <option value="Kruk / Tongkat Penuntun" {{$currentAlatBantu == 'Kruk / Tongkat Penuntun' ? 'selected' : ''}}>Kruk / Tongkat Penuntun</option>
+                                    <option value="Lainnya" {{$currentAlatBantu == 'Lainnya' ? 'selected' : ''}}>Lainnya</option>
+                                </select>
+                                @error('alat_bantu')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- BAGIAN 4: BERKAS & DOKUMEN PENDUKUNG -->
+                        <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
+                            <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
+                                <i class="fa fa-folder-open text-primary mr-2"></i> 4. Berkas & Dokumen Pendukung (Opsional)
+                            </h5>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">File Kartu Keluarga (KK)</label>
                             <div class="col-sm-10">
                                 <input type="file" class="form-control-file" name="file_kk" accept=".jpg,.jpeg,.png,.pdf">
-                                <small class="text-muted d-block mt-1">Format: JPG, JPEG, PNG, PDF (Maks. 10MB)</small>
+                                <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa fa-info-circle mr-1"></i>Format: JPG, JPEG, PNG, PDF (Maksimal 10MB)</small>
                                 @error('file_kk')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                                 @if ($data->file_kk)
                                     <div class="mt-2">
                                         @if (Str::endsWith(strtolower($data->file_kk), ['.jpg', '.jpeg', '.png']))
                                             <a href="{{$data->getFileKk()}}" target="_blank">
-                                                <img height="100px" class="img-thumbnail" src="{{$data->getFileKk()}}" alt="File KK">
+                                                <img height="90px" class="img-thumbnail" src="{{$data->getFileKk()}}" alt="File KK" style="border-radius: 8px;">
                                             </a>
                                         @else
-                                            <a href="{{$data->getFileKk()}}" target="_blank" class="btn btn-xs btn-info">
-                                                <i class="fa fa-file"></i> Lihat Berkas KK
+                                            <a href="{{$data->getFileKk()}}" target="_blank" class="btn btn-xs btn-info shadow-sm" style="font-size: 12px;">
+                                                <i class="fa fa-file mr-1"></i> Lihat Berkas KK
                                             </a>
                                         @endif
-                                        <small class="text-muted d-block mt-1">Upload file jika ingin mengupdate berkas KK</small>
+                                        <small class="text-muted d-block mt-1" style="font-size: 11.5px;">Upload file baru jika ingin mengganti berkas KK</small>
                                     </div>
                                 @endif
                             </div>
                         </div>
+
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Surat Resume / Riwayat Berobat</label>
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Surat Resume / Riwayat Berobat</label>
                             <div class="col-sm-10">
                                 <input type="file" class="form-control-file" name="file_resume" accept=".jpg,.jpeg,.png,.pdf">
-                                <small class="text-muted d-block mt-1">Format: JPG, JPEG, PNG, PDF (Maks. 10MB) - Berkas rekam medis / resume berobat sebelumnya</small>
+                                <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa fa-info-circle mr-1"></i>Format: JPG, JPEG, PNG, PDF (Maksimal 10MB) - Berkas rekam medis / resume berobat sebelumnya</small>
                                 @error('file_resume')
-                                <div class="invalid-feedback animated fadeInUp"
-                                style="display: block;">{{$message}}</div>
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                                 @if ($data->file_resume)
                                     <div class="mt-2">
                                         @if (Str::endsWith(strtolower($data->file_resume), ['.jpg', '.jpeg', '.png']))
                                             <a href="{{$data->getFileResume()}}" target="_blank">
-                                                <img height="100px" class="img-thumbnail" src="{{$data->getFileResume()}}" alt="Surat Resume">
+                                                <img height="90px" class="img-thumbnail" src="{{$data->getFileResume()}}" alt="Surat Resume" style="border-radius: 8px;">
                                             </a>
                                         @else
-                                            <a href="{{$data->getFileResume()}}" target="_blank" class="btn btn-xs btn-info">
-                                                <i class="fa fa-file"></i> Lihat Berkas Resume
+                                            <a href="{{$data->getFileResume()}}" target="_blank" class="btn btn-xs btn-info shadow-sm" style="font-size: 12px;">
+                                                <i class="fa fa-file mr-1"></i> Lihat Berkas Resume
                                             </a>
                                         @endif
-                                        <small class="text-muted d-block mt-1">Upload file jika ingin mengupdate berkas resume</small>
+                                        <small class="text-muted d-block mt-1" style="font-size: 11.5px;">Upload file baru jika ingin mengganti berkas resume</small>
                                     </div>
                                 @endif
                             </div>
                         </div>
-                        <hr>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">UPDATE</button>
+
+                        <!-- TOMBOL AKSI UPDATE -->
+                        <div class="d-flex align-items-center justify-content-between pt-3 mt-4" style="border-top: 1px solid #edf2f7;">
+                            <a href="{{Route('penerima-manfaat')}}" class="btn btn-sm btn-light" style="padding: 8px 18px; font-size: 13px; font-weight: 600; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                <i class="fa fa-arrow-left mr-1"></i> Kembali
+                            </a>
+                            <button type="submit" class="btn btn-sm btn-primary" style="padding: 8px 24px; font-size: 13px; font-weight: 600; border-radius: 6px;">
+                                <i class="fa fa-save mr-1"></i> Update Data
+                            </button>
                         </div>
 
-                        
                     </form>
                 </div>
             </div>
@@ -352,18 +410,4 @@
 </div>
 @endsection
 @section('script')
-    <script>
-        $('input:radio[name="cara_bayar"]').change(
-         function(){
-            if ($(this).is(':checked') && $(this).val() == 'Jaminan Kesehatan') {
-               $("#no_bpjs").show();
-               $("#no_bpjs_label").show();
-            }else{
-                $("#no_bpjs").hide();
-                $("#no_bpjs_label").hide();
-                $("#no_bpjs").val("");
-
-            }
-        });
-    </script>
 @endsection

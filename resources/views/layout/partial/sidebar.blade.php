@@ -5,7 +5,7 @@
             
             <li>
                 <a href="{{Route('dashboard')}}" class="ai-icon" aria-expanded="false">
-                    <i class="flaticon-381-networking"></i>
+                    <i class="fa fa-home"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
             </li>

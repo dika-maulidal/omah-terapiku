@@ -33,6 +33,18 @@
 }
 
 /* ==========================================================================
+   GLOBAL TYPOGRAPHY - PLUS JAKARTA SANS
+   ========================================================================== */
+body,
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+p, span, a, input, select, textarea, button,
+.btn, .badge, .table, .deznav, .form-control,
+.nav-text, .form-head, .card-header, .card-title {
+    font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif !important;
+}
+
+/* ==========================================================================
    1. ELIMINATE GREEN BARS & OLD HIGHLIGHTS ON SIDEBAR
    ========================================================================== */
 .deznav .metismenu > li > a:before,
@@ -80,24 +92,27 @@
 
 /* Menu Items (Clean Box with Soft Margin & Smooth Transition) */
 .deznav .metismenu > li {
-    margin-bottom: 2px;
+    margin-bottom: 3px;
 }
 
 .deznav .metismenu > li > a {
-    margin: 3px 12px !important;
+    margin: 2px 12px !important;
     padding: 11px 16px !important;
-    border-radius: 6px !important;
+    border-radius: 8px !important;
     color: #475569 !important;
     font-size: 13.5px !important;
     font-weight: 500;
-    border-left: 3px solid transparent !important;
+    border: none !important;
+    border-left: none !important;
     transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-.deznav .metismenu > li > a i {
+.deznav .metismenu > li > a i,
+.deznav .metismenu li > a i,
+.deznav .metismenu a i {
     font-size: 17px !important;
     margin-right: 12px !important;
-    color: #64748b !important;
+    color: var(--ot-navy) !important;
     transition: transform 0.22s ease, color 0.22s ease !important;
 }
 
@@ -105,9 +120,10 @@
 .deznav .metismenu > li:hover > a,
 .deznav .metismenu > li > a:hover {
     background-color: #f1f5fb !important;
-    color: var(--ot-navy) !important;
-    transform: translateX(4px) !important;
-    border-left-color: rgba(46, 75, 130, 0.35) !important;
+    color: #0f172a !important;
+    transform: translateX(3px) !important;
+    border: none !important;
+    border-left: none !important;
 }
 
 .deznav .metismenu > li:hover > a i,
@@ -116,16 +132,28 @@
     transform: scale(1.15) !important;
 }
 
-/* Menu Active State */
-.deznav .metismenu > li.mm-active > a {
+/* Menu Active State (Borderless, Colored Icon, Black Text) */
+.deznav .metismenu > li.mm-active > a,
+[data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a {
     background: #edf3fc !important;
-    color: var(--ot-navy) !important;
+    color: #0f172a !important;
     font-weight: 700 !important;
-    border-left: 3.5px solid var(--ot-navy) !important;
-    box-shadow: 0 2px 8px rgba(46, 75, 130, 0.08) !important;
+    border: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    box-shadow: 0 2px 8px rgba(46, 75, 130, 0.06) !important;
 }
 
-.deznav .metismenu > li.mm-active > a i {
+.deznav .metismenu > li.mm-active > a span,
+.deznav .metismenu > li.mm-active > a .nav-text {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+
+.deznav .metismenu > li.mm-active > a i,
+[data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a i {
     color: var(--ot-navy) !important;
     transform: scale(1.12) !important;
 }
@@ -142,24 +170,46 @@
 .deznav .metismenu ul a {
     margin: 2px 12px !important;
     padding: 8px 16px 8px 36px !important;
-    border-radius: 4px !important;
-    color: #64748b !important;
+    border-radius: 6px !important;
+    color: #475569 !important;
     font-size: 13px !important;
     font-weight: 500;
+    border: none !important;
+    border-left: none !important;
     transition: all 0.2s ease !important;
+}
+
+.deznav .metismenu ul a i {
+    color: var(--ot-navy) !important;
+    transition: color 0.2s ease, transform 0.2s ease !important;
 }
 
 .deznav .metismenu ul a:hover {
     background-color: #f1f5fb !important;
-    color: var(--ot-navy) !important;
+    color: #0f172a !important;
     padding-left: 40px !important;
+    border: none !important;
+    border-left: none !important;
 }
 
-.deznav .metismenu ul a.mm-active {
-    background-color: #edf3fc !important;
+.deznav .metismenu ul a:hover i {
     color: var(--ot-navy) !important;
+    transform: scale(1.1) !important;
+}
+
+.deznav .metismenu ul a.mm-active,
+.deznav .metismenu ul li.mm-active > a {
+    background-color: #edf3fc !important;
+    color: #0f172a !important;
     font-weight: 700 !important;
     padding-left: 40px !important;
+    border: none !important;
+    border-left: none !important;
+}
+
+.deznav .metismenu ul a.mm-active i,
+.deznav .metismenu ul li.mm-active > a i {
+    color: var(--ot-navy) !important;
 }
 
 /* Clear & Prominent Dropdown Arrow (Chevron: Right > then Down v) */
@@ -433,22 +483,22 @@
    ========================================================================== */
 .card {
     border-radius: 16px !important;
-    border: 1px solid #edf2f9 !important;
-    box-shadow: 0 4px 20px -2px rgba(46, 75, 130, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
+    border: none !important;
+    box-shadow: 0 4px 20px -2px rgba(46, 75, 130, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
     background-color: #ffffff !important;
     transition: transform 0.22s ease, box-shadow 0.22s ease !important;
     position: relative;
 }
 
 .card:hover {
-    box-shadow: 0 8px 24px -3px rgba(46, 75, 130, 0.08), 0 3px 8px -1px rgba(0, 0, 0, 0.03) !important;
+    box-shadow: 0 8px 25px -3px rgba(46, 75, 130, 0.10), 0 3px 8px -1px rgba(0, 0, 0, 0.03) !important;
 }
 
 .card-header {
     border-top-left-radius: 16px !important;
     border-top-right-radius: 16px !important;
-    border-bottom: 1px solid #f1f5fb !important;
-    background-color: #ffffff !important;
+    border-bottom: none !important;
+    background-color: transparent !important;
     padding: 1.25rem 1.5rem !important;
 }
 
@@ -463,7 +513,7 @@
 .card-footer {
     border-bottom-left-radius: 16px !important;
     border-bottom-right-radius: 16px !important;
-    border-top: 1px solid #f1f5fb !important;
+    border-top: none !important;
     background-color: #fafbfd !important;
     padding: 1rem 1.5rem !important;
 }
@@ -565,6 +615,31 @@
 .badge-info.light {
     background-color: var(--ot-cyan-light) !important;
     color: #0288d1 !important;
+}
+
+.badge-outline-primary {
+    background-color: var(--ot-navy-light) !important;
+    border: 1px solid rgba(46, 75, 130, 0.25) !important;
+    color: var(--ot-navy) !important;
+    font-weight: 600;
+}
+.badge-outline-success {
+    background-color: var(--ot-green-light) !important;
+    border: 1px solid rgba(76, 175, 80, 0.25) !important;
+    color: var(--ot-green) !important;
+    font-weight: 600;
+}
+.badge-outline-danger {
+    background-color: var(--ot-red-light) !important;
+    border: 1px solid rgba(229, 57, 53, 0.25) !important;
+    color: var(--ot-red) !important;
+    font-weight: 600;
+}
+.badge-outline-warning {
+    background-color: var(--ot-yellow-light) !important;
+    border: 1px solid rgba(245, 166, 35, 0.25) !important;
+    color: #b7791f !important;
+    font-weight: 600;
 }
 
 /* DataTables Pagination & General Pagination */
@@ -723,55 +798,111 @@ button.gp-search i.fa-search,
 }
 
 /* ==========================================================================
-   9. DASHBOARD COMPONENTS & BRAND NUANCE
+   9. DASHBOARD COMPONENTS & BRAND NUANCE (Borderless & Ornamented Cards)
    ========================================================================== */
 
-/* Modern Stat Widget Card with Harmonious Brand Backgrounds */
+/* Modern Stat Widget Card with Layered Background Ornaments & Borderless Design */
 .ot-stat-card {
-    border-radius: 14px !important;
-    padding: 16px 18px !important;
-    box-shadow: 0 2px 10px rgba(46, 75, 130, 0.04) !important;
-    transition: all 0.2s ease !important;
-    position: relative;
-    overflow: hidden;
+    border-radius: 16px !important;
+    padding: 18px 20px !important;
+    border: none !important;
+    box-shadow: 0 4px 20px -2px rgba(46, 75, 130, 0.07), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
     margin-bottom: 20px;
+    z-index: 1;
+}
+
+.ot-stat-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Background Ornament 1: Glowing Ambient Radial Orb */
+.ot-stat-card::before {
+    content: '';
+    position: absolute;
+    top: -35px;
+    right: -35px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+}
+
+/* Background Ornament 2: Modern Geometric Concentric Ring Watermark */
+.ot-stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    right: -25px;
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
 }
 
 .ot-stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(46, 75, 130, 0.08) !important;
+    transform: translateY(-4px);
 }
 
+.ot-stat-card:hover::before {
+    transform: scale(1.18) translate(-6px, 6px);
+}
+
+.ot-stat-card:hover::after {
+    transform: scale(1.15) rotate(15deg);
+}
+
+/* Icon Wrap with Translucent Glass Styling */
 .ot-stat-icon-wrap {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 19px;
     flex-shrink: 0;
-    background: #ffffff !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
+    transition: transform 0.25s ease !important;
 }
 
-/* 1. Navy Variant (Primary Brand) */
+.ot-stat-card:hover .ot-stat-icon-wrap {
+    transform: scale(1.08) rotate(5deg);
+}
+
+/* 1. Navy Variant (Primary Brand - Deep Blue & Cyan Accents) */
 .ot-stat-card.ot-navy {
-    background: linear-gradient(135deg, #eef4fc 0%, #e3ecf8 100%) !important;
-    border: 1.5px solid #9bbde5 !important;
-    border-left: 4.5px solid var(--ot-navy) !important;
+    background: linear-gradient(135deg, #eef4fc 0%, #dbe9f9 100%) !important;
+    border: none !important;
+}
+.ot-stat-card.ot-navy::before {
+    background: radial-gradient(circle, rgba(46, 75, 130, 0.28) 0%, rgba(41, 182, 246, 0.12) 65%, transparent 100%);
+}
+.ot-stat-card.ot-navy::after {
+    border: 14px solid rgba(46, 75, 130, 0.10);
+    box-shadow: inset 0 0 0 10px rgba(41, 182, 246, 0.08);
 }
 .ot-stat-card.ot-navy:hover {
-    border-color: var(--ot-navy) !important;
+    box-shadow: 0 12px 28px -3px rgba(46, 75, 130, 0.18) !important;
 }
 .ot-stat-card.ot-navy .ot-stat-title { color: #4a5d7e !important; }
 .ot-stat-card.ot-navy .ot-stat-number { color: #1e3761 !important; }
 .ot-stat-card.ot-navy .ot-stat-icon-wrap {
     color: var(--ot-navy) !important;
-    box-shadow: 0 2px 8px rgba(46, 75, 130, 0.12) !important;
-    border: 1px solid #d0e0f5;
 }
 .ot-stat-card.ot-navy .ot-stat-footer {
-    border-top: 1px solid rgba(46, 75, 130, 0.12) !important;
+    border-top: 1px solid rgba(46, 75, 130, 0.10) !important;
     color: #576d91 !important;
 }
 .ot-stat-card.ot-navy .badge {
@@ -779,24 +910,28 @@ button.gp-search i.fa-search,
     color: #ffffff !important;
 }
 
-/* 2. Cyan Variant (Medical/Info) */
+/* 2. Cyan Variant (Medical/Info - Sky Blue & Azure Accents) */
 .ot-stat-card.ot-cyan {
-    background: linear-gradient(135deg, #e6f7ff 0%, #d7effd 100%) !important;
-    border: 1.5px solid #8cd0f7 !important;
-    border-left: 4.5px solid var(--ot-cyan) !important;
+    background: linear-gradient(135deg, #e8f7ff 0%, #d2f0fe 100%) !important;
+    border: none !important;
+}
+.ot-stat-card.ot-cyan::before {
+    background: radial-gradient(circle, rgba(41, 182, 246, 0.32) 0%, rgba(2, 136, 209, 0.12) 65%, transparent 100%);
+}
+.ot-stat-card.ot-cyan::after {
+    border: 14px solid rgba(41, 182, 246, 0.14);
+    box-shadow: inset 0 0 0 10px rgba(2, 136, 209, 0.08);
 }
 .ot-stat-card.ot-cyan:hover {
-    border-color: var(--ot-cyan-hover) !important;
+    box-shadow: 0 12px 28px -3px rgba(41, 182, 246, 0.20) !important;
 }
 .ot-stat-card.ot-cyan .ot-stat-title { color: #2c6e91 !important; }
 .ot-stat-card.ot-cyan .ot-stat-number { color: #0277bd !important; }
 .ot-stat-card.ot-cyan .ot-stat-icon-wrap {
     color: #0288d1 !important;
-    box-shadow: 0 2px 8px rgba(2, 136, 209, 0.12) !important;
-    border: 1px solid #b8e2fa;
 }
 .ot-stat-card.ot-cyan .ot-stat-footer {
-    border-top: 1px solid rgba(2, 136, 209, 0.12) !important;
+    border-top: 1px solid rgba(2, 136, 209, 0.10) !important;
     color: #437e9e !important;
 }
 .ot-stat-card.ot-cyan .badge {
@@ -804,24 +939,28 @@ button.gp-search i.fa-search,
     color: #ffffff !important;
 }
 
-/* 3. Yellow/Gold Variant (Secondary Brand) */
+/* 3. Yellow/Gold Variant (Warm Amber & Sunburst Accents) */
 .ot-stat-card.ot-yellow {
-    background: linear-gradient(135deg, #fef8eb 0%, #fdf0d5 100%) !important;
-    border: 1.5px solid #f6cb78 !important;
-    border-left: 4.5px solid var(--ot-yellow) !important;
+    background: linear-gradient(135deg, #fef8eb 0%, #fdeacc 100%) !important;
+    border: none !important;
+}
+.ot-stat-card.ot-yellow::before {
+    background: radial-gradient(circle, rgba(245, 166, 35, 0.32) 0%, rgba(217, 143, 24, 0.12) 65%, transparent 100%);
+}
+.ot-stat-card.ot-yellow::after {
+    border: 14px solid rgba(245, 166, 35, 0.15);
+    box-shadow: inset 0 0 0 10px rgba(245, 166, 35, 0.08);
 }
 .ot-stat-card.ot-yellow:hover {
-    border-color: var(--ot-yellow-hover) !important;
+    box-shadow: 0 12px 28px -3px rgba(245, 166, 35, 0.22) !important;
 }
 .ot-stat-card.ot-yellow .ot-stat-title { color: #8c651e !important; }
 .ot-stat-card.ot-yellow .ot-stat-number { color: #b7791f !important; }
 .ot-stat-card.ot-yellow .ot-stat-icon-wrap {
     color: #d98f18 !important;
-    box-shadow: 0 2px 8px rgba(245, 166, 35, 0.15) !important;
-    border: 1px solid #fae1b2;
 }
 .ot-stat-card.ot-yellow .ot-stat-footer {
-    border-top: 1px solid rgba(245, 166, 35, 0.18) !important;
+    border-top: 1px solid rgba(245, 166, 35, 0.12) !important;
     color: #8c651e !important;
 }
 .ot-stat-card.ot-yellow .badge {
@@ -829,24 +968,28 @@ button.gp-search i.fa-search,
     color: #ffffff !important;
 }
 
-/* 4. Green Variant (Health/Success) */
+/* 4. Green Variant (Emerald Leaf & Health Accents) */
 .ot-stat-card.ot-green {
-    background: linear-gradient(135deg, #edf7ee 0%, #def0df 100%) !important;
-    border: 1.5px solid #9cd8a0 !important;
-    border-left: 4.5px solid var(--ot-green) !important;
+    background: linear-gradient(135deg, #edf7ee 0%, #d5eed8 100%) !important;
+    border: none !important;
+}
+.ot-stat-card.ot-green::before {
+    background: radial-gradient(circle, rgba(76, 175, 80, 0.30) 0%, rgba(46, 125, 50, 0.12) 65%, transparent 100%);
+}
+.ot-stat-card.ot-green::after {
+    border: 14px solid rgba(76, 175, 80, 0.14);
+    box-shadow: inset 0 0 0 10px rgba(46, 125, 50, 0.08);
 }
 .ot-stat-card.ot-green:hover {
-    border-color: var(--ot-green-hover) !important;
+    box-shadow: 0 12px 28px -3px rgba(76, 175, 80, 0.20) !important;
 }
 .ot-stat-card.ot-green .ot-stat-title { color: #356b38 !important; }
 .ot-stat-card.ot-green .ot-stat-number { color: #2e7d32 !important; }
 .ot-stat-card.ot-green .ot-stat-icon-wrap {
     color: #2e7d32 !important;
-    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.12) !important;
-    border: 1px solid #c3e6c5;
 }
 .ot-stat-card.ot-green .ot-stat-footer {
-    border-top: 1px solid rgba(46, 125, 50, 0.12) !important;
+    border-top: 1px solid rgba(46, 125, 50, 0.10) !important;
     color: #4b784e !important;
 }
 .ot-stat-card.ot-green .badge {
@@ -856,22 +999,26 @@ button.gp-search i.fa-search,
 
 /* 5. Purple Variant */
 .ot-stat-card.ot-purple {
-    background: linear-gradient(135deg, #f5f0fa 0%, #ece2f5 100%) !important;
-    border: 1.5px solid #c7a7e3 !important;
-    border-left: 4.5px solid var(--ot-purple) !important;
+    background: linear-gradient(135deg, #f6f1fb 0%, #ecdcf7 100%) !important;
+    border: none !important;
+}
+.ot-stat-card.ot-purple::before {
+    background: radial-gradient(circle, rgba(142, 100, 169, 0.30) 0%, rgba(94, 53, 177, 0.12) 65%, transparent 100%);
+}
+.ot-stat-card.ot-purple::after {
+    border: 14px solid rgba(142, 100, 169, 0.14);
+    box-shadow: inset 0 0 0 10px rgba(94, 53, 177, 0.08);
 }
 .ot-stat-card.ot-purple:hover {
-    border-color: var(--ot-purple) !important;
+    box-shadow: 0 12px 28px -3px rgba(142, 100, 169, 0.20) !important;
 }
 .ot-stat-card.ot-purple .ot-stat-title { color: #63457a !important; }
 .ot-stat-card.ot-purple .ot-stat-number { color: #5e35b1 !important; }
 .ot-stat-card.ot-purple .ot-stat-icon-wrap {
     color: #5e35b1 !important;
-    box-shadow: 0 2px 8px rgba(94, 53, 177, 0.12) !important;
-    border: 1px solid #ddccee;
 }
 .ot-stat-card.ot-purple .ot-stat-footer {
-    border-top: 1px solid rgba(94, 53, 177, 0.12) !important;
+    border-top: 1px solid rgba(94, 53, 177, 0.10) !important;
     color: #63457a !important;
 }
 .ot-stat-card.ot-purple .badge {
@@ -880,46 +1027,47 @@ button.gp-search i.fa-search,
 }
 
 .ot-stat-number {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 2px;
 }
 
 .ot-stat-title {
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 500;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
 }
 
 .ot-stat-footer {
-    margin-top: 10px;
-    padding-top: 8px;
+    margin-top: 12px;
+    padding-top: 9px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-size: 11.5px;
 }
 
-/* Patient Queue & Schedule List Item */
+/* Patient Queue & Schedule List Item (Borderless & Sleek) */
 .ot-schedule-item {
     background-color: #f8fafc;
-    border: 1px solid #eef2f7;
-    border-radius: 10px !important;
+    border: none !important;
+    border-radius: 12px !important;
     padding: 12px 14px !important;
     margin-bottom: 10px !important;
+    box-shadow: 0 2px 6px rgba(46, 75, 130, 0.03) !important;
     transition: all 0.2s ease !important;
 }
 
 .ot-schedule-item:hover {
     background-color: #ffffff;
-    border-color: #cbd5e1;
-    box-shadow: 0 3px 10px rgba(46, 75, 130, 0.06) !important;
+    box-shadow: 0 4px 14px rgba(46, 75, 130, 0.08) !important;
+    transform: translateX(2px);
 }
 
 .ot-patient-avatar {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 10px;
     background: var(--ot-navy-light);
     color: var(--ot-navy);
@@ -1000,7 +1148,7 @@ button.gp-search i.fa-search,
     box-shadow: 0 1px 4px rgba(46, 75, 130, 0.2) !important;
 }
 
-/* Top Diagnosa Items (Clean, Full-Width & Responsive) */
+/* Top Diagnosa Items (Borderless, Full-Width & Responsive) */
 .ot-diagnosa-list {
     display: flex;
     flex-direction: column;
@@ -1009,19 +1157,21 @@ button.gp-search i.fa-search,
 
 .ot-diagnosa-item {
     background-color: #f8fafc;
-    border: 1px solid #edf2f7;
-    border-radius: 8px;
-    padding: 9px 12px;
+    border: none !important;
+    border-radius: 10px;
+    padding: 10px 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
+    box-shadow: 0 2px 6px rgba(46, 75, 130, 0.02) !important;
     transition: all 0.15s ease;
 }
 
 .ot-diagnosa-item:hover {
     background-color: #ffffff;
-    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(46, 75, 130, 0.06) !important;
+    transform: translateX(2px);
 }
 
 .ot-rank-badge {
@@ -1083,27 +1233,35 @@ button.gp-search i.fa-search,
     flex-shrink: 0;
 }
 
-/* Stat Highlight Box for Tabs */
+/* Stat Highlight Box for Tabs (Borderless) */
 .ot-stat-highlight {
     background: #f8fafc;
-    border: 1px solid #eef2f7;
-    border-radius: 10px;
+    border: none !important;
+    border-radius: 12px;
     padding: 14px 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(46, 75, 130, 0.03) !important;
+    transition: all 0.2s ease;
+}
+
+.ot-stat-highlight:hover {
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(46, 75, 130, 0.06) !important;
 }
 
 .ot-stat-highlight-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
     background-color: var(--ot-navy);
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 17px;
+    font-size: 18px;
+    box-shadow: 0 3px 8px rgba(46, 75, 130, 0.2) !important;
 }
 
 
