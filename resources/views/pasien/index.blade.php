@@ -17,6 +17,9 @@
                         <a href="{{Route('penerima-manfaat.export-csv', ['keyword' => request('keyword'), 'status' => request('status')])}}" class="btn btn-sm btn-success" style="font-size: 13px; padding: 7px 14px; font-weight: 600;" title="Download data penerima manfaat ke CSV">
                             <i class="fa fa-file-excel-o mr-1"></i> Export CSV
                         </a>
+                        <a href="https://cekbansos.kemensos.go.id/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary" style="font-size: 13px; padding: 7px 14px; font-weight: 600; border-color: var(--ot-navy); color: var(--ot-navy);" title="Buka website resmi Kemensos untuk cek desil / bansos">
+                            <i class="fa fa-external-link mr-1"></i> Cek Desil Kemensos
+                        </a>
                     </div>
 
                     <!-- Filter Status & Pencarian Kanan -->

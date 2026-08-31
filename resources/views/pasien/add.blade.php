@@ -237,9 +237,9 @@
                             </h5>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row align-items-center">
                             <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Desil (DTKS/P3KE)</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <select name="desil" class="form-control" id="desil" style="height: 40px; font-size: 13px;">
                                     <option value="">--Pilih Tingkat Desil Sosial--</option>
                                     <option value="Desil 1" {{ old('desil') == 'Desil 1' ? 'selected' : '' }}>Desil 1 (Sangat Miskin)</option>
@@ -257,6 +257,16 @@
                                 @error('desil')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
+                            </div>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Verifikasi DTKS</label>
+                            <div class="col-sm-4">
+                                <a href="https://cekbansos.kemensos.go.id/" target="_blank" rel="noopener noreferrer" 
+                                   class="btn btn-outline-primary btn-block d-flex align-items-center justify-content-center" 
+                                   style="height: 40px; font-size: 12.5px; font-weight: 600; border-color: var(--ot-navy); color: var(--ot-navy); background: #f8fafc; border-style: dashed;"
+                                   title="Buka portal Cek Bansos Kemensos RI">
+                                    <i class="fa fa-external-link mr-2"></i> Cek Desil di Kemensos
+                                </a>
                             </div>
                         </div>
 
