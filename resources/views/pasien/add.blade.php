@@ -18,21 +18,19 @@
                     <form action="{{Route('penerima-manfaat.store')}}" method="POST" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
-                        <!-- BAGIAN 1: IDENTITAS UTAMA -->
+                        <!-- BAGIAN: IDENTITAS UTAMA -->
                         <div class="d-flex align-items-center mb-3 pb-2" style="border-bottom: 2px solid #edf2f7;">
                             <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
-                                <i class="fa fa-id-card text-primary mr-2"></i> 1. Identitas Penerima Manfaat
+                                <i class="fa fa-id-card text-primary mr-2"></i> Identitas Penerima Manfaat
                             </h5>
                         </div>
 
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">No. Rekam Medis</label>
                             <div class="col-sm-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text bg-light text-primary font-w600" style="height: 40px;"><i class="fa fa-id-card-o"></i></span>
-                                    </div>
-                                    <input type="text" class="form-control font-w600" name="no_rm" readonly value="{{ $autoNoRm ?? 'OTK-' . date('y') . '-XXXXX' }}" style="background-color: #f8f9fa; color: #1e3d73; height: 40px; font-size: 13px;">
+                                <div class="d-flex align-items-center" style="height: 40px; background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 12px;">
+                                    <i class="fa fa-id-card-o mr-2" style="color: var(--ot-navy); font-size: 15px;"></i>
+                                    <input type="text" class="font-w700" name="no_rm" readonly value="{{ $autoNoRm ?? 'OTK-' . date('y') . '-XXXXX' }}" style="background: transparent; border: none; outline: none; box-shadow: none; color: var(--ot-navy); font-size: 13.5px; width: 100%; letter-spacing: 0.5px; padding: 0;">
                                 </div>
                                 <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa fa-magic mr-1"></i>Nomor RM ter-generate otomatis (OTK-{{ date('y') }}-XXXXX)</small>
                             </div>
@@ -159,10 +157,10 @@
                             </div>
                         </div>
 
-                        <!-- BAGIAN 2: KONTAK & ALAMAT DOMISILI -->
+                        <!-- BAGIAN: KONTAK & ALAMAT DOMISILI -->
                         <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
                             <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
-                                <i class="fa fa-map-marker text-primary mr-2"></i> 2. Kontak & Alamat Domisili
+                                <i class="fa fa-map-marker text-primary mr-2"></i> Kontak & Alamat Domisili
                             </h5>
                         </div>
 
@@ -230,10 +228,10 @@
                             </div>
                         </div>
 
-                        <!-- BAGIAN 3: DATA SOSIAL, DISABILITAS & WALI -->
+                        <!-- BAGIAN: DATA SOSIAL, DISABILITAS & WALI -->
                         <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
                             <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
-                                <i class="fa fa-users text-primary mr-2"></i> 3. Data Sosial, Disabilitas & Wali
+                                <i class="fa fa-users text-primary mr-2"></i> Data Sosial, Disabilitas & Wali
                             </h5>
                         </div>
 
@@ -331,10 +329,10 @@
                             </div>
                         </div>
 
-                        <!-- BAGIAN 4: BERKAS & DOKUMEN PENDUKUNG -->
+                        <!-- BAGIAN: BERKAS & DOKUMEN PENDUKUNG -->
                         <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
                             <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
-                                <i class="fa fa-folder-open text-primary mr-2"></i> 4. Berkas & Dokumen Pendukung (Opsional)
+                                <i class="fa fa-folder-open text-primary mr-2"></i> Berkas & Dokumen Pendukung (Opsional)
                             </h5>
                         </div>
 

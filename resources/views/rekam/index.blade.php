@@ -12,7 +12,7 @@
                     <!-- Tombol Aksi Kiri -->
                     <div class="col-md-6 col-12 mb-2 mb-md-0 d-flex align-items-center flex-wrap" style="gap: 6px;">
                         <a href="{{Route('rekam.add')}}" class="btn btn-sm btn-primary" style="font-size: 13px; padding: 7px 14px; font-weight: 600;">
-                            <i class="fa fa-plus mr-1"></i> + Rekam Medis Baru
+                            <i class="fa fa-plus mr-1"></i> Rekam Medis Baru
                         </a>
                         <a href="{{Route('rekam.export-csv', ['keyword' => request('keyword'), 'status' => request('status', request('tab'))])}}" class="btn btn-sm btn-success" style="font-size: 13px; padding: 7px 14px; font-weight: 600;" title="Download data rekam medis ke CSV">
                             <i class="fa fa-file-excel-o mr-1"></i> Export CSV

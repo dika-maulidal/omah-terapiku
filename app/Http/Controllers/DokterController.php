@@ -14,7 +14,29 @@ class DokterController extends Controller
 {
     public function index(Request $request)
     {
-        $datas = Dokter::with('user')->get();
+        $query = Dokter::with('user');
+
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('nama', 'like', "%{$keyword}%")
+                  ->orWhere('no_hp', 'like', "%{$keyword}%")
+                  ->orWhere('poli', 'like', "%{$keyword}%")
+                  ->orWhereHas('user', function ($u) use ($keyword) {
+                      $u->where('nip', 'like', "%{$keyword}%");
+                  });
+            });
+        }
+
+        if ($request->filled('poli')) {
+            $query->where('poli', $request->poli);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $datas = $query->orderBy('id', 'desc')->paginate(10);
         $poli = Poli::all();
         return view('terapis.index', compact('datas', 'poli'));
     }
@@ -22,21 +44,38 @@ class DokterController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'nama' => 'required',
-            'no_hp' => 'required',
+            'nama' => 'required|string|max:255',
+            'no_hp' => 'required|string|max:30',
             'poli' => 'required',
-            'nip' => 'nullable|unique:users,nip',
-            'password' => 'required'
+            'nip' => 'nullable|string|max:50|unique:users,nip',
+            'password' => 'required|min:4'
+        ], [
+            'nama.required' => 'Nama terapis wajib diisi.',
+            'no_hp.required' => 'Nomor HP wajib diisi.',
+            'poli.required' => 'Omah Terapiku wajib dipilih.',
+            'nip.unique' => 'NIP sudah digunakan oleh akun lain.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal 4 karakter.'
         ]);
 
         DB::beginTransaction();
         try {
             // Generate email dummy / username jika tabel users mewajibkannya
-            $email = $request->email ?? ($request->no_hp . '@klinik.com');
+            $email = $request->filled('email') 
+                ? $request->email 
+                : ($request->filled('nip') 
+                    ? $request->nip . '@klinik.com' 
+                    : ($request->filled('no_hp') 
+                        ? $request->no_hp . '@klinik.com' 
+                        : 'terapis_' . time() . '_' . rand(100, 999) . '@klinik.com'));
+
+            if ($email && User::where('email', $email)->exists()) {
+                $email = 'terapis_' . time() . '_' . rand(100, 999) . '@klinik.com';
+            }
 
             $user = User::create([
                 'name' => $request->nama,
-                'nip' => $request->nip,
+                'nip' => $request->nip ?: null,
                 'email' => $email,
                 'phone' => $request->no_hp,
                 'password' => bcrypt($request->password),
@@ -52,7 +91,7 @@ class DokterController extends Controller
             Dokter::create($request->all());
 
             DB::commit();
-            return redirect()->route('dokter')->with('sukses', 'Data berhasil ditambahkan');
+            return redirect()->route('dokter')->with('sukses', 'Data terapis berhasil ditambahkan');
         } catch (\Throwable $th) {
             DB::rollBack();
             // Menampilkan pesan error asli agar mudah dilacak jika masih gagal

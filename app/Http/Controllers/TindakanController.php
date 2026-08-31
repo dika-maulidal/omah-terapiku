@@ -11,41 +11,73 @@ class TindakanController extends Controller
     public function index(Request $request)
     {
         $poli = Poli::all();
-        $datas = Tindakan::orderBy('kode','asc')
-                            ->when($request->keyword, function ($query) use ($request) {
-                                $query->where('kode', 'LIKE', "%{$request->keyword}%")
-                                    ->orWhere('nama', 'LIKE', "%{$request->keyword}%");
-                            })->paginate(10);
+        $query = Tindakan::orderBy('kode', 'asc');
 
-        return view('tindakan.index',compact('datas','poli'));
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('kode', 'LIKE', "%{$keyword}%")
+                  ->orWhere('nama', 'LIKE', "%{$keyword}%");
+            });
+        }
+
+        if ($request->filled('poli')) {
+            $query->where('poli', $request->poli);
+        }
+
+        $datas = $query->paginate(10);
+
+        return view('tindakan.index', compact('datas', 'poli'));
     }
 
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'kode' => 'required|unique:tindakan',
-            'nama' => 'required',
-            'poli' => 'required'
+        $this->validate($request, [
+            'kode' => 'required|string|max:50|unique:tindakan,kode',
+            'nama' => 'required|string|max:255',
+            'poli' => 'required',
+            'harga' => 'nullable|numeric'
+        ], [
+            'kode.required' => 'Kode tindakan wajib diisi.',
+            'kode.unique' => 'Kode tindakan sudah digunakan.',
+            'nama.required' => 'Nama tindakan wajib diisi.',
+            'poli.required' => 'Omah Terapiku wajib dipilih.'
         ]);
-        Tindakan::create($request->all());
-        return redirect()->route('tindakan')->with('sukses','Data berhasil ditambahkan');
+
+        $data = $request->all();
+        $data['harga'] = $request->filled('harga') ? $request->harga : 0;
+
+        Tindakan::create($data);
+        return redirect()->route('tindakan')->with('sukses', 'Data tindakan berhasil ditambahkan');
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'kode' => 'required',
-            'nama' => 'required',
-            'poli' => 'required'
+        $this->validate($request, [
+            'kode' => 'required|string|max:50|unique:tindakan,kode,' . $id,
+            'nama' => 'required|string|max:255',
+            'poli' => 'required',
+            'harga' => 'nullable|numeric'
+        ], [
+            'kode.required' => 'Kode tindakan wajib diisi.',
+            'kode.unique' => 'Kode tindakan sudah digunakan.',
+            'nama.required' => 'Nama tindakan wajib diisi.',
+            'poli.required' => 'Omah Terapiku wajib dipilih.'
         ]);
-        $data = Tindakan::find($id);
-        $data->update($request->all());
-        return redirect()->route('tindakan')->with('sukses','Data berhasil diperbaharui');
+
+        $tindakan = Tindakan::findOrFail($id);
+        $data = $request->all();
+        $data['harga'] = $request->filled('harga') ? $request->harga : 0;
+
+        $tindakan->update($data);
+        return redirect()->route('tindakan')->with('sukses', 'Data tindakan berhasil diperbaharui');
     }
 
-    public function delete(Request $request,$id)
+    public function delete(Request $request, $id)
     {
-        Tindakan::where('id',$id)->delete();
-        return redirect()->route('tindakan')->with('sukses','Data berhasil dihapus');
+        $tindakan = Tindakan::findOrFail($id);
+        $tindakan->delete();
+        return redirect()->route('tindakan')->with('sukses', 'Data tindakan berhasil dihapus');
     }    
 }
+

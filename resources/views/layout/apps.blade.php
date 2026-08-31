@@ -20,17 +20,6 @@
     p {
         margin: 0;
     }
-    .deznav .metismenu .nav-label {
-        margin: 10px 0 0 0 !important;
-        padding: 14px 30px 6px 30px !important;
-        text-transform: uppercase;
-        font-size: 12px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.8px;
-        border-top: none !important;
-        border: none !important;
-        color: #8fa0bc !important;
-    }
     </style>
     @yield('header')
     @stack('styles')
@@ -50,12 +39,12 @@
 
      
         <div class="nav-header">
-            <a href="#" class="brand-logo">
-                <img class="logo-abbr" src="{{asset('images/logo.png')}}" alt="Omah Terapiku" style="max-height: 48px;">
+            <a href="{{Route('dashboard')}}" class="brand-logo">
+                <img class="logo-abbr" src="{{asset('images/logo.png')}}" alt="">
                 <span class="logo-compact font-w800 font-italic" style="color: #2e4b82; font-size: 16px;">
                     OT
                 </span>
-                <h3 class="brand-title font-w800 font-italic mb-0" style="font-size: 17px; text-transform: uppercase; letter-spacing: 0.5px;">
+                <h3 class="brand-title font-w800 font-italic mb-0" style="font-size: 18px; text-transform: uppercase; letter-spacing: 0.5px;">
                     <span style="color: #2e4b82;">OMAH</span>
                     <span style="color: #f5a623;">TERAPIKU</span>
                 </h3>
@@ -67,8 +56,7 @@
                 </div>
             </div>
         </div>
-       
-		
+
 		<!--**********************************
             Header start
         ***********************************-->
@@ -120,6 +108,19 @@
     
 
 	<script>
+        // Mobile Sidebar Close Events
+        $(document).on('click', '.mobile-sidebar-backdrop', function() {
+            $('#main-wrapper').removeClass('menu-toggle');
+            $('.hamburger').removeClass('is-active');
+        });
+
+        $(document).on('click', '.deznav .metismenu a:not(.has-arrow)', function() {
+            if ($(window).width() < 768) {
+                $('#main-wrapper').removeClass('menu-toggle');
+                $('.hamburger').removeClass('is-active');
+            }
+        });
+
         @if(Session::has('sukses'))
             toastr.success("{{Session::get('sukses')}}", "Sukses",{timeOut: 5000})
         @endif

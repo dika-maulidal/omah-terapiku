@@ -12,7 +12,7 @@
                     <!-- Tombol Aksi Kiri -->
                     <div class="col-md-6 col-12 mb-2 mb-md-0 d-flex align-items-center flex-wrap" style="gap: 6px;">
                         <a href="{{Route('penerima-manfaat.add')}}" class="btn btn-sm btn-primary" style="font-size: 13px; padding: 7px 14px; font-weight: 600;">
-                            <i class="fa fa-user-plus mr-1"></i> + Penerima Manfaat Baru
+                            <i class="fa fa-user-plus mr-1"></i> Penerima Manfaat Baru
                         </a>
                         <a href="{{Route('penerima-manfaat.export-csv', ['keyword' => request('keyword'), 'status' => request('status')])}}" class="btn btn-sm btn-success" style="font-size: 13px; padding: 7px 14px; font-weight: 600;" title="Download data penerima manfaat ke CSV">
                             <i class="fa fa-file-excel-o mr-1"></i> Export CSV
