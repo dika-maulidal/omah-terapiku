@@ -76,6 +76,15 @@
                 </a>
             </li>
             @endif
+
+            <li class="nav-label">Akun & Sistem</li>
+            
+            <li>
+                <a href="{{Route('setting.index')}}" class="ai-icon" aria-expanded="false">
+                    <i class="fa fa-cog"></i>
+                    <span class="nav-text">Pengaturan</span>
+                </a>
+            </li>
         </ul>
         
         <div class="copyright">

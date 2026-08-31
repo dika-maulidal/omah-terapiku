@@ -11,6 +11,7 @@ use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\PoliController;
 use App\Http\Controllers\RekamController;
 use App\Http\Controllers\RekamPemeriksaanController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TindakanController;
 
 Route::get('/', [AuthController::class, 'page_login'])->name('login');
@@ -98,6 +99,11 @@ Route::group(['middleware' => 'auth'], function(){
 
 
     Route::get('/rekam/file/{id}/{type}', [RekamPemeriksaanController::class, 'file'])->name('pem.file');
+
+    // Pengaturan Akun & Ganti Password
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('/setting/password', [SettingController::class, 'updatePassword'])->name('setting.password');
+    Route::post('/setting/profile', [SettingController::class, 'updateProfile'])->name('setting.profile');
 
 });
 
