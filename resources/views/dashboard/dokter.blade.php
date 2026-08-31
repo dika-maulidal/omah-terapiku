@@ -10,6 +10,8 @@
         $availableYears = $query->getAvailableYears();
         $allYearsPasienData = $query->getAllYearsPasienData();
         $statusAntrian = $query->getStatusAntrianData();
+        $tren7Hari = $query->getTren7HariTerakhir();
+        $pasienOmah = $query->getPasienPerOmahTerapiku();
     @endphp
 
     <!-- Dashboard Header -->
@@ -104,10 +106,60 @@
         </div>
     </div>
 
+    <!-- Grafik Tren 7 Hari Terakhir Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
+                    <div>
+                        <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
+                            <i class="fa fa-line-chart text-primary mr-2"></i> Grafik Tren Pelayanan Anda (7 Hari Terakhir)
+                        </h4>
+                        <p class="fs-12 text-muted mb-0">Pergerakan jumlah tindakan terapi & pelayanan medis Anda dalam 7 hari terakhir</p>
+                    </div>
+                    <div class="d-flex align-items-center flex-wrap mt-2 mt-sm-0" style="gap: 14px;">
+                        <div class="d-flex align-items-center font-w600 fs-12" style="color: var(--ot-navy);">
+                            <span style="display: inline-block; width: 12px; height: 12px; background: #2e4b82; border-radius: 3px; margin-right: 6px;"></span>
+                            Pelayanan Anda
+                        </div>
+                        <div class="d-flex align-items-center font-w600 fs-12" style="color: #d98f18;">
+                            <span style="display: inline-block; width: 12px; height: 12px; background: #f5a623; border-radius: 3px; margin-right: 6px;"></span>
+                            Penerima Manfaat Baru
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-3">
+                    <div style="position: relative; height: 260px;">
+                        <canvas id="chartTren7Hari"></canvas>
+                    </div>
+                    <!-- Ringkasan Metrik 7 Hari -->
+                    <div class="row text-center mt-3 pt-3" style="border-top: 1px dashed #e2e8f0;">
+                        <div class="col-sm-3 col-6 mb-2 mb-sm-0">
+                            <small class="text-muted d-block font-w600 fs-12">Total Pelayanan 7 Hari</small>
+                            <span class="font-w700 text-primary fs-16">{{ $tren7Hari['total_periksa'] }} Pasien</span>
+                        </div>
+                        <div class="col-sm-3 col-6 mb-2 mb-sm-0" style="border-left: 1px solid #edf2f7;">
+                            <small class="text-muted d-block font-w600 fs-12">Rata-rata Harian</small>
+                            <span class="font-w700 text-success fs-16">{{ $tren7Hari['avg_periksa'] }} / hari</span>
+                        </div>
+                        <div class="col-sm-3 col-6" style="border-left: 1px solid #edf2f7;">
+                            <small class="text-muted d-block font-w600 fs-12">Penerima Baru 7 Hari</small>
+                            <span class="font-w700 text-warning fs-16">{{ $tren7Hari['total_pasien_baru'] }} Orang</span>
+                        </div>
+                        <div class="col-sm-3 col-6" style="border-left: 1px solid #edf2f7;">
+                            <small class="text-muted d-block font-w600 fs-12">Puncak Tertinggi</small>
+                            <span class="font-w700 text-info fs-16">{{ $tren7Hari['hari_tertinggi'] }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Analytics & Visualisasi Grafik Section (Charts Row) -->
     <div class="row mb-4">
         <!-- Kolom Kiri: Grafik Total Penerima Manfaat per Bulan -->
-        <div class="col-xl-8 col-lg-12 mb-3 mb-xl-0">
+        <div class="col-xl-6 col-lg-12 mb-3 mb-xl-0">
             <div class="card h-100 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
                 <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
                     <div>
@@ -126,35 +178,92 @@
                     </div>
                 </div>
                 <div class="card-body p-3">
-                    <div style="position: relative; height: 260px;">
+                    <div style="position: relative; height: 210px;">
                         <canvas id="chartPenerimaManfaat"></canvas>
                     </div>
                     <!-- Stat Ringkasan di Bawah Grafik -->
                     <div class="row text-center mt-3 pt-3" style="border-top: 1px dashed #e2e8f0;">
                         <div class="col-4">
                             <small class="text-muted d-block font-w600 fs-12">Total Tahun <span class="badgeYear">{{ date('Y') }}</span></small>
-                            <span class="font-w700 text-primary fs-16" id="statTotalTahun">-</span>
+                            <span class="font-w700 text-primary fs-15" id="statTotalTahun">-</span>
                         </div>
                         <div class="col-4" style="border-left: 1px solid #edf2f7; border-right: 1px solid #edf2f7;">
                             <small class="text-muted d-block font-w600 fs-12">Rata-rata / Bulan</small>
-                            <span class="font-w700 text-success fs-16" id="statRataRata">-</span>
+                            <span class="font-w700 text-success fs-15" id="statRataRata">-</span>
                         </div>
                         <div class="col-4">
                             <small class="text-muted d-block font-w600 fs-12">Bulan Tertinggi</small>
-                            <span class="font-w700 text-info fs-16" id="statTertinggi">-</span>
+                            <span class="font-w700 text-info fs-15" id="statTertinggi">-</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Kolom Kanan: Pie / Donut Chart Status Antrian Pasien -->
-        <div class="col-xl-4 col-lg-12">
+        <!-- Kolom Kanan: Donut Chart Distribusi Penerima Manfaat per Omah Terapiku -->
+        <div class="col-xl-6 col-lg-12">
+            <div class="card h-100 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
+                    <div>
+                        <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
+                            <i class="fa fa-pie-chart text-primary mr-2"></i> Penerima Manfaat per Omah Terapiku
+                        </h4>
+                        <p class="fs-12 text-muted mb-0">Distribusi penerima manfaat di setiap unit pelayanan</p>
+                    </div>
+                    <span class="badge badge-primary light font-w600" style="font-size: 11.5px;">
+                        Total: {{ $pasienOmah['total_pasien'] }} Pasien
+                    </span>
+                </div>
+                <div class="card-body p-3">
+                    <div class="row align-items-center">
+                        <!-- Sisi Kiri: Donut Chart -->
+                        <div class="col-md-5 col-12 mb-3 mb-md-0">
+                            <div style="position: relative; height: 200px;">
+                                <canvas id="chartOmahTerapiku"></canvas>
+                            </div>
+                        </div>
+                        <!-- Sisi Kanan: List Rincian Unit & Progress Bar -->
+                        <div class="col-md-7 col-12">
+                            <div class="dz-scroll" style="max-height: 210px; overflow-y: auto; padding-right: 4px;">
+                                @forelse($pasienOmah['items'] as $item)
+                                    <div class="p-2 mb-2 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <div class="d-flex align-items-center text-truncate" style="max-width: 65%;">
+                                                <span style="display: inline-block; width: 10px; height: 10px; background: {{ $item['color'] }}; border-radius: 50%; margin-right: 6px; flex-shrink: 0;"></span>
+                                                <strong class="fs-12 text-black text-truncate" title="{{ $item['nama'] }}">{{ $item['nama'] }}</strong>
+                                            </div>
+                                            <div class="text-right flex-shrink-0">
+                                                <span class="badge badge-light font-w700 text-dark" style="font-size: 11px;">
+                                                    {{ $item['total_pasien'] }} Pasien ({{ $item['persentase'] }}%)
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="progress" style="height: 5px; background: #e2e8f0; border-radius: 4px;">
+                                            <div class="progress-bar" role="progressbar" style="width: {{ $item['persentase'] }}%; background-color: {{ $item['color'] }}; border-radius: 4px;" aria-valuenow="{{ $item['persentase'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="text-center py-4 text-muted">
+                                        <p class="fs-12 mb-0">Belum ada data unit Omah Terapiku.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Row (3 Columns: Status Antrian, Pasien Antri, Pasien Selesai) -->
+    <div class="row mb-4">
+        <!-- Kolom 1: Status Antrian Pasien -->
+        <div class="col-xl-4 col-lg-12 mb-3 mb-xl-0">
             <div class="card h-100 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
                 <div class="card-header d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
                     <div>
                         <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
-                            <i class="fa fa-pie-chart text-primary mr-2"></i> Status Antrian Pasien
+                            <i class="fa fa-circle-o-notch text-primary mr-2"></i> Status Antrian Pasien
                         </h4>
                         <p class="fs-12 text-muted mb-0">Distribusi status pelayanan rekam medis</p>
                     </div>
@@ -163,7 +272,7 @@
                     </span>
                 </div>
                 <div class="card-body p-3 d-flex flex-column justify-content-between">
-                    <div style="position: relative; height: 180px;">
+                    <div style="position: relative; height: 170px;">
                         <canvas id="chartStatusAntrian"></canvas>
                     </div>
                     <!-- Custom Interactive Legend with counts -->
@@ -206,25 +315,25 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Main Content Row -->
-    <div class="row mb-4">
-        <!-- Left Column: Antrian Pasien Siap Diperiksa -->
-        <div class="col-xl-6 col-lg-12 mb-3 mb-xl-0">
+        <!-- Kolom 2: Pasien Menunggu Pelayanan Anda -->
+        <div class="col-xl-4 col-lg-12 mb-3 mb-xl-0">
             <div class="card h-100 mb-0 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
                 <div class="card-header d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
                     <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
-                        <i class="fa fa-stethoscope text-primary mr-1"></i> Antrian Pasien Anda Hari Ini
+                        <i class="fa fa-hourglass-half text-warning mr-1"></i> Pasien Menunggu
                     </h4>
-                    <span class="badge badge-warning text-white font-w600">
-                        {{ $query->rekam_antrian()->count() }} Menunggu
+                    <span class="badge badge-warning light font-w600">
+                        {{ $query->rekam_day()->whereIn('status', [1, 2, 3])->count() }} Antrian
                     </span>
                 </div>
                 <div class="card-body p-3">
-                    <div class="dz-scroll" id="appointment-schedule" style="overflow-y: auto; max-height: 380px; padding-right: 4px;">
-                        @if ($query->rekam_antrian()->count() > 0)
-                            @foreach ($query->rekam_antrian() as $item)
+                    <div class="dz-scroll" style="overflow-y: auto; max-height: 380px; padding-right: 4px;">
+                        @php
+                            $antrianHariIni = $query->rekam_day()->whereIn('status', [1, 2, 3]);
+                        @endphp
+                        @if ($antrianHariIni->count() > 0)
+                            @foreach ($antrianHariIni as $item)
                                 <div class="ot-schedule-item d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center" style="min-width: 0;">
                                         <div class="ot-patient-avatar">
@@ -242,7 +351,7 @@
                                                     {{ $item->created_at ? $item->created_at->diffForHumans() : '-' }}
                                                 </li>
                                                 <li>
-                                                    <i class="fa fa-tag text-muted"></i>
+                                                    <i class="fa fa-id-card-o text-muted"></i>
                                                     {{ $item->pasien->no_rm ?? '-' }}
                                                 </li>
                                                 @if($item->keluhan)
@@ -271,12 +380,12 @@
             </div>
         </div>
 
-        <!-- Right Column: Pasien Selesai Hari Ini -->
-        <div class="col-xl-6 col-lg-12">
+        <!-- Kolom 3: Pasien Selesai Hari Ini -->
+        <div class="col-xl-4 col-lg-12">
             <div class="card h-100 mb-0 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
                 <div class="card-header d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
                     <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
-                        <i class="fa fa-check-circle text-success mr-1"></i> Riwayat Pasien Selesai Hari Ini
+                        <i class="fa fa-check-circle text-success mr-1"></i> Pasien Selesai Hari Ini
                     </h4>
                     <span class="badge badge-success light font-w600">
                         {{ $query->rekam_day()->whereIn('status', [4, 5])->count() }} Selesai
@@ -327,8 +436,6 @@
                         @endif
                     </div>
                 </div>
-            </div>
-        </div>
             </div>
         </div>
     </div>
@@ -471,6 +578,146 @@ $(document).ready(function() {
             responsive: true,
             maintainAspectRatio: false,
             cutoutPercentage: 68,
+            legend: {
+                display: false
+            },
+            tooltips: {
+                backgroundColor: '#1e293b',
+                titleFontSize: 13,
+                bodyFontSize: 12,
+                xPadding: 10,
+                yPadding: 10,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.labels[tooltipItem.index] || '';
+                        var val = data.datasets[0].data[tooltipItem.index] || 0;
+                        var total = data.datasets[0].data.reduce(function(a, b) { return a + b; }, 0);
+                        var pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
+                        return ' ' + label + ': ' + val + ' Pasien (' + pct + '%)';
+                    }
+                }
+            }
+        }
+    });
+
+    // 3. Chart Tren 7 Hari Terakhir
+    var ctxTren = document.getElementById('chartTren7Hari').getContext('2d');
+    var tren7HariData = {!! json_encode($tren7Hari) !!};
+
+    var gradientPeriksa = ctxTren.createLinearGradient(0, 0, 0, 240);
+    gradientPeriksa.addColorStop(0, 'rgba(46, 75, 130, 0.35)');
+    gradientPeriksa.addColorStop(1, 'rgba(46, 75, 130, 0.02)');
+
+    var gradientPasien = ctxTren.createLinearGradient(0, 0, 0, 240);
+    gradientPasien.addColorStop(0, 'rgba(245, 166, 35, 0.3)');
+    gradientPasien.addColorStop(1, 'rgba(245, 166, 35, 0.01)');
+
+    var chart7Hari = new Chart(ctxTren, {
+        type: 'line',
+        data: {
+            labels: tren7HariData.labels,
+            datasets: [
+                {
+                    label: 'Pelayanan Medis',
+                    data: tren7HariData.periksa,
+                    borderColor: '#2e4b82',
+                    backgroundColor: gradientPeriksa,
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#2e4b82',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    lineTension: 0.35,
+                    fill: true
+                },
+                {
+                    label: 'Penerima Manfaat Baru',
+                    data: tren7HariData.pasien_baru,
+                    borderColor: '#f5a623',
+                    backgroundColor: gradientPasien,
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#f5a623',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    lineTension: 0.35,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+                backgroundColor: '#1e293b',
+                titleFontSize: 13,
+                bodyFontSize: 12,
+                xPadding: 12,
+                yPadding: 10,
+                callbacks: {
+                    title: function(tooltipItem) {
+                        var idx = tooltipItem[0].index;
+                        return tren7HariData.full_labels[idx] || tooltipItem[0].xLabel;
+                    },
+                    label: function(tooltipItem, data) {
+                        var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                        return ' ' + datasetLabel + ': ' + tooltipItem.yLabel + ' tindakan/pasien';
+                    }
+                }
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: {
+                        fontColor: '#64748b',
+                        fontSize: 12,
+                        fontStyle: '600'
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        color: '#f1f5f9',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1,
+                        fontColor: '#64748b',
+                        fontSize: 11
+                    }
+                }]
+            }
+        }
+    });
+
+    // 4. Donut Chart Penerima Manfaat per Omah Terapiku
+    var ctxOmah = document.getElementById('chartOmahTerapiku').getContext('2d');
+    var omahData = {!! json_encode($pasienOmah) !!};
+
+    var chartOmah = new Chart(ctxOmah, {
+        type: 'doughnut',
+        data: {
+            labels: omahData.labels,
+            datasets: [{
+                data: omahData.counts,
+                backgroundColor: omahData.colors,
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutoutPercentage: 65,
             legend: {
                 display: false
             },
