@@ -13,20 +13,20 @@ return new class extends Migration
     {
         Schema::table('rekam_assessment', function (Blueprint $table) {
             // Status Penglihatan / Netra (Sesuai Assesment.md)
-            $table->string('penglihatan_klasifikasi', 100)->nullable()->after('wicara_catatan');
-            $table->string('penglihatan_onset', 100)->nullable()->after('penglihatan_klasifikasi');
-            $table->string('penglihatan_sisi', 100)->nullable()->after('penglihatan_onset');
-            $table->string('penglihatan_usia_onset', 50)->nullable()->after('penglihatan_sisi');
-            $table->string('penglihatan_durasi', 50)->nullable()->after('penglihatan_usia_onset');
+            $table->text('penglihatan_klasifikasi')->nullable()->after('wicara_catatan');
+            $table->text('penglihatan_onset')->nullable()->after('penglihatan_klasifikasi');
+            $table->text('penglihatan_sisi')->nullable()->after('penglihatan_onset');
+            $table->text('penglihatan_usia_onset')->nullable()->after('penglihatan_sisi');
+            $table->text('penglihatan_durasi')->nullable()->after('penglihatan_usia_onset');
             $table->text('penglihatan_etiologi')->nullable()->after('penglihatan_durasi');
-            $table->string('penglihatan_progresif', 50)->nullable()->after('penglihatan_etiologi');
+            $table->text('penglihatan_progresif')->nullable()->after('penglihatan_etiologi');
             $table->text('penglihatan_terakhir_periksa')->nullable()->after('penglihatan_progresif');
-            $table->string('penglihatan_visus_od', 100)->nullable()->after('penglihatan_terakhir_periksa');
-            $table->string('penglihatan_visus_os', 100)->nullable()->after('penglihatan_visus_od');
-            $table->string('penglihatan_persepsi_cahaya', 50)->nullable()->after('penglihatan_visus_os');
-            $table->string('penglihatan_preferensi_sisi', 50)->nullable()->after('penglihatan_persepsi_cahaya');
+            $table->text('penglihatan_visus_od')->nullable()->after('penglihatan_terakhir_periksa');
+            $table->text('penglihatan_visus_os')->nullable()->after('penglihatan_visus_od');
+            $table->text('penglihatan_persepsi_cahaya')->nullable()->after('penglihatan_visus_os');
+            $table->text('penglihatan_preferensi_sisi')->nullable()->after('penglihatan_persepsi_cahaya');
             $table->json('penglihatan_alat_bantu')->nullable()->after('penglihatan_preferensi_sisi');
-            $table->string('penglihatan_teknik_tongkat', 100)->nullable()->after('penglihatan_alat_bantu');
+            $table->text('penglihatan_teknik_tongkat')->nullable()->after('penglihatan_alat_bantu');
             $table->text('penglihatan_alat_bantu_lainnya')->nullable()->after('penglihatan_teknik_tongkat');
             $table->text('penglihatan_catatan')->nullable()->after('penglihatan_alat_bantu_lainnya');
         });

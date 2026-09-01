@@ -20,31 +20,31 @@ return new class extends Migration
             $table->date('tgl_assessment')->nullable();
 
             // 1. Kemampuan Motorik (Sesuai Assesment.md)
-            $table->string('motorik_mengangkat_kepala', 100)->nullable();
-            $table->string('motorik_posisi_tengkurap', 100)->nullable();
-            $table->string('motorik_posisi_duduk', 100)->nullable();
-            $table->string('motorik_merangkak', 100)->nullable();
-            $table->string('motorik_berlutut', 100)->nullable();
-            $table->string('motorik_berjalan', 100)->nullable();
+            $table->text('motorik_mengangkat_kepala')->nullable();
+            $table->text('motorik_posisi_tengkurap')->nullable();
+            $table->text('motorik_posisi_duduk')->nullable();
+            $table->text('motorik_merangkak')->nullable();
+            $table->text('motorik_berlutut')->nullable();
+            $table->text('motorik_berjalan')->nullable();
             $table->text('motorik_catatan')->nullable();
 
             // 2. Kemampuan Aktivitas Sehari-hari / ADL (Sesuai Assesment.md)
-            $table->string('adl_kontak_mata', 100)->nullable();
-            $table->string('adl_duduk_tenang', 100)->nullable();
-            $table->string('adl_gerakan_berulang', 100)->nullable();
-            $table->string('adl_respon_nama', 100)->nullable();
-            $table->string('adl_makan', 100)->nullable();
-            $table->string('adl_mandi', 100)->nullable();
-            $table->string('adl_berpakaian', 100)->nullable();
-            $table->string('adl_bak', 100)->nullable();
-            $table->string('adl_bab', 100)->nullable();
+            $table->text('adl_kontak_mata')->nullable();
+            $table->text('adl_duduk_tenang')->nullable();
+            $table->text('adl_gerakan_berulang')->nullable();
+            $table->text('adl_respon_nama')->nullable();
+            $table->text('adl_makan')->nullable();
+            $table->text('adl_mandi')->nullable();
+            $table->text('adl_berpakaian')->nullable();
+            $table->text('adl_bak')->nullable();
+            $table->text('adl_bab')->nullable();
             $table->text('adl_catatan')->nullable();
 
             // 3. Kemampuan Wicara (Sesuai Assesment.md)
-            $table->string('wicara_komunikasi', 100)->nullable();
-            $table->string('wicara_organ', 100)->nullable();
+            $table->text('wicara_komunikasi')->nullable();
+            $table->text('wicara_organ')->nullable();
             $table->text('wicara_organ_keterangan')->nullable();
-            $table->string('wicara_makan_menelan', 100)->nullable();
+            $table->text('wicara_makan_menelan')->nullable();
             $table->text('wicara_makan_menelan_keterangan')->nullable();
             $table->text('wicara_catatan')->nullable();
 
