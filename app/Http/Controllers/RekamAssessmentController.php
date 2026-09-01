@@ -72,7 +72,36 @@ class RekamAssessmentController extends Controller
             'motorik_berjalan' => $request->motorik_berjalan,
             'motorik_catatan' => $request->motorik_catatan,
 
-            // 2. ADL
+            // 2. GMFM (Gross Motor Function Measure)
+            'gmfm_dimensi_a_scores' => $request->gmfm_dimensi_a_scores ?: [],
+            'gmfm_dimensi_a_total' => $request->filled('gmfm_dimensi_a_total') ? (int)$request->gmfm_dimensi_a_total : null,
+            'gmfm_dimensi_a_persen' => $request->filled('gmfm_dimensi_a_persen') ? (float)$request->gmfm_dimensi_a_persen : null,
+            'gmfm_dimensi_a_catatan' => $request->gmfm_dimensi_a_catatan,
+
+            'gmfm_dimensi_b_scores' => $request->gmfm_dimensi_b_scores ?: [],
+            'gmfm_dimensi_b_total' => $request->filled('gmfm_dimensi_b_total') ? (int)$request->gmfm_dimensi_b_total : null,
+            'gmfm_dimensi_b_persen' => $request->filled('gmfm_dimensi_b_persen') ? (float)$request->gmfm_dimensi_b_persen : null,
+            'gmfm_dimensi_b_catatan' => $request->gmfm_dimensi_b_catatan,
+
+            'gmfm_dimensi_c_scores' => $request->gmfm_dimensi_c_scores ?: [],
+            'gmfm_dimensi_c_total' => $request->filled('gmfm_dimensi_c_total') ? (int)$request->gmfm_dimensi_c_total : null,
+            'gmfm_dimensi_c_persen' => $request->filled('gmfm_dimensi_c_persen') ? (float)$request->gmfm_dimensi_c_persen : null,
+            'gmfm_dimensi_c_catatan' => $request->gmfm_dimensi_c_catatan,
+
+            'gmfm_dimensi_d_scores' => $request->gmfm_dimensi_d_scores ?: [],
+            'gmfm_dimensi_d_total' => $request->filled('gmfm_dimensi_d_total') ? (int)$request->gmfm_dimensi_d_total : null,
+            'gmfm_dimensi_d_persen' => $request->filled('gmfm_dimensi_d_persen') ? (float)$request->gmfm_dimensi_d_persen : null,
+            'gmfm_dimensi_d_catatan' => $request->gmfm_dimensi_d_catatan,
+
+            'gmfm_dimensi_e_scores' => $request->gmfm_dimensi_e_scores ?: [],
+            'gmfm_dimensi_e_total' => $request->filled('gmfm_dimensi_e_total') ? (int)$request->gmfm_dimensi_e_total : null,
+            'gmfm_dimensi_e_persen' => $request->filled('gmfm_dimensi_e_persen') ? (float)$request->gmfm_dimensi_e_persen : null,
+            'gmfm_dimensi_e_catatan' => $request->gmfm_dimensi_e_catatan,
+
+            'gmfm_total_score' => $request->filled('gmfm_total_score') ? (int)$request->gmfm_total_score : null,
+            'gmfm_total_persen' => $request->filled('gmfm_total_persen') ? (float)$request->gmfm_total_persen : null,
+
+            // 3. ADL
             'adl_kontak_mata' => $request->adl_kontak_mata,
             'adl_duduk_tenang' => $request->adl_duduk_tenang,
             'adl_gerakan_berulang' => $request->adl_gerakan_berulang,
@@ -84,7 +113,7 @@ class RekamAssessmentController extends Controller
             'adl_bab' => $request->adl_bab,
             'adl_catatan' => $request->adl_catatan,
 
-            // 3. Wicara
+            // 4. Wicara
             'wicara_komunikasi' => $request->wicara_komunikasi,
             'wicara_organ' => $request->wicara_organ,
             'wicara_organ_keterangan' => $request->wicara_organ_keterangan,
@@ -157,11 +186,49 @@ class RekamAssessmentController extends Controller
             'gait_10mwt_jumlah_langkah' => $request->gait_10mwt_jumlah_langkah,
             'gait_catatan' => $request->gait_catatan,
 
-            // 10. Kesimpulan & Rekomendasi
-            'kesimpulan' => $request->kesimpulan,
-            'rencana_terapi' => $request->rencana_terapi,
+            // 10. Pemeriksaan Sensoris, Propriosepsi & Vestibular
+            'sensoris_taktil_raba_halus' => $request->sensoris_taktil_raba_halus,
+            'sensoris_taktil_pinprick' => $request->sensoris_taktil_pinprick,
+            'sensoris_taktil_suhu' => $request->sensoris_taktil_suhu,
+            'sensoris_posisi_sendi' => $request->sensoris_posisi_sendi,
+            'sensoris_vibrasi' => $request->sensoris_vibrasi,
+            'sensoris_kinesthesia_jari' => $request->sensoris_kinesthesia_jari,
+            'vestibular_hit' => $request->vestibular_hit,
+            'vestibular_dix_hallpike' => $request->vestibular_dix_hallpike,
+            'vestibular_keluhan_pusing' => $request->vestibular_keluhan_pusing,
+            'sensoris_defisit_lokasi' => $request->sensoris_defisit_lokasi,
+            'sensoris_catatan' => $request->sensoris_catatan,
 
-            // 11. Custom / Additional dynamic data (step-by-step)
+            // 11. Faktor Psikososial & Kontekstual
+            'psikososial_pekerjaan_hobi' => $request->psikososial_pekerjaan_hobi,
+            'psikososial_faktor_psikologis' => $request->psikososial_faktor_psikologis,
+            'psikososial_dukungan_sosial' => $request->psikososial_dukungan_sosial,
+            'psikososial_harapan_pasien' => $request->psikososial_harapan_pasien,
+            'psikososial_catatan' => $request->psikososial_catatan,
+
+            // 12. Perencanaan Terapi & Dosis Program
+            'rencana_modalitas_fisik' => $request->rencana_modalitas_fisik ?: [],
+            'rencana_modalitas_lainnya' => $request->rencana_modalitas_lainnya,
+            'rencana_manual_terapi' => $request->rencana_manual_terapi ?: [],
+            'rencana_manual_lainnya' => $request->rencana_manual_lainnya,
+            'rencana_latihan_terapi' => $request->rencana_latihan_terapi ?: [],
+            'rencana_latihan_lainnya' => $request->rencana_latihan_lainnya,
+            'rencana_edukasi_konseling' => $request->rencana_edukasi_konseling ?: [],
+            'rencana_dosis_frekuensi' => $request->rencana_dosis_frekuensi,
+            'rencana_dosis_durasi' => $request->rencana_dosis_durasi,
+            'rencana_dosis_total_sesi' => $request->rencana_dosis_total_sesi,
+            'rencana_dosis_reassessment' => $request->rencana_dosis_reassessment,
+
+            // 14. Skala Denver (DDST II)
+            'denver_data' => $request->denver_data ?: [],
+            'denver_pass_count' => $request->filled('denver_pass_count') ? (int)$request->denver_pass_count : null,
+            'denver_fail_count' => $request->filled('denver_fail_count') ? (int)$request->denver_fail_count : null,
+            'denver_refusal_count' => $request->filled('denver_refusal_count') ? (int)$request->denver_refusal_count : null,
+            'denver_no_count' => $request->filled('denver_no_count') ? (int)$request->denver_no_count : null,
+            'denver_kesimpulan' => $request->denver_kesimpulan,
+            'denver_catatan' => $request->denver_catatan,
+
+            // 15. Custom / Additional dynamic data (step-by-step)
             'custom_data' => $request->custom_data ? (is_array($request->custom_data) ? $request->custom_data : json_decode($request->custom_data, true)) : null,
         ];
 

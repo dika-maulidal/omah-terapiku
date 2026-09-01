@@ -177,3 +177,97 @@ _(Lampirkan gambar anatomi tubuh di bawah bagian ini)_
 _(Orientasi spasial, respons auditif, ketakutan jatuh, teknik tongkat)_
 
 .........................................................................................................................................................................................................
+
+## PEMERIKSAAN SENSORIS, PROPRIOSEPSI & VESTIBULAR
+
+### Pemeriksaan Sensoris & Propriosepsi
+
+| **Jenis Sensasi**              | **Parameter**             | **Penilaian**           |
+| ------------------------------ | ------------------------- | ----------------------- |
+| **Sensasi Taktil**             | **Raba halus**            | • Normal<br>• Terganggu |
+|                                | **Pinprick**              | • Normal<br>• Terganggu |
+|                                | **Suhu**                  | • Normal<br>• Terganggu |
+| **Propriosepsi & Kinesthesia** | **Sensasi posisi sendi**  | • Normal<br>• Terganggu |
+|                                | **Vibrasi (garpu tala)**  | • Normal<br>• Terganggu |
+|                                | **Kinesthesia jari kaki** | • Normal<br>• Terganggu |
+
+### Skrining Vestibular Dasar
+
+| **Tes**                                          | **Hasil**                                   | **Interpretasi**                                                     |
+| ------------------------------------------------ | ------------------------------------------- | -------------------------------------------------------------------- |
+| **Head Impulse Test (HIT)**                      | • Normal<br>• Abnormal                      | **Abnormal:** Disfungsi kanal semisirkular _(rujuk neurologi / THT)_ |
+| **Dix-Hallpike** _(jika keluhan vertigo/pusing)_ | • Positif<br>• Negatif<br>• Tidak dilakukan | **Positif:** BPPV _(terapi reposisi kanalit)_                        |
+| **Keluhan pusing / vertigo saat bergerak**       | • Ya<br>• Tidak                             | **Positif:** BPPV _(terapi reposisi kanalit)_                        |
+
+### Lokasi & Deskripsi Defisit Sensoris _(Dermatom / Pola)_
+
+........................................................................................................................................................................................................
+
+## FAKTOR PSIKOSOSIAL & KONTEKSTUAL
+
+| **Indikator**                   | **Opsi / Field Isian**                                                                                                            |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **Pekerjaan / Hobi Terdampak**  | .........................................................................................................................<br>     |
+| **Faktor Psikologis**           | • Tidak ada kekhawatiran<br>• Cemas / _Anxiety_<br>• Depresi<br>• _Fear-avoidance behavior_<br>• Katastrofisasi<br>• Stres tinggi |
+| **Dukungan Sosial**             | • Baik _(keluarga mendukung)_<br>• Cukup<br>• Kurang / tinggal sendiri                                                            |
+| **Harapan / Ekspektasi Pasien** | • Normal<br>• Hipotonus<br>• Hipertonus / Spastis<br>• Klonus<br>• Rigiditas                                                      |
+
+
+## PERENCANAAN TERAPI
+
+| **Kategori Terapi**     | **Opsi / Teknik yang Dipilih**                                                                                                                                                                                                                                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Modalitas Fisik**     | - [ ] **TENS / EStim**<br>- [ ] **Ultrasound**<br>- [ ] **SWD / MWD**<br>- [ ] **Hot Pack**<br>- [ ] **Cold Pack**<br>- [ ] **LASER**<br>- [ ] **Paraffin Bath**<br>- [ ] **Traksi mekanik**<br>- [ ] **Hidroterapi**<br>- [ ] **Lainnya:** ............................................................                 |
+| **Manual Terapi**       | - [ ] **Joint mobilization**<br>- [ ] **Soft tissue mobilization**<br>- [ ] **Myofascial release**<br>- [ ] **PNF**<br>- [ ] **Dry needling**<br>- [ ] **Kinesio taping**<br>- [ ] **Neural mobilization**<br>- [ ] **Manipulasi**<br>- [ ] **Lainnya:** ............................................................    |
+| **Latihan Terapi**      | - [ ] **Stretching / flexibility**<br>- [ ] **Strengthening**<br>- [ ] **Stabilisasi core**<br>- [ ] **Propriosepsi / keseimbangan**<br>- [ ] **Aerobik / kardio**<br>- [ ] **Latihan fungsional**<br>- [ ] **Home exercise program**<br>- [ ] **Lainnya:** ............................................................ |
+| **Edukasi & Konseling** | - [ ] **Postur & ergonomi**<br>- [ ] **Manajemen nyeri mandiri**<br>- [ ] **Modifikasi aktivitas**<br>- [ ] **Pencegahan cedera ulang**<br>- [ ] **Nutrisi & gaya hidup**<br>- [ ] **Penggunaan alat bantu**                                                                                                             |
+
+### Program & Pengaturan Dosis Terapi
+
+|**Parameter**|**Pengaturan**|
+|---|---|
+|**Frekuensi Terapi**|..... x / minggu|
+|**Durasi per Sesi**|..... menit|
+|**Estimasi Total Sesi**|.....|
+|**Re-assessment**|.....|
+
+## Skala Denver (DDST II)
+
+### A. Personal Sosial
+
+|**No**|**Nama Task Perkembangan**|**Rentang Usia**|**Pass (P)**|**Fail (F)**|**Refusal (R)**|**No Opportunity (NO)**|**Catatan Terapis**|
+|---|---|---|---|---|---|---|---|
+|**1**|Menatap Muka|0–6 Bln|[ ]|[ ]|[ ]|[ ]||
+|**2**|Tepuk Tangan|6–12 Bln|[ ]|[ ]|[ ]|[ ]||
+|**3**|Menggunakan Sendok/Garpu|12–24 Bln|[ ]|[ ]|[ ]|[ ]||
+|**4**|Menyebut Nama Teman|2–4 Thn|[ ]|[ ]|[ ]|[ ]||
+
+### B. Motorik Halus
+
+|**No**|**Nama Task Perkembangan**|**Rentang Usia**|**Pass (P)**|**Fail (F)**|**Refusal (R)**|**No Opportunity (NO)**|**Catatan Terapis**|
+|---|---|---|---|---|---|---|---|
+|**1**|Memegang Mainan yang Bisa Digoyangkan|0–6 Bln|[ ]|[ ]|[ ]|[ ]||
+|**2**|Menjimpit (Ibu Jari & Jari)|6–12 Bln|[ ]|[ ]|[ ]|[ ]||
+|**3**|Menara 2 Kubus|12–24 Bln|[ ]|[ ]|[ ]|[ ]||
+|**4**|Meniru Garis Vertikal|2–4 Thn|[ ]|[ ]|[ ]|[ ]||
+|**5**|Menggambar Orang 6 Bagian|4–6 Thn|[ ]|[ ]|[ ]|[ ]||
+
+### C. Bahasa
+
+|**No**|**Nama Task Perkembangan**|**Rentang Usia**|**Pass (P)**|**Fail (F)**|**Refusal (R)**|**No Opportunity (NO)**|**Catatan Terapis**|
+|---|---|---|---|---|---|---|---|
+|**1**|Bereaksi Terhadap Bel|0–6 Bln|[ ]|[ ]|[ ]|[ ]||
+|**2**|Menyebut 1 Kata|6–12 Bln|[ ]|[ ]|[ ]|[ ]||
+|**3**|Menunjuk 2 Gambar|12–24 Bln|[ ]|[ ]|[ ]|[ ]||
+|**4**|Menyebut 1 Warna|2–4 Thn|[ ]|[ ]|[ ]|[ ]||
+|**5**|Menghitung 5 Kubus|4–6 Thn|[ ]|[ ]|[ ]|[ ]||
+
+### D. Motorik Kasar
+
+|**No**|**Nama Task Perkembangan**|**Rentang Usia**|**Pass (P)**|**Fail (F)**|**Refusal (R)**|**No Opportunity (NO)**|**Catatan Terapis**|
+|---|---|---|---|---|---|---|---|
+|**1**|Mengangkat Kepala|0–6 Bln|[ ]|[ ]|[ ]|[ ]||
+|**2**|Berjalan Dengan Baik|6–12 Bln|[ ]|[ ]|[ ]|[ ]||
+|**3**|Menendang Bola ke Depan|12–24 Bln|[ ]|[ ]|[ ]|[ ]||
+|**4**|Berdiri 1 Kaki (4 Detik)|2–4 Thn|[ ]|[ ]|[ ]|[ ]||
+|**5**|Berdiri 1 Kaki (6 Detik)|4–6 Thn|[ ]|

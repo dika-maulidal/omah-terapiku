@@ -215,8 +215,221 @@
         </div>
     @endif
 
-    <!-- 2. Kemampuan Aktivitas Sehari-hari -->
-    <div class="section-title">2. KEMAMPUAN AKTIVITAS SEHARI-HARI (ADL)</div>
+    <!-- 2. GMFM-88 Terpadu: Dimensi A, B, C, D & E -->
+    <div class="section-title">2. GROSS MOTOR FUNCTION MEASURE (GMFM-88)</div>
+    @if(!is_null($assessment->gmfm_dimensi_a_total) || !is_null($assessment->gmfm_dimensi_b_total) || !is_null($assessment->gmfm_dimensi_c_total) || !is_null($assessment->gmfm_dimensi_d_total) || !is_null($assessment->gmfm_dimensi_e_total))
+        <!-- TOTAL GMFM-88 REKAPITULASI -->
+        <div style="background: #1e293b; color: white; border-radius: 4px; padding: 6px 12px; margin-bottom: 8px; font-size: 11.5px; display: flex; justify-content: space-between; align-items: center;">
+            <span><strong>REKAPITULASI TOTAL GMFM-88 (88 ITEM):</strong> Skor Total: <strong>{{ $assessment->gmfm_total_score ?? 0 }} / 264</strong></span>
+            <span>Rata-rata Capaian: <strong>{{ number_format($assessment->gmfm_total_persen ?? 0, 1) }}%</strong></span>
+        </div>
+        <!-- DIMENSI A -->
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 10px; margin-bottom: 5px; font-size: 11px;">
+            <strong>DIMENSI A (BERBARING & BERGULING):</strong> &nbsp;
+            Skor: <strong>{{ $assessment->gmfm_dimensi_a_total ?? 0 }} / 51</strong> ({{ number_format($assessment->gmfm_dimensi_a_persen ?? 0, 1) }}%) &nbsp;|&nbsp;
+            Interpretasi: <strong>{{ ($assessment->gmfm_dimensi_a_persen ?? 0) >= 80 ? 'Sangat Baik (Mandiri)' : (($assessment->gmfm_dimensi_a_persen ?? 0) >= 50 ? 'Sedang' : 'Keterbatasan Signifikan') }}</strong>
+        </div>
+        <table class="table-assessment" style="font-size: 10px; margin-bottom: 5px;">
+            <thead>
+                <tr>
+                    <th style="width: 6%; text-align: center;">No</th>
+                    <th style="width: 74%;">Item Aktivitas Gerakan (Dimensi A)</th>
+                    <th style="width: 20%; text-align: center;">Skor (0-3)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $gmfm_a_items = config('gmfm.dimensions.A.items', []);
+                    $g_a_scores = is_array($assessment->gmfm_dimensi_a_scores) ? $assessment->gmfm_dimensi_a_scores : [];
+                @endphp
+                @foreach($gmfm_a_items as $no => $item)
+                    @php $scA = $g_a_scores[$no] ?? '-'; @endphp
+                    <tr>
+                        <td class="text-center">{{ $no }}</td>
+                        <td>
+                            <span style="color: #64748b;">{{ $item['position'] }}:</span>
+                            <strong>{{ $item['action'] }}</strong>
+                        </td>
+                        <td class="text-center font-w700">
+                            {{ $scA === 'NT' ? 'NT (Tidak Diuji)' : ($scA !== null && $scA !== '' ? $scA : '-') }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @if($assessment->gmfm_dimensi_a_catatan)
+            <div style="font-size: 10.5px; color: #334155; margin-bottom: 8px;">
+                <em>Catatan Dimensi A: {{ $assessment->gmfm_dimensi_a_catatan }}</em>
+            </div>
+        @endif
+
+        <!-- DIMENSI B -->
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 10px; margin-bottom: 5px; margin-top: 6px; font-size: 11px;">
+            <strong>DIMENSI B (DUDUK / SITTING):</strong> &nbsp;
+            Skor: <strong>{{ $assessment->gmfm_dimensi_b_total ?? 0 }} / 60</strong> ({{ number_format($assessment->gmfm_dimensi_b_persen ?? 0, 1) }}%) &nbsp;|&nbsp;
+            Interpretasi: <strong>{{ ($assessment->gmfm_dimensi_b_persen ?? 0) >= 80 ? 'Sangat Baik (Mandiri)' : (($assessment->gmfm_dimensi_b_persen ?? 0) >= 50 ? 'Sedang' : 'Keterbatasan Signifikan') }}</strong>
+        </div>
+        <table class="table-assessment" style="font-size: 10px; margin-bottom: 5px;">
+            <thead>
+                <tr>
+                    <th style="width: 6%; text-align: center;">No</th>
+                    <th style="width: 74%;">Item Aktivitas Gerakan (Dimensi B: Duduk)</th>
+                    <th style="width: 20%; text-align: center;">Skor (0-3)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $gmfm_b_items = config('gmfm.dimensions.B.items', []);
+                    $g_b_scores = is_array($assessment->gmfm_dimensi_b_scores) ? $assessment->gmfm_dimensi_b_scores : [];
+                @endphp
+                @foreach($gmfm_b_items as $no => $item)
+                    @php $scB = $g_b_scores[$no] ?? '-'; @endphp
+                    <tr>
+                        <td class="text-center">{{ $no }}</td>
+                        <td>
+                            <span style="color: #64748b;">{{ $item['position'] }}:</span>
+                            <strong>{{ $item['action'] }}</strong>
+                        </td>
+                        <td class="text-center font-w700">
+                            {{ $scB === 'NT' ? 'NT (Tidak Diuji)' : ($scB !== null && $scB !== '' ? $scB : '-') }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @if($assessment->gmfm_dimensi_b_catatan)
+            <div style="font-size: 10.5px; color: #334155; margin-bottom: 8px;">
+                <em>Catatan Dimensi B: {{ $assessment->gmfm_dimensi_b_catatan }}</em>
+            </div>
+        @endif
+
+        <!-- DIMENSI C -->
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 10px; margin-bottom: 5px; margin-top: 6px; font-size: 11px;">
+            <strong>DIMENSI C (MERANGKAK & BERLUTUT):</strong> &nbsp;
+            Skor: <strong>{{ $assessment->gmfm_dimensi_c_total ?? 0 }} / 42</strong> ({{ number_format($assessment->gmfm_dimensi_c_persen ?? 0, 1) }}%) &nbsp;|&nbsp;
+            Interpretasi: <strong>{{ ($assessment->gmfm_dimensi_c_persen ?? 0) >= 80 ? 'Sangat Baik (Mandiri)' : (($assessment->gmfm_dimensi_c_persen ?? 0) >= 50 ? 'Sedang' : 'Keterbatasan Signifikan') }}</strong>
+        </div>
+        <table class="table-assessment" style="font-size: 10px; margin-bottom: 5px;">
+            <thead>
+                <tr>
+                    <th style="width: 6%; text-align: center;">No</th>
+                    <th style="width: 74%;">Item Aktivitas Gerakan (Dimensi C: Merangkak & Berlutut)</th>
+                    <th style="width: 20%; text-align: center;">Skor (0-3)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $gmfm_c_items = config('gmfm.dimensions.C.items', []);
+                    $g_c_scores = is_array($assessment->gmfm_dimensi_c_scores) ? $assessment->gmfm_dimensi_c_scores : [];
+                @endphp
+                @foreach($gmfm_c_items as $no => $item)
+                    @php $scC = $g_c_scores[$no] ?? '-'; @endphp
+                    <tr>
+                        <td class="text-center">{{ $no }}</td>
+                        <td>
+                            <span style="color: #64748b;">{{ $item['position'] }}:</span>
+                            <strong>{{ $item['action'] }}</strong>
+                        </td>
+                        <td class="text-center font-w700">
+                            {{ $scC === 'NT' ? 'NT (Tidak Diuji)' : ($scC !== null && $scC !== '' ? $scC : '-') }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @if($assessment->gmfm_dimensi_c_catatan)
+            <div style="font-size: 10.5px; color: #334155; margin-bottom: 8px;">
+                <em>Catatan Dimensi C: {{ $assessment->gmfm_dimensi_c_catatan }}</em>
+            </div>
+        @endif
+
+        <!-- DIMENSI D -->
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 10px; margin-bottom: 5px; margin-top: 6px; font-size: 11px;">
+            <strong>DIMENSI D (BERDIRI / STANDING):</strong> &nbsp;
+            Skor: <strong>{{ $assessment->gmfm_dimensi_d_total ?? 0 }} / 39</strong> ({{ number_format($assessment->gmfm_dimensi_d_persen ?? 0, 1) }}%) &nbsp;|&nbsp;
+            Interpretasi: <strong>{{ ($assessment->gmfm_dimensi_d_persen ?? 0) >= 80 ? 'Sangat Baik (Mandiri)' : (($assessment->gmfm_dimensi_d_persen ?? 0) >= 50 ? 'Sedang' : 'Keterbatasan Signifikan') }}</strong>
+        </div>
+        <table class="table-assessment" style="font-size: 10px; margin-bottom: 5px;">
+            <thead>
+                <tr>
+                    <th style="width: 6%; text-align: center;">No</th>
+                    <th style="width: 74%;">Item Aktivitas Gerakan (Dimensi D: Berdiri)</th>
+                    <th style="width: 20%; text-align: center;">Skor (0-3)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $gmfm_d_items = config('gmfm.dimensions.D.items', []);
+                    $g_d_scores = is_array($assessment->gmfm_dimensi_d_scores) ? $assessment->gmfm_dimensi_d_scores : [];
+                @endphp
+                @foreach($gmfm_d_items as $no => $item)
+                    @php $scD = $g_d_scores[$no] ?? '-'; @endphp
+                    <tr>
+                        <td class="text-center">{{ $no }}</td>
+                        <td>
+                            <span style="color: #64748b;">{{ $item['position'] }}:</span>
+                            <strong>{{ $item['action'] }}</strong>
+                        </td>
+                        <td class="text-center font-w700">
+                            {{ $scD === 'NT' ? 'NT (Tidak Diuji)' : ($scD !== null && $scD !== '' ? $scD : '-') }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @if($assessment->gmfm_dimensi_d_catatan)
+            <div style="font-size: 10.5px; color: #334155; margin-bottom: 8px;">
+                <em>Catatan Dimensi D: {{ $assessment->gmfm_dimensi_d_catatan }}</em>
+            </div>
+        @endif
+
+        <!-- DIMENSI E -->
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 10px; margin-bottom: 5px; margin-top: 6px; font-size: 11px;">
+            <strong>DIMENSI E (BERJALAN, BERLARI & MELOMPAT):</strong> &nbsp;
+            Skor: <strong>{{ $assessment->gmfm_dimensi_e_total ?? 0 }} / 72</strong> ({{ number_format($assessment->gmfm_dimensi_e_persen ?? 0, 1) }}%) &nbsp;|&nbsp;
+            Interpretasi: <strong>{{ ($assessment->gmfm_dimensi_e_persen ?? 0) >= 80 ? 'Sangat Baik (Mandiri)' : (($assessment->gmfm_dimensi_e_persen ?? 0) >= 50 ? 'Sedang' : 'Keterbatasan Signifikan') }}</strong>
+        </div>
+        <table class="table-assessment" style="font-size: 10px; margin-bottom: 5px;">
+            <thead>
+                <tr>
+                    <th style="width: 6%; text-align: center;">No</th>
+                    <th style="width: 74%;">Item Aktivitas Gerakan (Dimensi E: Berjalan, Berlari & Melompat)</th>
+                    <th style="width: 20%; text-align: center;">Skor (0-3)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $gmfm_e_items = config('gmfm.dimensions.E.items', []);
+                    $g_e_scores = is_array($assessment->gmfm_dimensi_e_scores) ? $assessment->gmfm_dimensi_e_scores : [];
+                @endphp
+                @foreach($gmfm_e_items as $no => $item)
+                    @php $scE = $g_e_scores[$no] ?? '-'; @endphp
+                    <tr>
+                        <td class="text-center">{{ $no }}</td>
+                        <td>
+                            <span style="color: #64748b;">{{ $item['position'] }}:</span>
+                            <strong>{{ $item['action'] }}</strong>
+                        </td>
+                        <td class="text-center font-w700">
+                            {{ $scE === 'NT' ? 'NT (Tidak Diuji)' : ($scE !== null && $scE !== '' ? $scE : '-') }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @if($assessment->gmfm_dimensi_e_catatan)
+            <div style="font-size: 10.5px; color: #334155; margin-bottom: 8px;">
+                <em>Catatan Dimensi E: {{ $assessment->gmfm_dimensi_e_catatan }}</em>
+            </div>
+        @endif
+    @else
+        <div style="font-size: 11.5px; color: #64748b; margin-bottom: 8px; font-style: italic;">
+            Item GMFM belum diuji / diisi.
+        </div>
+    @endif
+
+    <!-- 3. Kemampuan Aktivitas Sehari-hari -->
+    <div class="section-title">3. KEMAMPUAN AKTIVITAS SEHARI-HARI (ADL)</div>
     <table class="table-assessment">
         <thead>
             <tr>
@@ -734,18 +947,333 @@
         </div>
     @endif
 
-    <!-- 10. Kesimpulan & Rencana Terapi -->
-    <div class="section-title">10. KESIMPULAN & RENCANA TERAPI</div>
+    <!-- 10. Pemeriksaan Sensoris, Propriosepsi & Vestibular -->
+    <div class="section-title">10. PEMERIKSAAN SENSORIS, PROPRIOSEPSI & VESTIBULAR</div>
+    <div class="row mb-2">
+        <div class="col-6">
+            <table class="table-assessment" style="font-size: 11px;">
+                <thead>
+                    <tr>
+                        <th colspan="3" class="text-center">Pemeriksaan Sensoris & Propriosepsi</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 38%;">Sensasi</th>
+                        <th style="width: 35%;">Parameter</th>
+                        <th style="width: 27%; text-align: center;">Hasil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="3" style="font-weight: 600; vertical-align: middle;">Sensasi Taktil</td>
+                        <td>Raba Halus</td>
+                        <td class="text-center"><strong>{{ $assessment->sensoris_taktil_raba_halus ?: '-' }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Pinprick</td>
+                        <td class="text-center"><strong>{{ $assessment->sensoris_taktil_pinprick ?: '-' }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Suhu</td>
+                        <td class="text-center"><strong>{{ $assessment->sensoris_taktil_suhu ?: '-' }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="3" style="font-weight: 600; vertical-align: middle;">Propriosepsi & Kinesthesia</td>
+                        <td>Posisi Sendi</td>
+                        <td class="text-center"><strong>{{ $assessment->sensoris_posisi_sendi ?: '-' }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Vibrasi</td>
+                        <td class="text-center"><strong>{{ $assessment->sensoris_vibrasi ?: '-' }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Kinesthesia Jari</td>
+                        <td class="text-center"><strong>{{ $assessment->sensoris_kinesthesia_jari ?: '-' }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <table class="table-assessment" style="font-size: 11px;">
+                <thead>
+                    <tr>
+                        <th colspan="3" class="text-center">Skrining Vestibular Dasar</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 45%;">Tes / Keluhan</th>
+                        <th style="width: 25%; text-align: center;">Hasil</th>
+                        <th style="width: 30%;">Interpretasi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Head Impulse Test (HIT)</td>
+                        <td class="text-center"><strong>{{ $assessment->vestibular_hit ?: '-' }}</strong></td>
+                        <td>{{ $assessment->vestibular_hit == 'Abnormal' ? 'Disfungsi kanal semisirkular' : '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Dix-Hallpike Test</td>
+                        <td class="text-center"><strong>{{ $assessment->vestibular_dix_hallpike ?: '-' }}</strong></td>
+                        <td>{{ $assessment->vestibular_dix_hallpike == 'Positif' ? 'BPPV (Kanalit)' : '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Pusing Saat Bergerak</td>
+                        <td class="text-center"><strong>{{ $assessment->vestibular_keluhan_pusing ?: '-' }}</strong></td>
+                        <td>{{ $assessment->vestibular_keluhan_pusing == 'Ya' ? 'Sensasi vertigo' : '-' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            @if($assessment->sensoris_defisit_lokasi)
+                <div style="font-size: 11px; border: 1px dashed #cbd5e1; padding: 5px 8px; border-radius: 4px; background: #fafcff; margin-bottom: 6px;">
+                    <strong>Lokasi Defisit Sensoris:</strong> {{ $assessment->sensoris_defisit_lokasi }}
+                </div>
+            @endif
+        </div>
+    </div>
+    @if($assessment->sensoris_catatan)
+        <div style="font-size: 11.5px; color: #334155; margin-bottom: 8px;">
+            <em>Catatan Sensoris & Vestibular: {{ $assessment->sensoris_catatan }}</em>
+        </div>
+    @endif
+
+    <!-- 11. Faktor Psikososial & Kontekstual -->
+    <div class="section-title">11. FAKTOR PSIKOSOSIAL & KONTEKSTUAL</div>
+    <table class="table-assessment" style="font-size: 11px; margin-bottom: 8px;">
+        <tbody>
+            <tr>
+                <td style="width: 28%; font-weight: 600;">Pekerjaan / Hobi Terdampak</td>
+                <td style="width: 2%;">:</td>
+                <td>{{ $assessment->psikososial_pekerjaan_hobi ?: '-' }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Faktor Psikologis</td>
+                <td>:</td>
+                <td><strong>{{ $assessment->psikososial_faktor_psikologis ?: '-' }}</strong></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Dukungan Sosial</td>
+                <td>:</td>
+                <td><strong>{{ $assessment->psikososial_dukungan_sosial ?: '-' }}</strong></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Harapan / Ekspektasi Pasien</td>
+                <td>:</td>
+                <td>{{ $assessment->psikososial_harapan_pasien ?: '-' }}</td>
+            </tr>
+        </tbody>
+    </table>
+    @if($assessment->psikososial_catatan)
+        <div style="font-size: 11.5px; color: #334155; margin-bottom: 8px;">
+            <em>Catatan Psikososial: {{ $assessment->psikososial_catatan }}</em>
+        </div>
+    @endif
+
+    <!-- 12. Perencanaan Terapi -->
+    <div class="section-title">12. PERENCANAAN TERAPI & PROGRAM INTERVENSI</div>
+    <table class="table-assessment" style="font-size: 11px; margin-bottom: 8px;">
+        <thead>
+            <tr>
+                <th style="width: 25%;">Kategori Terapi</th>
+                <th style="width: 75%;">Teknik & Intervensi Terpilih</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="font-weight: 600;">Modalitas Fisik</td>
+                <td>
+                    @if(is_array($assessment->rencana_modalitas_fisik) && count($assessment->rencana_modalitas_fisik) > 0)
+                        {{ implode(', ', $assessment->rencana_modalitas_fisik) }}
+                    @else
+                        -
+                    @endif
+                    @if($assessment->rencana_modalitas_lainnya)
+                        <em>(Lainnya: {{ $assessment->rencana_modalitas_lainnya }})</em>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Manual Terapi</td>
+                <td>
+                    @if(is_array($assessment->rencana_manual_terapi) && count($assessment->rencana_manual_terapi) > 0)
+                        {{ implode(', ', $assessment->rencana_manual_terapi) }}
+                    @else
+                        -
+                    @endif
+                    @if($assessment->rencana_manual_lainnya)
+                        <em>(Lainnya: {{ $assessment->rencana_manual_lainnya }})</em>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Latihan Terapi</td>
+                <td>
+                    @if(is_array($assessment->rencana_latihan_terapi) && count($assessment->rencana_latihan_terapi) > 0)
+                        {{ implode(', ', $assessment->rencana_latihan_terapi) }}
+                    @else
+                        -
+                    @endif
+                    @if($assessment->rencana_latihan_lainnya)
+                        <em>(Lainnya: {{ $assessment->rencana_latihan_lainnya }})</em>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Edukasi & Konseling</td>
+                <td>
+                    @if(is_array($assessment->rencana_edukasi_konseling) && count($assessment->rencana_edukasi_konseling) > 0)
+                        {{ implode(', ', $assessment->rencana_edukasi_konseling) }}
+                    @else
+                        -
+                    @endif
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table-assessment text-center" style="font-size: 11px; margin-bottom: 8px;">
+        <thead>
+            <tr>
+                <th style="width: 25%;">Frekuensi Terapi</th>
+                <th style="width: 25%;">Durasi per Sesi</th>
+                <th style="width: 25%;">Estimasi Total Sesi</th>
+                <th style="width: 25%;">Re-assessment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>{{ $assessment->rencana_dosis_frekuensi ? $assessment->rencana_dosis_frekuensi . ' x/minggu' : '-' }}</strong></td>
+                <td><strong>{{ $assessment->rencana_dosis_durasi ? $assessment->rencana_dosis_durasi . ' Menit' : '-' }}</strong></td>
+                <td><strong>{{ $assessment->rencana_dosis_total_sesi ?: '-' }}</strong></td>
+                <td><strong>{{ $assessment->rencana_dosis_reassessment ?: '-' }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- 14. Kesimpulan & Rekomendasi Terapi -->
+    <div class="section-title">14. KESIMPULAN & EVALUASI KLINIS</div>
     <div style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 8px 12px; margin-bottom: 12px; font-size: 12.5px;">
         <div style="margin-bottom: 6px;">
             <strong>Kesimpulan & Evaluasi Klinis:</strong>
             <p style="margin: 3px 0 0 0; color: #334155;">{{ $assessment->kesimpulan ?: '-' }}</p>
         </div>
         <div style="border-top: 1px dashed #e2e8f0; padding-top: 6px;">
-            <strong>Rencana Terapi Lanjutan:</strong>
+            <strong>Rencana Terapi Lanjutan & Target:</strong>
             <p style="margin: 3px 0 0 0; color: #334155;">{{ $assessment->rencana_terapi ?: '-' }}</p>
         </div>
     </div>
+
+    <!-- 15. Skala Denver (DDST II) -->
+    <div class="section-title">15. SKALA PERKEMBANGAN DENVER II (DDST II)</div>
+    @php
+        $has_denver_print = !is_null($assessment->denver_pass_count) || !is_null($assessment->denver_fail_count) || !empty($assessment->denver_data);
+    @endphp
+    @if($has_denver_print)
+        <!-- Denver Summary Box -->
+        <div style="background: #1e293b; color: white; border-radius: 4px; padding: 6px 12px; margin-bottom: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center;">
+            <span><strong>STATUS SKRINING DDST II:</strong> {{ $assessment->denver_kesimpulan ?: 'Tercatat' }}</span>
+            <span>Pass (P): <strong>{{ $assessment->denver_pass_count ?? 0 }}</strong> &nbsp;|&nbsp; Fail (F): <strong>{{ $assessment->denver_fail_count ?? 0 }}</strong> &nbsp;|&nbsp; Refusal (R): <strong>{{ $assessment->denver_refusal_count ?? 0 }}</strong> &nbsp;|&nbsp; No Opp (NO): <strong>{{ $assessment->denver_no_count ?? 0 }}</strong></span>
+        </div>
+
+        @php
+            $denver_print_data = is_array($assessment->denver_data) ? $assessment->denver_data : [];
+            $denver_print_sectors = [
+                'A' => [
+                    'title' => 'A. PERSONAL SOSIAL',
+                    'tasks' => [
+                        'ps_1' => ['no' => 1, 'name' => 'Menatap Muka', 'age' => '0–6 Bln'],
+                        'ps_2' => ['no' => 2, 'name' => 'Tepuk Tangan', 'age' => '6–12 Bln'],
+                        'ps_3' => ['no' => 3, 'name' => 'Menggunakan Sendok/Garpu', 'age' => '12–24 Bln'],
+                        'ps_4' => ['no' => 4, 'name' => 'Menyebut Nama Teman', 'age' => '2–4 Thn'],
+                    ]
+                ],
+                'B' => [
+                    'title' => 'B. MOTORIK HALUS - ADAPTIF',
+                    'tasks' => [
+                        'mh_1' => ['no' => 1, 'name' => 'Memegang Mainan yang Bisa Digoyangkan', 'age' => '0–6 Bln'],
+                        'mh_2' => ['no' => 2, 'name' => 'Menjimpit (Ibu Jari & Jari)', 'age' => '6–12 Bln'],
+                        'mh_3' => ['no' => 3, 'name' => 'Menara 2 Kubus', 'age' => '12–24 Bln'],
+                        'mh_4' => ['no' => 4, 'name' => 'Meniru Garis Vertikal', 'age' => '2–4 Thn'],
+                        'mh_5' => ['no' => 5, 'name' => 'Menggambar Orang 6 Bagian', 'age' => '4–6 Thn'],
+                    ]
+                ],
+                'C' => [
+                    'title' => 'C. BAHASA',
+                    'tasks' => [
+                        'bh_1' => ['no' => 1, 'name' => 'Bereaksi Terhadap Bel', 'age' => '0–6 Bln'],
+                        'bh_2' => ['no' => 2, 'name' => 'Menyebut 1 Kata', 'age' => '6–12 Bln'],
+                        'bh_3' => ['no' => 3, 'name' => 'Menunjuk 2 Gambar', 'age' => '12–24 Bln'],
+                        'bh_4' => ['no' => 4, 'name' => 'Menyebut 1 Warna', 'age' => '2–4 Thn'],
+                        'bh_5' => ['no' => 5, 'name' => 'Menghitung 5 Kubus', 'age' => '4–6 Thn'],
+                    ]
+                ],
+                'D' => [
+                    'title' => 'D. MOTORIK KASAR',
+                    'tasks' => [
+                        'mk_1' => ['no' => 1, 'name' => 'Mengangkat Kepala', 'age' => '0–6 Bln'],
+                        'mk_2' => ['no' => 2, 'name' => 'Berjalan Dengan Baik', 'age' => '6–12 Bln'],
+                        'mk_3' => ['no' => 3, 'name' => 'Menendang Bola ke Depan', 'age' => '12–24 Bln'],
+                        'mk_4' => ['no' => 4, 'name' => 'Berdiri 1 Kaki (4 Detik)', 'age' => '2–4 Thn'],
+                        'mk_5' => ['no' => 5, 'name' => 'Berdiri 1 Kaki (6 Detik)', 'age' => '4–6 Thn'],
+                    ]
+                ],
+            ];
+        @endphp
+
+        <table class="table-assessment" style="font-size: 10.5px; margin-bottom: 8px;">
+            <thead>
+                <tr>
+                    <th style="width: 6%; text-align: center;">No</th>
+                    <th style="width: 38%;">Nama Task Perkembangan</th>
+                    <th style="width: 14%; text-align: center;">Rentang Usia</th>
+                    <th style="width: 16%; text-align: center;">Hasil Penilaian</th>
+                    <th style="width: 26%;">Catatan Terapis</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($denver_print_sectors as $sec)
+                    <tr style="background: #f1f5f9;">
+                        <td colspan="5" style="font-weight: 700; color: #1e293b; font-size: 11px;">
+                            {{ $sec['title'] }}
+                        </td>
+                    </tr>
+                    @foreach($sec['tasks'] as $tKey => $task)
+                        @php
+                            $pScore = $denver_print_data[$tKey]['score'] ?? '-';
+                            $pNote = $denver_print_data[$tKey]['catatan'] ?? '';
+                        @endphp
+                        <tr>
+                            <td class="text-center">{{ $task['no'] }}</td>
+                            <td><strong>{{ $task['name'] }}</strong></td>
+                            <td class="text-center">{{ $task['age'] }}</td>
+                            <td class="text-center font-w700">
+                                @if($pScore === 'P')
+                                    <span style="color: #16a34a;">Pass (P)</span>
+                                @elseif($pScore === 'F')
+                                    <span style="color: #dc2626;">Fail (F)</span>
+                                @elseif($pScore === 'R')
+                                    <span style="color: #d97706;">Refusal (R)</span>
+                                @elseif($pScore === 'NO')
+                                    <span style="color: #64748b;">No Opp (NO)</span>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td>{{ $pNote ?: '-' }}</td>
+                        </tr>
+                    @endforeach
+                @endforeach
+            </tbody>
+        </table>
+        @if($assessment->denver_catatan)
+            <div style="font-size: 10.5px; color: #334155; margin-bottom: 10px;">
+                <em>Catatan Observasi Skala Denver: {{ $assessment->denver_catatan }}</em>
+            </div>
+        @endif
+    @else
+        <div style="font-size: 11px; color: #64748b; margin-bottom: 8px; font-style: italic;">
+            Skala Denver (DDST II) belum diuji / diisi.
+        </div>
+    @endif
 
     <!-- Tanda Tangan Section -->
     <div class="row mt-4 pt-2" style="page-break-inside: avoid;">

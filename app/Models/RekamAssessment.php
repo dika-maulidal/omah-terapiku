@@ -18,6 +18,16 @@ class RekamAssessment extends Model
         'neuro_koordinasi' => 'array',
         'postur_temuan' => 'array',
         'gait_karakteristik' => 'array',
+        'gmfm_dimensi_a_scores' => 'array',
+        'gmfm_dimensi_b_scores' => 'array',
+        'gmfm_dimensi_c_scores' => 'array',
+        'gmfm_dimensi_d_scores' => 'array',
+        'gmfm_dimensi_e_scores' => 'array',
+        'denver_data' => 'array',
+        'rencana_modalitas_fisik' => 'array',
+        'rencana_manual_terapi' => 'array',
+        'rencana_latihan_terapi' => 'array',
+        'rencana_edukasi_konseling' => 'array',
         'tgl_assessment' => 'date',
     ];
 
@@ -60,6 +70,11 @@ class RekamAssessment extends Model
             $this->wicara_komunikasi,
             $this->wicara_organ,
             $this->wicara_makan_menelan,
+            $this->sensoris_taktil_raba_halus,
+            $this->sensoris_posisi_sendi,
+            $this->vestibular_hit,
+            $this->psikososial_faktor_psikologis,
+            $this->psikososial_dukungan_sosial,
         ];
 
         $filled = count(array_filter($fields, function ($val) {
