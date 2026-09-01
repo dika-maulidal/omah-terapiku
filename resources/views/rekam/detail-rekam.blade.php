@@ -299,6 +299,33 @@
                                         </td>
                                         <td style="vertical-align: top;">
                                             <span class="badge badge-danger font-w600 mb-1" style="font-size: 10.5px;">A (Assessment)</span>
+                                            
+                                            <!-- Assessment Terapis Status & Link -->
+                                            @if ($row->assessment)
+                                                <div class="mb-2 p-1 px-2 rounded" style="background: #f0f7ff; border: 1px solid #cce5ff;">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span class="badge badge-primary font-w600" style="font-size: 10px;">
+                                                            <i class="fa fa-clipboard mr-1"></i> Ter-Assesment
+                                                        </span>
+                                                        <a href="{{ Route('rekam.assessment.show', $row->id) }}" class="text-primary font-w600" style="font-size: 11px;" title="Lihat Hasil Assessment">
+                                                            Detail <i class="fa fa-external-link"></i>
+                                                        </a>
+                                                    </div>
+                                                    @if($row->assessment->kesimpulan)
+                                                        <div class="text-muted mt-1 text-truncate" style="font-size: 11px; max-width: 170px;" title="{{ $row->assessment->kesimpulan }}">
+                                                            {{ $row->assessment->kesimpulan }}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @else
+                                                <div class="mb-2">
+                                                    <a href="{{ Route('rekam.assessment', $row->id) }}" class="badge badge-outline-warning font-w500" style="font-size: 10.5px;">
+                                                        <i class="fa fa-plus mr-1"></i> Isi Assesment
+                                                    </a>
+                                                </div>
+                                            @endif
+
+                                            <!-- ICD-10 Diagnoses -->
                                             @if ($row->diagnosa() && count($row->diagnosa()) > 0)
                                                 <ul class="list-unstyled mb-0" style="font-size: 12px;">
                                                     @foreach ($row->diagnosa() as $item)
@@ -316,7 +343,7 @@
                                                     @endforeach
                                                 </ul>
                                             @else
-                                                <div class="text-muted" style="font-size: 12px;">-</div>
+                                                <div class="text-muted" style="font-size: 11.5px;">Diagnosa ICD: -</div>
                                             @endif
                                         </td>
                                         <td style="vertical-align: top;">
@@ -331,8 +358,28 @@
                                             @endif
                                         </td>
                                         <td style="vertical-align: middle; text-align: center; white-space: nowrap;">
-                                            @if ($row->status != 5 && $row->status != 4)
-                                                <div class="d-inline-flex align-items-center justify-content-center flex-wrap" style="gap: 4px;">
+                                            <div class="d-inline-flex align-items-center justify-content-center flex-wrap" style="gap: 4px;">
+                                                @if (auth()->user()->role_display() == "Dokter" || auth()->user()->role_display() == "Admin")
+                                                    <!-- Tombol Form Assessment Terapis -->
+                                                    <a href="{{ Route('rekam.assessment', $row->id) }}"
+                                                       class="btn btn-warning btn-xs shadow-sm font-w600 {{ $row->assessment ? 'text-dark' : 'text-dark' }}" 
+                                                       style="font-size: 11px; border-radius: 4px; padding: 4px 7px; background-color: #ffc107; border-color: #ffc107;" 
+                                                       title="{{ $row->assessment ? 'Edit Form Assessment' : 'Isi Form Assessment Terapis' }}">
+                                                        <i class="fa fa-clipboard mr-1"></i> Assesment
+                                                        @if($row->assessment)
+                                                            <i class="fa fa-check text-success ml-1"></i>
+                                                        @endif
+                                                    </a>
+
+                                                    @if($row->assessment)
+                                                        <a href="{{ Route('rekam.assessment.print', $row->id) }}" target="_blank"
+                                                           class="btn btn-light btn-xs shadow-sm text-primary" style="font-size: 11px; border-radius: 4px; padding: 4px 6px; border: 1px solid #cbd5e1;" title="Cetak Lembar Assessment">
+                                                            <i class="fa fa-print"></i>
+                                                        </a>
+                                                    @endif
+                                                @endif
+
+                                                @if ($row->status != 5 && $row->status != 4)
                                                     @if (auth()->user()->role_display() == "Dokter" || auth()->user()->role_display() == "Admin")
                                                         <a href="javascript:void(0)" data-toggle="modal" data-target="#addPemeriksaan"
                                                            data-id="{{$row->id}}" data-tanggal="{{$row->tgl_rekam}}"
@@ -355,12 +402,12 @@
                                                             <i class="fa fa-medkit mr-1"></i> (P) Plan
                                                         </a>
                                                     @endif
-                                                </div>
-                                            @else
-                                                <span class="badge badge-success light font-w600" style="font-size: 11px;">
-                                                    <i class="fa fa-check-circle mr-1"></i> Selesai
-                                                </span>
-                                            @endif
+                                                @else
+                                                    <span class="badge badge-success light font-w600" style="font-size: 11px;">
+                                                        <i class="fa fa-check-circle mr-1"></i> Selesai
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

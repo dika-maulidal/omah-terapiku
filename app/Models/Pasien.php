@@ -55,6 +55,11 @@ class Pasien extends Model
         return $this->hasMany(Rekam::class, 'pasien_id');
     }
 
+    public function assessments()
+    {
+        return $this->hasMany(RekamAssessment::class, 'pasien_id');
+    }
+
     public function rekamGigi()
     {
         return RekamGigi::where('pasien_id', $this->id)->get();

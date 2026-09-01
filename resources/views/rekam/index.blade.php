@@ -108,6 +108,9 @@
                                                 <a href="{{Route('rekam.detail', $row->pasien_id)}}" class="btn btn-primary shadow btn-xs sharp mr-1" title="Lihat Rekam Medis">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
+                                                <a href="{{Route('rekam.assessment', $row->id)}}" class="btn btn-warning shadow btn-xs sharp mr-1" title="Form Assessment Terapis">
+                                                    <i class="fa fa-clipboard"></i>
+                                                </a>
                                                 @if (auth()->user()->role_display() == "Admin" && $row->status == 2)
                                                     <a href="{{Route('rekam.edit', $row->id)}}" class="btn btn-info shadow btn-xs sharp mr-1" title="Edit Data Rekam Medis">
                                                         <i class="fa fa-pencil"></i>

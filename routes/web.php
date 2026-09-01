@@ -9,6 +9,7 @@ use App\Http\Controllers\IcdController;
 use App\Http\Controllers\PasienController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\PoliController;
+use App\Http\Controllers\RekamAssessmentController;
 use App\Http\Controllers\RekamController;
 use App\Http\Controllers\RekamPemeriksaanController;
 use App\Http\Controllers\SettingController;
@@ -99,6 +100,12 @@ Route::group(['middleware' => 'auth'], function(){
 
 
     Route::get('/rekam/file/{id}/{type}', [RekamPemeriksaanController::class, 'file'])->name('pem.file');
+
+    // Assessment Terapis
+    Route::get('/rekam/{id}/assessment', [RekamAssessmentController::class, 'form'])->name('rekam.assessment');
+    Route::post('/rekam/{id}/assessment', [RekamAssessmentController::class, 'store'])->name('rekam.assessment.store');
+    Route::get('/rekam/{id}/assessment/show', [RekamAssessmentController::class, 'show'])->name('rekam.assessment.show');
+    Route::get('/rekam/{id}/assessment/print', [RekamAssessmentController::class, 'print'])->name('rekam.assessment.print');
 
     // Pengaturan Akun & Ganti Password
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');

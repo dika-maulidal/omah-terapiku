@@ -23,6 +23,10 @@ class Rekam extends Model
         return  RekamDiagnosa::where('rekam_id',$this->id)->get();
       }
 
+    function assessment(){
+        return $this->hasOne(RekamAssessment::class, 'rekam_id');
+    }
+
     function pasien(){
         return $this->belongsTo(Pasien::class);
     }
