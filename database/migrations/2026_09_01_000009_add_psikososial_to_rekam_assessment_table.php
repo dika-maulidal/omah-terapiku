@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('rekam_assessment', function (Blueprint $table) {
             $table->text('psikososial_pekerjaan_hobi')->nullable()->after('sensoris_catatan');
-            $table->string('psikososial_faktor_psikologis', 100)->nullable()->after('psikososial_pekerjaan_hobi');
-            $table->string('psikososial_dukungan_sosial', 100)->nullable()->after('psikososial_faktor_psikologis');
+            $table->text('psikososial_faktor_psikologis')->nullable()->after('psikososial_pekerjaan_hobi');
+            $table->text('psikososial_dukungan_sosial')->nullable()->after('psikososial_faktor_psikologis');
             $table->text('psikososial_harapan_pasien')->nullable()->after('psikososial_dukungan_sosial');
             $table->text('psikososial_catatan')->nullable()->after('psikososial_harapan_pasien');
         });

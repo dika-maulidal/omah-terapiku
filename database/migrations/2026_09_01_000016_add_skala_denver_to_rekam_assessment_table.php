@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('denver_fail_count')->nullable()->after('denver_pass_count');
             $table->integer('denver_refusal_count')->nullable()->after('denver_fail_count');
             $table->integer('denver_no_count')->nullable()->after('denver_refusal_count');
-            $table->string('denver_kesimpulan', 100)->nullable()->after('denver_no_count');
+            $table->text('denver_kesimpulan')->nullable()->after('denver_no_count');
             $table->text('denver_catatan')->nullable()->after('denver_kesimpulan');
         });
     }

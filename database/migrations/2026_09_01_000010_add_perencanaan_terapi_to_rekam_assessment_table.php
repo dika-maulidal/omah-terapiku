@@ -23,10 +23,10 @@ return new class extends Migration
             
             $table->json('rencana_edukasi_konseling')->nullable()->after('rencana_latihan_lainnya');
             
-            $table->string('rencana_dosis_frekuensi', 50)->nullable()->after('rencana_edukasi_konseling');
-            $table->string('rencana_dosis_durasi', 50)->nullable()->after('rencana_dosis_frekuensi');
-            $table->string('rencana_dosis_total_sesi', 50)->nullable()->after('rencana_dosis_durasi');
-            $table->string('rencana_dosis_reassessment', 100)->nullable()->after('rencana_dosis_total_sesi');
+            $table->text('rencana_dosis_frekuensi')->nullable()->after('rencana_edukasi_konseling');
+            $table->text('rencana_dosis_durasi')->nullable()->after('rencana_dosis_frekuensi');
+            $table->text('rencana_dosis_total_sesi')->nullable()->after('rencana_dosis_durasi');
+            $table->text('rencana_dosis_reassessment')->nullable()->after('rencana_dosis_total_sesi');
         });
     }
 

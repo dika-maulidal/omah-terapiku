@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -11,21 +12,24 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Pastikan table menggunakan ROW_FORMAT=DYNAMIC untuk menghindari batas row size 8126 bytes
+        DB::statement('ALTER TABLE rekam_assessment ROW_FORMAT=DYNAMIC');
+
         Schema::table('rekam_assessment', function (Blueprint $table) {
             // Sensasi Taktil
-            $table->string('sensoris_taktil_raba_halus', 50)->nullable()->after('gait_catatan');
-            $table->string('sensoris_taktil_pinprick', 50)->nullable()->after('sensoris_taktil_raba_halus');
-            $table->string('sensoris_taktil_suhu', 50)->nullable()->after('sensoris_taktil_pinprick');
+            $table->text('sensoris_taktil_raba_halus')->nullable()->after('gait_catatan');
+            $table->text('sensoris_taktil_pinprick')->nullable()->after('sensoris_taktil_raba_halus');
+            $table->text('sensoris_taktil_suhu')->nullable()->after('sensoris_taktil_pinprick');
             
             // Propriosepsi & Kinesthesia
-            $table->string('sensoris_posisi_sendi', 50)->nullable()->after('sensoris_taktil_suhu');
-            $table->string('sensoris_vibrasi', 50)->nullable()->after('sensoris_posisi_sendi');
-            $table->string('sensoris_kinesthesia_jari', 50)->nullable()->after('sensoris_vibrasi');
+            $table->text('sensoris_posisi_sendi')->nullable()->after('sensoris_taktil_suhu');
+            $table->text('sensoris_vibrasi')->nullable()->after('sensoris_posisi_sendi');
+            $table->text('sensoris_kinesthesia_jari')->nullable()->after('sensoris_vibrasi');
             
             // Skrining Vestibular Dasar
-            $table->string('vestibular_hit', 50)->nullable()->after('sensoris_kinesthesia_jari');
-            $table->string('vestibular_dix_hallpike', 50)->nullable()->after('vestibular_hit');
-            $table->string('vestibular_keluhan_pusing', 50)->nullable()->after('vestibular_dix_hallpike');
+            $table->text('vestibular_hit')->nullable()->after('sensoris_kinesthesia_jari');
+            $table->text('vestibular_dix_hallpike')->nullable()->after('vestibular_hit');
+            $table->text('vestibular_keluhan_pusing')->nullable()->after('vestibular_dix_hallpike');
             
             // Lokasi & Deskripsi Defisit Sensoris & Catatan
             $table->text('sensoris_defisit_lokasi')->nullable()->after('vestibular_keluhan_pusing');
