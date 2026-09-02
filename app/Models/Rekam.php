@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Rekam extends Model
 {
     protected $table = "rekam";
-    protected $fillable = ["tgl_rekam","pasien_id","keluhan","poli","layanan_terapi","dokter_id","pemeriksaan",
-    "no_rekam","tindakan","status","petugas_id","biaya_pemeriksaan","biaya_tindakan",
-    "biaya_obat","total_biaya","cara_bayar","resep_obat","pemeriksaan_file","tindakan_file"];
+    protected $fillable = [
+        "tgl_rekam", "pasien_id", "keluhan", "poli", "upt_lokasi", "layanan_terapi",
+        "sesi_waktu", "dokter_id", "terapis_pendamping_id", "pemeriksaan", "diagnosa",
+        "no_rekam", "tindakan", "status", "petugas_id", "biaya_pemeriksaan", "biaya_tindakan",
+        "biaya_obat", "total_biaya", "cara_bayar", "resep_obat", "pemeriksaan_file", "tindakan_file"
+    ];
 
     function getFilePemeriksaan(){
         return $this->pemeriksaan_file != null ? asset('images/pemeriksaan/'.$this->pemeriksaan_file) : null;
@@ -38,6 +41,10 @@ class Rekam extends Model
     function dokter(){
         return $this->belongsTo(Dokter::class);
     }
+
+    function terapisPendamping(){
+        return $this->belongsTo(Dokter::class, 'terapis_pendamping_id');
+    }
     function status_rekams(){
         switch ($this->status) {
             case 1:
@@ -64,36 +71,36 @@ class Rekam extends Model
     function status_display(){
         switch ($this->status) {
             case 1:
-                return '<span class="badge badge-outline-warning">
-                            <i class="fa fa-clock-o text-warning mr-1"></i>
-                             Antrian
+                return '<span class="badge badge-warning light font-w600">
+                            <i class="fa-solid fa-clock mr-1"></i>
+                            Antrian
                         </span>';
             break;
             case 2:
-                return '<span class="badge badge-info light">
-                            <i class="fa fa-stethoscope text-info mr-1"></i>
+                return '<span class="badge badge-info light font-w600">
+                            <i class="fa-solid fa-stethoscope mr-1"></i>
                             Pemeriksaan
                         </span>';
             break;
             case 3:
-                return '<span class="badge badge-warning light" style="min-width:100px">
-                           <i class="fa fa-hourglass-half text-warning mr-1"></i> Menunggu
+                return '<span class="badge badge-warning light font-w600" style="min-width:95px">
+                           <i class="fa-solid fa-hourglass-half mr-1"></i> Menunggu
                         </span>';
             break;
             case 4:
-                return '<span class="badge badge-success light">
-                            <i class="fa fa-check-circle text-success mr-1"></i>
+                return '<span class="badge badge-success light font-w600">
+                            <i class="fa-solid fa-circle-check mr-1"></i>
                             Selesai
                         </span>';
             break;
             case 5:
-                return '<span class="badge badge-success light" style="min-width:95px">
-                            <i class="fa fa-check-circle text-success mr-1"></i>
+                return '<span class="badge badge-success light font-w600" style="min-width:95px">
+                            <i class="fa-solid fa-circle-check mr-1"></i>
                             Selesai
                         </span>';
             break;
             default:
-                # code...
+                return '<span class="badge badge-secondary light font-w600">-</span>';
                 break;
         }
     }

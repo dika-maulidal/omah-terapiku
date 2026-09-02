@@ -214,10 +214,15 @@ class RekamAssessmentController extends Controller
             'rencana_latihan_terapi' => $request->rencana_latihan_terapi ?: [],
             'rencana_latihan_lainnya' => $request->rencana_latihan_lainnya,
             'rencana_edukasi_konseling' => $request->rencana_edukasi_konseling ?: [],
+            'rencana_edukasi_lainnya' => $request->rencana_edukasi_lainnya,
             'rencana_dosis_frekuensi' => $request->rencana_dosis_frekuensi,
             'rencana_dosis_durasi' => $request->rencana_dosis_durasi,
             'rencana_dosis_total_sesi' => $request->rencana_dosis_total_sesi,
             'rencana_dosis_reassessment' => $request->rencana_dosis_reassessment,
+
+            // 13. Kesimpulan & Target Terapi
+            'kesimpulan' => $request->kesimpulan,
+            'rencana_terapi' => $request->rencana_terapi,
 
             // 14. Skala Denver (DDST II)
             'denver_data' => $request->denver_data ?: [],

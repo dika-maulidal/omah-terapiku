@@ -706,14 +706,7 @@
     <!-- 6. Lingkup Gerak Sendi (ROM) & Kekuatan Otot (MMT) -->
     @php
         $rom_data = is_array($assessment->rom_mmt_data) ? $assessment->rom_mmt_data : [];
-        $rom_labels = [
-            'kanan'    => 'Kanan (Aktif/Pasif)',
-            'kiri'     => 'Kiri (Aktif/Pasif)',
-            'cervical' => 'Cervical (Leher)',
-            'thoracal' => 'Thoracal (Punggung)',
-            'lumbal'   => 'Lumbal (Pinggang)',
-            'custom'   => 'Sendi Lainnya'
-        ];
+        $rom_labels = config('assessment.rom_mmt.rows', []);
     @endphp
     <div class="section-title">6. LINGKUP GERAK SENDI (ROM) & KEKUATAN OTOT (MMT)</div>
     <table class="table-assessment" style="font-size: 11px;">
@@ -1121,9 +1114,12 @@
                 <td style="font-weight: 600;">Edukasi & Konseling</td>
                 <td>
                     @if(is_array($assessment->rencana_edukasi_konseling) && count($assessment->rencana_edukasi_konseling) > 0)
-                        {{ implode(', ', $assessment->rencana_edukasi_konseling) }}
+                        {{ implode(', ', array_filter($assessment->rencana_edukasi_konseling, fn($x) => $x !== 'Lainnya')) }}
                     @else
                         -
+                    @endif
+                    @if($assessment->rencana_edukasi_lainnya)
+                        <em>(Lainnya: {{ $assessment->rencana_edukasi_lainnya }})</em>
                     @endif
                 </td>
             </tr>
@@ -1176,47 +1172,7 @@
 
         @php
             $denver_print_data = is_array($assessment->denver_data) ? $assessment->denver_data : [];
-            $denver_print_sectors = [
-                'A' => [
-                    'title' => 'A. PERSONAL SOSIAL',
-                    'tasks' => [
-                        'ps_1' => ['no' => 1, 'name' => 'Menatap Muka', 'age' => '0–6 Bln'],
-                        'ps_2' => ['no' => 2, 'name' => 'Tepuk Tangan', 'age' => '6–12 Bln'],
-                        'ps_3' => ['no' => 3, 'name' => 'Menggunakan Sendok/Garpu', 'age' => '12–24 Bln'],
-                        'ps_4' => ['no' => 4, 'name' => 'Menyebut Nama Teman', 'age' => '2–4 Thn'],
-                    ]
-                ],
-                'B' => [
-                    'title' => 'B. MOTORIK HALUS - ADAPTIF',
-                    'tasks' => [
-                        'mh_1' => ['no' => 1, 'name' => 'Memegang Mainan yang Bisa Digoyangkan', 'age' => '0–6 Bln'],
-                        'mh_2' => ['no' => 2, 'name' => 'Menjimpit (Ibu Jari & Jari)', 'age' => '6–12 Bln'],
-                        'mh_3' => ['no' => 3, 'name' => 'Menara 2 Kubus', 'age' => '12–24 Bln'],
-                        'mh_4' => ['no' => 4, 'name' => 'Meniru Garis Vertikal', 'age' => '2–4 Thn'],
-                        'mh_5' => ['no' => 5, 'name' => 'Menggambar Orang 6 Bagian', 'age' => '4–6 Thn'],
-                    ]
-                ],
-                'C' => [
-                    'title' => 'C. BAHASA',
-                    'tasks' => [
-                        'bh_1' => ['no' => 1, 'name' => 'Bereaksi Terhadap Bel', 'age' => '0–6 Bln'],
-                        'bh_2' => ['no' => 2, 'name' => 'Menyebut 1 Kata', 'age' => '6–12 Bln'],
-                        'bh_3' => ['no' => 3, 'name' => 'Menunjuk 2 Gambar', 'age' => '12–24 Bln'],
-                        'bh_4' => ['no' => 4, 'name' => 'Menyebut 1 Warna', 'age' => '2–4 Thn'],
-                        'bh_5' => ['no' => 5, 'name' => 'Menghitung 5 Kubus', 'age' => '4–6 Thn'],
-                    ]
-                ],
-                'D' => [
-                    'title' => 'D. MOTORIK KASAR',
-                    'tasks' => [
-                        'mk_1' => ['no' => 1, 'name' => 'Mengangkat Kepala', 'age' => '0–6 Bln'],
-                        'mk_2' => ['no' => 2, 'name' => 'Berjalan Dengan Baik', 'age' => '6–12 Bln'],
-                        'mk_3' => ['no' => 3, 'name' => 'Menendang Bola ke Depan', 'age' => '12–24 Bln'],
-                        'mk_4' => ['no' => 4, 'name' => 'Berdiri 1 Kaki (4 Detik)', 'age' => '2–4 Thn'],
-                        'mk_5' => ['no' => 5, 'name' => 'Berdiri 1 Kaki (6 Detik)', 'age' => '4–6 Thn'],
-                    ]
-                ],
-            ];
+            $denver_print_sectors = config('denver.sectors', []);
         @endphp
 
         <table class="table-assessment" style="font-size: 10.5px; margin-bottom: 8px;">

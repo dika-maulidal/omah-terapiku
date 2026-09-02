@@ -65,20 +65,18 @@ class RekamPemeriksaanController extends Controller
             'diagnosa' => 'required',
         ]);
 
-        $rekam = Rekam::find($request->rekam_id);
-        // $rekam->update([
-        //     'diagnosa' => $request->diagnosa
-        // ]);
-        $data = array(
-            'pasien_id' => $request->pasien_id,
-            'rekam_id' => $request->rekam_id,
+        $rekam = Rekam::findOrFail($request->rekam_id);
+        $rekam->update([
             'diagnosa' => $request->diagnosa
+        ]);
+
+        RekamDiagnosa::updateOrCreate(
+            ['rekam_id' => $request->rekam_id, 'pasien_id' => $request->pasien_id],
+            ['diagnosa' => $request->diagnosa]
         );
-        RekamDiagnosa::updateOrCreate($data,$data);
 
-        return redirect()->route('rekam.detail',$request->pasien_id)
-                ->with('sukses','Diagnosa Berhasil diperbaharui');
-
+        return redirect()->route('rekam.detail', $request->pasien_id)
+                ->with('sukses', 'Assessment / Diagnosa Terapi Berhasil diperbaharui');
     }
 
     public function tindakan(Request $request)

@@ -845,14 +845,7 @@
     <!-- 6. Lingkup Gerak Sendi (ROM) & Kekuatan Otot (MMT) -->
     @php
         $rom_data = is_array($assessment->rom_mmt_data) ? $assessment->rom_mmt_data : [];
-        $rom_labels = [
-            'kanan'    => 'Kanan (Aktif/Pasif)',
-            'kiri'     => 'Kiri (Aktif/Pasif)',
-            'cervical' => 'Cervical (Leher)',
-            'thoracal' => 'Thoracal (Punggung)',
-            'lumbal'   => 'Lumbal (Pinggang)',
-            'custom'   => 'Sendi Lainnya'
-        ];
+        $rom_labels = config('assessment.rom_mmt.rows', []);
     @endphp
     <div class="col-12 mb-4">
         <div class="card" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
@@ -1453,17 +1446,19 @@
                             @if(is_array($assessment->rencana_modalitas_fisik) && count($assessment->rencana_modalitas_fisik) > 0)
                                 <div class="d-flex flex-wrap" style="gap: 5px;">
                                     @foreach($assessment->rencana_modalitas_fisik as $mf)
-                                        <span class="badge badge-light font-w600 text-dark border" style="font-size: 11.5px; padding: 4px 8px;">
-                                            <i class="fa fa-check text-primary mr-1"></i> {{ $mf }}
-                                        </span>
+                                        @if($mf !== 'Lainnya')
+                                            <span class="badge badge-light font-w600 text-dark border" style="font-size: 11.5px; padding: 4px 8px;">
+                                                <i class="fa fa-check text-primary mr-1"></i> {{ $mf }}
+                                            </span>
+                                        @endif
                                     @endforeach
                                 </div>
                             @else
                                 <span class="text-muted" style="font-size: 12.5px;">- (Tidak ada modalitas fisik khusus)</span>
                             @endif
                             @if($assessment->rencana_modalitas_lainnya)
-                                <div class="mt-2 text-muted" style="font-size: 12px;">
-                                    <em>Lainnya: {{ $assessment->rencana_modalitas_lainnya }}</em>
+                                <div class="mt-2 text-dark" style="font-size: 12px;">
+                                    <span class="badge badge-primary light font-w600" style="font-size: 11.5px; padding: 4px 8px;"><i class="fa fa-plus-circle mr-1"></i> Lainnya: {{ $assessment->rencana_modalitas_lainnya }}</span>
                                 </div>
                             @endif
                         </div>
@@ -1478,17 +1473,19 @@
                             @if(is_array($assessment->rencana_manual_terapi) && count($assessment->rencana_manual_terapi) > 0)
                                 <div class="d-flex flex-wrap" style="gap: 5px;">
                                     @foreach($assessment->rencana_manual_terapi as $mt)
-                                        <span class="badge badge-light font-w600 text-dark border" style="font-size: 11.5px; padding: 4px 8px;">
-                                            <i class="fa fa-check text-primary mr-1"></i> {{ $mt }}
-                                        </span>
+                                        @if($mt !== 'Lainnya')
+                                            <span class="badge badge-light font-w600 text-dark border" style="font-size: 11.5px; padding: 4px 8px;">
+                                                <i class="fa fa-check text-primary mr-1"></i> {{ $mt }}
+                                            </span>
+                                        @endif
                                     @endforeach
                                 </div>
                             @else
                                 <span class="text-muted" style="font-size: 12.5px;">- (Tidak ada manual terapi khusus)</span>
                             @endif
                             @if($assessment->rencana_manual_lainnya)
-                                <div class="mt-2 text-muted" style="font-size: 12px;">
-                                    <em>Lainnya: {{ $assessment->rencana_manual_lainnya }}</em>
+                                <div class="mt-2 text-dark" style="font-size: 12px;">
+                                    <span class="badge badge-primary light font-w600" style="font-size: 11.5px; padding: 4px 8px;"><i class="fa fa-plus-circle mr-1"></i> Lainnya: {{ $assessment->rencana_manual_lainnya }}</span>
                                 </div>
                             @endif
                         </div>
@@ -1503,17 +1500,19 @@
                             @if(is_array($assessment->rencana_latihan_terapi) && count($assessment->rencana_latihan_terapi) > 0)
                                 <div class="d-flex flex-wrap" style="gap: 5px;">
                                     @foreach($assessment->rencana_latihan_terapi as $lt)
-                                        <span class="badge badge-light font-w600 text-dark border" style="font-size: 11.5px; padding: 4px 8px;">
-                                            <i class="fa fa-check text-primary mr-1"></i> {{ $lt }}
-                                        </span>
+                                        @if($lt !== 'Lainnya')
+                                            <span class="badge badge-light font-w600 text-dark border" style="font-size: 11.5px; padding: 4px 8px;">
+                                                <i class="fa fa-check text-primary mr-1"></i> {{ $lt }}
+                                            </span>
+                                        @endif
                                     @endforeach
                                 </div>
                             @else
                                 <span class="text-muted" style="font-size: 12.5px;">- (Tidak ada latihan terapi khusus)</span>
                             @endif
                             @if($assessment->rencana_latihan_lainnya)
-                                <div class="mt-2 text-muted" style="font-size: 12px;">
-                                    <em>Lainnya: {{ $assessment->rencana_latihan_lainnya }}</em>
+                                <div class="mt-2 text-dark" style="font-size: 12px;">
+                                    <span class="badge badge-primary light font-w600" style="font-size: 11.5px; padding: 4px 8px;"><i class="fa fa-plus-circle mr-1"></i> Lainnya: {{ $assessment->rencana_latihan_lainnya }}</span>
                                 </div>
                             @endif
                         </div>
@@ -1528,13 +1527,20 @@
                             @if(is_array($assessment->rencana_edukasi_konseling) && count($assessment->rencana_edukasi_konseling) > 0)
                                 <div class="d-flex flex-wrap" style="gap: 5px;">
                                     @foreach($assessment->rencana_edukasi_konseling as $ek)
-                                        <span class="badge badge-light font-w600 text-dark border" style="font-size: 11.5px; padding: 4px 8px;">
-                                            <i class="fa fa-check text-primary mr-1"></i> {{ $ek }}
-                                        </span>
+                                        @if($ek !== 'Lainnya')
+                                            <span class="badge badge-light font-w600 text-dark border" style="font-size: 11.5px; padding: 4px 8px;">
+                                                <i class="fa fa-check text-primary mr-1"></i> {{ $ek }}
+                                            </span>
+                                        @endif
                                     @endforeach
                                 </div>
                             @else
                                 <span class="text-muted" style="font-size: 12.5px;">- (Tidak ada edukasi khusus)</span>
+                            @endif
+                            @if($assessment->rencana_edukasi_lainnya)
+                                <div class="mt-2 text-dark" style="font-size: 12px;">
+                                    <span class="badge badge-primary light font-w600" style="font-size: 11.5px; padding: 4px 8px;"><i class="fa fa-plus-circle mr-1"></i> Lainnya: {{ $assessment->rencana_edukasi_lainnya }}</span>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -1665,51 +1671,7 @@
 
                     @php
                         $denver_data = is_array($assessment->denver_data) ? $assessment->denver_data : [];
-                        $denver_sectors = [
-                            'A' => [
-                                'title' => 'A. Personal Sosial',
-                                'badge_color' => '#0284c7',
-                                'tasks' => [
-                                    'ps_1' => ['no' => 1, 'name' => 'Menatap Muka', 'age' => '0–6 Bln'],
-                                    'ps_2' => ['no' => 2, 'name' => 'Tepuk Tangan', 'age' => '6–12 Bln'],
-                                    'ps_3' => ['no' => 3, 'name' => 'Menggunakan Sendok/Garpu', 'age' => '12–24 Bln'],
-                                    'ps_4' => ['no' => 4, 'name' => 'Menyebut Nama Teman', 'age' => '2–4 Thn'],
-                                ]
-                            ],
-                            'B' => [
-                                'title' => 'B. Motorik Halus - Adaptif',
-                                'badge_color' => '#7c3aed',
-                                'tasks' => [
-                                    'mh_1' => ['no' => 1, 'name' => 'Memegang Mainan yang Bisa Digoyangkan', 'age' => '0–6 Bln'],
-                                    'mh_2' => ['no' => 2, 'name' => 'Menjimpit (Ibu Jari & Jari)', 'age' => '6–12 Bln'],
-                                    'mh_3' => ['no' => 3, 'name' => 'Menara 2 Kubus', 'age' => '12–24 Bln'],
-                                    'mh_4' => ['no' => 4, 'name' => 'Meniru Garis Vertikal', 'age' => '2–4 Thn'],
-                                    'mh_5' => ['no' => 5, 'name' => 'Menggambar Orang 6 Bagian', 'age' => '4–6 Thn'],
-                                ]
-                            ],
-                            'C' => [
-                                'title' => 'C. Bahasa',
-                                'badge_color' => '#059669',
-                                'tasks' => [
-                                    'bh_1' => ['no' => 1, 'name' => 'Bereaksi Terhadap Bel', 'age' => '0–6 Bln'],
-                                    'bh_2' => ['no' => 2, 'name' => 'Menyebut 1 Kata', 'age' => '6–12 Bln'],
-                                    'bh_3' => ['no' => 3, 'name' => 'Menunjuk 2 Gambar', 'age' => '12–24 Bln'],
-                                    'bh_4' => ['no' => 4, 'name' => 'Menyebut 1 Warna', 'age' => '2–4 Thn'],
-                                    'bh_5' => ['no' => 5, 'name' => 'Menghitung 5 Kubus', 'age' => '4–6 Thn'],
-                                ]
-                            ],
-                            'D' => [
-                                'title' => 'D. Motorik Kasar',
-                                'badge_color' => '#ea580c',
-                                'tasks' => [
-                                    'mk_1' => ['no' => 1, 'name' => 'Mengangkat Kepala', 'age' => '0–6 Bln'],
-                                    'mk_2' => ['no' => 2, 'name' => 'Berjalan Dengan Baik', 'age' => '6–12 Bln'],
-                                    'mk_3' => ['no' => 3, 'name' => 'Menendang Bola ke Depan', 'age' => '12–24 Bln'],
-                                    'mk_4' => ['no' => 4, 'name' => 'Berdiri 1 Kaki (4 Detik)', 'age' => '2–4 Thn'],
-                                    'mk_5' => ['no' => 5, 'name' => 'Berdiri 1 Kaki (6 Detik)', 'age' => '4–6 Thn'],
-                                ]
-                            ],
-                        ];
+                        $denver_sectors = config('denver.sectors', []);
                     @endphp
 
                     <div class="row">

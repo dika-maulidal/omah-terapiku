@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\IcdController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\PasienController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\PoliController;
@@ -28,6 +29,16 @@ Route::get('test', function () {
 Route::get('/loaddata', [RekamPemeriksaanController::class, 'insertToTableNew'])->name('loaddata');
 
 Route::group(['middleware' => 'auth'], function(){
+    Route::get('/set-global-upt', function(\Illuminate\Http\Request $request) {
+        $upt = $request->get('upt');
+        if ($upt === 'all' || empty($upt)) {
+            session()->forget('selected_upt');
+        } else {
+            session(['selected_upt' => $upt]);
+        }
+        return redirect()->back();
+    })->name('set.global.upt');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/omahterapiku', [PoliController::class, 'index'])->name('omahterapiku');
     Route::post('/omahterapiku', [PoliController::class, 'store'])->name('omahterapiku.store');
@@ -67,17 +78,22 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/penerima-manfaat/store', [PasienController::class, 'store'])->name('penerima-manfaat.store');
     Route::post('/penerima-manfaat/{id}/update', [PasienController::class, 'update'])->name('penerima-manfaat.update');
 
-    Route::get('/icd/json', [IcdController::class, 'data'])->name('icd.data');
-    Route::get('/icd', [IcdController::class, 'index'])->name('icd');
-    Route::post('/icd/store', [IcdController::class, 'store'])->name('icd.store');
-    Route::post('/icd/{id}/update', [IcdController::class, 'update'])->name('icd.update');
-    Route::get('/icd/{id}/delete', [IcdController::class, 'delete'])->name('icd.delete');
+
 
     Route::get('/tindakan', [TindakanController::class, 'index'])->name('tindakan');
     Route::post('/tindakan/store', [TindakanController::class, 'store'])->name('tindakan.store');
     Route::post('/tindakan/{id}/update', [TindakanController::class, 'update'])->name('master.tindakan.update');
     Route::get('/tindakan/{id}/delete', [TindakanController::class, 'delete'])->name('tindakan.delete');
 
+    Route::get('/icd', [IcdController::class, 'index'])->name('icd');
+    Route::get('/icd/data', [IcdController::class, 'data'])->name('icd.data');
+    Route::post('/icd/store', [IcdController::class, 'store'])->name('icd.store');
+    Route::post('/icd/{id}/update', [IcdController::class, 'update'])->name('icd.update');
+    Route::get('/icd/{id}/delete', [IcdController::class, 'delete'])->name('icd.delete');
+
+
+    Route::get('/jadwal-terapi', [JadwalController::class, 'index'])->name('jadwal.index');
+    Route::get('/jadwal-terapi/events', [JadwalController::class, 'eventsJson'])->name('jadwal.events');
 
     Route::get('/rekam', [RekamController::class, 'index'])->name('rekam');
     Route::get('/rekam/export-csv', [RekamController::class, 'exportCsv'])->name('rekam.export-csv');

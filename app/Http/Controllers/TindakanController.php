@@ -27,7 +27,15 @@ class TindakanController extends Controller
 
         $datas = $query->paginate(10);
 
-        return view('tindakan.index', compact('datas', 'poli'));
+        $layananList = [
+            'Fisioterapi',
+            'Terapi Okupasi / Sensorik Integrasi',
+            'Terapi Wicara',
+            'Terapi Netra (Orientasi & Mobilitas)',
+            'Umum / Semua Layanan'
+        ];
+
+        return view('tindakan.index', compact('datas', 'poli', 'layananList'));
     }
 
     public function store(Request $request)

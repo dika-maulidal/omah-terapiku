@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pasien;
+use App\Models\Poli;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DataTables;
 // use Image;
 use App\Models\Rekam;
-use App\Models\RekamGigi;
 
 class PasienController extends Controller
 {
@@ -69,6 +69,13 @@ class PasienController extends Controller
     public function index(Request $request)
     {
         $datas = Pasien::whereNull('deleted_at')
+                ->when(session('selected_upt'), function ($query) {
+                    $upt = session('selected_upt');
+                    $query->where(function ($q) use ($upt) {
+                        $q->where('upt_lokasi', 'LIKE', "%{$upt}%")
+                          ->orWhereNull('upt_lokasi');
+                    });
+                })
                 ->when($request->keyword, function ($query) use ($request) {
                     $query->where(function ($q) use ($request) {
                         $q->where('no_rm', 'LIKE', "%{$request->keyword}%")
@@ -233,16 +240,18 @@ class PasienController extends Controller
 
     function add(Request $request){
         $autoNoRm = Pasien::generateNoRM();
-        return view('pasien.add', compact('autoNoRm'));
+        $polis = Poli::where('status', 1)->get();
+        return view('pasien.add', compact('autoNoRm', 'polis'));
     }
 
     function edit(Request $request,$id){
-        $data = Pasien::find($id);
-        return view('pasien.edit',compact('data'));
+        $data = Pasien::findOrFail($id);
+        $polis = Poli::where('status', 1)->get();
+        return view('pasien.edit',compact('data', 'polis'));
     }
 
     function file(Request $request,$id){
-        $data = Pasien::find($id);
+        $data = Pasien::findOrFail($id);
         return view('pasien.file',compact('data'));
     }
 
@@ -256,18 +265,43 @@ class PasienController extends Controller
             'desil' => 'nullable|string|max:50',
             'nama_wali' => 'nullable|string|max:191',
             'hubungan_wali' => 'nullable|string|max:100',
-            'jenis_disabilitas' => 'nullable|string|max:100',
-            'alat_bantu' => 'nullable|string|max:100',
             'file_kk' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240',
             'file_resume' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240'
         ]);
 
         $no_rm = $request->no_rm ?: Pasien::generateNoRM();
 
+        // Convert multiselect arrays to comma-separated strings if needed
+        $disabilitas = $request->jenis_disabilitas;
+        if (is_array($disabilitas)) {
+            $disabilitas = array_map(function($item) use ($request) {
+                if ($item === 'Lainnya' && !empty($request->jenis_disabilitas_lainnya)) {
+                    return 'Lainnya (' . trim($request->jenis_disabilitas_lainnya) . ')';
+                }
+                return $item;
+            }, $disabilitas);
+            $disabilitas = implode(', ', array_filter($disabilitas));
+        }
+        $alat = $request->alat_bantu;
+        if (is_array($alat)) {
+            $alat = array_map(function($item) use ($request) {
+                if ($item === 'Lainnya' && !empty($request->alat_bantu_lainnya)) {
+                    return 'Lainnya (' . trim($request->alat_bantu_lainnya) . ')';
+                }
+                return $item;
+            }, $alat);
+            $alat = implode(', ', array_filter($alat));
+        }
+
+        $upt = $request->upt_lokasi ?: (session('selected_upt') ?: null);
+
         $request->merge([
             'no_rm' => $no_rm,
             'cara_bayar' => 'Gratis',
-            'kewarganegaraan' => $request->kewarganegaraan ?? 'WNI'
+            'kewarganegaraan' => $request->kewarganegaraan ?? 'WNI',
+            'jenis_disabilitas' => $disabilitas,
+            'alat_bantu' => $alat,
+            'upt_lokasi' => $upt
         ]);
         $pasien = Pasien::create($request->all());
 
@@ -287,7 +321,7 @@ class PasienController extends Controller
 
         $pasien->save();
 
-        return redirect()->route('penerima-manfaat')->with('sukses','Data berhasil ditambahkan');
+        return redirect()->route('penerima-manfaat')->with('sukses','Data Penerima Manfaat berhasil ditambahkan');
     }
 
     function update(Request $request,$id){
@@ -299,13 +333,42 @@ class PasienController extends Controller
             'desil' => 'nullable|string|max:50',
             'nama_wali' => 'nullable|string|max:191',
             'hubungan_wali' => 'nullable|string|max:100',
-            'jenis_disabilitas' => 'nullable|string|max:100',
-            'alat_bantu' => 'nullable|string|max:100',
             'file_kk' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240',
             'file_resume' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240'
         ]);
-        $data = Pasien::find($id);
-        $request->merge(['cara_bayar' => 'Gratis']);
+
+        $data = Pasien::findOrFail($id);
+
+        // Convert multiselect arrays to comma-separated strings if needed
+        $disabilitas = $request->jenis_disabilitas;
+        if (is_array($disabilitas)) {
+            $disabilitas = array_map(function($item) use ($request) {
+                if ($item === 'Lainnya' && !empty($request->jenis_disabilitas_lainnya)) {
+                    return 'Lainnya (' . trim($request->jenis_disabilitas_lainnya) . ')';
+                }
+                return $item;
+            }, $disabilitas);
+            $disabilitas = implode(', ', array_filter($disabilitas));
+        }
+        $alat = $request->alat_bantu;
+        if (is_array($alat)) {
+            $alat = array_map(function($item) use ($request) {
+                if ($item === 'Lainnya' && !empty($request->alat_bantu_lainnya)) {
+                    return 'Lainnya (' . trim($request->alat_bantu_lainnya) . ')';
+                }
+                return $item;
+            }, $alat);
+            $alat = implode(', ', array_filter($alat));
+        }
+
+        $upt = $request->upt_lokasi ?: ($data->upt_lokasi ?: (session('selected_upt') ?: null));
+
+        $request->merge([
+            'cara_bayar' => 'Gratis',
+            'jenis_disabilitas' => $disabilitas,
+            'alat_bantu' => $alat,
+            'upt_lokasi' => $upt
+        ]);
         $data->update($request->all());
 
         if ($request->hasFile('file_kk')) {
@@ -324,7 +387,7 @@ class PasienController extends Controller
 
         $data->save();
 
-        return redirect()->route('penerima-manfaat')->with('sukses','Data berhasil diperbaharui');
+        return redirect()->route('penerima-manfaat')->with('sukses','Data Penerima Manfaat berhasil diperbaharui');
     }
 
     function delete(Request $request,$id)
@@ -333,7 +396,6 @@ class PasienController extends Controller
        $suk = Pasien::find($id)->delete();
        if($suk){
             Rekam::where('pasien_id',$id)->delete();
-            RekamGigi::where('pasien_id',$id)->delete();
        }
         return redirect()->route('penerima-manfaat')->with('sukses','Data berhasil dihapus');
     } 

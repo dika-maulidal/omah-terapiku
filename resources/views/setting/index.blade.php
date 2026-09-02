@@ -88,7 +88,7 @@
     <div class="col-sm-6 p-md-0">
         <div class="welcome-text">
             <h4 class="font-w700" style="color: var(--ot-navy) !important;">
-                <i class="fa fa-cog mr-2" style="color: var(--ot-yellow);"></i>Pengaturan Akun
+                <i class="fa-solid fa-gear mr-2" style="color: var(--ot-yellow);"></i>Pengaturan Akun
             </h4>
             <span class="text-muted fs-13">Kelola informasi profil dan ubah kata sandi akun Anda</span>
         </div>
@@ -121,10 +121,10 @@
                 </p>
                 <div class="d-flex justify-content-center gap-2 flex-wrap">
                     <span class="badge badge-warning text-white px-3 py-1 font-w600" style="background: var(--ot-yellow) !important; border-radius: 20px; font-size: 11px;">
-                        <i class="fa fa-shield mr-1"></i>{{ $user->role_display() }}
+                        <i class="fa-solid fa-shield-halved mr-1"></i>{{ $user->role_display() }}
                     </span>
                     <span class="badge badge-success px-3 py-1 font-w600" style="background: var(--ot-green) !important; border-radius: 20px; font-size: 11px;">
-                        <i class="fa fa-check-circle mr-1"></i>{{ $user->status_display() }}
+                        <i class="fa-solid fa-circle-check mr-1"></i>{{ $user->status_display() }}
                     </span>
                 </div>
             </div>
@@ -132,23 +132,23 @@
                 <h6 class="font-w700 mb-3" style="color: var(--ot-navy);">Detail Akun</h6>
                 <ul class="list-group list-group-flush fs-13">
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                        <span class="text-muted"><i class="fa fa-user-circle mr-2 text-primary"></i>Nama Lengkap</span>
+                        <span class="text-muted"><i class="fa-solid fa-circle-user mr-2 text-primary"></i>Nama Lengkap</span>
                         <span class="font-w600 text-black">{{ $user->name }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                        <span class="text-muted"><i class="fa fa-id-badge mr-2 text-primary"></i>NIP / ID</span>
+                        <span class="text-muted"><i class="fa-solid fa-id-badge mr-2 text-primary"></i>NIP / ID</span>
                         <span class="font-w600 text-black">{{ $user->nip ?? '-' }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                        <span class="text-muted"><i class="fa fa-phone mr-2 text-primary"></i>No. Telepon/WA</span>
+                        <span class="text-muted"><i class="fa-solid fa-phone mr-2 text-primary"></i>No. Telepon/WA</span>
                         <span class="font-w600 text-black">{{ $user->phone ?? '-' }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                        <span class="text-muted"><i class="fa fa-envelope mr-2 text-primary"></i>Email</span>
+                        <span class="text-muted"><i class="fa-solid fa-envelope mr-2 text-primary"></i>Email</span>
                         <span class="font-w600 text-black">{{ $user->email ?? '-' }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                        <span class="text-muted"><i class="fa fa-clock-o mr-2 text-primary"></i>Terdaftar Sejak</span>
+                        <span class="text-muted"><i class="fa-solid fa-clock mr-2 text-primary"></i>Terdaftar Sejak</span>
                         <span class="font-w600 text-black">{{ $user->created_at ? $user->created_at->format('d M Y') : '-' }}</span>
                     </li>
                 </ul>
@@ -156,7 +156,7 @@
                 <hr class="my-3" style="border-top: 1px dashed #e2e8f0;">
 
                 <div class="security-note">
-                    <i class="fa fa-info-circle mr-1"></i>
+                    <i class="fa-solid fa-circle-info mr-1"></i>
                     <strong>Tips Keamanan:</strong> Gunakan password yang kuat dengan panjang minimal 6 karakter, kombinasikan huruf kapital, angka, dan simbol untuk keamanan maksimal.
                 </div>
             </div>
@@ -170,7 +170,7 @@
         <div class="setting-card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title font-w700 mb-0" style="color: var(--ot-navy); font-size: 16px;">
-                    <i class="fa fa-key mr-2" style="color: var(--ot-yellow);"></i>Ganti Password
+                    <i class="fa-solid fa-key mr-2" style="color: var(--ot-yellow);"></i>Ganti Password
                 </h5>
                 <span class="badge badge-light text-muted font-w500 fs-12 px-2 py-1">Wajib Verifikasi</span>
             </div>
@@ -193,7 +193,7 @@
                                    autocomplete="current-password"
                                    style="padding-right: 45px; border-radius: 8px; height: 44px;">
                             <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('current_password', this)">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa-solid fa-eye"></i>
                             </button>
                         </div>
                         @error('current_password')

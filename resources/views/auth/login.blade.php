@@ -18,10 +18,12 @@
 
     <style>
         :root {
-            --ot-navy: #2e4b82;
-            --ot-navy-hover: #213761;
-            --ot-cyan: #29b6f6;
-            --ot-yellow: #f5a623;
+            --ot-navy: #2D4B7A;
+            --ot-navy-hover: #22385c;
+            --ot-cyan: #38A5DB;
+            --ot-yellow: #F3B329;
+            --ot-red: #D9383A;
+            --ot-green: #2EB88A;
         }
 
         * {
@@ -30,7 +32,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #182c4f 0%, #2e4b82 50%, #3b63a6 100%);
+            background: linear-gradient(135deg, #182c4f 0%, #2D4B7A 50%, #38A5DB 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -41,7 +43,7 @@
 
         .login-card {
             background: #ffffff;
-            border-radius: 6px;
+            border-radius: 8px;
             border: 1px solid #e2e8f0;
             box-shadow: 0 15px 35px rgba(24, 44, 79, 0.25);
             width: 100%;
@@ -161,16 +163,16 @@
         .btn-submit {
             width: 100%;
             height: 46px;
-            background: linear-gradient(90deg, #2e4b82 0%, #3a62a3 100%);
+            background: linear-gradient(90deg, #2D4B7A 0%, #38A5DB 100%);
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             color: #ffffff;
             font-size: 14.5px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.25s ease;
             margin-top: 8px;
-            box-shadow: 0 4px 12px rgba(46, 75, 130, 0.25);
+            box-shadow: 0 4px 12px rgba(45, 75, 122, 0.25);
             letter-spacing: 0.3px;
             display: inline-flex;
             align-items: center;
@@ -179,8 +181,8 @@
         }
 
         .btn-submit:hover {
-            background: linear-gradient(90deg, #213761 0%, #2e4b82 100%);
-            box-shadow: 0 6px 16px rgba(46, 75, 130, 0.35);
+            background: linear-gradient(90deg, #22385c 0%, #2D4B7A 100%);
+            box-shadow: 0 6px 16px rgba(45, 75, 122, 0.35);
             transform: translateY(-1px);
         }
 

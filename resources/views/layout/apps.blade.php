@@ -13,6 +13,7 @@
     <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="{{asset('css/brand-theme.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('vendor/toastr/css/toastr.min.css')}}">
     <link href="{{asset('vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
@@ -42,13 +43,13 @@
      
         <div class="nav-header">
             <a href="{{Route('dashboard')}}" class="brand-logo">
-                <img class="logo-abbr" src="{{asset('images/logo.png')}}" alt="">
-                <span class="logo-compact font-w800 font-italic" style="color: #2e4b82; font-size: 16px;">
+                <img class="logo-abbr" src="{{asset('images/logo.png')}}" alt="Logo Omah Terapiku">
+                <span class="logo-compact font-w800 font-italic" style="color: var(--ot-navy); font-size: 16px;">
                     OT
                 </span>
                 <h3 class="brand-title font-w800 font-italic mb-0" style="font-size: 18px; text-transform: uppercase; letter-spacing: 0.5px;">
-                    <span style="color: #2e4b82;">OMAH</span>
-                    <span style="color: #f5a623;">TERAPIKU</span>
+                    <span style="color: var(--ot-navy);">OMAH</span>
+                    <span style="color: var(--ot-yellow);">TERAPIKU</span>
                 </h3>
             </a>
 

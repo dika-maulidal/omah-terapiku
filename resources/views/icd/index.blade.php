@@ -13,7 +13,7 @@
         <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
             <div class="modal-header" style="border-bottom: 1px solid #edf2f7; background: #f8fafc; border-top-left-radius: 12px; border-top-right-radius: 12px;">
                 <h5 class="modal-title font-w700" style="color: var(--ot-navy) !important; font-size: 16px;">
-                    <i class="fa fa-heartbeat text-primary mr-2"></i> Tambah Kode ICD-10 Baru
+                    <i class="fa-solid fa-heart-pulse text-primary mr-2"></i> Tambah Kode ICD-10 Baru
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 22px;">
                     <span aria-hidden="true">&times;</span>
@@ -52,7 +52,7 @@
                             Batal
                         </button>
                         <button type="submit" class="btn btn-sm btn-primary" style="padding: 8px 20px; font-size: 13px; font-weight: 600; border-radius: 6px;">
-                            <i class="fa fa-save mr-1"></i> Simpan ICD-10
+                            <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan ICD-10
                         </button>
                     </div>
                 </form>
@@ -69,20 +69,20 @@
                 <div class="row mb-3 align-items-center">
                     <!-- Tombol Tambah Kiri -->
                     <div class="col-md-6 col-12 mb-2 mb-md-0 d-flex align-items-center flex-wrap" style="gap: 6px;">
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addOrderModal" style="font-size: 13px; padding: 7px 14px; font-weight: 600;">
-                            <i class="fa fa-plus mr-1"></i> Tambah ICD-10
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary font-w600" data-toggle="modal" data-target="#addOrderModal" style="font-size: 13px; padding: 7px 16px; border-radius: 6px;">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah ICD-10
                         </a>
                     </div>
 
                     <!-- Pencarian Kanan -->
                     <div class="col-md-6 col-12">
                         <form method="get" action="{{ url()->current() }}">
-                            <div class="d-flex align-items-center justify-content-md-end" style="gap: 6px;">
+                            <div class="d-flex align-items-center justify-content-md-end flex-wrap" style="gap: 6px;">
                                 <div class="input-group" style="max-width: 280px;">
                                     <input type="text" class="form-control form-control-sm gp-search" name="keyword" value="{{request('keyword')}}" placeholder="Cari kode atau nama diagnosis..." autocomplete="off" style="height: 36px; font-size: 12.5px;">
                                     <div class="input-group-btn">
                                         <button type="submit" class="btn btn-primary btn-sm no-border gp-search" style="height: 36px; padding: 0 12px;">
-                                            <i class="ace-icon fa fa-search icon-on-right"></i>
+                                            <i class="ace-icon fa-solid fa-magnifying-glass icon-on-right"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
                                 <!-- Tombol Reset Filter -->
                                 @if(request('keyword'))
                                     <a href="{{ Route('icd') }}" class="btn btn-sm btn-light" style="height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border: 1px solid #e2e8f0;" title="Reset Filter">
-                                        <i class="fa fa-refresh"></i>
+                                        <i class="fa-solid fa-rotate-right"></i>
                                     </a>
                                 @endif
                             </div>
@@ -122,7 +122,7 @@
                                         </td>
                                         <td style="vertical-align: middle;">
                                             <strong style="font-size: 13.5px; color: #1e293b;">
-                                                <i class="fa fa-heartbeat text-primary mr-1"></i> {{$row->name_id}}
+                                                <i class="fa-solid fa-heart-pulse text-primary mr-1"></i> {{$row->name_id}}
                                             </strong>
                                         </td>
                                         <td style="vertical-align: middle;">
@@ -134,11 +134,11 @@
                                             <div class="d-flex align-items-center justify-content-center">
                                                 <a href="javascript:void(0)" data-toggle="modal" data-target="#editPoli{{$row->code}}" 
                                                     class="btn btn-info shadow btn-xs sharp mr-1" title="Edit ICD-10">
-                                                    <i class="fa fa-pencil"></i>
+                                                    <i class="fa-solid fa-pencil"></i>
                                                 </a>
                                                 <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('icd.delete',$row->code)}}"
                                                    r-name="{{$row->name_id}}" r-id="{{$row->code}}" title="Hapus ICD-10">
-                                                    <i class="fa fa-trash"></i>
+                                                    <i class="fa-solid fa-trash"></i>
                                                 </a>
                                             </div>
 

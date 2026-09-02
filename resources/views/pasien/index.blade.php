@@ -11,43 +11,43 @@
                 <div class="row mb-3 align-items-center">
                     <!-- Tombol Aksi Kiri -->
                     <div class="col-md-6 col-12 mb-2 mb-md-0 d-flex align-items-center flex-wrap" style="gap: 6px;">
-                        <a href="{{Route('penerima-manfaat.add')}}" class="btn btn-sm btn-primary" style="font-size: 13px; padding: 7px 14px; font-weight: 600;">
-                            <i class="fa fa-user-plus mr-1"></i> Penerima Manfaat Baru
+                        <a href="{{Route('penerima-manfaat.add')}}" class="btn btn-sm btn-primary font-w600" style="font-size: 13px; padding: 7px 16px; border-radius: 6px;">
+                            <i class="fa-solid fa-user-plus mr-1"></i> Penerima Manfaat Baru
                         </a>
-                        <a href="{{Route('penerima-manfaat.export-csv', ['keyword' => request('keyword'), 'status' => request('status')])}}" class="btn btn-sm btn-success" style="font-size: 13px; padding: 7px 14px; font-weight: 600;" title="Download data penerima manfaat ke CSV">
-                            <i class="fa fa-file-excel-o mr-1"></i> Export CSV
+                        <a href="{{Route('penerima-manfaat.export-csv', ['keyword' => request('keyword'), 'status' => request('status')])}}" class="btn btn-sm btn-success font-w600" style="font-size: 13px; padding: 7px 14px; border-radius: 6px;" title="Download data penerima manfaat ke CSV">
+                            <i class="fa-solid fa-file-csv mr-1"></i> Export CSV
                         </a>
-                        <a href="https://cekbansos.kemensos.go.id/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary" style="font-size: 13px; padding: 7px 14px; font-weight: 600; border-color: var(--ot-navy); color: var(--ot-navy);" title="Buka website resmi Kemensos untuk cek desil / bansos">
-                            <i class="fa fa-external-link mr-1"></i> Cek Desil Kemensos
+                        <a href="https://cekbansos.kemensos.go.id/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary font-w600" style="font-size: 13px; padding: 7px 14px; border-radius: 6px; border-color: var(--ot-navy); color: var(--ot-navy);" title="Buka website resmi Kemensos untuk cek desil / bansos">
+                            <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Cek Desil Kemensos
                         </a>
                     </div>
 
                     <!-- Filter Status & Pencarian Kanan -->
                     <div class="col-md-6 col-12">
                         <form method="get" action="{{ url()->current() }}">
-                            <div class="d-flex align-items-center justify-content-md-end" style="gap: 6px;">
+                            <div class="d-flex align-items-center justify-content-md-end flex-wrap" style="gap: 6px;">
                                 <!-- Dropdown Filter Status -->
                                 <select name="status" class="form-control form-control-sm" onchange="this.form.submit()" style="max-width: 155px; height: 36px; font-size: 12.5px;">
                                     <option value="">-- Semua Status --</option>
-                                    <option value="sudah_periksa" {{ request('status') == 'sudah_periksa' ? 'selected' : '' }}>Sudah Periksa</option>
-                                    <option value="pasien_baru" {{ request('status') == 'pasien_baru' ? 'selected' : '' }}>Pasien Baru</option>
-                                    <option value="pasien_lama" {{ request('status') == 'pasien_lama' ? 'selected' : '' }}>Pasien Lama</option>
+                                    <option value="sudah_periksa" {{ request('status') == 'sudah_periksa' ? 'selected' : '' }}>Sudah Terapi</option>
+                                    <option value="pasien_baru" {{ request('status') == 'pasien_baru' ? 'selected' : '' }}>Penerima Baru</option>
+                                    <option value="pasien_lama" {{ request('status') == 'pasien_lama' ? 'selected' : '' }}>Penerima Lama</option>
                                 </select>
 
                                 <!-- Kolom Pencarian -->
                                 <div class="input-group" style="max-width: 230px;">
-                                    <input type="text" class="form-control form-control-sm gp-search" name="keyword" value="{{request('keyword')}}" placeholder="Cari..." autocomplete="off" style="height: 36px; font-size: 12.5px;">
+                                    <input type="text" class="form-control form-control-sm gp-search" name="keyword" value="{{request('keyword')}}" placeholder="Cari penerima..." autocomplete="off" style="height: 36px; font-size: 12.5px;">
                                     <div class="input-group-btn">
                                         <button type="submit" class="btn btn-primary btn-sm no-border gp-search" style="height: 36px; padding: 0 12px;">
-                                            <i class="ace-icon fa fa-search icon-on-right"></i>
+                                            <i class="ace-icon fa-solid fa-magnifying-glass icon-on-right"></i>
                                         </button>
                                     </div>
                                 </div>
 
                                 <!-- Tombol Reset Filter -->
                                 @if(request('keyword') || request('status'))
-                                    <a href="{{ Route('penerima-manfaat') }}" class="btn btn-sm btn-light" style="height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px;" title="Reset Filter">
-                                        <i class="fa fa-refresh"></i>
+                                    <a href="{{ Route('penerima-manfaat') }}" class="btn btn-sm btn-light" style="height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border: 1px solid #e2e8f0;" title="Reset Filter">
+                                        <i class="fa-solid fa-rotate-right"></i>
                                     </a>
                                 @endif
                             </div>
@@ -78,14 +78,14 @@
                                         <td style="vertical-align: middle;">{{$datas->firstItem() + $key}}</td>
                                         <td style="vertical-align: middle;"><a href="{{Route('rekam.detail',$row->id)}}" class="font-w600 text-primary">{{$row->no_rm}}</a></td>
                                         <td style="vertical-align: middle;">
-                                            <strong style="font-size: 13.5px; color: #1e293b;">{{$row->nama}}</strong>
-                                            @if ($row->jenis_disabilitas && $row->jenis_disabilitas != 'Tidak Ada')
-                                                <br><span class="badge badge-info light font-w500 mt-1" style="font-size: 11px;">{{$row->jenis_disabilitas}}</span>
-                                            @endif
-                                            @if ($row->nama_wali)
-                                                <br><small class="text-muted"><i class="fa fa-user-circle-o mr-1"></i>Wali: {{$row->nama_wali}}</small>
-                                            @endif
-                                        </td>
+                                             <strong style="font-size: 13.5px; color: #1e293b;">{{$row->nama}}</strong>
+                                             @if ($row->jenis_disabilitas && $row->jenis_disabilitas != 'Tidak Ada')
+                                                 <br><span class="badge badge-info light font-w500 mt-1" style="font-size: 11px;">{{$row->jenis_disabilitas}}</span>
+                                             @endif
+                                             @if ($row->nama_wali)
+                                                 <br><small class="text-muted"><i class="fa-solid fa-user-group mr-1"></i>Wali: {{$row->nama_wali}}</small>
+                                             @endif
+                                         </td>
                                         <td style="vertical-align: middle;">{{$row->tmp_lahir}}, {{$row->tgl_lahir}}</td>
                                         <td style="vertical-align: middle;">{{$row->alamat_lengkap}}</td>
                                         <td style="vertical-align: middle;">{{$row->jk}}</td>
@@ -103,14 +103,14 @@
                                         <td style="white-space: nowrap; vertical-align: middle;">
                                             <div class="d-flex align-items-center justify-content-center">
                                                 <a href="{{Route('rekam.detail',$row->id)}}" class="btn btn-primary shadow btn-xs sharp mr-1" title="Lihat Rekam Medis">
-                                                    <i class="fa fa-eye"></i>
+                                                    <i class="fa-solid fa-eye"></i>
                                                 </a>
                                                 <a href="{{Route('penerima-manfaat.edit',$row->id)}}" class="btn btn-info shadow btn-xs sharp mr-1" title="Edit Data Pasien">
-                                                    <i class="fa fa-pencil"></i>
+                                                    <i class="fa-solid fa-pencil"></i>
                                                 </a>
                                                 <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('penerima-manfaat.delete',$row->id)}}"
                                                     r-name="{{$row->nama}}" r-id="{{$row->id}}" title="Hapus Data Pasien">
-                                                    <i class="fa fa-trash"></i>
+                                                    <i class="fa-solid fa-trash"></i>
                                                 </a>
                                             </div>
                                         </td>

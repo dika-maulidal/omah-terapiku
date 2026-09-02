@@ -16,7 +16,7 @@
         <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
             <div class="modal-header" style="border-bottom: 1px solid #edf2f7; background: #f8fafc; border-top-left-radius: 12px; border-top-right-radius: 12px;">
                 <h5 class="modal-title font-w700" style="color: var(--ot-navy) !important; font-size: 16px;">
-                    <i class="fa fa-users text-primary mr-2"></i> Pilih Data Penerima Manfaat
+                    <i class="fa-solid fa-users text-primary mr-2"></i> Pilih Data Penerima Manfaat
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 22px;">
                     <span aria-hidden="true">&times;</span>
@@ -54,14 +54,14 @@
                         <!-- BAGIAN 1: INFORMASI KUNJUNGAN & PENERIMA MANFAAT -->
                         <div class="d-flex align-items-center mb-3 pb-2" style="border-bottom: 2px solid #edf2f7;">
                             <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
-                                <i class="fa fa-calendar-check-o text-primary mr-2"></i> 1. Informasi Kunjungan & Penerima Manfaat
+                                <i class="fa-solid fa-calendar-check text-primary mr-2"></i> 1. Informasi Kunjungan & Penerima Manfaat
                             </h5>
                         </div>
 
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">No. Rekam Medis</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control font-w600" readonly value="{{ $data->pasien->no_rm ?? $data->no_rekam }}" style="background-color: #f8f9fa; color: #1e3d73; height: 40px; font-size: 13px;">
+                                <input type="text" class="form-control font-w600" readonly value="{{ $data->pasien->no_rm ?? $data->no_rekam }}" style="background-color: #f8f9fa; color: #2D4B7A; height: 40px; font-size: 13px;">
                             </div>
 
                             <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Tanggal Periksa <span class="text-danger">*</span></label>
@@ -83,7 +83,7 @@
                                       name="pasien_nama" readonly style="background-color: #fff; cursor: pointer; height: 40px; font-size: 13px;" placeholder="Klik untuk memilih penerima manfaat...">
                                     <div class="input-group-append" data-toggle="modal" data-target="#modalPasien">
                                         <button class="btn btn-primary" type="button" style="height: 40px; font-size: 13px; font-weight: 600; padding: 0 16px;"> 
-                                            <i class="fa fa-search mr-1"></i> Ganti Pasien
+                                            <i class="fa-solid fa-magnifying-glass mr-1"></i> Ganti Pasien
                                         </button>
                                     </div>
                                 </div>
@@ -113,29 +113,29 @@
                         <div class="form-group row mb-2">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
-                                <div id="patientSummaryCard" class="card border-primary mb-3" style="background: #f8fbff; border: 1px solid #b8daff; border-left: 5px solid #2e4b82; box-shadow: 0 3px 10px rgba(46,75,130,0.08); border-radius: 8px;">
+                                <div id="patientSummaryCard" class="card border-primary mb-3" style="background: #f8fbff; border: 1px solid #b8daff; border-left: 5px solid #2D4B7A; box-shadow: 0 3px 10px rgba(45,75,122,0.08); border-radius: 8px;">
                                     <div class="card-body py-3 px-4">
                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                             <div class="d-flex align-items-center flex-wrap">
                                                 <span class="badge badge-primary font-w600 mr-2 mb-1 py-1 px-2" style="font-size: 12.5px;" id="sumNoRm">RM# {{ $pasien->no_rm ?? '-' }}</span>
-                                                <span class="badge {{ $kategoriPasien == 'Anak' ? 'badge-success' : 'badge-secondary' }} font-w600 mr-2 mb-1 py-1 px-2" style="font-size: 12.5px;" id="sumKategori">Kategori: {{ $kategoriPasien }}</span>
+                                                <span class="badge badge-success font-w600 mr-2 mb-1 py-1 px-2" style="font-size: 12.5px;" id="sumKategori">Kategori: {{ $kategoriPasien }}</span>
                                                 <h5 class="mb-1 text-black font-w700" id="sumNama" style="font-size: 15.5px; color: #1e293b;">{{ $pasien->nama ?? '-' }}</h5>
                                             </div>
                                             <button type="button" class="btn btn-xs btn-outline-primary shadow-sm" data-toggle="modal" data-target="#modalPasien" style="font-size: 11.5px; font-weight: 600; border-radius: 4px;">
-                                                <i class="fa fa-refresh mr-1"></i> Ganti Pasien
+                                                <i class="fa-solid fa-rotate mr-1"></i> Ganti Pasien
                                             </button>
                                         </div>
                                         <div class="row pt-2" style="border-top: 1px dashed #cbd5e1;">
                                             <div class="col-md-4 col-sm-6 mb-2">
-                                                <small class="text-muted d-block font-w600" style="font-size: 11.5px;"><i class="fa fa-user-circle text-primary mr-1"></i> Kontak / Wali Pasien:</small>
+                                                <small class="text-muted d-block font-w600" style="font-size: 11.5px;"><i class="fa-solid fa-user-group text-primary mr-1"></i> Kontak / Wali Pasien:</small>
                                                 <span class="text-black font-w600" style="font-size: 13px;" id="sumWali">{{ $waliInfo }}</span>
                                             </div>
                                             <div class="col-md-4 col-sm-6 mb-2">
-                                                <small class="text-muted d-block font-w600" style="font-size: 11.5px;"><i class="fa fa-wheelchair text-primary mr-1"></i> Jenis Disabilitas:</small>
-                                                <span class="badge badge-info light font-w600" style="font-size: 12px;" id="sumDisabilitas">{{ $pasien->jenis_disabilitas ?? '-' }}</span>
+                                                <small class="text-muted d-block font-w600" style="font-size: 11.5px;"><i class="fa-solid fa-wheelchair text-primary mr-1"></i> Jenis Disabilitas:</small>
+                                                <span class="badge badge-info light font-w600" style="font-size: 12px;" id="sumDisabilitas">{{ $pasien->jenis_disabilitas ?: 'Umum' }}</span>
                                             </div>
                                             <div class="col-md-4 col-sm-6 mb-2">
-                                                <small class="text-muted d-block font-w600" style="font-size: 11.5px;"><i class="fa fa-info-circle text-primary mr-1"></i> Alat Bantu / Desil:</small>
+                                                <small class="text-muted d-block font-w600" style="font-size: 11.5px;"><i class="fa-solid fa-circle-info text-primary mr-1"></i> Alat Bantu / Desil:</small>
                                                 <span class="text-black font-w500" style="font-size: 12.5px;" id="sumExtra">{{ $extraInfo }}</span>
                                             </div>
                                         </div>
@@ -144,28 +144,11 @@
                             </div>
                         </div>
 
-                        <!-- BAGIAN 2: LAYANAN TERAPI & PENUGASAN TERAPIS -->
+                        <!-- BAGIAN 2: LAYANAN TERAPI, JADWAL SESI & PENUGASAN TERAPIS -->
                         <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
                             <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
-                                <i class="fa fa-stethoscope text-primary mr-2"></i> 2. Layanan Terapi & Penugasan Terapis
+                                <i class="fa fa-stethoscope text-primary mr-2"></i> 2. Layanan Terapi, Jadwal Sesi & Penugasan Terapis
                             </h5>
-                        </div>
-
-                        <div class="form-group row">
-                            @php $currentTerapi = old('layanan_terapi', $data->layanan_terapi); @endphp
-                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Layanan Terapi <span class="text-danger">*</span></label>
-                            <div class="col-sm-10">
-                                <select name="layanan_terapi" id="layanan_terapi" class="form-control" required style="height: 40px; font-size: 13px;">
-                                    <option value="">--Pilih Jenis Layanan Terapi yang Dituju--</option>
-                                    <option value="Fisioterapi" {{ $currentTerapi == 'Fisioterapi' ? 'selected' : '' }}>Fisioterapi</option>
-                                    <option value="Terapi Okupasi / Sensorik Integrasi" {{ $currentTerapi == 'Terapi Okupasi / Sensorik Integrasi' ? 'selected' : '' }}>Terapi Okupasi / Sensorik Integrasi</option>
-                                    <option value="Terapi Wicara" {{ $currentTerapi == 'Terapi Wicara' ? 'selected' : '' }}>Terapi Wicara</option>
-                                    <option value="Terapi Netra (Orientasi & Mobilitas)" {{ $currentTerapi == 'Terapi Netra (Orientasi & Mobilitas)' ? 'selected' : '' }}>Terapi Netra (Orientasi & Mobilitas)</option>
-                                </select>
-                                @error('layanan_terapi')
-                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
                         </div>
 
                         <div class="form-group row">
@@ -182,10 +165,27 @@
                                 @enderror
                             </div>
 
-                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Terapis / Dokter <span class="text-danger">*</span></label>
+                            @php $currentTerapi = old('layanan_terapi', $data->layanan_terapi); @endphp
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Layanan Terapi <span class="text-danger">*</span></label>
+                            <div class="col-sm-4">
+                                <select name="layanan_terapi" id="layanan_terapi" class="form-control" required style="height: 40px; font-size: 13px;">
+                                    <option value="">--Pilih Jenis Layanan Terapi--</option>
+                                    <option value="Fisioterapi" {{ $currentTerapi == 'Fisioterapi' ? 'selected' : '' }}>Fisioterapi</option>
+                                    <option value="Terapi Okupasi / Sensorik Integrasi" {{ $currentTerapi == 'Terapi Okupasi / Sensorik Integrasi' ? 'selected' : '' }}>Terapi Okupasi / Sensorik Integrasi</option>
+                                    <option value="Terapi Wicara" {{ $currentTerapi == 'Terapi Wicara' ? 'selected' : '' }}>Terapi Wicara</option>
+                                    <option value="Terapi Netra (Orientasi & Mobilitas)" {{ $currentTerapi == 'Terapi Netra (Orientasi & Mobilitas)' ? 'selected' : '' }}>Terapi Netra (Orientasi & Mobilitas)</option>
+                                </select>
+                                @error('layanan_terapi')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Terapis Pemeriksa <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
                                 <select name="dokter_id" id="dokter_id" class="form-control" required style="height: 40px; font-size: 13px;">
-                                    <option value="">--Pilih Terapis / Dokter--</option>
+                                    <option value="">--Pilih Terapis--</option>
                                     @if(isset($data->dokter))
                                         <option value="{{$data->dokter_id}}" selected>{{$data->dokter->nama}}</option>
                                     @endif
@@ -194,7 +194,25 @@
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
+
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Jadwal Sesi Terapi <small class="text-muted d-block">(Rabu, 30-45 mnt)</small></label>
+                            <div class="col-sm-4">
+                                @php $currentSesi = old('sesi_waktu', $data->sesi_waktu); @endphp
+                                <select name="sesi_waktu" class="form-control" style="height: 40px; font-size: 13px;">
+                                    <option value="">--Pilih Slot Sesi Waktu--</option>
+                                    <option value="Sesi 1 (08.00 - 08.45 WIB)" {{ $currentSesi == 'Sesi 1 (08.00 - 08.45 WIB)' ? 'selected' : '' }}>Sesi 1 (08.00 - 08.45 WIB)</option>
+                                    <option value="Sesi 2 (08.45 - 09.30 WIB)" {{ $currentSesi == 'Sesi 2 (08.45 - 09.30 WIB)' ? 'selected' : '' }}>Sesi 2 (08.45 - 09.30 WIB)</option>
+                                    <option value="Sesi 3 (09.30 - 10.15 WIB)" {{ $currentSesi == 'Sesi 3 (09.30 - 10.15 WIB)' ? 'selected' : '' }}>Sesi 3 (09.30 - 10.15 WIB)</option>
+                                    <option value="Sesi 4 (10.15 - 11.00 WIB)" {{ $currentSesi == 'Sesi 4 (10.15 - 11.00 WIB)' ? 'selected' : '' }}>Sesi 4 (10.15 - 11.00 WIB)</option>
+                                    <option value="Sesi 5 (11.00 - 11.45 WIB)" {{ $currentSesi == 'Sesi 5 (11.00 - 11.45 WIB)' ? 'selected' : '' }}>Sesi 5 (11.00 - 11.45 WIB)</option>
+                                    <option value="Sesi 6 (11.45 - 12.30 WIB)" {{ $currentSesi == 'Sesi 6 (11.45 - 12.30 WIB)' ? 'selected' : '' }}>Sesi 6 (11.45 - 12.30 WIB)</option>
+                                    <option value="Sesi 7 (12.30 - 13.00 WIB)" {{ $currentSesi == 'Sesi 7 (12.30 - 13.00 WIB)' ? 'selected' : '' }}>Sesi 7 (12.30 - 13.00 WIB)</option>
+                                    <option value="Sesi Khusus / Fleksibel" {{ $currentSesi == 'Sesi Khusus / Fleksibel' ? 'selected' : '' }}>Sesi Khusus / Fleksibel</option>
+                                </select>
+                            </div>
                         </div>
+
+
 
                         <!-- BAGIAN 3: ANAMNESA & KELUHAN -->
                         <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
@@ -258,20 +276,20 @@
         function loadDokter(selectedDokterId = null) {
             var poli = $("#poli").val();
             if (!poli) {
-                $("#dokter_id").html('<option value="">--Pilih Terapis / Dokter--</option>');
+                $("#dokter_id").html('<option value="">--Pilih Terapis--</option>');
                 return;
             }
 
             $.get("{{ route('getDokter') }}", { poli: poli }, function(response) {
-                var string = '<option value="">--Pilih Terapis / Dokter--</option>';
+                var stringUtama = '<option value="">--Pilih Terapis--</option>';
                 var listDokter = response.data ? response.data : response;
 
                 $.each(listDokter, function(index, value) {
-                    var isSelected = (selectedDokterId && selectedDokterId == value.id) ? 'selected' : '';
-                    string += `<option value="${value.id}" ${isSelected}>${value.nama}</option>`;
+                    var isSelectedUtama = (selectedDokterId && selectedDokterId == value.id) ? 'selected' : '';
+                    stringUtama += `<option value="${value.id}" ${isSelectedUtama}>${value.nama}</option>`;
                 });
 
-                $("#dokter_id").html(string);
+                $("#dokter_id").html(stringUtama);
             });
         }
 

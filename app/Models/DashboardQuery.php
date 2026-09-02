@@ -6,73 +6,86 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardQuery 
 {
+    protected function scopeUpt($query)
+    {
+        if (session()->has('selected_upt') && session('selected_upt') != '') {
+            $upt = session('selected_upt');
+            $query->where(function($q) use ($upt) {
+                $q->where('rekam.poli', 'LIKE', "%{$upt}%")
+                  ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");
+            });
+        }
+        return $query;
+    }
+
     public function perikaHariini()
     {
         $user = auth()->user();
         $role = $user->role_display();
-        return Rekam::whereDate('tgl_rekam', date('Y-m-d'))
+        $query = Rekam::whereDate('tgl_rekam', date('Y-m-d'))
                         ->when($role == "Dokter", function ($query) use ($user){
                             $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
                             if ($dokter) {
                                 $query->where('dokter_id', '=', $dokter->id);
                             }
-                        })
-                        ->count();
+                        });
+        return $this->scopeUpt($query)->count();
     }
 
     public function pasienAntri(){
         $user = auth()->user();
         $role = $user->role_display();
-        return Rekam::whereDate('tgl_rekam', date('Y-m-d'))
+        $query = Rekam::whereDate('tgl_rekam', date('Y-m-d'))
                         ->when($role == "Dokter", function ($query) use ($user){
                             $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
                             if ($dokter) {
                                 $query->where('dokter_id', '=', $dokter->id);
                             }
                         })
-                        ->whereIn('status', [1, 2])
-                        ->count();
+                        ->whereIn('status', [1, 2]);
+        return $this->scopeUpt($query)->count();
     }
 
     public function perikaBulanini()
     {
         $user = auth()->user();
         $role = $user->role_display();
-        return Rekam::whereMonth('tgl_rekam', date('m'))
+        $query = Rekam::whereMonth('tgl_rekam', date('m'))
                     ->whereYear('tgl_rekam', date('Y'))
                     ->when($role == "Dokter", function ($query) use ($user){
                         $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
                         if ($dokter) {
                             $query->where('dokter_id', '=', $dokter->id);
                         }
-                    })
-                    ->count();
+                    });
+        return $this->scopeUpt($query)->count();
     }
 
     public function perikaTahunini()
     {
         $user = auth()->user();
         $role = $user->role_display();
-        return Rekam::whereYear('tgl_rekam', date('Y'))
+        $query = Rekam::whereYear('tgl_rekam', date('Y'))
                     ->when($role == "Dokter", function ($query) use ($user){
                         $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
                         if ($dokter) {
                             $query->where('dokter_id', '=', $dokter->id);
                         }
-                    })
-                    ->count();
+                    });
+        return $this->scopeUpt($query)->count();
     }
 
     public function totalPeriksa()
     {
         $user = auth()->user();
         $role = $user->role_display();
-        return Rekam::when($role == "Dokter", function ($query) use ($user){
+        $query = Rekam::when($role == "Dokter", function ($query) use ($user){
             $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
             if ($dokter) {
                 $query->where('dokter_id', '=', $dokter->id);
             }
-        })->count();
+        });
+        return $this->scopeUpt($query)->count();
     }
 
     public function totalPasien()
@@ -300,7 +313,7 @@ class DashboardQuery
 
     public function getPasienPerOmahTerapiku()
     {
-        $allUnits = Omahterapiku::orderBy('nama', 'asc')->get();
+        $allUnits = Poli::orderBy('nama', 'asc')->get();
         
         $palette = [
             '#2e4b82', // Navy Blue

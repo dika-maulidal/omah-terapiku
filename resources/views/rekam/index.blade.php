@@ -11,11 +11,11 @@
                 <div class="row mb-3 align-items-center">
                     <!-- Tombol Aksi Kiri -->
                     <div class="col-md-6 col-12 mb-2 mb-md-0 d-flex align-items-center flex-wrap" style="gap: 6px;">
-                        <a href="{{Route('rekam.add')}}" class="btn btn-sm btn-primary" style="font-size: 13px; padding: 7px 14px; font-weight: 600;">
-                            <i class="fa fa-plus mr-1"></i> Rekam Medis Baru
+                        <a href="{{Route('rekam.add')}}" class="btn btn-sm btn-primary font-w600" style="font-size: 13px; padding: 7px 16px; border-radius: 6px;">
+                            <i class="fa-solid fa-circle-plus mr-1"></i> Input Sesi Terapi Baru
                         </a>
-                        <a href="{{Route('rekam.export-csv', ['keyword' => request('keyword'), 'status' => request('status', request('tab'))])}}" class="btn btn-sm btn-success" style="font-size: 13px; padding: 7px 14px; font-weight: 600;" title="Download data rekam medis ke CSV">
-                            <i class="fa fa-file-excel-o mr-1"></i> Export CSV
+                        <a href="{{Route('rekam.export-csv', ['keyword' => request('keyword'), 'status' => request('status', request('tab'))])}}" class="btn btn-sm btn-success font-w600" style="font-size: 13px; padding: 7px 14px; border-radius: 6px;" title="Download data rekam medis ke CSV">
+                            <i class="fa-solid fa-file-csv mr-1"></i> Export CSV
                         </a>
                     </div>
 
@@ -37,7 +37,7 @@
                                     <input type="text" class="form-control form-control-sm gp-search" name="keyword" value="{{request('keyword')}}" placeholder="Cari rekam / pasien..." autocomplete="off" style="height: 36px; font-size: 12.5px;">
                                     <div class="input-group-btn">
                                         <button type="submit" class="btn btn-primary btn-sm no-border gp-search" style="height: 36px; padding: 0 12px;">
-                                            <i class="ace-icon fa fa-search icon-on-right"></i>
+                                            <i class="ace-icon fa-solid fa-magnifying-glass icon-on-right"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -45,7 +45,7 @@
                                 <!-- Tombol Reset Filter -->
                                 @if(request('keyword') || request('status') || request('tab'))
                                     <a href="{{ Route('rekam') }}" class="btn btn-sm btn-light" style="height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border: 1px solid #e2e8f0;" title="Reset Filter">
-                                        <i class="fa fa-refresh"></i>
+                                        <i class="fa-solid fa-rotate-right"></i>
                                     </a>
                                 @endif
                             </div>
@@ -72,29 +72,37 @@
                                     <tr>
                                         <td style="vertical-align: middle;">{{ $rekams->firstItem() + $key }}</td>
                                         <td style="vertical-align: middle;">
-                                            <a href="{{Route('rekam.detail', $row->pasien_id)}}" class="font-w600 text-primary">
-                                                {{ $row->pasien && $row->pasien->no_rm ? $row->pasien->no_rm : ($row->no_rekam ?? '-') }}
-                                            </a>
-                                            <br><small class="text-muted"><i class="fa fa-calendar-o mr-1"></i>{{$row->tgl_rekam}}</small>
-                                        </td>
-                                        <td style="vertical-align: middle;">
-                                            <strong style="font-size: 13.5px; color: #1e293b;">
-                                                <a href="{{Route('rekam.detail', $row->pasien_id)}}" class="text-primary">{{$row->pasien->nama ?? '-'}}</a>
-                                            </strong>
-                                            @if ($row->pasien && $row->pasien->jenis_disabilitas && $row->pasien->jenis_disabilitas != 'Tidak Ada')
-                                                <br><span class="badge badge-info light font-w500 mt-1" style="font-size: 11px;">{{$row->pasien->jenis_disabilitas}}</span>
-                                            @endif
-                                            @if ($row->pasien && $row->pasien->nama_wali)
-                                                <br><small class="text-muted"><i class="fa fa-user-circle-o mr-1"></i>Wali: {{$row->pasien->nama_wali}}</small>
-                                            @endif
-                                        </td>
-                                        <td style="vertical-align: middle;">
-                                            <strong style="color: #334155;">{{$row->poli}}</strong>
-                                            @if ($row->layanan_terapi)
-                                                <br><span class="badge badge-primary light font-w600 mt-1" style="font-size: 11px;">{{$row->layanan_terapi}}</span>
-                                            @endif
-                                            <br><small class="text-muted"><i class="fa fa-user-md mr-1"></i>{{$row->dokter->nama ?? '-'}}</small>
-                                        </td>
+                                             <a href="{{Route('rekam.detail', $row->pasien_id)}}" class="font-w600 text-primary">
+                                                 {{ $row->pasien && $row->pasien->no_rm ? $row->pasien->no_rm : ($row->no_rekam ?? '-') }}
+                                             </a>
+                                             <br><small class="text-muted"><i class="fa-solid fa-calendar mr-1"></i>{{$row->tgl_rekam}}</small>
+                                             @if($row->sesi_waktu)
+                                                 <br><span class="badge badge-primary light mt-1 font-w600" style="font-size: 10px;">
+                                                     <i class="fa-solid fa-clock mr-1"></i> {{$row->sesi_waktu}}
+                                                 </span>
+                                             @endif
+                                         </td>
+                                         <td style="vertical-align: middle;">
+                                             <strong style="font-size: 13.5px; color: #1e293b;">
+                                                 <a href="{{Route('rekam.detail', $row->pasien_id)}}" class="text-primary">{{$row->pasien->nama ?? '-'}}</a>
+                                             </strong>
+                                             @if ($row->pasien && $row->pasien->jenis_disabilitas && $row->pasien->jenis_disabilitas != 'Tidak Ada')
+                                                 <br><span class="badge badge-info light font-w500 mt-1" style="font-size: 11px;">{{$row->pasien->jenis_disabilitas}}</span>
+                                             @endif
+                                             @if ($row->pasien && $row->pasien->nama_wali)
+                                                 <br><small class="text-muted"><i class="fa-solid fa-user-group mr-1"></i>Wali: {{$row->pasien->nama_wali}}</small>
+                                             @endif
+                                         </td>
+                                         <td style="vertical-align: middle;">
+                                             <strong style="color: #334155;">{{$row->upt_lokasi ?: ($row->poli ?: 'Omah Terapi')}}</strong>
+                                             @if ($row->layanan_terapi)
+                                                 <br><span class="badge badge-primary light font-w600 mt-1" style="font-size: 11px;">{{$row->layanan_terapi}}</span>
+                                             @endif
+                                             <br><small class="text-muted"><i class="fa-solid fa-user-doctor mr-1"></i>{{$row->dokter->nama ?? '-'}}</small>
+                                             @if($row->terapisPendamping)
+                                                 <br><small class="text-info"><i class="fa-solid fa-hands-holding-child mr-1"></i>Pendamping: {{$row->terapisPendamping->nama}}</small>
+                                             @endif
+                                         </td>
                                         <td style="vertical-align: middle; max-width: 260px;">
                                             <span style="font-size: 12.5px; line-height: 1.4; color: #475569;">
                                                 {{$row->keluhan ?: '-'}}
@@ -106,18 +114,18 @@
                                         <td style="white-space: nowrap; vertical-align: middle;">
                                             <div class="d-flex align-items-center justify-content-center">
                                                 <a href="{{Route('rekam.detail', $row->pasien_id)}}" class="btn btn-primary shadow btn-xs sharp mr-1" title="Lihat Rekam Medis">
-                                                    <i class="fa fa-eye"></i>
+                                                    <i class="fa-solid fa-eye"></i>
                                                 </a>
                                                 <a href="{{Route('rekam.assessment', $row->id)}}" class="btn btn-warning shadow btn-xs sharp mr-1" title="Form Assessment Terapis">
-                                                    <i class="fa fa-clipboard"></i>
+                                                    <i class="fa-solid fa-clipboard-list"></i>
                                                 </a>
                                                 @if (auth()->user()->role_display() == "Admin" && $row->status == 2)
                                                     <a href="{{Route('rekam.edit', $row->id)}}" class="btn btn-info shadow btn-xs sharp mr-1" title="Edit Data Rekam Medis">
-                                                        <i class="fa fa-pencil"></i>
+                                                        <i class="fa-solid fa-pencil"></i>
                                                     </a>
                                                     <a href="#" class="btn btn-danger shadow btn-xs sharp delete" r-link="{{Route('rekam.delete', $row->id)}}"
                                                        r-name="{{$row->pasien->nama ?? 'Rekam'}}" r-id="{{$row->id}}" title="Hapus Data">
-                                                        <i class="fa fa-trash"></i>
+                                                        <i class="fa-solid fa-trash"></i>
                                                     </a>
                                                 @endif
                                             </div>

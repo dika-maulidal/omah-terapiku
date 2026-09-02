@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Events\StatusRekamUpdate;
 use App\Models\Dokter;
-use App\Models\KondisiGigi;
 use App\Models\Pasien;
 use App\Models\Poli;
 use App\Models\Rekam;
+use App\Models\RekamAssessment;
 use App\Models\Tindakan;
 use App\Notifications\RekamUpdateNotification;
 use App\User;
@@ -27,6 +27,13 @@ class RekamController extends Controller
                     ->leftJoin('pasien', function($join) {
                         $join->on('rekam.pasien_id', '=', 'pasien.id');
                     })
+                    ->when(session('selected_upt'), function ($query) {
+                        $upt = session('selected_upt');
+                        $query->where(function ($q) use ($upt) {
+                            $q->where('rekam.poli', 'LIKE', "%{$upt}%")
+                              ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");
+                        });
+                    })
                     ->when($request->keyword, function ($query) use ($request) {
                         $query->where(function ($q) use ($request) {
                             $q->where('rekam.tgl_rekam', 'LIKE', "%{$request->keyword}%")
@@ -41,7 +48,10 @@ class RekamController extends Controller
                     ->when($role == "Dokter", function ($query) use ($user) {
                         $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
                         if ($dokter) {
-                            $query->where('rekam.dokter_id', '=', $dokter->id);
+                            $query->where(function($q) use ($dokter) {
+                                $q->where('rekam.dokter_id', '=', $dokter->id)
+                                  ->orWhere('rekam.terapis_pendamping_id', '=', $dokter->id);
+                            });
                         }
                     })
                     ->when($request->filled('status') || $request->filled('tab'), function ($query) use ($request, $role) {
@@ -59,6 +69,7 @@ class RekamController extends Controller
                             $query->where('rekam.status', '=', $status);
                         }
                     })
+                    ->with(['pasien', 'dokter', 'terapisPendamping'])
                     ->paginate(10);
         return view('rekam.index', compact('rekams'));
     }
@@ -73,6 +84,13 @@ class RekamController extends Controller
                     ->leftJoin('pasien', function($join) {
                         $join->on('rekam.pasien_id', '=', 'pasien.id');
                     })
+                    ->when(session('selected_upt'), function ($query) {
+                        $upt = session('selected_upt');
+                        $query->where(function ($q) use ($upt) {
+                            $q->where('rekam.poli', 'LIKE', "%{$upt}%")
+                              ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");
+                        });
+                    })
                     ->when($request->keyword, function ($query) use ($request) {
                         $query->where(function ($q) use ($request) {
                             $q->where('rekam.tgl_rekam', 'LIKE', "%{$request->keyword}%")
@@ -87,7 +105,10 @@ class RekamController extends Controller
                     ->when($role == "Dokter", function ($query) use ($user) {
                         $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
                         if ($dokter) {
-                            $query->where('rekam.dokter_id', '=', $dokter->id);
+                            $query->where(function($q) use ($dokter) {
+                                $q->where('rekam.dokter_id', '=', $dokter->id)
+                                  ->orWhere('rekam.terapis_pendamping_id', '=', $dokter->id);
+                            });
                         }
                     })
                     ->when($request->filled('status') || $request->filled('tab'), function ($query) use ($request, $role) {
@@ -105,7 +126,7 @@ class RekamController extends Controller
                             $query->where('rekam.status', '=', $status);
                         }
                     })
-                    ->with(['pasien', 'dokter'])
+                    ->with(['pasien', 'dokter', 'terapisPendamping'])
                     ->get();
 
         $filename = 'data-rekam-medis-' . date('Y-m-d_His') . '.csv';
@@ -159,14 +180,16 @@ class RekamController extends Controller
                     $statusText = 'Selesai';
                 }
 
-                // Diagnosa text list
-                $diagnosaList = [];
-                if ($row->diagnosa() && count($row->diagnosa()) > 0) {
+                // Assessment / Diagnosa text
+                $diagnosaText = $row->diagnosa ?: '';
+                if (!$diagnosaText && $row->diagnosa() && count($row->diagnosa()) > 0) {
+                    $diagnosaList = [];
                     foreach ($row->diagnosa() as $diag) {
-                        $diagnosaList[] = ($diag->diagnosa ?? '') . ($diag->nama_diagnosa ? ' - ' . $diag->nama_diagnosa : '');
+                        $diagnosaList[] = ($diag->diagnosa ?? '');
                     }
+                    $diagnosaText = implode('; ', $diagnosaList);
                 }
-                $diagnosaText = count($diagnosaList) > 0 ? implode('; ', $diagnosaList) : '-';
+                $diagnosaText = $diagnosaText ?: '-';
 
                 fputcsv($file, [
                     $index++,
@@ -197,24 +220,27 @@ class RekamController extends Controller
 
     public function add(Request $request)
     {
-        $poli = Poli::all();
-        return view('rekam.add', compact('poli'));
+        $poli = Poli::where('status', 1)->get();
+        $dokters = Dokter::where('status', 1)->get();
+        return view('rekam.add', compact('poli', 'dokters'));
     }
 
     public function edit(Request $request, $id)
     {
-        $poli = Poli::all();
-        $data = Rekam::find($id);
-        return view('rekam.edit', compact('data', 'poli'));
+        $poli = Poli::where('status', 1)->get();
+        $dokters = Dokter::where('status', 1)->get();
+        $data = Rekam::with(['terapisPendamping'])->findOrFail($id);
+        return view('rekam.edit', compact('data', 'poli', 'dokters'));
     }
 
     public function detail(Request $request, $pasien_id)
     {
-        $pasien = Pasien::find($pasien_id);
+        $pasien = Pasien::findOrFail($pasien_id);
         
         $rekamLatest = Rekam::latest()
                             ->where('status', '!=', 5)
                             ->where('pasien_id', $pasien_id)
+                            ->with(['dokter', 'terapisPendamping', 'assessment'])
                             ->first();
 
         $rekams = Rekam::latest()
@@ -225,14 +251,25 @@ class RekamController extends Controller
                     ->when($request->poli, function ($query) use ($request) {
                         $query->where('poli', 'LIKE', "%{$request->poli}%");
                     })
-                    ->paginate(5);
+                    ->with(['dokter', 'terapisPendamping', 'assessment'])
+                    ->paginate(10);
                     
         if ($rekamLatest) {
             auth()->user()->notifications->where('data.no_rekam', $rekamLatest->no_rekam)->markAsRead();
         }
         $poli = Poli::where('status', 1)->get();
 
-        return view('rekam.detail-rekam', compact('pasien', 'rekams', 'rekamLatest', 'poli'));
+        // Riwayat Asesmen Lengkap Penerima Manfaat
+        $riwayatAssessment = RekamAssessment::where('pasien_id', $pasien_id)
+            ->orderBy('tgl_assessment', 'desc')
+            ->orderBy('id', 'desc')
+            ->with(['dokter', 'rekam'])
+            ->get();
+
+        $latestAssessment = $riwayatAssessment->first();
+        $masterTindakan = Tindakan::orderBy('kode', 'asc')->get();
+
+        return view('rekam.detail-rekam', compact('pasien', 'rekams', 'rekamLatest', 'poli', 'riwayatAssessment', 'latestAssessment', 'masterTindakan'));
     }
 
     function store(Request $request)
@@ -264,6 +301,8 @@ class RekamController extends Controller
                                     ->withErrors(['pasien_id' => 'Pasien ini masih belum selesai periksa, harap selesaikan pemeriksaan sebelumnya']);
         }
 
+        $upt = $request->upt_lokasi ?: ($request->poli ?: (session('selected_upt') ?: null));
+
         $request->merge([
             'no_rekam' => "REG#" . date('Ymd') . $request->pasien_id,
             'petugas_id' => auth()->user()->id,
@@ -272,13 +311,16 @@ class RekamController extends Controller
             'biaya_pemeriksaan' => 0,
             'biaya_tindakan' => 0,
             'biaya_obat' => 0,
-            'total_biaya' => 0
+            'total_biaya' => 0,
+            'upt_lokasi' => $upt,
+            'sesi_waktu' => $request->sesi_waktu,
+            'terapis_pendamping_id' => $request->terapis_pendamping_id ?: null,
         ]);
 
         Rekam::create($request->all());
 
         return redirect()->route('rekam.detail', $request->pasien_id)
-                        ->with('sukses', 'Pendaftaran Berhasil, Silakan lakukan pemeriksaan dan teruskan ke dokter terkait');
+                        ->with('sukses', 'Sesi Terapi Berhasil Didaftarkan. Silakan lakukan pemeriksaan dan proses terapi.');
     }
 
     function update(Request $request, $id)
@@ -301,18 +343,23 @@ class RekamController extends Controller
                                     ->withErrors(['pasien_id' => 'Data Pasien Tidak Ditemukan']);
         }
         
-        $rekam = Rekam::find($id);
+        $rekam = Rekam::findOrFail($id);
+        $upt = $request->upt_lokasi ?: ($request->poli ?: (session('selected_upt') ?: null));
+
         $request->merge([
             'cara_bayar' => 'Gratis',
             'biaya_pemeriksaan' => 0,
             'biaya_tindakan' => 0,
             'biaya_obat' => 0,
-            'total_biaya' => 0
+            'total_biaya' => 0,
+            'upt_lokasi' => $upt,
+            'sesi_waktu' => $request->sesi_waktu,
+            'terapis_pendamping_id' => $request->terapis_pendamping_id ?: null,
         ]);
         $rekam->update($request->all());
 
         return redirect()->route('rekam.detail', $request->pasien_id)
-                        ->with('sukses', 'Berhasil diperbaharui, Silakan lakukan pemeriksaan dan teruskan ke dokter terkait');
+                        ->with('sukses', 'Data Sesi Terapi Berhasil Diperbaharui.');
     }
 
     public function rekam_status(Request $request, $id, $status)

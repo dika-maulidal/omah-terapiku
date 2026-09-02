@@ -27,9 +27,9 @@
         </div>
     </div>
 
-    <!-- Stat Widgets (Top Row) -->
+    <!-- Stat Widgets (Top Row - DESIGN.md Section 4.B) -->
     <div class="row">
-        <!-- Pendaftaran Hari Ini -->
+        <!-- Card 1: Pendaftaran Hari Ini (Ocean Navy #2D4B7A) -->
         <div class="col-xl-3 col-sm-6">
             <div class="ot-stat-card ot-navy">
                 <div class="d-flex align-items-center justify-content-between">
@@ -38,7 +38,7 @@
                         <h2 class="ot-stat-number">{{ $query->perikaHariini() }}</h2>
                     </div>
                     <div class="ot-stat-icon-wrap">
-                        <i class="fa fa-calendar-check-o"></i>
+                        <i class="fa-solid fa-clipboard-check"></i>
                     </div>
                 </div>
                 <div class="ot-stat-footer">
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <!-- Total Penerima Manfaat -->
+        <!-- Card 2: Total Penerima Manfaat (Sky Blue #38A5DB) -->
         <div class="col-xl-3 col-sm-6">
             <div class="ot-stat-card ot-cyan">
                 <div class="d-flex align-items-center justify-content-between">
@@ -57,7 +57,7 @@
                         <h2 class="ot-stat-number">{{ $query->totalPasien() }}</h2>
                     </div>
                     <div class="ot-stat-icon-wrap">
-                        <i class="fa fa-users"></i>
+                        <i class="fa-solid fa-wheelchair"></i>
                     </div>
                 </div>
                 <div class="ot-stat-footer">
@@ -67,39 +67,39 @@
             </div>
         </div>
 
-        <!-- Total Terapis -->
+        <!-- Card 3: Total Terapis (Emerald Green #2EB88A) -->
         <div class="col-xl-3 col-sm-6">
-            <div class="ot-stat-card ot-yellow">
+            <div class="ot-stat-card ot-green">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <p class="ot-stat-title">Total Terapis</p>
                         <h2 class="ot-stat-number">{{ $query->totalDoktor() }}</h2>
                     </div>
                     <div class="ot-stat-icon-wrap">
-                        <i class="fa fa-user-md"></i>
+                        <i class="fa-solid fa-user-doctor"></i>
                     </div>
                 </div>
                 <div class="ot-stat-footer">
-                    <span class="badge badge-pill badge-warning light">Aktif</span>
+                    <span class="badge badge-pill badge-success light">Aktif</span>
                     <span>Terapis Medis</span>
                 </div>
             </div>
         </div>
 
-        <!-- Total Riwayat Periksa -->
+        <!-- Card 4: Total Riwayat Periksa (Warm Gold #F3B329) -->
         <div class="col-xl-3 col-sm-6">
-            <div class="ot-stat-card ot-green">
+            <div class="ot-stat-card ot-yellow">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <p class="ot-stat-title">Total Riwayat Periksa</p>
                         <h2 class="ot-stat-number">{{ $query->totalPeriksa() }}</h2>
                     </div>
                     <div class="ot-stat-icon-wrap">
-                        <i class="fa fa-file-text-o"></i>
+                        <i class="fa-solid fa-notes-medical"></i>
                     </div>
                 </div>
                 <div class="ot-stat-footer">
-                    <span class="badge badge-pill badge-success light">Akumulasi</span>
+                    <span class="badge badge-pill badge-warning light">Akumulasi</span>
                     <span>Tahun {{ date('Y') }}: {{ $query->perikaTahunini() }}</span>
                 </div>
             </div>
@@ -607,10 +607,10 @@ $(document).ready(function() {
                     statusData.selesai
                 ],
                 backgroundColor: [
-                    '#ff9f43',
-                    '#2e4b82',
-                    '#7367f0',
-                    '#28c76f'
+                    '#F3B329', // Antrian (Warm Gold)
+                    '#2D4B7A', // Pemeriksaan (Ocean Navy)
+                    '#38A5DB', // Menunggu (Sky Blue)
+                    '#2EB88A'  // Selesai (Emerald Green)
                 ],
                 borderWidth: 2,
                 borderColor: '#ffffff'
@@ -647,12 +647,12 @@ $(document).ready(function() {
     var tren7HariData = {!! json_encode($tren7Hari) !!};
 
     var gradientPeriksa = ctxTren.createLinearGradient(0, 0, 0, 240);
-    gradientPeriksa.addColorStop(0, 'rgba(46, 75, 130, 0.35)');
-    gradientPeriksa.addColorStop(1, 'rgba(46, 75, 130, 0.02)');
+    gradientPeriksa.addColorStop(0, 'rgba(45, 75, 122, 0.35)');
+    gradientPeriksa.addColorStop(1, 'rgba(45, 75, 122, 0.02)');
 
     var gradientPasien = ctxTren.createLinearGradient(0, 0, 0, 240);
-    gradientPasien.addColorStop(0, 'rgba(245, 166, 35, 0.3)');
-    gradientPasien.addColorStop(1, 'rgba(245, 166, 35, 0.01)');
+    gradientPasien.addColorStop(0, 'rgba(243, 179, 41, 0.35)');
+    gradientPasien.addColorStop(1, 'rgba(243, 179, 41, 0.01)');
 
     var chart7Hari = new Chart(ctxTren, {
         type: 'line',
@@ -662,11 +662,11 @@ $(document).ready(function() {
                 {
                     label: 'Pelayanan Rekam Medis',
                     data: tren7HariData.periksa,
-                    borderColor: '#2e4b82',
+                    borderColor: '#2D4B7A',
                     backgroundColor: gradientPeriksa,
                     borderWidth: 2.5,
                     pointBackgroundColor: '#ffffff',
-                    pointBorderColor: '#2e4b82',
+                    pointBorderColor: '#2D4B7A',
                     pointBorderWidth: 2,
                     pointRadius: 4,
                     pointHoverRadius: 6,
@@ -676,11 +676,11 @@ $(document).ready(function() {
                 {
                     label: 'Penerima Manfaat Baru',
                     data: tren7HariData.pasien_baru,
-                    borderColor: '#f5a623',
+                    borderColor: '#F3B329',
                     backgroundColor: gradientPasien,
                     borderWidth: 2.5,
                     pointBackgroundColor: '#ffffff',
-                    pointBorderColor: '#f5a623',
+                    pointBorderColor: '#F3B329',
                     pointBorderWidth: 2,
                     pointRadius: 4,
                     pointHoverRadius: 6,

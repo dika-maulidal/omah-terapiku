@@ -21,7 +21,7 @@
                         <!-- BAGIAN: IDENTITAS UTAMA -->
                         <div class="d-flex align-items-center mb-3 pb-2" style="border-bottom: 2px solid #edf2f7;">
                             <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
-                                <i class="fa fa-id-card text-primary mr-2"></i> Identitas Penerima Manfaat
+                                <i class="fa-solid fa-id-card text-primary mr-2"></i> Identitas Penerima Manfaat
                             </h5>
                         </div>
 
@@ -29,10 +29,10 @@
                             <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">No. Rekam Medis</label>
                             <div class="col-sm-4">
                                 <div class="d-flex align-items-center" style="height: 40px; background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 12px;">
-                                    <i class="fa fa-id-card-o mr-2" style="color: var(--ot-navy); font-size: 15px;"></i>
+                                    <i class="fa-solid fa-id-card mr-2" style="color: var(--ot-navy); font-size: 15px;"></i>
                                     <input type="text" class="font-w700" name="no_rm" readonly value="{{ $autoNoRm ?? 'OTK-' . date('y') . '-XXXXX' }}" style="background: transparent; border: none; outline: none; box-shadow: none; color: var(--ot-navy); font-size: 13.5px; width: 100%; letter-spacing: 0.5px; padding: 0;">
                                 </div>
-                                <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa fa-magic mr-1"></i>Nomor RM ter-generate otomatis (OTK-{{ date('y') }}-XXXXX)</small>
+                                <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Nomor RM ter-generate otomatis (OTK-{{ date('y') }}-XXXXX)</small>
                             </div>
 
                             <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">NIK</label>
@@ -160,7 +160,7 @@
                         <!-- BAGIAN: KONTAK & ALAMAT DOMISILI -->
                         <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
                             <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
-                                <i class="fa fa-map-marker text-primary mr-2"></i> Kontak & Alamat Domisili
+                                <i class="fa-solid fa-location-dot text-primary mr-2"></i> Kontak & Alamat Domisili
                             </h5>
                         </div>
 
@@ -228,10 +228,10 @@
                             </div>
                         </div>
 
-                        <!-- BAGIAN: DATA SOSIAL, DISABILITAS & WALI -->
+                        <!-- BAGIAN: DATA SOSIAL, DISABILITAS, UPT & WALI -->
                         <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
                             <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
-                                <i class="fa fa-users text-primary mr-2"></i> Data Sosial, Disabilitas & Wali
+                                <i class="fa-solid fa-wheelchair text-primary mr-2"></i> Data Sosial, Disabilitas, UPT & Wali
                             </h5>
                         </div>
 
@@ -240,11 +240,11 @@
                             <div class="col-sm-4">
                                 <select name="desil" class="form-control" id="desil" style="height: 40px; font-size: 13px;">
                                     <option value="">--Pilih Tingkat Desil Sosial--</option>
-                                    <option value="Desil 1" {{ old('desil') == 'Desil 1' ? 'selected' : '' }}>Desil 1 (Sangat Miskin)</option>
+                                    <option value="Desil 1" {{ old('desil') == 'Desil 1' ? 'selected' : '' }}>Desil 1 (Sangat Miskin / Ekstrem)</option>
                                     <option value="Desil 2" {{ old('desil') == 'Desil 2' ? 'selected' : '' }}>Desil 2 (Miskin)</option>
                                     <option value="Desil 3" {{ old('desil') == 'Desil 3' ? 'selected' : '' }}>Desil 3 (Hampir Miskin)</option>
                                     <option value="Desil 4" {{ old('desil') == 'Desil 4' ? 'selected' : '' }}>Desil 4 (Rentan Miskin)</option>
-                                    <option value="Desil 5" {{ old('desil') == 'Desil 5' ? 'selected' : '' }}>Desil 5</option>
+                                    <option value="Desil 5" {{ old('desil') == 'Desil 5' ? 'selected' : '' }}>Desil 5 (Menengah Bawah)</option>
                                     <option value="Desil 6" {{ old('desil') == 'Desil 6' ? 'selected' : '' }}>Desil 6</option>
                                     <option value="Desil 7" {{ old('desil') == 'Desil 7' ? 'selected' : '' }}>Desil 7</option>
                                     <option value="Desil 8" {{ old('desil') == 'Desil 8' ? 'selected' : '' }}>Desil 8</option>
@@ -252,18 +252,37 @@
                                     <option value="Desil 10" {{ old('desil') == 'Desil 10' ? 'selected' : '' }}>Desil 10</option>
                                     <option value="Non-Desil" {{ old('desil') == 'Non-Desil' ? 'selected' : '' }}>Non-Desil / Belum Terdata</option>
                                 </select>
+                                <div id="desilBadge" class="mt-2 d-none"></div>
                                 @error('desil')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
 
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">UPT Lokasi Domisili</label>
+                            <div class="col-sm-4">
+                                <select name="upt_lokasi" class="form-control" style="height: 40px; font-size: 13px;">
+                                    @php $currentUpt = old('upt_lokasi', session('selected_upt', 'UPT PPSAB Sidoarjo')); @endphp
+                                    @if(isset($polis) && count($polis) > 0)
+                                        @foreach($polis as $p)
+                                            <option value="{{ $p->nama }}" {{ $currentUpt == $p->nama ? 'selected' : '' }}>{{ $p->nama }}</option>
+                                        @endforeach
+                                    @else
+                                        <option value="UPT PPSAB Sidoarjo" {{ $currentUpt == 'UPT PPSAB Sidoarjo' ? 'selected' : '' }}>UPT PPSAB Sidoarjo</option>
+                                        <option value="Balai RS PMKS Sidoarjo" {{ $currentUpt == 'Balai RS PMKS Sidoarjo' ? 'selected' : '' }}>Balai RS PMKS Sidoarjo</option>
+                                        <option value="UPT RSBN Malang" {{ $currentUpt == 'UPT RSBN Malang' ? 'selected' : '' }}>UPT RSBN Malang</option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row align-items-center">
                             <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Verifikasi DTKS</label>
                             <div class="col-sm-4">
                                 <a href="https://cekbansos.kemensos.go.id/" target="_blank" rel="noopener noreferrer" 
                                    class="btn btn-outline-primary btn-block d-flex align-items-center justify-content-center" 
                                    style="height: 40px; font-size: 12.5px; font-weight: 600; border-color: var(--ot-navy); color: var(--ot-navy); background: #f8fafc; border-style: dashed;"
                                    title="Buka portal Cek Bansos Kemensos RI">
-                                    <i class="fa fa-external-link mr-2"></i> Cek Desil di Kemensos
+                                    <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> Cek Desil di Kemensos
                                 </a>
                             </div>
                         </div>
@@ -294,35 +313,57 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Jenis Disabilitas</label>
-                            <div class="col-sm-4">
-                                <select name="jenis_disabilitas" class="form-control" style="height: 40px; font-size: 13px;">
-                                    <option value="">--Pilih Jenis Disabilitas--</option>
-                                    <option value="Tidak Ada" {{ old('jenis_disabilitas') == 'Tidak Ada' ? 'selected' : '' }}>Tidak Ada</option>
-                                    <option value="Fisik" {{ old('jenis_disabilitas') == 'Fisik' ? 'selected' : '' }}>Fisik</option>
-                                    <option value="Intelektual" {{ old('jenis_disabilitas') == 'Intelektual' ? 'selected' : '' }}>Intelektual</option>
-                                    <option value="Sensorik Netra" {{ old('jenis_disabilitas') == 'Sensorik Netra' ? 'selected' : '' }}>Sensorik Netra</option>
-                                    <option value="Sensorik Rungu/Wicara" {{ old('jenis_disabilitas') == 'Sensorik Rungu/Wicara' ? 'selected' : '' }}>Sensorik Rungu/Wicara</option>
-                                    <option value="Ganda" {{ old('jenis_disabilitas') == 'Ganda' ? 'selected' : '' }}>Ganda</option>
-                                    <option value="Lainnya" {{ old('jenis_disabilitas') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
-                                </select>
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Jenis Disabilitas <small class="text-muted d-block">(Bisa pilih > 1)</small></label>
+                            <div class="col-sm-10">
+                                @php
+                                    $oldDis = (array) old('jenis_disabilitas', []);
+                                    $disOpts = ['Fisik', 'Intelektual', 'Mental', 'Sensorik Netra', 'Sensorik Rungu/Wicara', 'Ganda', 'Lainnya'];
+                                @endphp
+                                <div class="d-flex flex-wrap" style="gap: 8px;">
+                                    @foreach($disOpts as $disOpt)
+                                        <label class="check-pill-card {{ in_array($disOpt, $oldDis) ? 'active' : '' }}" style="padding: 6px 14px; font-size: 12.5px; border-radius: 6px;">
+                                            <input type="checkbox" name="jenis_disabilitas[]" value="{{ $disOpt }}" {{ in_array($disOpt, $oldDis) ? 'checked' : '' }}>
+                                            <span>{{ $disOpt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <div id="wrapper_disabilitas_lainnya" class="mt-2 {{ in_array('Lainnya', $oldDis) ? '' : 'd-none' }}" style="max-width: 480px;">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-light font-w600 text-primary" style="font-size: 12px;">Sebutkan Disabilitas Lainnya:</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="jenis_disabilitas_lainnya" id="input_disabilitas_lainnya" placeholder="Tuliskan ragam disabilitas..." value="{{ old('jenis_disabilitas_lainnya') }}" style="height: 38px; font-size: 12.5px;">
+                                    </div>
+                                </div>
                                 @error('jenis_disabilitas')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
+                        </div>
 
-                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Alat Bantu Mobilitas</label>
-                            <div class="col-sm-4">
-                                <select name="alat_bantu" class="form-control" style="height: 40px; font-size: 13px;">
-                                    <option value="">--Pilih Alat Bantu--</option>
-                                    <option value="Tidak Ada" {{ old('alat_bantu') == 'Tidak Ada' ? 'selected' : '' }}>Tidak Ada</option>
-                                    <option value="Kursi Roda" {{ old('alat_bantu') == 'Kursi Roda' ? 'selected' : '' }}>Kursi Roda</option>
-                                    <option value="Tongkat Ketiak (Crutches)" {{ old('alat_bantu') == 'Tongkat Ketiak (Crutches)' ? 'selected' : '' }}>Tongkat Ketiak (Crutches)</option>
-                                    <option value="Walker" {{ old('alat_bantu') == 'Walker' ? 'selected' : '' }}>Walker</option>
-                                    <option value="Alat Bantu Dengar" {{ old('alat_bantu') == 'Alat Bantu Dengar' ? 'selected' : '' }}>Alat Bantu Dengar</option>
-                                    <option value="Kruk / Tongkat Penuntun" {{ old('alat_bantu') == 'Kruk / Tongkat Penuntun' ? 'selected' : '' }}>Kruk / Tongkat Penuntun</option>
-                                    <option value="Lainnya" {{ old('alat_bantu') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
-                                </select>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Alat Bantu Mobilitas <small class="text-muted d-block">(Bisa pilih > 1)</small></label>
+                            <div class="col-sm-10">
+                                @php
+                                    $oldAb = (array) old('alat_bantu', ['Tidak Ada']);
+                                    $abOpts = ['Tidak Ada', 'Kursi Roda', 'Tongkat Ketiak (Crutches)', 'Walker', 'Tripod / Quadripod', 'Alat Bantu Dengar', 'Kruk / Tongkat Penuntun', 'AFO / Splint', 'Lainnya'];
+                                @endphp
+                                <div class="d-flex flex-wrap" style="gap: 8px;">
+                                    @foreach($abOpts as $abOpt)
+                                        <label class="check-pill-card {{ in_array($abOpt, $oldAb) ? 'active' : '' }}" style="padding: 6px 14px; font-size: 12.5px; border-radius: 6px;">
+                                            <input type="checkbox" name="alat_bantu[]" value="{{ $abOpt }}" {{ in_array($abOpt, $oldAb) ? 'checked' : '' }}>
+                                            <span>{{ $abOpt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <div id="wrapper_alat_bantu_lainnya" class="mt-2 {{ in_array('Lainnya', $oldAb) ? '' : 'd-none' }}" style="max-width: 480px;">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-light font-w600 text-primary" style="font-size: 12px;">Sebutkan Alat Bantu Lainnya:</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="alat_bantu_lainnya" id="input_alat_bantu_lainnya" placeholder="Tuliskan alat bantu..." value="{{ old('alat_bantu_lainnya') }}" style="height: 38px; font-size: 12.5px;">
+                                    </div>
+                                </div>
                                 @error('alat_bantu')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
@@ -332,7 +373,7 @@
                         <!-- BAGIAN: BERKAS & DOKUMEN PENDUKUNG -->
                         <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
                             <h5 class="text-primary font-w700 mb-0" style="color: var(--ot-navy) !important; font-size: 15px;">
-                                <i class="fa fa-folder-open text-primary mr-2"></i> Berkas & Dokumen Pendukung (Opsional)
+                                <i class="fa-solid fa-folder-open text-primary mr-2"></i> Berkas & Dokumen Pendukung (Opsional)
                             </h5>
                         </div>
 
@@ -340,7 +381,7 @@
                             <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">File Kartu Keluarga (KK)</label>
                             <div class="col-sm-10">
                                 <input type="file" class="form-control-file" name="file_kk" accept=".jpg,.jpeg,.png,.pdf">
-                                <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa fa-info-circle mr-1"></i>Format: JPG, JPEG, PNG, PDF (Maksimal 10MB)</small>
+                                <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa-solid fa-circle-info mr-1"></i>Format: JPG, JPEG, PNG, PDF (Maksimal 10MB)</small>
                                 @error('file_kk')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
@@ -351,7 +392,7 @@
                             <label class="col-sm-2 col-form-label font-w600" style="font-size: 13px;">Surat Resume / Riwayat Berobat</label>
                             <div class="col-sm-10">
                                 <input type="file" class="form-control-file" name="file_resume" accept=".jpg,.jpeg,.png,.pdf">
-                                <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa fa-info-circle mr-1"></i>Format: JPG, JPEG, PNG, PDF (Maksimal 10MB) - Berkas rekam medis atau surat keterangan rujukan/berobat sebelumnya jika ada</small>
+                                <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa-solid fa-circle-info mr-1"></i>Format: JPG, JPEG, PNG, PDF (Maksimal 10MB) - Berkas rekam medis atau surat keterangan rujukan/berobat sebelumnya jika ada</small>
                                 @error('file_resume')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
@@ -361,10 +402,10 @@
                         <!-- TOMBOL AKSI SIMPAN -->
                         <div class="d-flex align-items-center justify-content-between pt-3 mt-4" style="border-top: 1px solid #edf2f7;">
                             <a href="{{Route('penerima-manfaat')}}" class="btn btn-sm btn-light" style="padding: 8px 18px; font-size: 13px; font-weight: 600; border: 1px solid #e2e8f0; border-radius: 6px;">
-                                <i class="fa fa-arrow-left mr-1"></i> Kembali
+                                <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
                             </a>
                             <button type="submit" class="btn btn-sm btn-primary" style="padding: 8px 24px; font-size: 13px; font-weight: 600; border-radius: 6px;">
-                                <i class="fa fa-save mr-1"></i> Simpan Data
+                                <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Data
                             </button>
                         </div>
 
@@ -376,8 +417,97 @@
 </div>
 @endsection
 
+@section('style')
+<style>
+.check-pill-card {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #334155;
+    transition: all 0.15s ease-in-out;
+    user-select: none;
+    margin-bottom: 0;
+}
+
+.check-pill-card:hover {
+    background: #f8fafc;
+    border-color: #38A5DB;
+    color: #2D4B7A;
+}
+
+.check-pill-card input[type="checkbox"] {
+    margin: 0 8px 0 0;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    accent-color: #2D4B7A;
+    vertical-align: middle;
+}
+
+.check-pill-card.active,
+.check-pill-card:has(input:checked) {
+    background: #edf3fc !important;
+    border-color: #2D4B7A !important;
+    color: #2D4B7A !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 6px rgba(45, 75, 122, 0.12) !important;
+}
+</style>
+@endsection
+
 @section('script')
 <script>
-    // Nomor RM di-generate secara otomatis oleh sistem dengan format OTK-[YY]-[5 DIGIT]
+    function updateDesilBadge() {
+        var val = $('#desil').val();
+        var badge = $('#desilBadge');
+        if (!val) {
+            badge.addClass('d-none').html('');
+            return;
+        }
+        badge.removeClass('d-none');
+        if (['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4', 'Desil 5'].indexOf(val) !== -1) {
+            badge.html('<span class="badge badge-success font-w700 py-2 px-3 text-white" style="font-size: 12px; border-radius: 6px; display: inline-flex; align-items: center;"><i class="fa-solid fa-circle-check mr-1"></i> PRIORITAS PROGRAM (Desil 1-5)</span>');
+        } else {
+            badge.html('<span class="badge badge-warning font-w700 py-2 px-3 text-dark" style="font-size: 12px; border-radius: 6px; display: inline-flex; align-items: center;"><i class="fa-solid fa-circle-info mr-1"></i> NON-PRIORITAS</span>');
+        }
+    }
+
+    function toggleLainnyaInputs() {
+        var isDisLainnya = $('input[name="jenis_disabilitas[]"][value="Lainnya"]').is(':checked');
+        if (isDisLainnya) {
+            $('#wrapper_disabilitas_lainnya').removeClass('d-none');
+        } else {
+            $('#wrapper_disabilitas_lainnya').addClass('d-none');
+        }
+
+        var isAbLainnya = $('input[name="alat_bantu[]"][value="Lainnya"]').is(':checked');
+        if (isAbLainnya) {
+            $('#wrapper_alat_bantu_lainnya').removeClass('d-none');
+        } else {
+            $('#wrapper_alat_bantu_lainnya').addClass('d-none');
+        }
+    }
+
+    $(document).ready(function() {
+        $('#desil').on('change', updateDesilBadge);
+        updateDesilBadge();
+
+        toggleLainnyaInputs();
+
+        $(document).on('change', '.check-pill-card input[type="checkbox"]', function() {
+            if ($(this).is(':checked')) {
+                $(this).closest('.check-pill-card').addClass('active');
+            } else {
+                $(this).closest('.check-pill-card').removeClass('active');
+            }
+            toggleLainnyaInputs();
+        });
+    });
 </script>
 @endsection

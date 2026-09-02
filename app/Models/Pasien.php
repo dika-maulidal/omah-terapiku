@@ -26,6 +26,7 @@ class Pasien extends Model
         "pendidikan",
         "pekerjaan",
         "desil",
+        "upt_lokasi",
         "nama_wali",
         "hubungan_wali",
         "jenis_disabilitas",
@@ -60,16 +61,6 @@ class Pasien extends Model
         return $this->hasMany(RekamAssessment::class, 'pasien_id');
     }
 
-    public function rekamGigi()
-    {
-        return RekamGigi::where('pasien_id', $this->id)->get();
-    }
-
-    public function isRekamGigi()
-    {
-        return RekamGigi::where('pasien_id', $this->id)->count() > 0;
-    }
-
     public function statusPasien()
     {
         $lastData = Carbon::createFromFormat('Y-m-d H:i:s', '2023-05-22 18:00:00');
@@ -79,27 +70,20 @@ class Pasien extends Model
                       ->count();
 
         if ($rekam > 0) {
-            if ($this->created_at > $lastData) {
-                return '<span class="badge badge-outline-primary">
-                            <i class="fa fa-circle text-primary mr-1"></i>
-                            Sudah Periksa
-                        </span>';
-            } else {
-                return '<span class="badge badge-outline-success">
-                            <i class="fa fa-circle text-success mr-1"></i>
-                            Sudah Periksa
-                        </span>';
-            }
+            return '<span class="badge badge-success light font-w600">
+                        <i class="fa-solid fa-circle-check mr-1"></i>
+                        Sudah Terapi
+                    </span>';
         } else {
             if ($this->created_at > $lastData) {
-                return '<span class="badge badge-outline-primary">
-                            <i class="fa fa-circle text-primary mr-1"></i>
-                            Pasien Baru
+                return '<span class="badge badge-info light font-w600">
+                            <i class="fa-solid fa-user-plus mr-1"></i>
+                            Penerima Baru
                         </span>';
             } else {
-                return '<span class="badge badge-outline-danger">
-                            <i class="fa fa-circle text-danger mr-1"></i>
-                            Pasien Lama
+                return '<span class="badge badge-secondary light font-w600">
+                            <i class="fa-solid fa-user mr-1"></i>
+                            Penerima Lama
                         </span>';
             }
         }
