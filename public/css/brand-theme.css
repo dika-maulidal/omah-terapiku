@@ -1106,6 +1106,38 @@ body,
     background-color: #EDF3FC !important;
 }
 
+/* Horizontal Responsive Table Scrollbar */
+.table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive::-webkit-scrollbar {
+    height: 7px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+.table-hover tbody tr:hover td {
+    background-color: #f8fafc;
+}
+
+.table-hover tbody tr:hover td[style*="position: sticky"] {
+    background-color: #f8fafc !important;
+}
+
 /* ==========================================================================
    7. PRELOADER - MODERN SOFT BLUE SPINNER
    ========================================================================== */
@@ -1247,7 +1279,9 @@ button.gp-search i.fa-search,
 #filterPeriodeTindakan,
 #filterPeriodeDiagnosa,
 .card-header select,
-.card-header select:focus {
+.card-header select:focus,
+.ot-filter-select,
+.ot-filter-select:focus {
     color: #2563eb !important;
     font-weight: 700 !important;
 }
@@ -1255,10 +1289,220 @@ button.gp-search i.fa-search,
 #filterRentangTren option,
 #filterTahunPenerima option,
 #filterPeriodeTindakan option,
-#filterPeriodeDiagnosa option {
+#filterPeriodeDiagnosa option,
+.ot-filter-select option {
     color: #1e293b !important;
     background-color: #ffffff !important;
     font-weight: 600 !important;
+}
+
+/* Universal Dashboard & Page Filter Dropdowns */
+.ot-filter-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.ot-filter-wrapper i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #2563eb;
+    font-size: 11.5px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.ot-filter-select,
+#filterRentangTren,
+#filterTahunPenerima,
+#filterPeriodeTindakan,
+#filterPeriodeDiagnosa {
+    padding-left: 32px !important;
+    padding-right: 38px !important;
+    height: 38px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+    border: 1px solid #cbd5e1 !important;
+    cursor: pointer !important;
+    background-color: #ffffff !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%232563eb' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 10px 10px !important;
+}
+
+/* Global Form Select Controls Spacing & Custom Arrow */
+select.form-control:not([multiple]) {
+    padding-right: 38px !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 10px 10px !important;
+}
+
+/* Modern Unified Search Input */
+.ot-search-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.ot-search-wrapper .ot-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #2563eb;
+    font-size: 12.5px;
+    pointer-events: none;
+    z-index: 2;
+    transition: color 0.2s ease;
+}
+
+.ot-search-input {
+    height: 38px !important;
+    padding-left: 34px !important;
+    padding-right: 40px !important;
+    border-radius: 8px !important;
+    border: 1px solid #cbd5e1 !important;
+    font-size: 12.5px !important;
+    font-weight: 500 !important;
+    color: #1e293b !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    width: 100%;
+}
+
+.ot-search-input::placeholder {
+    color: #94a3b8 !important;
+    font-weight: 400 !important;
+}
+
+.ot-search-input:focus {
+    border-color: #2563eb !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.12), 0 2px 6px rgba(37, 99, 235, 0.06) !important;
+    outline: none !important;
+}
+
+.ot-search-wrapper:focus-within .ot-search-icon {
+    color: #1d4ed8;
+}
+
+.ot-search-btn {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 30px;
+    width: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 3;
+}
+
+.ot-search-btn:hover {
+    background: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+.ot-search-btn i {
+    font-size: 11px;
+}
+
+/* Check Pill Card Component (Multiple Select Pills with Custom Blue Checkbox) */
+.check-pill-card {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 16px;
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #334155;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    margin-bottom: 0;
+    position: relative;
+}
+
+.check-pill-card:hover {
+    background: #f8fafc;
+    border-color: #93c5fd;
+    color: #1e40af;
+}
+
+/* Custom Styled Checkbox */
+.check-pill-card input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    border: 1.8px solid #94a3b8;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    margin: 0 9px 0 0;
+    background-color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    transition: all 0.15s ease;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.check-pill-card:hover input[type="checkbox"] {
+    border-color: #2563eb;
+}
+
+.check-pill-card input[type="checkbox"]:checked {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+}
+
+/* Custom Crisp White Checkmark inside the Blue Box */
+.check-pill-card input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 9px;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    top: 1px;
+    left: 4.5px;
+}
+
+/* Active State */
+.check-pill-card.active,
+.check-pill-card:has(input:checked) {
+    background: #eff6ff !important;
+    border-color: #2563eb !important;
+    color: #1e40af !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.14) !important;
 }
 
 .text-primary,

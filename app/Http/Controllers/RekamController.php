@@ -69,6 +69,9 @@ class RekamController extends Controller
                             $query->where('rekam.status', '=', $status);
                         }
                     })
+                    ->when($request->filled('layanan'), function ($query) use ($request) {
+                        $query->where('rekam.layanan_terapi', 'LIKE', "%{$request->layanan}%");
+                    })
                     ->with(['pasien', 'dokter', 'terapisPendamping'])
                     ->paginate(10);
         return view('rekam.index', compact('rekams'));
@@ -125,6 +128,9 @@ class RekamController extends Controller
                         } else {
                             $query->where('rekam.status', '=', $status);
                         }
+                    })
+                    ->when($request->filled('layanan'), function ($query) use ($request) {
+                        $query->where('rekam.layanan_terapi', 'LIKE', "%{$request->layanan}%");
                     })
                     ->with(['pasien', 'dokter', 'terapisPendamping'])
                     ->get();

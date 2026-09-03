@@ -11,10 +11,19 @@ class PoliController extends Controller
     public function index(Request $request)
     {
         $datas = Poli::with('terapis')
-                ->when($request->keyword, function ($query) use ($request) {
-                    $query->where('nama', 'LIKE', "%{$request->keyword}%")
-                          ->orWhere('alamat', 'LIKE', "%{$request->keyword}%")
-                          ->orWhere('fokus_layanan', 'LIKE', "%{$request->keyword}%");
+                ->when($request->filled('status'), function ($query) use ($request) {
+                    $query->where('status', $request->status);
+                })
+                ->when($request->filled('fokus'), function ($query) use ($request) {
+                    $query->where('fokus_layanan', 'LIKE', "%{$request->fokus}%");
+                })
+                ->when($request->filled('keyword'), function ($query) use ($request) {
+                    $keyword = $request->keyword;
+                    $query->where(function($q) use ($keyword) {
+                        $q->where('nama', 'LIKE', "%{$keyword}%")
+                          ->orWhere('alamat', 'LIKE', "%{$keyword}%")
+                          ->orWhere('fokus_layanan', 'LIKE', "%{$keyword}%");
+                    });
                 })
                 ->paginate(10);
 

@@ -107,6 +107,30 @@ class PasienController extends Controller
                         })->where('created_at', '<=', $lastData);
                     }
                 })
+                ->when($request->desil, function ($query) use ($request) {
+                    $desil = $request->desil;
+                    if ($desil === 'prioritas') {
+                        $query->whereIn('desil', ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4', 'Desil 5']);
+                    } elseif ($desil === 'desil_6_10') {
+                        $query->whereIn('desil', ['Desil 6', 'Desil 7', 'Desil 8', 'Desil 9', 'Desil 10']);
+                    } elseif ($desil === 'non_desil') {
+                        $query->where(function ($q) {
+                            $q->where('desil', 'Non-Desil')
+                              ->orWhere('desil', 'Non-DTSEN')
+                              ->orWhere('desil', 'Tidak Terdaftar')
+                              ->orWhereNull('desil')
+                              ->orWhere('desil', '');
+                        });
+                    } else {
+                        $query->where('desil', $desil);
+                    }
+                })
+                ->when($request->jk, function ($query) use ($request) {
+                    $query->where('jk', $request->jk);
+                })
+                ->when($request->disabilitas, function ($query) use ($request) {
+                    $query->where('jenis_disabilitas', 'LIKE', "%{$request->disabilitas}%");
+                })
                 ->orderBy('id', 'desc')
                 ->paginate(10);
 
@@ -146,6 +170,30 @@ class PasienController extends Controller
                             $q->whereIn('status', [4, 5]);
                         })->where('created_at', '<=', $lastData);
                     }
+                })
+                ->when($request->desil, function ($query) use ($request) {
+                    $desil = $request->desil;
+                    if ($desil === 'prioritas') {
+                        $query->whereIn('desil', ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4', 'Desil 5']);
+                    } elseif ($desil === 'desil_6_10') {
+                        $query->whereIn('desil', ['Desil 6', 'Desil 7', 'Desil 8', 'Desil 9', 'Desil 10']);
+                    } elseif ($desil === 'non_desil') {
+                        $query->where(function ($q) {
+                            $q->where('desil', 'Non-Desil')
+                              ->orWhere('desil', 'Non-DTSEN')
+                              ->orWhere('desil', 'Tidak Terdaftar')
+                              ->orWhereNull('desil')
+                              ->orWhere('desil', '');
+                        });
+                    } else {
+                        $query->where('desil', $desil);
+                    }
+                })
+                ->when($request->jk, function ($query) use ($request) {
+                    $query->where('jk', $request->jk);
+                })
+                ->when($request->disabilitas, function ($query) use ($request) {
+                    $query->where('jenis_disabilitas', 'LIKE', "%{$request->disabilitas}%");
                 })
                 ->orderBy('id', 'asc')
                 ->get();
