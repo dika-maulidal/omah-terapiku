@@ -240,7 +240,7 @@ class DashboardQuery
         ];
     }
 
-    public function getTren7HariTerakhir()
+    public function getTrenPelayananData($days = 7)
     {
         $user = auth()->user();
         $role = $user ? $user->role_display() : '';
@@ -256,21 +256,29 @@ class DashboardQuery
         $periksaCounts = [];
         $pasienBaruCounts = [];
 
-        $hariIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        $hariIndoLengkap = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
         $bulanIndo = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
-        for ($i = 6; $i >= 0; $i--) {
+        $countDays = (int)$days;
+        if ($countDays <= 0) $countDays = 7;
+
+        for ($i = $countDays - 1; $i >= 0; $i--) {
             $time = strtotime("-{$i} days");
             $ymd = date('Y-m-d', $time);
             $w = (int)date('w', $time);
             $d = date('j', $time);
             $n = (int)date('n', $time) - 1;
 
-            $dayName = $hariIndo[$w];
-            $displayLabel = ($i === 0) ? 'Hari Ini' : $dayName;
+            $dayName = $hariIndoLengkap[$w];
             $fullLabel = $dayName . ', ' . $d . ' ' . $bulanIndo[$n];
 
-            $labels[] = $displayLabel . ' (' . $d . '/' . date('m', $time) . ')';
+            if ($countDays <= 7) {
+                $displayLabel = ($i === 0) ? 'Hari Ini' : $dayName;
+                $labels[] = $displayLabel . ' (' . $d . '/' . date('m', $time) . ')';
+            } else {
+                $labels[] = $d . ' ' . $bulanIndo[$n];
+            }
+
             $shortLabels[] = $fullLabel;
             $dates[] = $ymd;
 
@@ -289,9 +297,9 @@ class DashboardQuery
             $pasienBaruCounts[] = $pasienCount;
         }
 
-        $totalPeriksa7Hari = array_sum($periksaCounts);
-        $totalPasien7Hari = array_sum($pasienBaruCounts);
-        $avgPeriksa = round($totalPeriksa7Hari / 7, 1);
+        $totalPeriksa = array_sum($periksaCounts);
+        $totalPasien = array_sum($pasienBaruCounts);
+        $avgPeriksa = round($totalPeriksa / $countDays, 1);
 
         // Cari hari tertinggi
         $maxPeriksa = !empty($periksaCounts) ? max($periksaCounts) : 0;
@@ -299,15 +307,29 @@ class DashboardQuery
         $hariTertinggi = ($maxPeriksa > 0 && isset($shortLabels[$maxIndex])) ? $shortLabels[$maxIndex] . ' (' . $maxPeriksa . ')' : '-';
 
         return [
+            'days' => $countDays,
             'labels' => $labels,
             'full_labels' => $shortLabels,
             'dates' => $dates,
             'periksa' => $periksaCounts,
             'pasien_baru' => $pasienBaruCounts,
-            'total_periksa' => $totalPeriksa7Hari,
-            'total_pasien_baru' => $totalPasien7Hari,
+            'total_periksa' => $totalPeriksa,
+            'total_pasien_baru' => $totalPasien,
             'avg_periksa' => $avgPeriksa,
             'hari_tertinggi' => $hariTertinggi,
+        ];
+    }
+
+    public function getTren7HariTerakhir()
+    {
+        return $this->getTrenPelayananData(7);
+    }
+
+    public function getTrenPelayananAll()
+    {
+        return [
+            '7' => $this->getTrenPelayananData(7),
+            '30' => $this->getTrenPelayananData(30),
         ];
     }
 
@@ -316,16 +338,16 @@ class DashboardQuery
         $allUnits = Poli::orderBy('nama', 'asc')->get();
         
         $palette = [
-            '#2e4b82', // Navy Blue
-            '#f5a623', // Amber / Warm Gold
-            '#29b6f6', // Cyan / Cerulean
-            '#28c76f', // Emerald Green
-            '#7367f0', // Purple / Violet
-            '#ea5455', // Coral Red
-            '#ff9f43', // Orange
-            '#00cfe8', // Teal
-            '#6c5ce7', // Indigo
-            '#10ac84'  // Mint Green
+            '#1e3a8a', // Deep Navy Blue
+            '#2563eb', // Royal Blue
+            '#3b82f6', // Brand Blue
+            '#60a5fa', // Sky Blue
+            '#38bdf8', // Cerulean
+            '#0284c7', // Ocean Blue
+            '#0369a1', // Dark Cyan Blue
+            '#1d4ed8', // Sapphire
+            '#93c5fd', // Light Blue
+            '#0284c7'  // Steel Blue
         ];
 
         $labels = [];
@@ -405,6 +427,218 @@ class DashboardQuery
             'colors' => array_column($items, 'color'),
             'items' => $items,
             'total_pasien' => $totalPasienUnik
+        ];
+    }
+
+    public function getDemografiPenerimaManfaat()
+    {
+        $pasienQuery = Pasien::whereNull('deleted_at');
+        $totalPasien = (clone $pasienQuery)->count();
+
+        // 1. Demografi Berdasarkan Kelompok Usia
+        $usiaBalita = (clone $pasienQuery)->whereNotNull('tgl_lahir')->whereRaw('TIMESTAMPDIFF(YEAR, tgl_lahir, CURDATE()) <= 5')->count();
+        $usiaAnak = (clone $pasienQuery)->whereNotNull('tgl_lahir')->whereRaw('TIMESTAMPDIFF(YEAR, tgl_lahir, CURDATE()) BETWEEN 6 AND 12')->count();
+        $usiaRemaja = (clone $pasienQuery)->whereNotNull('tgl_lahir')->whereRaw('TIMESTAMPDIFF(YEAR, tgl_lahir, CURDATE()) BETWEEN 13 AND 17')->count();
+        $usiaDewasa = (clone $pasienQuery)->whereNotNull('tgl_lahir')->whereRaw('TIMESTAMPDIFF(YEAR, tgl_lahir, CURDATE()) BETWEEN 18 AND 59')->count();
+        $usiaLansia = (clone $pasienQuery)->whereNotNull('tgl_lahir')->whereRaw('TIMESTAMPDIFF(YEAR, tgl_lahir, CURDATE()) >= 60')->count();
+        $usiaUnknown = (clone $pasienQuery)->whereNull('tgl_lahir')->count();
+
+        // 2. Demografi Berdasarkan Jenis Kelamin
+        $jkLaki = (clone $pasienQuery)->where(function($q) {
+            $q->where('jk', 'L')->orWhere('jk', 'LIKE', 'Laki%');
+        })->count();
+        $jkPerempuan = (clone $pasienQuery)->where(function($q) {
+            $q->where('jk', 'P')->orWhere('jk', 'LIKE', 'Perem%');
+        })->count();
+        $jkLainnya = max(0, $totalPasien - ($jkLaki + $jkPerempuan));
+
+        // 3. Demografi Berdasarkan Jenis Disabilitas
+        $disabilitasData = DB::table('pasien')
+            ->select('jenis_disabilitas', DB::raw('count(*) as total'))
+            ->whereNull('deleted_at')
+            ->whereNotNull('jenis_disabilitas')
+            ->where('jenis_disabilitas', '!=', '')
+            ->groupBy('jenis_disabilitas')
+            ->orderBy('total', 'desc')
+            ->limit(5)
+            ->get();
+
+        return [
+            'total' => $totalPasien,
+            'usia' => [
+                'labels' => ['Balita (0-5 th)', 'Anak-Anak (6-12 th)', 'Remaja (13-17 th)', 'Dewasa (18-59 th)', 'Lansia (60+ th)'],
+                'counts' => [$usiaBalita, $usiaAnak, $usiaRemaja, $usiaDewasa, $usiaLansia],
+                'unknown' => $usiaUnknown,
+                'colors' => ['#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1e40af']
+            ],
+            'jk' => [
+                'laki' => $jkLaki,
+                'perempuan' => $jkPerempuan,
+                'lainnya' => $jkLainnya,
+                'persen_laki' => $totalPasien > 0 ? round(($jkLaki / $totalPasien) * 100, 1) : 0,
+                'persen_perempuan' => $totalPasien > 0 ? round(($jkPerempuan / $totalPasien) * 100, 1) : 0,
+            ],
+            'disabilitas' => $disabilitasData
+        ];
+    }
+
+    public function getDistribusiJenisTerapi()
+    {
+        $user = auth()->user();
+        $role = $user ? $user->role_display() : '';
+        $dokterId = null;
+        if ($role == "Dokter") {
+            $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
+            $dokterId = $dokter ? $dokter->id : null;
+        }
+
+        $query = DB::table('rekam')
+            ->when($dokterId, function ($q) use ($dokterId) {
+                $q->where('dokter_id', $dokterId);
+            });
+
+        $this->scopeUpt($query);
+
+        $results = (clone $query)
+            ->select('layanan_terapi', DB::raw('count(*) as total'))
+            ->whereNotNull('layanan_terapi')
+            ->where('layanan_terapi', '!=', '')
+            ->groupBy('layanan_terapi')
+            ->orderBy('total', 'desc')
+            ->get();
+
+        $standardLayanan = [
+            'Fisioterapi' => ['color' => '#1e40af', 'icon' => 'fa-person-walking'],
+            'Terapi Okupasi / Sensorik Integrasi' => ['color' => '#2563eb', 'icon' => 'fa-hands'],
+            'Terapi Wicara' => ['color' => '#38bdf8', 'icon' => 'fa-comments'],
+            'Terapi Netra (Orientasi & Mobilitas)' => ['color' => '#60a5fa', 'icon' => 'fa-eye'],
+        ];
+
+        $palette = ['#1e40af', '#2563eb', '#38bdf8', '#60a5fa', '#0284c7', '#1d4ed8', '#93c5fd', '#0369a1'];
+
+        $labels = [];
+        $counts = [];
+        $colors = [];
+        $items = [];
+        $totalSessions = 0;
+        $colorIdx = 0;
+
+        if ($results->count() > 0) {
+            foreach ($results as $row) {
+                $name = $row->layanan_terapi;
+                $count = (int)$row->total;
+                $totalSessions += $count;
+
+                $color = isset($standardLayanan[$name]) ? $standardLayanan[$name]['color'] : $palette[$colorIdx % count($palette)];
+                $icon = isset($standardLayanan[$name]) ? $standardLayanan[$name]['icon'] : 'fa-hand-holding-medical';
+                $colorIdx++;
+
+                $labels[] = $name;
+                $counts[] = $count;
+                $colors[] = $color;
+
+                $items[] = [
+                    'nama' => $name,
+                    'total' => $count,
+                    'color' => $color,
+                    'icon' => $icon
+                ];
+            }
+        } else {
+            foreach ($standardLayanan as $name => $meta) {
+                $labels[] = $name;
+                $counts[] = 0;
+                $colors[] = $meta['color'];
+                $items[] = [
+                    'nama' => $name,
+                    'total' => 0,
+                    'color' => $meta['color'],
+                    'icon' => $meta['icon']
+                ];
+            }
+        }
+
+        foreach ($items as &$it) {
+            $it['persentase'] = $totalSessions > 0 ? round(($it['total'] / $totalSessions) * 100, 1) : 0;
+        }
+
+        return [
+            'labels' => $labels,
+            'counts' => $counts,
+            'colors' => $colors,
+            'items' => $items,
+            'total' => $totalSessions
+        ];
+    }
+
+    public function getTopTindakanTerbanyak($limit = 5)
+    {
+        $user = auth()->user();
+        $role = $user ? $user->role_display() : '';
+        $dokterId = null;
+        if ($role == "Dokter") {
+            $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
+            $dokterId = $dokter ? $dokter->id : null;
+        }
+
+        $rekamTindakan = DB::table('rekam')
+            ->select('tindakan', DB::raw('count(*) as total'))
+            ->when($dokterId, function ($q) use ($dokterId) {
+                $q->where('dokter_id', $dokterId);
+            })
+            ->whereNotNull('tindakan')
+            ->where('tindakan', '!=', '')
+            ->where('tindakan', 'NOT LIKE', '%Belum ada catatan%')
+            ->groupBy('tindakan')
+            ->orderBy('total', 'desc')
+            ->limit($limit)
+            ->get();
+
+        $items = [];
+        $totalTindakan = 0;
+        $palette = ['#1e40af', '#2563eb', '#3b82f6', '#60a5fa', '#38bdf8', '#0284c7'];
+        $idx = 0;
+
+        foreach ($rekamTindakan as $row) {
+            $namaTindakan = trim(strip_tags($row->tindakan));
+            if (strlen($namaTindakan) > 55) {
+                $namaTindakan = substr($namaTindakan, 0, 52) . '...';
+            }
+            $count = (int)$row->total;
+            $totalTindakan += $count;
+
+            $items[] = [
+                'nama' => $namaTindakan,
+                'total' => $count,
+                'color' => $palette[$idx % count($palette)]
+            ];
+            $idx++;
+        }
+
+        if (count($items) === 0) {
+            $master = DB::table('tindakan')->limit($limit)->get();
+            foreach ($master as $m) {
+                $items[] = [
+                    'nama' => $m->nama,
+                    'total' => 0,
+                    'color' => $palette[$idx % count($palette)]
+                ];
+                $idx++;
+            }
+        }
+
+        $maxCount = !empty($items) ? max(array_column($items, 'total')) : 0;
+        foreach ($items as &$it) {
+            $it['persentase'] = $totalTindakan > 0 ? round(($it['total'] / $totalTindakan) * 100, 1) : 0;
+            $it['bar_persen'] = $maxCount > 0 ? round(($it['total'] / $maxCount) * 100, 1) : ($it['total'] > 0 ? 100 : 5);
+        }
+
+        return [
+            'items' => $items,
+            'total' => $totalTindakan,
+            'labels' => array_column($items, 'nama'),
+            'counts' => array_column($items, 'total'),
+            'colors' => array_column($items, 'color')
         ];
     }
 }

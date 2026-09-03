@@ -31,10 +31,9 @@
 <body>
 
     <div id="preloader">
-        <div class="sk-three-bounce">
-            <div class="sk-child sk-bounce1"></div>
-            <div class="sk-child sk-bounce2"></div>
-            <div class="sk-child sk-bounce3"></div>
+        <div class="loader-spinner-wrapper">
+            <div class="brand-spinner"></div>
+            <p class="loader-text">Memuat...</p>
         </div>
     </div>
     
@@ -43,19 +42,14 @@
      
         <div class="nav-header">
             <a href="{{Route('dashboard')}}" class="brand-logo">
-                <img class="logo-abbr" src="{{asset('images/logo.png')}}" alt="Logo Omah Terapiku">
-                <span class="logo-compact font-w800 font-italic" style="color: var(--ot-navy); font-size: 16px;">
-                    OT
-                </span>
-                <h3 class="brand-title font-w800 font-italic mb-0" style="font-size: 18px; text-transform: uppercase; letter-spacing: 0.5px;">
-                    <span style="color: var(--ot-navy);">OMAH</span>
-                    <span style="color: var(--ot-yellow);">TERAPIKU</span>
-                </h3>
+                <img class="logo-abbr" src="{{asset('images/header.png')}}" alt="Logo Omah Terapiku">
+                <img class="brand-title" src="{{asset('images/logo-text.png')}}" alt="Omah Terapiku">
             </a>
 
-            <div class="nav-control">
+            <div class="nav-control" title="Toggle Sidebar">
                 <div class="hamburger">
-                    <span class="line"></span><span class="line"></span><span class="line"></span>
+                    <i class="fa-solid fa-bars hamburger-icon-bars"></i>
+                    <i class="fa-solid fa-arrow-right hamburger-icon-arrow"></i>
                 </div>
             </div>
         </div>

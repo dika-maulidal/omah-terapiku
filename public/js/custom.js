@@ -16,19 +16,22 @@ function getUrlParams(dParam) {
 
 
 jQuery(window).on("load", function() {
-    $('#preloader').fadeOut(500);
+    $('#preloader').fadeOut(350, function() {
+        $(this).css('display', 'none');
+    });
     $('#main-wrapper').addClass('show');
-
-    // if($('body').attr('data-sidebar-position') === "fixed") {
-    //     $('.deznav-scroll').slimscroll({
-    //         position: "right",
-    //         size: "5px",
-    //         height: "100%",
-    //         color: "transparent"
-    //     });
-    // }
 	$('select').selectpicker();
 });
+
+// Fallback safety timeout (guarantees preloader never hangs)
+setTimeout(function() {
+    if ($('#preloader').is(':visible')) {
+        $('#preloader').fadeOut(300, function() {
+            $(this).css('display', 'none');
+        });
+        $('#main-wrapper').addClass('show');
+    }
+}, 1200);
 
 (function($) {
     "use strict";
@@ -57,11 +60,19 @@ jQuery(window).on("load", function() {
         color: "#c6c8c9"
     }); */
 
-    $(".nav-control").on('click', function() {
-
+    $(".nav-control").on('click', function(e) {
+        e.stopPropagation();
         $('#main-wrapper').toggleClass("menu-toggle");
-
         $(".hamburger").toggleClass("is-active");
+    });
+
+    $(document).on('click', function(e) {
+        if ($(window).innerWidth() < 768 && $('#main-wrapper').hasClass('menu-toggle')) {
+            if (!$(e.target).closest('.deznav, .nav-control').length) {
+                $('#main-wrapper').removeClass('menu-toggle');
+                $('.hamburger').removeClass('is-active');
+            }
+        }
     });
 
     //to keep the current page active

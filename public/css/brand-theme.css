@@ -104,8 +104,62 @@ body,
 }
 
 /* ==========================================================================
-   1. ELIMINATE GREEN BARS & OLD HIGHLIGHTS ON SIDEBAR
+   1. BLUE SIDEBAR & CONTRAST NAVIGATION SYSTEM
    ========================================================================== */
+.deznav,
+[data-sidebar-style="full"] .deznav,
+[data-sidebar-style="compact"] .deznav,
+[data-sidebar-style="mini"] .deznav,
+[data-sidebar-style="modern"] .deznav,
+[data-sidebar-style="overlay"] .deznav,
+[data-sidebarbg] .deznav {
+    background: linear-gradient(180deg, #3574b5 0%, #295d96 100%) !important;
+    background-color: #3168a5 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 4px 0 20px rgba(41, 93, 150, 0.12) !important;
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    height: 100vh !important;
+    z-index: 4 !important;
+}
+
+.deznav-scroll,
+.deznav .deznav-scroll {
+    background: transparent !important;
+    position: relative !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+.deznav-scroll::-webkit-scrollbar,
+.deznav .deznav-scroll::-webkit-scrollbar {
+    width: 5px !important;
+}
+
+.deznav-scroll::-webkit-scrollbar-track,
+.deznav .deznav-scroll::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+.deznav-scroll::-webkit-scrollbar-thumb,
+.deznav .deznav-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-radius: 4px !important;
+}
+
+.deznav-scroll::-webkit-scrollbar-thumb:hover,
+.deznav .deznav-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5) !important;
+}
+
 .deznav .metismenu > li > a:before,
 .deznav .metismenu > li:before,
 .deznav .metismenu > li.mm-active > a:before,
@@ -129,24 +183,25 @@ body,
     flex-grow: 1 !important;
 }
 
-/* Category Labels */
+/* Category Labels - Bright Yellow / Kuning Cerah */
 .deznav .metismenu .nav-label {
-    padding: 16px 24px 6px 24px !important;
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.8px;
-    color: #94A3B8 !important;
-    text-transform: uppercase;
+    padding: 18px 24px 8px 24px !important;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.9px !important;
+    color: #FFE066 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+    text-transform: uppercase !important;
     border: none !important;
-    margin: 6px 0 2px 0 !important;
+    margin: 8px 0 2px 0 !important;
 }
 
 .deznav .metismenu .nav-label.first {
-    padding-top: 12px !important;
+    padding-top: 14px !important;
     margin-top: 4px !important;
 }
 
-/* Menu Items */
+/* Menu Items - White Text & Icons */
 .deznav .metismenu > li {
     margin-bottom: 3px;
 }
@@ -155,11 +210,16 @@ body,
     margin: 2px 12px !important;
     padding: 11px 16px !important;
     border-radius: 8px !important;
-    color: #475569 !important;
+    color: #ffffff !important;
     font-size: 13.5px !important;
     font-weight: 500;
     border: none !important;
     transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.deznav .metismenu > li > a .nav-text,
+.deznav .metismenu > li > a span {
+    color: #ffffff !important;
 }
 
 .deznav .metismenu > li > a i,
@@ -167,45 +227,56 @@ body,
 .deznav .metismenu a i {
     font-size: 17px !important;
     margin-right: 12px !important;
-    color: var(--ot-navy) !important;
+    color: #ffffff !important;
     transition: transform 0.22s ease, color 0.22s ease !important;
 }
 
 /* Menu Hover State */
 .deznav .metismenu > li:hover > a,
 .deznav .metismenu > li > a:hover {
-    background-color: #F1F5F9 !important;
-    color: var(--ot-navy) !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
     transform: translateX(3px) !important;
 }
 
 .deznav .metismenu > li:hover > a i,
 .deznav .metismenu > li > a:hover i {
-    color: var(--ot-cyan) !important;
+    color: #ffffff !important;
     transform: scale(1.15) !important;
 }
 
-/* Menu Active State with 4px Sky Blue Left Border */
+.deznav .metismenu > li:hover > a.text-logout,
+.deznav .metismenu > li > a.text-logout:hover {
+    background-color: rgba(239, 68, 68, 0.22) !important;
+    color: #ffffff !important;
+}
+
+.deznav .metismenu > li:hover > a.text-logout i,
+.deznav .metismenu > li > a.text-logout:hover i {
+    color: #fecaca !important;
+}
+
+/* Menu Active State with 4px White Left Border */
 .deznav .metismenu > li.mm-active > a,
 [data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a {
-    background: #edf3fc !important;
-    color: var(--ot-navy) !important;
+    background: rgba(255, 255, 255, 0.22) !important;
+    color: #ffffff !important;
     font-weight: 700 !important;
     border: none !important;
-    border-left: 4px solid var(--ot-cyan) !important;
+    border-left: 4px solid #ffffff !important;
     border-radius: 0 8px 8px 0 !important;
-    box-shadow: 0 2px 8px rgba(45, 75, 122, 0.08) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
 }
 
 .deznav .metismenu > li.mm-active > a span,
 .deznav .metismenu > li.mm-active > a .nav-text {
-    color: var(--ot-navy) !important;
+    color: #ffffff !important;
     font-weight: 700 !important;
 }
 
 .deznav .metismenu > li.mm-active > a i,
 [data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a i {
-    color: var(--ot-cyan) !important;
+    color: #ffffff !important;
     transform: scale(1.12) !important;
 }
 
@@ -215,14 +286,14 @@ body,
 }
 
 .deznav .metismenu ul:after {
-    background-color: #cbd5e1 !important;
+    background-color: rgba(255, 255, 255, 0.22) !important;
 }
 
 .deznav .metismenu ul a {
     margin: 2px 12px !important;
     padding: 8px 16px 8px 28px !important;
     border-radius: 6px !important;
-    color: #475569 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
     font-size: 13px !important;
     font-weight: 500;
     border: none !important;
@@ -233,7 +304,7 @@ body,
 }
 
 .deznav .metismenu ul a i {
-    color: var(--ot-navy) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
     font-size: 13px !important;
     margin-right: 8px !important;
     width: 16px !important;
@@ -243,22 +314,22 @@ body,
 }
 
 .deznav .metismenu ul a:hover {
-    background-color: #f1f5fb !important;
-    color: #0f172a !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
     padding-left: 32px !important;
     border: none !important;
     border-left: none !important;
 }
 
 .deznav .metismenu ul a:hover i {
-    color: var(--ot-navy) !important;
+    color: #ffffff !important;
     transform: scale(1.15) !important;
 }
 
 .deznav .metismenu ul a.mm-active,
 .deznav .metismenu ul li.mm-active > a {
-    background-color: #edf3fc !important;
-    color: #0f172a !important;
+    background-color: rgba(255, 255, 255, 0.22) !important;
+    color: #ffffff !important;
     font-weight: 700 !important;
     padding-left: 32px !important;
     border: none !important;
@@ -267,12 +338,12 @@ body,
 
 .deznav .metismenu ul a.mm-active i,
 .deznav .metismenu ul li.mm-active > a i {
-    color: var(--ot-navy) !important;
+    color: #ffffff !important;
 }
 
 /* Clear & Prominent Dropdown Arrow (Chevron: Right > then Down v) */
 .deznav .metismenu .has-arrow:after {
-    border-color: #64748b !important;
+    border-color: rgba(255, 255, 255, 0.85) !important;
     border-style: solid !important;
     border-width: 2px 2px 0 0 !important;
     width: 7px !important;
@@ -287,32 +358,41 @@ body,
 
 .deznav .metismenu > li:hover > .has-arrow:after,
 .deznav .metismenu .has-arrow:hover:after {
-    border-color: var(--ot-navy) !important;
+    border-color: #ffffff !important;
     opacity: 1 !important;
 }
 
 .deznav .metismenu .has-arrow[aria-expanded="true"]:after,
 .deznav .metismenu .mm-active > .has-arrow:after {
-    border-color: var(--ot-navy) !important;
+    border-color: #ffffff !important;
     opacity: 1 !important;
     transform: translateY(-50%) rotate(135deg) !important;
 }
 
 /* Sidebar Copyright Footer */
 .deznav .copyright {
-    padding: 14px 20px 24px 20px !important;
-    border-top: 1px solid #edf2f7 !important;
+    padding: 16px 20px 24px 20px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
     font-size: 11.5px !important;
-    color: #8fa0bc !important;
+    color: #ffffff !important;
     line-height: 1.5 !important;
     margin-top: auto !important;
-    background: #ffffff !important;
+    background: transparent !important;
     flex-shrink: 0 !important;
 }
 
+.deznav .copyright p,
+.deznav .copyright span {
+    color: #ffffff !important;
+    font-size: 11.5px !important;
+    margin: 0 !important;
+    opacity: 0.95 !important;
+}
+
 .deznav .copyright strong {
-    color: var(--ot-navy) !important;
+    color: #ffffff !important;
     font-weight: 700 !important;
+    opacity: 1 !important;
 }
 
 /* Main Page Footer */
@@ -361,58 +441,297 @@ body,
 /* ==========================================================================
    3. HEADER, HAMBURGER MENU & NOTIFICATION BOX
    ========================================================================== */
-.nav-header {
-    background-color: #ffffff !important;
-    border-bottom: 1px solid #edf2f7;
+.nav-header,
+[data-headerbg] .nav-header,
+[data-nav-headerbg] .nav-header {
+    background-color: #3574b5 !important;
+    background: #3574b5 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.14) !important;
 }
 
-/* Hamburger Menu Colors & Animation (Override all data attributes) */
-.hamburger,
-.nav-control .hamburger {
+.nav-header .brand-logo {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    padding: 0 16px !important;
+}
+
+.nav-header .brand-logo .logo-abbr {
+    max-height: 44px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) !important;
+    flex-shrink: 0 !important;
+    transition: all 0.25s ease !important;
+}
+
+.nav-header .brand-logo .brand-title {
+    max-height: 36px !important;
+    max-width: 140px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    margin-left: 10px !important;
+    display: inline-block;
+    transition: all 0.25s ease !important;
+}
+
+/* When Hamburger Menu is clicked / Collapsed: HIDE logo-text.png and CENTER header.png */
+.menu-toggle .nav-header .brand-logo .brand-title,
+[data-sidebar-style="mini"] .nav-header .brand-logo .brand-title,
+.menu-toggle .brand-title,
+[data-sidebar-style="mini"] .brand-title,
+[data-sidebar-style="compact"] .brand-title {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.menu-toggle .nav-header .brand-logo,
+[data-sidebar-style="mini"] .nav-header .brand-logo {
+    padding: 0 !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+.menu-toggle .nav-header .brand-logo .logo-abbr,
+[data-sidebar-style="mini"] .nav-header .brand-logo .logo-abbr {
+    max-height: 40px !important;
+    margin: 0 auto !important;
+    display: block !important;
+}
+
+/* Collapsed Sidebar Items Polish */
+.menu-toggle .deznav,
+[data-sidebar-style="mini"] .deznav {
+    width: 5rem !important;
+}
+
+.menu-toggle .deznav .metismenu .nav-label,
+[data-sidebar-style="mini"] .deznav .metismenu .nav-label {
+    display: none !important;
+}
+
+.menu-toggle .deznav .metismenu > li > a,
+[data-sidebar-style="mini"] .deznav .metismenu > li > a {
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 12px 0 !important;
+    margin: 4px 6px !important;
+}
+
+.menu-toggle .deznav .metismenu > li > a i,
+[data-sidebar-style="mini"] .deznav .metismenu > li > a i {
+    margin-right: 0 !important;
+    font-size: 19px !important;
+}
+
+.menu-toggle .deznav .metismenu > li > a .nav-text,
+[data-sidebar-style="mini"] .deznav .metismenu > li > a .nav-text {
+    display: none !important;
+}
+
+.menu-toggle .deznav .metismenu > li.mm-active > a,
+[data-sidebar-style="mini"] .deznav .metismenu > li.mm-active > a {
+    border-left: none !important;
+    border-radius: 8px !important;
+}
+
+/* Hamburger Menu Button - Styled with Matching Blue Box & FontAwesome Icons */
+.nav-header .nav-control,
+.nav-control {
+    cursor: pointer !important;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+}
+
+.nav-header .nav-control .hamburger,
+.nav-control .hamburger,
+.hamburger {
+    background: #3574b5 !important;
+    background-color: #3574b5 !important;
+    border: 1.5px solid #295d96 !important;
+    border-radius: 8px !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-shadow: 0 2px 6px rgba(53, 116, 181, 0.25) !important;
+    transition: all 0.2s ease !important;
     cursor: pointer !important;
 }
 
-.hamburger .line,
-.nav-header .hamburger .line,
-.nav-control .hamburger .line,
-.nav-header .nav-control .hamburger .line,
-[data-headerbg] .nav-header .hamburger .line,
-[data-headerbg] .nav-header .hamburger.is-active .line,
-[data-headerbg] .hamburger .line,
-[data-primary] .hamburger .line,
-[data-primary] .nav-header .hamburger .line,
-[data-primary][data-sidebar-style] .menu-toggle .nav-header .nav-control .hamburger .line,
-[data-sidebar-style] .nav-header .hamburger .line,
-[data-sidebar-style] .nav-header .hamburger.is-active .line {
-    background: var(--ot-navy) !important;
-    background-color: var(--ot-navy) !important;
-    height: 3px !important;
-    border-radius: 2px !important;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+.nav-header .nav-control:hover .hamburger,
+.nav-control .hamburger:hover,
+.hamburger:hover {
+    background: #295d96 !important;
+    background-color: #295d96 !important;
+    border-color: #1e4d82 !important;
+    box-shadow: 0 4px 10px rgba(41, 93, 150, 0.35) !important;
+    transform: translateY(-1px) !important;
 }
 
-.hamburger:hover .line,
-.nav-header .hamburger:hover .line,
-.nav-control .hamburger:hover .line {
-    background: var(--ot-yellow) !important;
-    background-color: var(--ot-yellow) !important;
+/* FontAwesome Hamburger & Arrow Icons */
+.hamburger .hamburger-icon-bars,
+.hamburger .hamburger-icon-arrow {
+    color: #ffffff !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    transition: transform 0.2s ease, opacity 0.2s ease !important;
 }
 
-.hamburger.is-active .line,
-.nav-header .hamburger.is-active .line,
-.nav-control .hamburger.is-active .line {
-    background: var(--ot-navy) !important;
-    background-color: var(--ot-navy) !important;
+.hamburger .hamburger-icon-bars {
+    display: block !important;
 }
 
-/* Notification Dropdown & Box */
-.notification_dropdown .nav-link svg path {
-    fill: var(--ot-navy) !important;
+.hamburger .hamburger-icon-arrow {
+    display: none !important;
+}
+
+/* When collapsed / is-active -> switch to standard FontAwesome Arrow icon */
+.hamburger.is-active .hamburger-icon-bars,
+.menu-toggle .hamburger .hamburger-icon-bars {
+    display: none !important;
+}
+
+.hamburger.is-active .hamburger-icon-arrow,
+.menu-toggle .hamburger .hamburger-icon-arrow {
+    display: block !important;
+}
+
+/* Hide fallback .line elements */
+.hamburger .line {
+    display: none !important;
+}
+
+/* Header Right Navigation Spacing & Notification Centered */
+.header-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.header-right > li {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+.header-right > li:not(:first-child) {
+    padding-left: 10px !important;
+}
+
+.header-right .header-profile > a.nav-link {
+    padding: 6px 8px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.header-right .header-profile > a.nav-link .header-info {
+    padding-right: 10px !important;
+}
+
+.header-right .notification_dropdown,
+.notification_dropdown {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.notification_dropdown .nav-link,
+.header-right .notification_dropdown .nav-link {
+    background: #3574b5 !important;
+    background-color: #3574b5 !important;
+    border: 1.5px solid #295d96 !important;
+    border-radius: 8px !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    box-shadow: 0 2px 6px rgba(53, 116, 181, 0.25) !important;
+    transition: all 0.2s ease !important;
+    line-height: 0 !important;
+}
+
+.notification_dropdown .nav-link:after,
+.notification_dropdown .nav-link::after,
+.header-right .notification_dropdown .nav-link:after,
+.header-right .notification_dropdown .nav-link::after {
+    display: none !important;
+    content: none !important;
+}
+
+.notification_dropdown .nav-link:hover,
+.header-right .notification_dropdown .nav-link:hover {
+    background: #295d96 !important;
+    background-color: #295d96 !important;
+    border-color: #1e4d82 !important;
+    box-shadow: 0 4px 10px rgba(41, 93, 150, 0.35) !important;
+    transform: translateY(-1px) !important;
+}
+
+.notification_dropdown .nav-link svg,
+.header-right .notification_dropdown .nav-link svg {
+    width: 20px !important;
+    height: 20px !important;
+    display: block !important;
+    margin: 0 auto !important;
+    flex-shrink: 0 !important;
+}
+
+.notification_dropdown .nav-link svg path,
+.notification_dropdown .nav-link [fill],
+.header-right .notification_dropdown .nav-link svg path,
+.header-right .notification_dropdown .nav-link [fill] {
+    fill: #ffffff !important;
     transition: fill 0.2s ease;
 }
 
-.notification_dropdown .nav-link:hover svg path {
-    fill: var(--ot-yellow) !important;
+.notification_dropdown .nav-link:hover svg path,
+.notification_dropdown .nav-link:hover [fill],
+.header-right .notification_dropdown .nav-link:hover svg path,
+.header-right .notification_dropdown .nav-link:hover [fill] {
+    fill: #ffffff !important;
+}
+
+.notification_dropdown .nav-link .badge,
+.header-right .notification_dropdown .nav-link .badge {
+    position: absolute !important;
+    top: -4px !important;
+    right: -4px !important;
+    padding: 2px 6px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    background-color: #f59e0b !important;
+    border: 2px solid #ffffff !important;
+    border-radius: 10px !important;
+    line-height: 1.1 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
 }
 
 .notification_dropdown .dropdown-menu {
@@ -780,44 +1099,67 @@ body,
 }
 
 /* ==========================================================================
-   7. PRELOADER - BRAND PALETTE HARMONY
+   7. PRELOADER - MODERN SOFT BLUE SPINNER
    ========================================================================== */
 #preloader {
-    position: fixed !important;
-    width: 100% !important;
-    height: 100% !important;
-    left: 0 !important;
-    top: 0 !important;
-    background-color: #ffffff !important;
-    z-index: 999999 !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: #ffffff;
+    z-index: 999999;
+}
+
+#preloader[style*="display: none"] {
+    display: none !important;
+}
+
+.loader-spinner-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.brand-spinner {
+    width: 44px;
+    height: 44px;
+    border: 3.5px solid rgba(53, 116, 181, 0.16);
+    border-top: 3.5px solid #3574b5;
+    border-right: 3.5px solid #295d96;
+    border-radius: 50%;
+    animation: ot-spin 0.75s linear infinite;
+    background: transparent;
+    box-sizing: border-box;
+    margin: 0 auto;
 }
 
 .sk-three-bounce {
-    background-color: transparent !important;
+    display: none !important;
 }
 
-.sk-three-bounce .sk-child,
-[data-primary] .sk-three-bounce .sk-child {
-    width: 18px !important;
-    height: 18px !important;
-    margin: 0 4px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+.loader-text {
+    margin-top: 14px;
+    color: #3574b5;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
 }
 
-/* 3 Brand Colors from Logo */
-.sk-three-bounce .sk-bounce1,
-[data-primary] .sk-three-bounce .sk-bounce1 {
-    background-color: var(--ot-navy) !important;   /* Deep Navy Blue */
-}
-
-.sk-three-bounce .sk-bounce2,
-[data-primary] .sk-three-bounce .sk-bounce2 {
-    background-color: var(--ot-cyan) !important;   /* Sky Cyan Blue */
-}
-
-.sk-three-bounce .sk-bounce3,
-[data-primary] .sk-three-bounce .sk-bounce3 {
-    background-color: var(--ot-yellow) !important; /* Golden Amber */
+@keyframes ot-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* ==========================================================================
@@ -882,13 +1224,45 @@ button.gp-search i.fa-search,
    9. DASHBOARD COMPONENTS & BRAND NUANCE (Borderless & Ornamented Cards)
    ========================================================================== */
 
+/* Card Header Icons & Header Date Badge Icons - Modern Vibrant Blue */
+.card-header h4 > i,
+.card-header h3 > i,
+.card-header .fs-15 > i,
+.form-head .badge > i,
+.form-head i.fa-calendar {
+    color: #2563eb !important;
+}
+
+/* Dashboard Filter Dropdowns Text Color */
+#filterRentangTren,
+#filterTahunPenerima,
+.card-header select,
+.card-header select:focus {
+    color: #2563eb !important;
+    font-weight: 700 !important;
+}
+
+#filterRentangTren option,
+#filterTahunPenerima option {
+    color: #1e293b !important;
+    background-color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.text-primary,
+a.text-primary {
+    color: #2563eb !important;
+}
+
 /* Modern Stat Widget Card with Layered Background Ornaments & Borderless Design */
+/* Modern Stat Widget Card - Clean White Card with Brand Blue Icons */
 .ot-stat-card {
+    background: #ffffff !important;
     border-radius: 16px !important;
     padding: 18px 20px !important;
-    border: none !important;
-    box-shadow: 0 4px 20px -2px rgba(46, 75, 130, 0.07), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
-    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease, border-color 0.28s ease !important;
     position: relative !important;
     overflow: hidden !important;
     margin-bottom: 20px;
@@ -900,182 +1274,149 @@ button.gp-search i.fa-search,
     z-index: 2;
 }
 
-/* Background Ornament 1: Glowing Ambient Radial Orb */
+/* Subtle background accent glow */
 .ot-stat-card::before {
     content: '';
     position: absolute;
-    top: -35px;
-    right: -35px;
-    width: 140px;
-    height: 140px;
+    top: -40px;
+    right: -40px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
+    background: radial-gradient(circle, rgba(53, 116, 181, 0.06) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
 }
 
-/* Background Ornament 2: Modern Geometric Concentric Ring Watermark */
 .ot-stat-card::after {
     content: '';
     position: absolute;
     bottom: -40px;
     right: -25px;
-    width: 125px;
-    height: 125px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
+    border: 10px solid rgba(53, 116, 181, 0.03);
     pointer-events: none;
     z-index: 0;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
 }
 
 .ot-stat-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-4px) !important;
+    box-shadow: 0 10px 25px rgba(46, 75, 130, 0.10) !important;
+    border-color: #cbd5e1 !important;
 }
 
 .ot-stat-card:hover::before {
-    transform: scale(1.18) translate(-6px, 6px);
+    transform: scale(1.2) translate(-4px, 4px);
+    opacity: 0.8;
 }
 
 .ot-stat-card:hover::after {
     transform: scale(1.15) rotate(15deg);
 }
 
-/* Icon Wrap with Translucent Glass Styling */
+.ot-stat-card .ot-stat-title {
+    color: #64748b !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    margin-bottom: 4px;
+}
+
+.ot-stat-card .ot-stat-number {
+    color: #1e293b !important;
+    font-size: 26px !important;
+    font-weight: 800 !important;
+    margin-bottom: 0;
+    line-height: 1.2;
+}
+
+/* Icon Wrap: Soft Blue Pill with Crisp Brand Blue Icon */
 .ot-stat-icon-wrap {
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 19px;
+    font-size: 20px;
     flex-shrink: 0;
-    background: rgba(255, 255, 255, 0.9) !important;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: none !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
-    transition: transform 0.25s ease !important;
+    background: #ebf5ff !important;
+    color: #3574b5 !important;
+    border: 1px solid #dbeafe !important;
+    box-shadow: 0 3px 10px rgba(53, 116, 181, 0.12) !important;
+    transition: all 0.25s ease !important;
 }
 
 .ot-stat-card:hover .ot-stat-icon-wrap {
-    transform: scale(1.08) rotate(5deg);
-}
-
-/* 1. Navy Variant (Card 1: Ocean Navy #2D4B7A) */
-.ot-stat-card.ot-navy {
-    background: linear-gradient(135deg, #eef4fc 0%, #dbe9f9 100%) !important;
-    border: 1px solid rgba(45, 75, 122, 0.12) !important;
-}
-.ot-stat-card.ot-navy::before {
-    background: radial-gradient(circle, rgba(45, 75, 122, 0.28) 0%, rgba(56, 165, 219, 0.12) 65%, transparent 100%);
-}
-.ot-stat-card.ot-navy::after {
-    border: 14px solid rgba(45, 75, 122, 0.10);
-    box-shadow: inset 0 0 0 10px rgba(56, 165, 219, 0.08);
-}
-.ot-stat-card.ot-navy:hover {
-    box-shadow: 0 12px 28px -3px rgba(45, 75, 122, 0.18) !important;
-}
-.ot-stat-card.ot-navy .ot-stat-title { color: #4a5d7e !important; }
-.ot-stat-card.ot-navy .ot-stat-number { color: #2D4B7A !important; }
-.ot-stat-card.ot-navy .ot-stat-icon-wrap {
-    color: var(--ot-navy) !important;
-}
-.ot-stat-card.ot-navy .ot-stat-footer {
-    border-top: 1px solid rgba(45, 75, 122, 0.10) !important;
-    color: #576d91 !important;
-}
-.ot-stat-card.ot-navy .badge {
-    background-color: var(--ot-navy) !important;
+    transform: scale(1.08) rotate(4deg) !important;
+    background: #3574b5 !important;
     color: #ffffff !important;
+    box-shadow: 0 6px 16px rgba(53, 116, 181, 0.25) !important;
 }
 
-/* 2. Sky Blue Variant (Card 2: Sky Blue #38A5DB) */
-.ot-stat-card.ot-cyan {
-    background: linear-gradient(135deg, #eaf6fc 0%, #d5eefb 100%) !important;
-    border: 1px solid rgba(56, 165, 219, 0.15) !important;
-}
-.ot-stat-card.ot-cyan::before {
-    background: radial-gradient(circle, rgba(56, 165, 219, 0.32) 0%, rgba(38, 140, 189, 0.12) 65%, transparent 100%);
-}
-.ot-stat-card.ot-cyan::after {
-    border: 14px solid rgba(56, 165, 219, 0.14);
-    box-shadow: inset 0 0 0 10px rgba(38, 140, 189, 0.08);
-}
-.ot-stat-card.ot-cyan:hover {
-    box-shadow: 0 12px 28px -3px rgba(56, 165, 219, 0.20) !important;
-}
-.ot-stat-card.ot-cyan .ot-stat-title { color: #1e668c !important; }
-.ot-stat-card.ot-cyan .ot-stat-number { color: #0284c7 !important; }
-.ot-stat-card.ot-cyan .ot-stat-icon-wrap {
-    color: var(--ot-cyan) !important;
-}
-.ot-stat-card.ot-cyan .ot-stat-footer {
-    border-top: 1px solid rgba(56, 165, 219, 0.12) !important;
-    color: #2b7094 !important;
-}
-.ot-stat-card.ot-cyan .badge {
-    background-color: var(--ot-cyan) !important;
-    color: #ffffff !important;
+.ot-stat-card .ot-stat-footer {
+    border-top: 1px solid #f1f5f9 !important;
+    padding-top: 10px;
+    margin-top: 12px;
+    font-size: 11.5px;
+    color: #64748b !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-/* 3. Emerald Green Variant (Card 3: Emerald #2EB88A) */
-.ot-stat-card.ot-green {
-    background: linear-gradient(135deg, #ebf8f3 0%, #d4f2e6 100%) !important;
-    border: 1px solid rgba(46, 184, 138, 0.15) !important;
-}
-.ot-stat-card.ot-green::before {
-    background: radial-gradient(circle, rgba(46, 184, 138, 0.30) 0%, rgba(36, 150, 112, 0.12) 65%, transparent 100%);
-}
-.ot-stat-card.ot-green::after {
-    border: 14px solid rgba(46, 184, 138, 0.14);
-    box-shadow: inset 0 0 0 10px rgba(36, 150, 112, 0.08);
-}
-.ot-stat-card.ot-green:hover {
-    box-shadow: 0 12px 28px -3px rgba(46, 184, 138, 0.20) !important;
-}
-.ot-stat-card.ot-green .ot-stat-title { color: #1e6950 !important; }
-.ot-stat-card.ot-green .ot-stat-number { color: #15803d !important; }
-.ot-stat-card.ot-green .ot-stat-icon-wrap {
-    color: var(--ot-green) !important;
-}
-.ot-stat-card.ot-green .ot-stat-footer {
-    border-top: 1px solid rgba(46, 184, 138, 0.12) !important;
-    color: #26795e !important;
-}
-.ot-stat-card.ot-green .badge {
-    background-color: var(--ot-green) !important;
-    color: #ffffff !important;
+.ot-stat-card .badge {
+    background-color: #ebf5ff !important;
+    color: #3574b5 !important;
+    border: 1px solid #dbeafe !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
 }
 
-/* 4. Warm Gold Variant (Card 4: Warm Gold #F3B329) */
+/* Specific Variant Overrides to ensure clean white background & blue accents */
+.ot-stat-card.ot-navy,
+.ot-stat-card.ot-cyan,
+.ot-stat-card.ot-green,
 .ot-stat-card.ot-yellow {
-    background: linear-gradient(135deg, #fef8eb 0%, #fdeacc 100%) !important;
-    border: 1px solid rgba(243, 179, 41, 0.18) !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
 }
-.ot-stat-card.ot-yellow::before {
-    background: radial-gradient(circle, rgba(243, 179, 41, 0.32) 0%, rgba(217, 158, 32, 0.12) 65%, transparent 100%);
-}
-.ot-stat-card.ot-yellow::after {
-    border: 14px solid rgba(243, 179, 41, 0.15);
-    box-shadow: inset 0 0 0 10px rgba(243, 179, 41, 0.08);
-}
-.ot-stat-card.ot-yellow:hover {
-    box-shadow: 0 12px 28px -3px rgba(243, 179, 41, 0.22) !important;
-}
-.ot-stat-card.ot-yellow .ot-stat-title { color: #78350f !important; }
-.ot-stat-card.ot-yellow .ot-stat-number { color: #b45309 !important; }
+
+.ot-stat-card.ot-navy .ot-stat-icon-wrap,
+.ot-stat-card.ot-cyan .ot-stat-icon-wrap,
+.ot-stat-card.ot-green .ot-stat-icon-wrap,
 .ot-stat-card.ot-yellow .ot-stat-icon-wrap {
-    color: #d99e20 !important;
+    background: #ebf5ff !important;
+    color: #3574b5 !important;
+    border: 1px solid #dbeafe !important;
 }
-.ot-stat-card.ot-yellow .ot-stat-footer {
-    border-top: 1px solid rgba(243, 179, 41, 0.15) !important;
-    color: #78350f !important;
+
+.ot-stat-card.ot-navy .ot-stat-title,
+.ot-stat-card.ot-cyan .ot-stat-title,
+.ot-stat-card.ot-green .ot-stat-title,
+.ot-stat-card.ot-yellow .ot-stat-title {
+    color: #64748b !important;
 }
+
+.ot-stat-card.ot-navy .ot-stat-number,
+.ot-stat-card.ot-cyan .ot-stat-number,
+.ot-stat-card.ot-green .ot-stat-number,
+.ot-stat-card.ot-yellow .ot-stat-number {
+    color: #1e293b !important;
+}
+
+.ot-stat-card.ot-navy .badge,
+.ot-stat-card.ot-cyan .badge,
+.ot-stat-card.ot-green .badge,
 .ot-stat-card.ot-yellow .badge {
-    background-color: var(--ot-yellow) !important;
-    color: #1E293B !important;
+    background-color: #ebf5ff !important;
+    color: #3574b5 !important;
+    border: 1px solid #dbeafe !important;
 }
 
 /* 5. Solid Stat Cards Option (DESIGN.md Section 4.B) */
@@ -1436,6 +1777,297 @@ nav[role="navigation"] svg,
     font-size: 12.5px !important;
     font-weight: 500 !important;
     margin-top: 12px !important;
+}
+
+/* ==========================================================================
+   4. COMPREHENSIVE RESPONSIVE MOBILE & TABLET RULES
+   ========================================================================== */
+
+@media only screen and (max-width: 1199px) {
+    .nav-header {
+        width: 5rem !important;
+        height: 5rem !important;
+    }
+    
+    .nav-header .brand-logo {
+        padding: 0 !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+    
+    .nav-header .brand-logo .logo-abbr {
+        max-height: 40px !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+    
+    .nav-header .brand-logo .brand-title {
+        display: none !important;
+    }
+    
+    .header {
+        height: 5rem !important;
+        padding-left: 5rem !important;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    /* Top Navigation Bar on Mobile: Brand Logo + Adjacent Hamburger Arrow */
+    .nav-header,
+    .menu-toggle .nav-header,
+    [data-sidebar-style="overlay"] .nav-header,
+    [data-sidebar-style="overlay"] .menu-toggle .nav-header,
+    [data-sidebar-style="mini"] .nav-header {
+        width: auto !important;
+        min-width: 105px !important;
+        height: 5rem !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 100002 !important;
+        background: transparent !important;
+        border: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        padding: 0 0 0 12px !important;
+    }
+    
+    .nav-header .brand-logo,
+    .menu-toggle .nav-header .brand-logo,
+    [data-sidebar-style="overlay"] .nav-header .brand-logo {
+        padding: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        width: auto !important;
+        height: 100% !important;
+    }
+    
+    .nav-header .brand-logo .logo-abbr,
+    .menu-toggle .nav-header .brand-logo .logo-abbr,
+    [data-sidebar-style="overlay"] .nav-header .brand-logo .logo-abbr {
+        max-height: 38px !important;
+        width: auto !important;
+        margin: 0 !important;
+        display: block !important;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) !important;
+    }
+    
+    .nav-header .brand-logo .brand-title,
+    .menu-toggle .nav-header .brand-logo .brand-title,
+    [data-sidebar-style="overlay"] .nav-header .brand-logo .brand-title {
+        display: none !important;
+    }
+    
+    /* Hamburger / Arrow Button Positioned Right Beside header.png */
+    .nav-header .nav-control,
+    .nav-control,
+    .menu-toggle .nav-header .nav-control,
+    [data-sidebar-style="overlay"] .nav-header .nav-control {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        margin-left: 10px !important;
+        z-index: 100003 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+    }
+    
+    .nav-header .nav-control .hamburger,
+    .nav-control .hamburger,
+    .hamburger,
+    .menu-toggle .nav-header .nav-control .hamburger,
+    [data-sidebar-style="overlay"] .nav-header .hamburger.is-active {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        min-height: 38px !important;
+        border-radius: 8px !important;
+        left: 0 !important;
+        top: 0 !important;
+        position: relative !important;
+    }
+
+    .hamburger.is-active .hamburger-icon-arrow,
+    .menu-toggle .hamburger .hamburger-icon-arrow {
+        display: block !important;
+        font-size: 16px !important;
+        color: #ffffff !important;
+    }
+
+    .hamburger.is-active .hamburger-icon-bars,
+    .menu-toggle .hamburger .hamburger-icon-bars {
+        display: none !important;
+    }
+    
+    /* Top Header Bar */
+    .header,
+    .menu-toggle .header,
+    [data-sidebar-style="overlay"] .header {
+        height: 5rem !important;
+        padding: 0 !important;
+        width: 100% !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 9999 !important;
+        background: #3574b5 !important;
+        background-color: #3574b5 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+    }
+    
+    .header .header-content {
+        padding-left: 110px !important;
+        padding-right: 12px !important;
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+    }
+    
+    .header-right {
+        gap: 8px !important;
+        margin-left: auto !important;
+    }
+    
+    .notification_dropdown .nav-link,
+    .header-right .notification_dropdown .nav-link {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+    }
+    
+    .header-right .header-profile > a.nav-link {
+        padding: 4px 6px !important;
+    }
+    
+    .header-right .header-profile > a.nav-link .header-info {
+        padding-right: 6px !important;
+    }
+    
+    .header-right .header-profile > a.nav-link .header-info span {
+        font-size: 11px !important;
+    }
+    
+    .header-right .header-profile > a.nav-link .header-info p {
+        font-size: 10px !important;
+    }
+    
+    .header-right .header-profile img {
+        width: 28px !important;
+        height: 28px !important;
+    }
+    
+    .content-body {
+        margin-left: 0 !important;
+        padding-top: 5.5rem !important;
+    }
+    
+    .footer {
+        padding-left: 0 !important;
+    }
+
+    /* Mobile Sidebar Drawer (Closed / Default state) */
+    .deznav,
+    [data-sidebar-style="overlay"] .deznav,
+    [data-sidebar-style="mini"] .deznav {
+        position: fixed !important;
+        top: 5rem !important;
+        left: -100% !important;
+        transform: translateX(-100%) !important;
+        width: 270px !important;
+        height: calc(100vh - 5rem) !important;
+        max-height: calc(100vh - 5rem) !important;
+        z-index: 99998 !important;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), left 0.3s ease !important;
+        box-shadow: none !important;
+        padding-top: 0.5rem !important;
+    }
+
+    /* Mobile Sidebar Drawer (Open state when Hamburger is clicked / .menu-toggle) */
+    .menu-toggle .deznav,
+    [data-sidebar-style="overlay"] .menu-toggle .deznav,
+    [data-sidebar-style="mini"] .menu-toggle .deznav {
+        left: 0 !important;
+        transform: translateX(0) !important;
+        width: 270px !important;
+        box-shadow: 6px 0 25px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* Keep full readable text and section labels inside the open mobile drawer */
+    .menu-toggle .deznav .metismenu .nav-label,
+    [data-sidebar-style="overlay"] .menu-toggle .deznav .metismenu .nav-label,
+    [data-sidebar-style="mini"] .menu-toggle .deznav .metismenu .nav-label {
+        display: block !important;
+        color: #FFE066 !important;
+        padding: 10px 18px 4px 18px !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+    }
+
+    .menu-toggle .deznav .metismenu > li > a,
+    [data-sidebar-style="overlay"] .menu-toggle .deznav .metismenu > li > a,
+    [data-sidebar-style="mini"] .menu-toggle .deznav .metismenu > li > a {
+        justify-content: flex-start !important;
+        text-align: left !important;
+        padding: 11px 16px !important;
+        margin: 2px 12px !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .menu-toggle .deznav .metismenu > li > a i,
+    [data-sidebar-style="overlay"] .menu-toggle .deznav .metismenu > li > a i,
+    [data-sidebar-style="mini"] .menu-toggle .deznav .metismenu > li > a i {
+        margin-right: 12px !important;
+        font-size: 17px !important;
+    }
+
+    .menu-toggle .deznav .metismenu > li > a .nav-text,
+    [data-sidebar-style="overlay"] .menu-toggle .deznav .metismenu > li > a .nav-text,
+    [data-sidebar-style="mini"] .menu-toggle .deznav .metismenu > li > a .nav-text {
+        display: inline-block !important;
+        color: #ffffff !important;
+    }
+
+    .menu-toggle .deznav .metismenu > li > a.has-arrow:after,
+    [data-sidebar-style="overlay"] .menu-toggle .deznav .metismenu > li > a.has-arrow:after,
+    [data-sidebar-style="mini"] .menu-toggle .deznav .metismenu > li > a.has-arrow:after {
+        display: block !important;
+    }
+
+    .menu-toggle .deznav .metismenu ul,
+    [data-sidebar-style="overlay"] .menu-toggle .deznav .metismenu ul,
+    [data-sidebar-style="mini"] .menu-toggle .deznav .metismenu ul {
+        position: static !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        border: none !important;
+        padding-left: 0 !important;
+    }
+
+    .menu-toggle .deznav .metismenu ul a,
+    [data-sidebar-style="overlay"] .menu-toggle .deznav .metismenu ul a,
+    [data-sidebar-style="mini"] .menu-toggle .deznav .metismenu ul a {
+        padding: 8px 16px 8px 28px !important;
+        margin: 2px 12px !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .menu-toggle .deznav .copyright,
+    [data-sidebar-style="overlay"] .menu-toggle .deznav .copyright,
+    [data-sidebar-style="mini"] .menu-toggle .deznav .copyright {
+        display: block !important;
+    }
 }
 
 

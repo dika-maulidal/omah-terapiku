@@ -70,9 +70,11 @@
                     <li><a href="{{Route('terapis')}}"><i class="fa-solid fa-user-doctor mr-2"></i>Data Terapis</a></li>
                 </ul>
             </li>
+            @endif
             
             <li class="nav-label">Akun & Sistem</li>
             
+            @if (auth()->user()->role_display() == 'Admin')
             <li>
                 <a href="{{Route('setting.index')}}" class="ai-icon" aria-expanded="false">
                     <i class="fa-solid fa-sliders"></i>
@@ -80,6 +82,13 @@
                 </a>
             </li>
             @endif
+
+            <li>
+                <a href="{{Route('logout')}}" class="ai-icon text-logout" aria-expanded="false">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span class="nav-text">Logout</span>
+                </a>
+            </li>
         </ul>
         
         <div class="copyright">
