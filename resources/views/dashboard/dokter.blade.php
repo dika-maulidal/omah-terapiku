@@ -15,7 +15,8 @@
         $pasienOmah = $query->getPasienPerOmahTerapiku();
         $demografi = $query->getDemografiPenerimaManfaat();
         $distribusiTerapi = $query->getDistribusiJenisTerapi();
-        $topTindakan = $query->getTopTindakanTerbanyak(5);
+        $allTopTindakan = $query->getTopTindakanAll(5);
+        $topTindakan = $allTopTindakan['bulan'];
     @endphp
 
     <!-- Dashboard Header Banner (Unified White Card) -->
@@ -337,9 +338,21 @@
                             <i class="fa fa-list-ol mr-2" style="color: #2563eb;"></i> Top 5 Rencana Tindakan & Intervensi
                         </h4>
                     </div>
+                    <div class="position-relative mt-2 mt-sm-0" style="width: 145px;">
+                        <i class="fa fa-filter" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 12px; pointer-events: none; z-index: 2;"></i>
+                        <select id="filterPeriodeTindakan" class="form-control form-control-sm font-w700" style="color: #2563eb !important; padding-left: 32px; padding-right: 34px; height: 36px; font-size: 12.5px; border-radius: 8px; border-color: #cbd5e1; cursor: pointer; background-color: #ffffff; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%232563eb' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e&quot;); background-repeat: no-repeat; background-position: right 14px center; background-size: 11px 11px;">
+                            <option value="bulan" selected>Bulan Ini</option>
+                            <option value="tahun">Tahun Ini</option>
+                            <option value="semua">Semua Waktu</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="card-body p-3">
-                    <div class="dz-scroll" style="max-height: 220px; overflow-y: auto;">
+                    <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                        <span class="fs-12 text-muted font-w600" id="labelPeriodeTindakan">Periode: <strong class="text-primary">{{ $bulan }} {{ date('Y') }}</strong></span>
+                        <span class="badge badge-primary light font-w700" id="badgeTotalTindakan" style="font-size: 11px;">Total: {{ $topTindakan['total'] }} Tindakan</span>
+                    </div>
+                    <div class="dz-scroll" id="containerTopTindakan" style="max-height: 220px; overflow-y: auto;">
                         @forelse($topTindakan['items'] as $index => $tdk)
                             <div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
@@ -364,7 +377,7 @@
                         @empty
                             <div class="text-center py-4 text-muted">
                                 <i class="fa-solid fa-clipboard-list fa-2x mb-2 text-muted" style="opacity: 0.5;"></i>
-                                <p class="fs-12 mb-0">Belum ada data tindakan terapi yang tercatat.</p>
+                                <p class="fs-12 mb-0">Belum ada data tindakan terapi pada periode ini.</p>
                             </div>
                         @endforelse
                     </div>
@@ -582,7 +595,7 @@
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center flex-shrink-0 ml-2">
-                                        <a href="{{ Route('rekam.detail', $item->pasien_id) }}" class="btn btn-xs btn-primary shadow-sm font-w600" style="padding: 5px 12px; border-radius: 6px;">
+                                        <a href="{{ Route('rekam.detail', $item->pasien_id) }}" class="btn btn-xs btn-primary shadow-sm font-w600" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 6px 14px; border-radius: 6px; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);">
                                             Periksa <i class="fa fa-arrow-right ml-1"></i>
                                         </a>
                                     </div>
@@ -1086,6 +1099,70 @@ $(document).ready(function() {
                 }]
             }
         }
+    });
+
+    // 7. Interactive Filter Top 5 Rencana Tindakan & Intervensi
+    var allTopTindakan = {!! json_encode($allTopTindakan) !!};
+    var labelBulanIniTindakan = "{{ $bulan }} {{ date('Y') }}";
+    var labelTahunIniTindakan = "Tahun {{ date('Y') }}";
+
+    function renderTopTindakan(periode) {
+        var data = allTopTindakan[periode] || { items: [], total: 0 };
+        var container = $('#containerTopTindakan');
+        var badgeTotal = $('#badgeTotalTindakan');
+        var labelPeriode = $('#labelPeriodeTindakan');
+
+        badgeTotal.text('Total: ' + (data.total || 0) + ' Tindakan');
+
+        if (periode === 'bulan') {
+            labelPeriode.html('Periode: <strong class="text-primary">' + labelBulanIniTindakan + '</strong>');
+        } else if (periode === 'tahun') {
+            labelPeriode.html('Periode: <strong class="text-primary">' + labelTahunIniTindakan + '</strong>');
+        } else {
+            labelPeriode.html('Periode: <strong class="text-primary">Semua Waktu</strong>');
+        }
+
+        if (!data.items || data.items.length === 0 || data.total === 0) {
+            container.html(
+                '<div class="text-center py-4 text-muted">' +
+                    '<i class="fa-solid fa-clipboard-list fa-2x mb-2 text-muted" style="opacity: 0.5;"></i>' +
+                    '<p class="fs-12 mb-0">Belum ada data tindakan terapi pada periode ini.</p>' +
+                '</div>'
+            );
+            return;
+        }
+
+        var html = '';
+        data.items.forEach(function(tdk, index) {
+            var safeNama = $('<div>').text(tdk.nama).html();
+            html += '<div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">' +
+                '<div class="d-flex justify-content-between align-items-center mb-1">' +
+                    '<div class="d-flex align-items-center text-truncate" style="max-width: 70%;">' +
+                        '<span class="badge badge-pill badge-primary mr-2 font-w700" style="width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: ' + tdk.color + ';">' +
+                            '#' + (index + 1) +
+                        '</span>' +
+                        '<span class="fs-12 text-dark font-w600 text-truncate" title="' + safeNama + '">' +
+                            safeNama +
+                        '</span>' +
+                    '</div>' +
+                    '<div class="text-right flex-shrink-0">' +
+                        '<span class="badge badge-light font-w700 text-primary" style="font-size: 11px; background: #f1f5f9;">' +
+                            tdk.total + ' Kali' +
+                        '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="progress" style="height: 6px; background: #f1f5f9; border-radius: 4px;">' +
+                    '<div class="progress-bar" role="progressbar" style="width: ' + tdk.bar_persen + '%; background-color: ' + tdk.color + '; border-radius: 4px;" aria-valuenow="' + tdk.bar_persen + '" aria-valuemin="0" aria-valuemax="100"></div>' +
+                '</div>' +
+            '</div>';
+        });
+
+        container.html(html);
+    }
+
+    $('#filterPeriodeTindakan').on('change', function() {
+        var selectedPeriode = $(this).val();
+        renderTopTindakan(selectedPeriode);
     });
 });
 </script>

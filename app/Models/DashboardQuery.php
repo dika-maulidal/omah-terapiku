@@ -138,6 +138,95 @@ class DashboardQuery
         return $data;
     }
 
+    public function getTopDiagnosaTerbanyak($limit = 10, $periode = 'bulan')
+    {
+        $user = auth()->user();
+        $role = $user ? $user->role_display() : '';
+        $dokterId = null;
+        if ($role == "Dokter") {
+            $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
+            $dokterId = $dokter ? $dokter->id : null;
+        }
+
+        $query = DB::table('rekam_diagnosa')
+            ->join('rekam', 'rekam.id', '=', 'rekam_diagnosa.rekam_id')
+            ->leftJoin('icds', 'icds.code', '=', 'rekam_diagnosa.diagnosa')
+            ->select(
+                'rekam_diagnosa.diagnosa as code',
+                'icds.name_id',
+                'icds.name_en',
+                DB::raw('count(*) as total')
+            )
+            ->whereNotNull('rekam_diagnosa.diagnosa')
+            ->where('rekam_diagnosa.diagnosa', '!=', '')
+            ->when($dokterId, function ($q) use ($dokterId) {
+                $q->where('rekam.dokter_id', $dokterId);
+            });
+
+        if (session()->has('selected_upt') && session('selected_upt') != '') {
+            $upt = session('selected_upt');
+            $query->where(function($q) use ($upt) {
+                $q->where('rekam.poli', 'LIKE', "%{$upt}%")
+                  ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");
+            });
+        }
+
+        if ($periode === 'bulan') {
+            $query->whereYear('rekam.tgl_rekam', date('Y'))
+                  ->whereMonth('rekam.tgl_rekam', date('m'));
+        } elseif ($periode === 'tahun') {
+            $query->whereYear('rekam.tgl_rekam', date('Y'));
+        }
+
+        $diagnosaData = $query->groupBy('rekam_diagnosa.diagnosa', 'icds.name_id', 'icds.name_en')
+            ->orderBy('total', 'desc')
+            ->limit($limit)
+            ->get();
+
+        $items = [];
+        $totalKasus = 0;
+        $palette = ['#1e40af', '#2563eb', '#3b82f6', '#60a5fa', '#38bdf8', '#0284c7', '#0369a1', '#0ea5e9', '#64748b', '#475569'];
+        $idx = 0;
+
+        foreach ($diagnosaData as $row) {
+            $code = $row->code;
+            $nama = !empty($row->name_id) ? $row->name_id : (!empty($row->name_en) ? $row->name_en : $code);
+            $count = (int)$row->total;
+            $totalKasus += $count;
+
+            $items[] = [
+                'code' => $code,
+                'nama' => $nama,
+                'total' => $count,
+                'color' => $palette[$idx % count($palette)]
+            ];
+            $idx++;
+        }
+
+        $maxCount = !empty($items) ? max(array_column($items, 'total')) : 0;
+        foreach ($items as &$it) {
+            $it['persentase'] = $totalKasus > 0 ? round(($it['total'] / $totalKasus) * 100, 1) : 0;
+            $it['bar_persen'] = $maxCount > 0 ? round(($it['total'] / $maxCount) * 100, 1) : ($it['total'] > 0 ? 100 : 5);
+        }
+
+        return [
+            'items' => $items,
+            'total' => $totalKasus,
+            'labels' => array_column($items, 'nama'),
+            'counts' => array_column($items, 'total'),
+            'colors' => array_column($items, 'color')
+        ];
+    }
+
+    public function getTopDiagnosaAll($limit = 10)
+    {
+        return [
+            'bulan' => $this->getTopDiagnosaTerbanyak($limit, 'bulan'),
+            'tahun' => $this->getTopDiagnosaTerbanyak($limit, 'tahun'),
+            'semua' => $this->getTopDiagnosaTerbanyak($limit, 'semua')
+        ];
+    }
+
     function rekam_day(){
         $user = auth()->user();
         $role = $user->role_display();
@@ -571,7 +660,7 @@ class DashboardQuery
         ];
     }
 
-    public function getTopTindakanTerbanyak($limit = 5)
+    public function getTopTindakanTerbanyak($limit = 5, $periode = 'bulan')
     {
         $user = auth()->user();
         $role = $user ? $user->role_display() : '';
@@ -581,15 +670,31 @@ class DashboardQuery
             $dokterId = $dokter ? $dokter->id : null;
         }
 
-        $rekamTindakan = DB::table('rekam')
+        $query = DB::table('rekam')
             ->select('tindakan', DB::raw('count(*) as total'))
             ->when($dokterId, function ($q) use ($dokterId) {
                 $q->where('dokter_id', $dokterId);
             })
             ->whereNotNull('tindakan')
             ->where('tindakan', '!=', '')
-            ->where('tindakan', 'NOT LIKE', '%Belum ada catatan%')
-            ->groupBy('tindakan')
+            ->where('tindakan', 'NOT LIKE', '%Belum ada catatan%');
+
+        if (session()->has('selected_upt') && session('selected_upt') != '') {
+            $upt = session('selected_upt');
+            $query->where(function($q) use ($upt) {
+                $q->where('rekam.poli', 'LIKE', "%{$upt}%")
+                  ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");
+            });
+        }
+
+        if ($periode === 'bulan') {
+            $query->whereYear('tgl_rekam', date('Y'))
+                  ->whereMonth('tgl_rekam', date('m'));
+        } elseif ($periode === 'tahun') {
+            $query->whereYear('tgl_rekam', date('Y'));
+        }
+
+        $rekamTindakan = $query->groupBy('tindakan')
             ->orderBy('total', 'desc')
             ->limit($limit)
             ->get();
@@ -615,18 +720,6 @@ class DashboardQuery
             $idx++;
         }
 
-        if (count($items) === 0) {
-            $master = DB::table('tindakan')->limit($limit)->get();
-            foreach ($master as $m) {
-                $items[] = [
-                    'nama' => $m->nama,
-                    'total' => 0,
-                    'color' => $palette[$idx % count($palette)]
-                ];
-                $idx++;
-            }
-        }
-
         $maxCount = !empty($items) ? max(array_column($items, 'total')) : 0;
         foreach ($items as &$it) {
             $it['persentase'] = $totalTindakan > 0 ? round(($it['total'] / $totalTindakan) * 100, 1) : 0;
@@ -639,6 +732,15 @@ class DashboardQuery
             'labels' => array_column($items, 'nama'),
             'counts' => array_column($items, 'total'),
             'colors' => array_column($items, 'color')
+        ];
+    }
+
+    public function getTopTindakanAll($limit = 5)
+    {
+        return [
+            'bulan' => $this->getTopTindakanTerbanyak($limit, 'bulan'),
+            'tahun' => $this->getTopTindakanTerbanyak($limit, 'tahun'),
+            'semua' => $this->getTopTindakanTerbanyak($limit, 'semua')
         ];
     }
 }

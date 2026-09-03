@@ -1,100 +1,109 @@
 # UI/UX Design System & Style Guide — Omah Terapi-KU
 
-Dokumen ini berisi standar visual, skema warna, tipografi, dan acuan komponen UI untuk memastikan antarmuka aplikasi Omah Terapi-KU terlihat profesional, konsisten, ramah pengguna (aksesibel untuk disabilitas/inklusi), dan terhindar dari tampilan generik (AI slop).
+Dokumen ini merupakan acuan standar visual, skema warna (*palette*), tipografi, komponen UI, dan pedoman interaktivitas untuk memastikan antarmuka **Omah Terapi-KU** tampil modern, elegan, konsisten dengan nuansa khas **Royal Blue & Ocean Navy**, serta ramah pengguna (aksesibel dan inklusif).
 
 ---
 
-## 1. Palette Warna (Extracted from Logo & Reference)
+## 1. Skema Warna (*Color Palette*)
 
-Warna utama diambil dari logo resmi **Omah Terapi-KU** (Dinsos Jatim) dan dikombinasikan dengan nuansa *Clean Medical Dashboard*.
+Sistem warna aplikasi dibangun di atas nuansa **Clean Medical Royal Blue** yang memberikan kesan klinis yang terpercaya, segar, dan profesional.
 
-### A. Primary Brand Colors (Logo Based)
-- **Ocean Navy (Primary/Brand Text):** `#2D4B7A`
-  - *Penggunaan:* Text logo, Topbar, Header Card, Active Sidebar Item, Utama Tombol Primar.
-- **Sky Blue (Accent/Secondary):** `#38A5DB`
-  - *Penggunaan:* Icon highlight, Active Tabs, Progress Bar, Status "Sedang Terapi".
-- **Warm Gold / Mustard (Warning/Accent):** `#F3B329`
-  - *Penggunaan:* Badge status "Menunggu", Highlight Peringatan, Accent Card.
-- **Heart Red (Danger/Critical):** `#D9383A`
-  - *Penggunaan:* Status "Batal", Badge Urgent, Alert Nyeri Tinggi.
-- **Teal / Emerald Green (Success):** `#2EB88A`
-  - *Penggunaan:* Status "Selesai/Pass", Tombol Simpan/Konfirmasi, Badge Desil DTSEN.
+### A. Palet Warna Utama (*Primary Brand Palette*)
 
-### B. UI Surface & Background (Referensi Dashboard Modern)
-- **Sidebar Navy (Dark Mode Sidebar Optional/Contrast):** `#2B2F57` atau **Clean Soft White:** `#F8FAFC`
-- **Main App Background:** `#F1F5F9` (Gunakan off-white bersuhu netral, hindari putih murni yang silau di mata).
-- **Card Surface Background:** `#FFFFFF` dengan shadow lembut (`box-shadow: 0 1px 3px rgba(0,0,0,0.05)`).
-- **Border & Divider:** `#E2E8F0` (Garis tipis tegas 1px).
+| Nama Token | Hex Code | Visual Preview / Keterangan | Penggunaan Utama |
+|---|---|---|---|
+| **Royal Blue** | `#2563eb` | Biru Utama Terang | Tombol utama (*Primary Button*), ikon fokus, tab aktif, filter aktif, progress bar utama, link hover |
+| **Ocean Navy** | `#1e40af` / `#2D4B7A` | Biru Navy Gelap | Judul halaman (*H1*), judul kartu (*Card Title*), header sidebar, ranking `#1`, brand header banner |
+| **Sky Blue** | `#38bdf8` / `#38A5DB` | Biru Langit / Cyan | Aksen tren penerima baru, grafik komparasi, badge sekunder, highlight metrik |
+| **Deep Navy** | `#1e293b` / `#0f172a` | Navy Pekat / Text Dark | Teks utama body, judul modal, tooltip chart background |
+| **Soft Blue Light** | `#eff6ff` / `#e0f2fe` | Biru Pastel Sangat Lembut | Latar avatar inisial, badge aktif ringan, kontainer status |
 
----
+### B. Palet Pendukung Status Klinis (*Semantic Status Colors*)
 
-## 2. Tipografi (Typography)
+| Status | Warna Utama | Warna Latar Ringan (*Badge Light*) | Penggunaan |
+|---|---|---|---|
+| **Antrian / Menunggu** | `#f59e0b` (Amber Gold) | `#fef3c7` / `#fffbeb` | Status antrian, peringatan batas re-evaluasi |
+| **Pemeriksaan / Proses** | `#2563eb` (Royal Blue) | `#eff6ff` / `#dbeafe` | Pasien sedang diperiksa terapis, sesi berlangsung |
+| **Selesai / Terverifikasi** | `#10b981` (Emerald Teal) | `#ecfdf5` / `#d1fae5` | Selesai pelayanan, asesmen tersimpan |
+| **Batal / Nyeri / Kritis** | `#ef4444` (Coral Red) | `#fef2f2` / `#fee2e2` | Status batal, asesmen skala nyeri tinggi |
 
-Gunakan font sans-serif modern yang sangat mudah dibaca (*high legibility*) untuk dokumen medis dan aksesibilitas anak/lansia.
+### C. Permukaan & Latar Belakang (*Surface & Neutral Background*)
 
-- **Primary Font Family:** `Plus Jakarta Sans` atau `Inter`, `sans-serif`.
-- **Heading Scale:**
-  - `H1` (Page Title): **24px / Bold (700)** — `#2D4B7A`
-  - `H2` (Section Title / Card Title): **18px / SemiBold (600)** — `#1E293B`
-  - `H3` (Sub-section / Tab Label): **14px / Medium (500)** — `#334155`
-- **Body Text Scale:**
-  - `Body Regular`: **14px / Regular (400)** — `#475569`
-  - `Body Small / Captions`: **12px / Regular (400)** — `#64748B`
+- **Main App Background:** `#F1F5F9` (Abu-abu kebiruan netral dengan *radial ambient glow* halus).
+- **Card Surface:** `#FFFFFF` murni dengan garis batas `1px solid #E2E8F0` dan bayangan lembut `box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05)`.
+- **Border & Separator:** `#E2E8F0` (Garis pemisah kartu, header, dan divider form).
 
 ---
 
-## 3. Iconography (FontAwesome 6 Pro / Free)
+## 2. Tipografi (*Typography*)
 
-Gunakan set ikon **FontAwesome 6** yang konsisten (*Solid* untuk state aktif, *Regular/Light* untuk state netral). Jangan mencampur gaya ikon dari pustaka yang berbeda-beda.
+Menggunakan font modern sans-serif yang tajam dengan tingkat keterbacaan (*legibility*) tinggi untuk kemudahan pembacaan data klinis.
 
-### A. Navigation & System Icons
-- **Dashboard:** `fa-solid fa-chart-pie`
-- **Penerima Manfaat / Pasien:** `fa-solid fa-wheelchair` / `fa-solid fa-hospital-user`
-- **Rekam Medis / SOAP:** `fa-solid fa-notes-medical`
-- **Form Asesmen:** `fa-solid fa-clipboard-check`
-- **Master Data:** `fa-solid fa-database`
-- **Pengaturan:** `fa-solid fa-sliders`
-
-### B. Clinical & Therapy Icons
-- **Fisioterapi:** `fa-solid fa-child-reaching` / `fa-solid fa-person-walking`
-- **Terapi Okupasi:** `fa-solid fa-hands-holding-child` / `fa-solid fa-puzzle-piece`
-- **Terapi Wicara:** `fa-solid fa-comment-dots` / `fa-solid fa-hands-asl-interpreting`
-- **Status Penglihatan (Netra):** `fa-solid fa-eye-low-vision`
-- **Body Chart / Nyeri:** `fa-solid fa-child` / `fa-solid fa-stethoscope`
+- **Font Family Utama:** `'Plus Jakarta Sans', 'Inter', sans-serif`
+- **Skala Ukuran & Bobot:**
+  - **H1 (Page Title):** `22px – 24px` | Bobot: `700 (Bold)` | Warna: `#1e40af` / `#2D4B7A`
+  - **H2 / Card Header:** `15px – 16px` | Bobot: `700 (Bold)` | Warna: `#1e40af` / `#1e293b`
+  - **Sub-header / Periode:** `12px – 12.5px` | Bobot: `600 (SemiBold)` | Warna: `#64748b`
+  - **Body Text:** `13px – 14px` | Bobot: `400 (Regular)` / `500 (Medium)` | Warna: `#334155`
+  - **Caption & Micro-Text:** `11px – 12px` | Bobot: `500 / 600` | Warna: `#64748b`
 
 ---
 
-## 4. Component Design Rules (Anti "AI Slop")
+## 3. Komponen Dashboard Terstandarisasi
 
-Agar aplikasi tidak terlihat seperti template buatan AI yang berantakan, patuhi aturan berikut:
+### A. Dropdown Filter Seragam (*Universal Header Filter*)
+Seluruh kartu analitik dan ranking di dashboard wajib menggunakan format dropdown filter seragam:
 
-### A. Sidebar Navigation
-- **Default Style:** Gunakan latar **Clean Navy Dark (`#2B2F57`)** atau **Pure Soft Gray (`#F8FAFC`)**.
-- **Active State:** Tanda aktif menggunakan warna dasar Ocean Navy (`#2D4B7A`) dengan aksen garis vertical dibagian kiri (*Border-left 4px* warna `#38A5DB`) dan efek membulat (*rounded-r-lg*).
-- **Group Label:** Kategori menu (MENU UTAMA, PELAYANAN, MASTER DATA) menggunakan font `11px / Bold / Uppercase` warna `#94A3B8`.
+- **Posisi:** Kanan atas pada *Card Header*.
+- **Ikon:** `<i class="fa fa-filter"></i>` berwarna `#2563eb` di sisi kiri dalam dropdown.
+- **Styling:**
+  - Tinggi: `36px`, Sudut: `border-radius: 8px`, Border: `1px solid #cbd5e1`.
+  - Warna Teks: `#2563eb` dengan `font-weight: 700`.
+  - Panah Dropdown: Menggunakan SVG custom panah biru yang tajam.
+- **Komponen Pengguna:**
+  1. *Grafik Tren Pelayanan* (`#filterRentangTren`)
+  2. *Grafik Total Penerima Manfaat per Bulan* (`#filterTahunPenerima`)
+  3. *Top 5 Rencana Tindakan & Intervensi* (`#filterPeriodeTindakan`)
+  4. *Top Diagnosa Kasus Terbanyak* (`#filterPeriodeDiagnosa`)
 
-### B. Summary Stat Cards (Top Dashboard)
-- Terinspirasi dari *reference image*: Gunakan gradasi warna lembut atau *flat solid color* dengan aksen visual yang jelas (bukan gambar hiasan AI yang tidak relevan).
-- **Card 1 (Total Pasien):** Background `#2D4B7A` (Text Putih).
-- **Card 2 (Sesi Hari Ini):** Background `#38A5DB` (Text Putih).
-- **Card 3 (Pasien Selesai):** Background `#2EB88A` (Text Putih).
-- **Card 4 (Re-evaluasi Perlu Diselesai):** Background `#F3B329` (Text Gelap).
+### B. Format Kartu Top Ranking (Tindakan & Diagnosa)
+- **Sub-Header:** Label periode dinamis (kiri) dan badge total frekuensi (kanan).
+- **Struktur Baris Item:**
+  - **Ranking Pill:** `#1` sampai `#10` dengan palet bergradasi biru (`#1e40af`, `#2563eb`, `#3b82f6`, `#60a5fa`, `#38bdf8`).
+  - **Badge Kode (Khusus Diagnosa):** Badge kode ICD-10 berlatar `#e0f2fe` dan teks `#0284c7`.
+  - **Nama / Label:** Teks tebal `#1e293b` dengan *text-overflow ellipsis* dan tooltip judul lengkap.
+  - **Badge Total:** Pill abu-abu `#f1f5f9` dengan teks biru bold `#2563eb` (contoh: `25 Kali`, `14 Kasus`).
+  - **Progres Bar:** Tinggi `6px`, latar `#f1f5f9`, terisi proporsional sesuai nilai tertinggi (*bar_persen*).
 
-### C. Tables & Data Display
-- **Header Tabel:** Gunakan background `#F8FAFC`, font `12px / Bold / Uppercase` warna `#475569`.
-- **Row Hover:** Berikan efek hover lembut `#F1F5F9`.
-- **Badge Status:** Gunakan pill badge dengan transparansi background:
-  - *Selesai:* Background `rgba(46, 184, 138, 0.1)`, Text `#2EB88A`.
-  - *Proses:* Background `rgba(56, 165, 219, 0.1)`, Text `#38A5DB`.
-  - *Batal:* Background `rgba(217, 56, 58, 0.1)`, Text `#D9383A`.
+### C. Visualisasi Grafik (*Charts Visual Standard*)
+- **Grafik Tren Garis (Line Chart):**
+  - Menggunakan area gradient lembut (*fading to transparent*).
+  - Garis primer `#1e40af` (Pelayanan Rekam Medis) dan garis sekunder `#38bdf8` (Penerima Manfaat Baru).
+- **Grafik Batang (Bar Chart):**
+  - Bar rounded-top (`borderRadius: 6`), warna biru solid `#2563eb`.
+- **Grafik Donat / Pie:**
+  - Rasio *cutoutPercentage*: `65% – 68%`.
+  - Border putih `2px` antar irisan untuk kontras maksimal.
 
-### D. Forms & Asesmen Inputs
-- **Input Fields:** Border `1px solid #CBD5E1`, border-radius `8px`, dengan *focus state* ring warna `#38A5DB`.
-- **Matrix Tables (GMFM/Denver):** Gunakan selang-seling warna baris (*zebra striping*) `#FFFFFF` dan `#F8FAFC` agar terapis tidak salah mengklik baris indikator.
+### D. Tombol & Tombol Aksi (*Buttons*)
+- **Tombol Utama (*Primary Button*):**
+  - Gradien: `linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)`.
+  - Efek: *Box-shadow* biru lembut `rgba(37, 99, 235, 0.25)`, sudut `border-radius: 8px`.
+- **Tombol Aksi Baris / Tabel:**
+  - Tombol ikon ringkas `28x28px`, warna latar solid `#2563eb`, ikon putih di tengah.
+
+### E. Footer Copyright Ramping (*Compact Footer*)
+- Jarak vertikal terhadap konten dipersempit (`padding-top: 10px`, `padding-bottom: 12px`).
+- Latar transparan dengan garis pemisah tipis `1px solid rgba(226, 232, 240, 0.6)`.
+- Link nama brand beraksen biru `#2563eb` dengan transisi hover ke `#1d4ed8`.
 
 ---
 
-## 5. Micro-Interactions & Responsiveness
-- **Hover Effects:** Transisi halus (`transition: all 0.2s ease-in-out`).
-- **Target Touch Size:** Karena kemungkinan digunakan di tablet touchscreen oleh terapis, pastikan ukuran tombol minimal **44px x 44px**.
-- **Contrast Ratio:** Seluruh kombinasi warna teks dan background wajib lolos **WCAG 2.1 AA Standard** agar mudah dibaca oleh penyandang disabilitas low vision.
+## 4. Pedoman Micro-Interactions & Aksesibilitas
+
+1. **Responsivitas Realtime:**
+   - Pergantian filter periode (Bulan Ini / Tahun Ini / Semua Waktu) harus ditangani via JavaScript secara langsung tanpa jeda reload halaman penuh.
+2. **Penanganan Kondisi Kosong (*Empty State*):**
+   - Jika suatu periode tidak memiliki data, tampilkan ikon representatif berukuran `24px` dengan opasitas `0.5` dan pesan penjelasan yang ramah.
+3. **Standar Kontras & Inklusivitas:**
+   - Semua perpaduan warna teks dan background memenuhi standar **WCAG 2.1 Level AA** agar nyaman dibaca oleh terapis, petugas, maupun pengguna dengan kebutuhan visual khusus.

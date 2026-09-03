@@ -15,7 +15,10 @@
         $pasienOmah = $query->getPasienPerOmahTerapiku();
         $demografi = $query->getDemografiPenerimaManfaat();
         $distribusiTerapi = $query->getDistribusiJenisTerapi();
-        $topTindakan = $query->getTopTindakanTerbanyak(5);
+        $allTopTindakan = $query->getTopTindakanAll(5);
+        $topTindakan = $allTopTindakan['bulan'];
+        $allTopDiagnosa = $query->getTopDiagnosaAll(10);
+        $topDiagnosa = $allTopDiagnosa['bulan'];
     @endphp
 
     <!-- Dashboard Header Banner (Unified White Card) -->
@@ -337,9 +340,21 @@
                             <i class="fa fa-list-ol mr-2" style="color: #2563eb;"></i> Top 5 Rencana Tindakan & Intervensi
                         </h4>
                     </div>
+                    <div class="position-relative mt-2 mt-sm-0" style="width: 145px;">
+                        <i class="fa fa-filter" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 12px; pointer-events: none; z-index: 2;"></i>
+                        <select id="filterPeriodeTindakan" class="form-control form-control-sm font-w700" style="color: #2563eb !important; padding-left: 32px; padding-right: 34px; height: 36px; font-size: 12.5px; border-radius: 8px; border-color: #cbd5e1; cursor: pointer; background-color: #ffffff; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%232563eb' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e&quot;); background-repeat: no-repeat; background-position: right 14px center; background-size: 11px 11px;">
+                            <option value="bulan" selected>Bulan Ini</option>
+                            <option value="tahun">Tahun Ini</option>
+                            <option value="semua">Semua Waktu</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="card-body p-3">
-                    <div class="dz-scroll" style="max-height: 220px; overflow-y: auto;">
+                    <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                        <span class="fs-12 text-muted font-w600" id="labelPeriodeTindakan">Periode: <strong class="text-primary">{{ $bulan }} {{ date('Y') }}</strong></span>
+                        <span class="badge badge-primary light font-w700" id="badgeTotalTindakan" style="font-size: 11px;">Total: {{ $topTindakan['total'] }} Tindakan</span>
+                    </div>
+                    <div class="dz-scroll" id="containerTopTindakan" style="max-height: 220px; overflow-y: auto;">
                         @forelse($topTindakan['items'] as $index => $tdk)
                             <div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
@@ -364,7 +379,7 @@
                         @empty
                             <div class="text-center py-4 text-muted">
                                 <i class="fa-solid fa-clipboard-list fa-2x mb-2 text-muted" style="opacity: 0.5;"></i>
-                                <p class="fs-12 mb-0">Belum ada data tindakan terapi yang tercatat.</p>
+                                <p class="fs-12 mb-0">Belum ada data tindakan terapi pada periode ini.</p>
                             </div>
                         @endforelse
                     </div>
@@ -582,7 +597,7 @@
                                         <div class="mr-2 text-right">
                                             {!! $item->status_display() !!}
                                         </div>
-                                        <a href="{{ Route('rekam.detail', $item->pasien_id) }}" class="btn btn-xs btn-primary shadow-sm" title="Lihat Rekam Medis">
+                                        <a href="{{ Route('rekam.detail', $item->pasien_id) }}" class="btn btn-xs btn-primary shadow-sm d-inline-flex align-items-center justify-content-center" title="Lihat Rekam Medis" style="width: 28px; height: 28px; padding: 0; border-radius: 8px; background: #2563eb !important; border-color: #2563eb !important; color: #ffffff !important; font-size: 11px;">
                                             <i class="fa fa-arrow-right"></i>
                                         </a>
                                     </div>
@@ -592,8 +607,8 @@
                             <div class="text-center py-5 text-muted">
                                 <i class="fa fa-calendar-check-o text-muted fs-24 mb-2 d-block"></i>
                                 <p class="fs-13 mb-2">Belum ada pelayanan pasien hari ini.</p>
-                                <a href="{{ Route('rekam') }}" class="btn btn-xs btn-primary font-w600" style="padding: 6px 14px; border-radius: 6px;">
-                                    <i class="fa fa-plus mr-1"></i> Ke Rekam Medis
+                                <a href="{{ Route('rekam') }}" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 18px; border-radius: 8px; font-size: 12.5px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                                    <i class="fa fa-plus-circle mr-1"></i> Ke Rekam Medis
                                 </a>
                             </div>
                         @endif
@@ -602,138 +617,60 @@
             </div>
         </div>
 
-        <!-- Right Column: Top Diagnosa & Statistik (Col 3) -->
+        <!-- Right Column: Top Diagnosa (Col 3) -->
         <div class="col-xl-4 col-lg-12">
             <div class="card h-100 mb-0 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
                 <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
-                    <div class="mr-auto">
+                    <div>
                         <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
-                            <i class="fa fa-medkit mr-1" style="color: #2563eb;"></i> Top Diagnosa & Statistik
+                            <i class="fa fa-stethoscope mr-1" style="color: #2563eb;"></i> Top Diagnosa Kasus
                         </h4>
                     </div>
-                    <div class="ot-card-tabs mt-1 mt-sm-0">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#MonthlyDiagnosa" role="tab">Bulan Ini</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#YearlyDiagnosa" role="tab">Tahun Ini</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#StatistikTab" role="tab">Statistik</a>
-                            </li>
-                        </ul>
+                    <div class="position-relative mt-2 mt-sm-0" style="width: 145px;">
+                        <i class="fa fa-filter" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 12px; pointer-events: none; z-index: 2;"></i>
+                        <select id="filterPeriodeDiagnosa" class="form-control form-control-sm font-w700" style="color: #2563eb !important; padding-left: 32px; padding-right: 34px; height: 36px; font-size: 12.5px; border-radius: 8px; border-color: #cbd5e1; cursor: pointer; background-color: #ffffff; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%232563eb' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e&quot;); background-repeat: no-repeat; background-position: right 14px center; background-size: 11px 11px;">
+                            <option value="bulan" selected>Bulan Ini</option>
+                            <option value="tahun">Tahun Ini</option>
+                            <option value="semua">Semua Waktu</option>
+                        </select>
                     </div>
                 </div>
                 <div class="card-body p-3">
-                    <div class="tab-content">
-                        <!-- Tab 1: Monthly Diagnosa -->
-                        <div class="tab-pane fade show active" id="MonthlyDiagnosa" role="tabpanel">
-                            @php $diagnosaBulan = $query->diagnosaBulanan(); @endphp
-                            @if (count($diagnosaBulan) > 0)
-                                <div class="d-flex flex-column" style="gap: 8px;">
-                                    @foreach ($diagnosaBulan as $index => $item)
-                                        <div class="ot-diagnosa-item">
-                                            <div class="d-flex align-items-center" style="min-width: 0;">
-                                                <span class="badge badge-primary light font-w600 mr-2" style="font-size: 11px; min-width: 24px; text-align: center;">
-                                                    {{ $index + 1 }}
-                                                </span>
-                                                <div style="min-width: 0;">
-                                                    <span class="badge badge-info light font-w600 mr-1" style="font-size: 11px;">
-                                                        {{ $item->diagnosa }}
-                                                    </span>
-                                                    <span class="fs-12 text-black font-w500 text-truncate d-inline-block" style="max-width: 260px; vertical-align: middle;" title="{{ $item->name_id ?? '-' }}">
-                                                        {{ $item->name_id ?? '-' }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center flex-shrink-0 ml-2">
-                                                <span class="badge badge-primary font-w600" style="font-size: 11px;">
-                                                    {{ $item->total }} Kasus
-                                                </span>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="text-center py-5 text-muted">
-                                    <i class="fa fa-stethoscope text-muted fs-24 mb-2 d-block"></i>
-                                    <p class="fs-12 mb-0">Belum ada data diagnosa untuk bulan ini.</p>
-                                </div>
-                            @endif
-                        </div>
-
-                        <!-- Tab 2: Yearly Diagnosa -->
-                        <div class="tab-pane fade" id="YearlyDiagnosa" role="tabpanel">
-                            @php $diagnosaTahun = $query->diagnosaYearly(); @endphp
-                            @if (count($diagnosaTahun) > 0)
-                                <div class="d-flex flex-column" style="gap: 8px;">
-                                    @foreach ($diagnosaTahun as $index => $item)
-                                        <div class="ot-diagnosa-item">
-                                            <div class="d-flex align-items-center" style="min-width: 0;">
-                                                <span class="badge badge-primary light font-w600 mr-2" style="font-size: 11px; min-width: 24px; text-align: center;">
-                                                    {{ $index + 1 }}
-                                                </span>
-                                                <div style="min-width: 0;">
-                                                    <span class="badge badge-info light font-w600 mr-1" style="font-size: 11px;">
-                                                        {{ $item->diagnosa }}
-                                                    </span>
-                                                    <span class="fs-12 text-black font-w500 text-truncate d-inline-block" style="max-width: 260px; vertical-align: middle;" title="{{ $item->name_id ?? '-' }}">
-                                                        {{ $item->name_id ?? '-' }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center flex-shrink-0 ml-2">
-                                                <span class="badge badge-primary font-w600" style="font-size: 11px;">
-                                                    {{ $item->total }} Kasus
-                                                </span>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="text-center py-5 text-muted">
-                                    <i class="fa fa-stethoscope text-muted fs-24 mb-2 d-block"></i>
-                                    <p class="fs-12 mb-0">Belum ada data diagnosa untuk tahun ini.</p>
-                                </div>
-                            @endif
-                        </div>
-
-                        <!-- Tab 3: Statistik Ringkasan -->
-                        <div class="tab-pane fade" id="StatistikTab" role="tabpanel">
-                            <div class="d-flex flex-column" style="gap: 10px;">
-                                <div class="ot-stat-highlight">
-                                    <div>
-                                        <p class="fs-12 text-muted mb-0 font-w500">Pemeriksaan Hari Ini</p>
-                                        <h2 class="fs-22 text-primary font-w700 mb-0" style="color: #1e40af !important;">{{ $query->perikaHariini() }}</h2>
-                                        <span class="fs-11 text-muted">{{ date('d M Y') }}</span>
+                    <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                        <span class="fs-12 text-muted font-w600" id="labelPeriodeDiagnosa">Periode: <strong class="text-primary">{{ $bulan }} {{ date('Y') }}</strong></span>
+                        <span class="badge badge-primary light font-w700" id="badgeTotalDiagnosa" style="font-size: 11px;">Total: {{ $topDiagnosa['total'] }} Kasus</span>
+                    </div>
+                    <div class="dz-scroll" id="containerTopDiagnosa" style="overflow-y: auto; max-height: 380px; padding-right: 4px;">
+                        @forelse($topDiagnosa['items'] as $index => $dg)
+                            <div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <div class="d-flex align-items-center text-truncate" style="max-width: 72%;">
+                                        <span class="badge badge-pill badge-primary mr-2 font-w700" style="width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: {{ $dg['color'] }};">
+                                            #{{ $index + 1 }}
+                                        </span>
+                                        <span class="badge badge-info light font-w700 mr-1" style="font-size: 10.5px; padding: 2px 6px;">
+                                            {{ $dg['code'] }}
+                                        </span>
+                                        <span class="fs-12 text-dark font-w600 text-truncate" title="{{ $dg['nama'] }}">
+                                            {{ $dg['nama'] }}
+                                        </span>
                                     </div>
-                                    <div class="ot-stat-highlight-icon" style="background-color: #1e40af;">
-                                        <i class="fa fa-calendar-check-o"></i>
+                                    <div class="text-right flex-shrink-0">
+                                        <span class="badge badge-light font-w700 text-primary" style="font-size: 11px; background: #f1f5f9;">
+                                            {{ $dg['total'] }} Kasus
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="ot-stat-highlight">
-                                    <div>
-                                        <p class="fs-12 text-muted mb-0 font-w500">Pemeriksaan Bulan Ini</p>
-                                        <h2 class="fs-22 text-primary font-w700 mb-0" style="color: #2563eb !important;">{{ $query->perikaBulanini() }}</h2>
-                                        <span class="fs-11 text-muted">Periode {{ date('F Y') }}</span>
-                                    </div>
-                                    <div class="ot-stat-highlight-icon" style="background-color: #2563eb;">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                </div>
-                                <div class="ot-stat-highlight">
-                                    <div>
-                                        <p class="fs-12 text-muted mb-0 font-w500">Pemeriksaan Tahun Ini</p>
-                                        <h2 class="fs-22 text-primary font-w700 mb-0" style="color: #0284c7 !important;">{{ $query->perikaTahunini() }}</h2>
-                                        <span class="fs-11 text-muted">Tahun {{ date('Y') }}</span>
-                                    </div>
-                                    <div class="ot-stat-highlight-icon" style="background-color: #0284c7;">
-                                        <i class="fa fa-trophy"></i>
-                                    </div>
+                                <div class="progress" style="height: 6px; background: #f1f5f9; border-radius: 4px;">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ $dg['bar_persen'] }}%; background-color: {{ $dg['color'] }}; border-radius: 4px;" aria-valuenow="{{ $dg['bar_persen'] }}" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
-                        </div>
+                        @empty
+                            <div class="text-center py-5 text-muted">
+                                <i class="fa fa-stethoscope text-muted fs-24 mb-2 d-block" style="opacity: 0.5;"></i>
+                                <p class="fs-12 mb-0">Belum ada data diagnosa pada periode ini.</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -1168,6 +1105,138 @@ $(document).ready(function() {
                 }]
             }
         }
+    });
+
+    // 7. Interactive Filter Top 5 Rencana Tindakan & Intervensi
+    var allTopTindakan = {!! json_encode($allTopTindakan) !!};
+    var labelBulanIniTindakan = "{{ $bulan }} {{ date('Y') }}";
+    var labelTahunIniTindakan = "Tahun {{ date('Y') }}";
+
+    function renderTopTindakan(periode) {
+        var data = allTopTindakan[periode] || { items: [], total: 0 };
+        var container = $('#containerTopTindakan');
+        var badgeTotal = $('#badgeTotalTindakan');
+        var labelPeriode = $('#labelPeriodeTindakan');
+
+        badgeTotal.text('Total: ' + (data.total || 0) + ' Tindakan');
+
+        if (periode === 'bulan') {
+            labelPeriode.html('Periode: <strong class="text-primary">' + labelBulanIniTindakan + '</strong>');
+        } else if (periode === 'tahun') {
+            labelPeriode.html('Periode: <strong class="text-primary">' + labelTahunIniTindakan + '</strong>');
+        } else {
+            labelPeriode.html('Periode: <strong class="text-primary">Semua Waktu</strong>');
+        }
+
+        if (!data.items || data.items.length === 0 || data.total === 0) {
+            container.html(
+                '<div class="text-center py-4 text-muted">' +
+                    '<i class="fa-solid fa-clipboard-list fa-2x mb-2 text-muted" style="opacity: 0.5;"></i>' +
+                    '<p class="fs-12 mb-0">Belum ada data tindakan terapi pada periode ini.</p>' +
+                '</div>'
+            );
+            return;
+        }
+
+        var html = '';
+        data.items.forEach(function(tdk, index) {
+            var safeNama = $('<div>').text(tdk.nama).html();
+            html += '<div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">' +
+                '<div class="d-flex justify-content-between align-items-center mb-1">' +
+                    '<div class="d-flex align-items-center text-truncate" style="max-width: 70%;">' +
+                        '<span class="badge badge-pill badge-primary mr-2 font-w700" style="width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: ' + tdk.color + ';">' +
+                            '#' + (index + 1) +
+                        '</span>' +
+                        '<span class="fs-12 text-dark font-w600 text-truncate" title="' + safeNama + '">' +
+                            safeNama +
+                        '</span>' +
+                    '</div>' +
+                    '<div class="text-right flex-shrink-0">' +
+                        '<span class="badge badge-light font-w700 text-primary" style="font-size: 11px; background: #f1f5f9;">' +
+                            tdk.total + ' Kali' +
+                        '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="progress" style="height: 6px; background: #f1f5f9; border-radius: 4px;">' +
+                    '<div class="progress-bar" role="progressbar" style="width: ' + tdk.bar_persen + '%; background-color: ' + tdk.color + '; border-radius: 4px;" aria-valuenow="' + tdk.bar_persen + '" aria-valuemin="0" aria-valuemax="100"></div>' +
+                '</div>' +
+            '</div>';
+        });
+
+        container.html(html);
+    }
+
+    $('#filterPeriodeTindakan').on('change', function() {
+        var selectedPeriode = $(this).val();
+        renderTopTindakan(selectedPeriode);
+    });
+
+    // 8. Interactive Filter Top Diagnosa
+    var allTopDiagnosa = {!! json_encode($allTopDiagnosa) !!};
+    var labelBulanIniDiagnosa = "{{ $bulan }} {{ date('Y') }}";
+    var labelTahunIniDiagnosa = "Tahun {{ date('Y') }}";
+
+    function renderTopDiagnosa(periode) {
+        var data = allTopDiagnosa[periode] || { items: [], total: 0 };
+        var container = $('#containerTopDiagnosa');
+        var badgeTotal = $('#badgeTotalDiagnosa');
+        var labelPeriode = $('#labelPeriodeDiagnosa');
+
+        badgeTotal.text('Total: ' + (data.total || 0) + ' Kasus');
+
+        if (periode === 'bulan') {
+            labelPeriode.html('Periode: <strong class="text-primary">' + labelBulanIniDiagnosa + '</strong>');
+        } else if (periode === 'tahun') {
+            labelPeriode.html('Periode: <strong class="text-primary">' + labelTahunIniDiagnosa + '</strong>');
+        } else {
+            labelPeriode.html('Periode: <strong class="text-primary">Semua Waktu</strong>');
+        }
+
+        if (!data.items || data.items.length === 0 || data.total === 0) {
+            container.html(
+                '<div class="text-center py-5 text-muted">' +
+                    '<i class="fa fa-stethoscope text-muted fs-24 mb-2 d-block" style="opacity: 0.5;"></i>' +
+                    '<p class="fs-12 mb-0">Belum ada data diagnosa pada periode ini.</p>' +
+                '</div>'
+            );
+            return;
+        }
+
+        var html = '';
+        data.items.forEach(function(dg, index) {
+            var safeCode = $('<div>').text(dg.code).html();
+            var safeNama = $('<div>').text(dg.nama).html();
+            html += '<div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">' +
+                '<div class="d-flex justify-content-between align-items-center mb-1">' +
+                    '<div class="d-flex align-items-center text-truncate" style="max-width: 72%;">' +
+                        '<span class="badge badge-pill badge-primary mr-2 font-w700" style="width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: ' + dg.color + ';">' +
+                            '#' + (index + 1) +
+                        '</span>' +
+                        '<span class="badge badge-info light font-w700 mr-1" style="font-size: 10.5px; padding: 2px 6px;">' +
+                            safeCode +
+                        '</span>' +
+                        '<span class="fs-12 text-dark font-w600 text-truncate" title="' + safeNama + '">' +
+                            safeNama +
+                        '</span>' +
+                    '</div>' +
+                    '<div class="text-right flex-shrink-0">' +
+                        '<span class="badge badge-light font-w700 text-primary" style="font-size: 11px; background: #f1f5f9;">' +
+                            dg.total + ' Kasus' +
+                        '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="progress" style="height: 6px; background: #f1f5f9; border-radius: 4px;">' +
+                    '<div class="progress-bar" role="progressbar" style="width: ' + dg.bar_persen + '%; background-color: ' + dg.color + '; border-radius: 4px;" aria-valuenow="' + dg.bar_persen + '" aria-valuemin="0" aria-valuemax="100"></div>' +
+                '</div>' +
+            '</div>';
+        });
+
+        container.html(html);
+    }
+
+    $('#filterPeriodeDiagnosa').on('change', function() {
+        var selectedPeriode = $(this).val();
+        renderTopDiagnosa(selectedPeriode);
     });
 });
 </script>
