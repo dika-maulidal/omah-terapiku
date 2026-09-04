@@ -201,97 +201,77 @@
             padding-top: 14px;
         }
 
-        /* Modal Bantuan Admin Custom Styling */
+        /* Modal Bantuan Admin Custom Styling Sesuai DESIGN.md */
         .modal-admin-dialog {
-            max-width: 500px;
+            max-width: 520px;
             margin: 1.75rem auto;
         }
 
         .modal-admin-content {
-            border-radius: 16px;
-            border: 1px solid rgba(226, 232, 240, 0.9);
-            box-shadow: 0 25px 50px -12px rgba(30, 64, 175, 0.25), 0 10px 20px -5px rgba(15, 23, 42, 0.08);
+            border-radius: 14px;
+            border: 1px solid #dbeafe;
+            box-shadow: 0 12px 36px rgba(30, 64, 175, 0.12);
             overflow: hidden;
             background: #ffffff;
             text-align: left;
         }
 
         .modal-admin-header {
-            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
-            padding: 18px 22px;
-            border-bottom: none;
-            position: relative;
+            background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%);
+            padding: 16px 22px;
+            border-bottom: 1.5px solid #bfdbfe;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .modal-admin-header::after {
-            content: "";
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 140px;
-            background: radial-gradient(circle at right center, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
         .modal-admin-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.28);
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: #ffffff;
+            border: 1px solid #bfdbfe;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
-            font-size: 20px;
+            color: #2563eb;
+            font-size: 18px;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
         }
 
         .modal-admin-title {
             font-size: 16px;
             font-weight: 700;
-            color: #ffffff;
+            color: #1e40af !important;
             margin: 0;
             line-height: 1.25;
-            letter-spacing: -0.2px;
         }
 
         .modal-admin-subtitle {
             font-size: 11.5px;
-            color: rgba(255, 255, 255, 0.88);
+            color: #64748b;
             font-weight: 500;
-            margin-top: 3px;
+            margin-top: 2px;
             display: block;
         }
 
         .modal-admin-close {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
+            font-size: 24px;
+            color: #64748b;
+            opacity: 0.8;
+            background: transparent;
             border: none;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
             cursor: pointer;
-            transition: all 0.2s ease;
             padding: 0;
             line-height: 1;
-            z-index: 2;
+            transition: all 0.2s ease;
         }
 
         .modal-admin-close:hover {
-            background: rgba(255, 255, 255, 0.3);
-            color: #ffffff;
-            transform: rotate(90deg);
+            color: #1e293b;
+            opacity: 1;
+            transform: scale(1.1);
         }
 
         .modal-admin-body {
@@ -543,7 +523,7 @@
         <div class="modal-dialog modal-admin-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-admin-content">
                 
-                <!-- Modal Header: Royal Blue & Ocean Navy Theme -->
+                <!-- Modal Header: Soft Blue Light Gradient & Royal Blue Theme -->
                 <div class="modal-header modal-admin-header">
                     <div class="d-flex align-items-center">
                         <div class="modal-admin-icon mr-3">
@@ -554,12 +534,12 @@
                                 Pusat Bantuan & Layanan Akun
                             </h5>
                             <span class="modal-admin-subtitle">
-                                <i class="fa-solid fa-shield-halved mr-1"></i> SIM Rekam Medis Omah Terapi-KU
+                                <i class="fa-solid fa-shield-halved text-primary mr-1"></i> SIM Rekam Medis Omah Terapi-KU
                             </span>
                         </div>
                     </div>
-                    <button type="button" class="modal-admin-close" data-dismiss="modal" aria-label="Close" title="Tutup Pop-up">
-                        <i class="fa-solid fa-xmark"></i>
+                    <button type="button" class="close modal-admin-close" data-dismiss="modal" aria-label="Close" title="Tutup Pop-up">
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
@@ -567,18 +547,18 @@
                 <div class="modal-admin-body">
                     
                     <!-- Alert Pengantar -->
-                    <div class="help-intro-card">
-                        <i class="fa-solid fa-circle-info"></i>
-                        <p>
+                    <div class="alert alert-light mb-3 d-flex align-items-start py-2.5 px-3" style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; font-size: 12px; gap: 8px; color: #475569; line-height: 1.5;">
+                        <i class="fa-solid fa-circle-info text-primary mt-1" style="font-size: 14px; flex-shrink: 0;"></i>
+                        <div>
                             Mengalami kendala login, lupa kata sandi, atau memerlukan aktivasi hak akses (Dokter, Terapis, Pendaftaran)? Tim Pengelola SIM Rekam Medis siap membantu Anda.
-                        </p>
+                        </div>
                     </div>
 
                     <!-- Kontak 1: WhatsApp Helpdesk (Featured Card) -->
-                    <div class="contact-card-item featured">
+                    <div class="contact-card-item featured" style="border-radius: 10px; border: 1px solid #bbf7d0; background: #ffffff;">
                         <div class="d-flex align-items-start justify-content-between mb-2">
                             <div class="d-flex align-items-center">
-                                <div class="contact-badge-icon mr-3" style="background: #ecfdf5; color: #10b981; border: 1px solid #a7f3d0;">
+                                <div class="contact-badge-icon mr-3" style="background: #ecfdf5; color: #10b981; border: 1px solid #a7f3d0; border-radius: 8px;">
                                     <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i>
                                 </div>
                                 <div>
@@ -610,10 +590,10 @@
                     </div>
 
                     <!-- Kontak 2: Email Layanan Pengelola -->
-                    <div class="contact-card-item">
+                    <div class="contact-card-item" style="border-radius: 10px; border: 1px solid #bfdbfe; background: #ffffff;">
                         <div class="d-flex align-items-start justify-content-between mb-2">
                             <div class="d-flex align-items-center">
-                                <div class="contact-badge-icon mr-3" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;">
+                                <div class="contact-badge-icon mr-3" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; border-radius: 8px;">
                                     <i class="fa-solid fa-envelope"></i>
                                 </div>
                                 <div>
@@ -640,9 +620,9 @@
                     </div>
 
                     <!-- Kontak 3: Unit Kerja & Jam Operasional -->
-                    <div class="contact-card-item mb-0">
+                    <div class="contact-card-item mb-0" style="border-radius: 10px;">
                         <div class="d-flex align-items-start">
-                            <div class="contact-badge-icon mr-3" style="background: #f8fafc; color: #475569; border: 1px solid #e2e8f0;">
+                            <div class="contact-badge-icon mr-3" style="background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; border-radius: 8px;">
                                 <i class="fa-solid fa-building-columns"></i>
                             </div>
                             <div style="flex: 1;">
@@ -660,7 +640,7 @@
                     </div>
 
                     <!-- Panduan Cepat Kendala (Quick Accordion) -->
-                    <div class="quick-tips-accordion">
+                    <div class="quick-tips-accordion" style="border-radius: 8px;">
                         <div class="quick-tips-header" data-toggle="collapse" data-target="#collapseQuickTips" aria-expanded="false" aria-controls="collapseQuickTips">
                             <span><i class="fa-solid fa-circle-question mr-1 text-primary"></i> Panduan Cepat Kendala Akun</span>
                             <i class="fa-solid fa-chevron-down" style="font-size: 10px; transition: transform 0.2s ease;"></i>
@@ -684,10 +664,10 @@
                         <i class="fa-solid fa-circle-check text-success mr-1"></i> Layanan Resmi Dinsos Jatim
                     </div>
                     <div class="d-flex align-items-center" style="gap: 8px;">
-                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="border-radius: 8px; font-size: 12.5px; color: #475569; border: 1px solid #cbd5e1; padding: 7px 16px;">
+                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="border-radius: 6px; font-size: 12.5px; color: #475569; border: 1px solid #cbd5e1; padding: 6px 16px;">
                             Tutup
                         </button>
-                        <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Omah%20Terapi-KU%2C%20saya%20mengalami%20kendala%20saat%20login%20ke%20sistem.%20Mohon%20bantuannya." target="_blank" class="btn btn-sm btn-primary font-w600" style="border-radius: 8px; font-size: 12.5px; padding: 7px 16px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                        <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Omah%20Terapi-KU%2C%20saya%20mengalami%20kendala%20saat%20login%20ke%20sistem.%20Mohon%20bantuannya." target="_blank" class="btn btn-sm btn-primary font-w700" style="border-radius: 6px; font-size: 12.5px; padding: 7px 18px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
                             <i class="fa-brands fa-whatsapp mr-1"></i> Hubungi WhatsApp
                         </a>
                     </div>

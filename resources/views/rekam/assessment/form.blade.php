@@ -33,17 +33,6 @@
                 <a href="{{Route('rekam.detail', $pasien->id)}}" class="btn btn-sm btn-light font-w600" style="padding: 8px 16px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
                     <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Rekam Medis
                 </a>
-                @if($assessment->exists)
-                    <a href="{{Route('rekam.assessment.print', $rekam->id)}}" target="_blank" class="btn btn-sm btn-info text-white font-w600" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important; border: none !important; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);">
-                        <i class="fa-solid fa-print mr-1"></i> Cetak Asesmen
-                    </a>
-                    <a href="{{Route('rekam.assessment.print', $rekam->id)}}?download=pdf" target="_blank" class="btn btn-sm btn-success text-white font-w700" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; border: none !important; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
-                        <i class="fa-solid fa-download mr-1"></i> Unduh PDF
-                    </a>
-                @endif
-                <button type="button" onclick="$('#formAssessment').submit()" class="btn btn-sm btn-primary font-w700" style="padding: 8px 18px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
-                    <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Assessment
-                </button>
             </div>
         </div>
     </div>
@@ -218,43 +207,73 @@
             </div>
         </div>
 
-        <!-- Underline Tabs Navigation 6 Modul Sesuai DESIGN.md -->
-        <div class="card-header p-0 px-3 bg-white" style="border-bottom: 2px solid #e2e8f0;">
-            <ul class="nav ot-underline-tabs flex-nowrap" id="modulTabs" role="tablist" style="overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 4px;">
+        <!-- Tabs Navigation 6 Modul (Grid 3x2, Tanpa Perlu Geser) -->
+        <div class="card-header p-3 bg-white" style="border-bottom: 2px solid #e2e8f0;">
+            <ul class="nav assessment-modul-grid-tabs" id="modulTabs" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="tab-modul1-btn" data-toggle="tab" href="#modul-1" role="tab" data-module-index="1">
-                        <i class="fa-solid fa-eye-low-vision mr-1"></i> Modul 1: Penglihatan & Psikososial
-                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-1">0/2</span>
+                        <div class="d-flex align-items-center justify-content-between w-100" style="gap: 8px;">
+                            <span class="d-inline-flex align-items-center text-truncate font-w700" style="font-size: 13px;">
+                                <i class="fa-solid fa-eye-low-vision mr-2 tab-mod-icon"></i>
+                                <span class="tab-mod-title text-truncate">Modul 1: Penglihatan & Psikososial</span>
+                            </span>
+                            <span class="badge ml-1 counter-pill" id="badge-modul-1">0/2</span>
+                        </div>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="tab-modul2-btn" data-toggle="tab" href="#modul-2" role="tab" data-module-index="2">
-                        <i class="fa-solid fa-child-reaching mr-1"></i> Modul 2: Motorik Dasar & ADL
-                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-2">0/3</span>
+                        <div class="d-flex align-items-center justify-content-between w-100" style="gap: 8px;">
+                            <span class="d-inline-flex align-items-center text-truncate font-w700" style="font-size: 13px;">
+                                <i class="fa-solid fa-child-reaching mr-2 tab-mod-icon"></i>
+                                <span class="tab-mod-title text-truncate">Modul 2: Motorik Dasar & ADL</span>
+                            </span>
+                            <span class="badge ml-1 counter-pill" id="badge-modul-2">0/3</span>
+                        </div>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="tab-modul3-btn" data-toggle="tab" href="#modul-3" role="tab" data-module-index="3">
-                        <i class="fa-solid fa-heart-pulse mr-1"></i> Modul 3: Evaluasi Fisik & Nyeri
-                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-3">0/2</span>
+                        <div class="d-flex align-items-center justify-content-between w-100" style="gap: 8px;">
+                            <span class="d-inline-flex align-items-center text-truncate font-w700" style="font-size: 13px;">
+                                <i class="fa-solid fa-heart-pulse mr-2 tab-mod-icon"></i>
+                                <span class="tab-mod-title text-truncate">Modul 3: Evaluasi Fisik & Nyeri</span>
+                            </span>
+                            <span class="badge ml-1 counter-pill" id="badge-modul-3">0/2</span>
+                        </div>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="tab-modul4-btn" data-toggle="tab" href="#modul-4" role="tab" data-module-index="4">
-                        <i class="fa-solid fa-brain mr-1"></i> Modul 4: Neurologis & Gait
-                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-4">0/4</span>
+                        <div class="d-flex align-items-center justify-content-between w-100" style="gap: 8px;">
+                            <span class="d-inline-flex align-items-center text-truncate font-w700" style="font-size: 13px;">
+                                <i class="fa-solid fa-brain mr-2 tab-mod-icon"></i>
+                                <span class="tab-mod-title text-truncate">Modul 4: Neurologis & Gait</span>
+                            </span>
+                            <span class="badge ml-1 counter-pill" id="badge-modul-4">0/4</span>
+                        </div>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="tab-modul5-btn" data-toggle="tab" href="#modul-5" role="tab" data-module-index="5">
-                        <i class="fa-solid fa-clipboard-list mr-1"></i> Modul 5: Instrumen Khusus
-                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-5">0/2</span>
+                        <div class="d-flex align-items-center justify-content-between w-100" style="gap: 8px;">
+                            <span class="d-inline-flex align-items-center text-truncate font-w700" style="font-size: 13px;">
+                                <i class="fa-solid fa-clipboard-list mr-2 tab-mod-icon"></i>
+                                <span class="tab-mod-title text-truncate">Modul 5: Instrumen Khusus</span>
+                            </span>
+                            <span class="badge ml-1 counter-pill" id="badge-modul-5">0/2</span>
+                        </div>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="tab-modul6-btn" data-toggle="tab" href="#modul-6" role="tab" data-module-index="6">
-                        <i class="fa-solid fa-notes-medical mr-1"></i> Modul 6: Rencana Terapi & TTD
-                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-6">0/2</span>
+                        <div class="d-flex align-items-center justify-content-between w-100" style="gap: 8px;">
+                            <span class="d-inline-flex align-items-center text-truncate font-w700" style="font-size: 13px;">
+                                <i class="fa-solid fa-notes-medical mr-2 tab-mod-icon"></i>
+                                <span class="tab-mod-title text-truncate">Modul 6: Rencana Terapi & TTD</span>
+                            </span>
+                            <span class="badge ml-1 counter-pill" id="badge-modul-6">0/2</span>
+                        </div>
                     </a>
                 </li>
             </ul>
@@ -3229,45 +3248,105 @@
 
 @section('style')
 <style>
-/* Underline Tabs Navigation Sesuai DESIGN.md */
-.ot-underline-tabs {
-    border-bottom: 2px solid #e2e8f0;
+/* Assessment Modul Grid Tabs (3x2 Layout - Tanpa Scroll Geser) */
+.assessment-modul-grid-tabs {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
 }
-.ot-underline-tabs .nav-link {
-    border: none !important;
-    border-bottom: 3px solid transparent !important;
-    background: transparent !important;
-    color: #64748b !important;
-    font-weight: 600;
-    font-size: 13px;
-    padding: 12px 18px;
-    border-radius: 0 !important;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
+
+@media (max-width: 991px) {
+    .assessment-modul-grid-tabs {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
 }
-.ot-underline-tabs .nav-link:hover {
-    color: #2563eb !important;
+
+@media (max-width: 576px) {
+    .assessment-modul-grid-tabs {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+.assessment-modul-grid-tabs .nav-item {
+    margin: 0 !important;
+    display: flex !important;
+}
+
+.assessment-modul-grid-tabs .nav-link {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 11px 14px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
     background: #f8fafc !important;
+    color: #475569 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
 }
-.ot-underline-tabs .nav-link.active {
+
+.assessment-modul-grid-tabs .nav-link .tab-mod-icon {
+    font-size: 15px !important;
     color: #2563eb !important;
-    border-bottom-color: #2563eb !important;
-    font-weight: 700 !important;
+    transition: transform 0.2s ease !important;
+}
+
+.assessment-modul-grid-tabs .nav-link:hover {
     background: #eff6ff !important;
+    color: #1d4ed8 !important;
+    border-color: #93c5fd !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.1) !important;
 }
-.ot-underline-tabs .nav-link .counter-pill {
-    font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 9999px;
-    background: #f1f5f9;
-    color: #475569;
-    transition: all 0.2s ease;
+
+.assessment-modul-grid-tabs .nav-link:hover .tab-mod-icon {
+    transform: scale(1.1) !important;
 }
-.ot-underline-tabs .nav-link.active .counter-pill {
-    background: #2563eb;
-    color: #ffffff;
+
+.assessment-modul-grid-tabs .nav-link.active {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+    border-color: #2563eb !important;
+    border-left: 4px solid #2563eb !important;
+    color: #1e40af !important;
+    font-weight: 700 !important;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15) !important;
+}
+
+.assessment-modul-grid-tabs .nav-link.active .tab-mod-icon {
+    color: #1d4ed8 !important;
+}
+
+.assessment-modul-grid-tabs .nav-link .counter-pill {
+    font-size: 11px !important;
+    padding: 3px 8px !important;
+    border-radius: 9999px !important;
+    background: #ffffff !important;
+    color: #475569 !important;
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+    border: 1px solid #cbd5e1 !important;
+    transition: all 0.2s ease !important;
+}
+
+.assessment-modul-grid-tabs .nav-link:hover .counter-pill {
+    background: #ffffff !important;
+    color: #1d4ed8 !important;
+    border-color: #93c5fd !important;
+}
+
+.assessment-modul-grid-tabs .nav-link.active .counter-pill {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #1d4ed8 !important;
+    box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3) !important;
 }
 
 /* Subtest Card Styling */

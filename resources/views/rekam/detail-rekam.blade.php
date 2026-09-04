@@ -206,12 +206,12 @@
                     <div class="col-md-6">
                         <div class="p-3 mb-3" style="background: #f8fafc; border-radius: 8px; border: 1px solid #edf2f7;">
                             <span class="text-muted d-block mb-1" style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">
-                                <i class="fa fa-phone mr-1 text-primary"></i> No. HP / Kontak
+                                <i class="fa-solid fa-phone mr-1 text-primary"></i> No. HP / Kontak
                             </span>
                             <div class="font-w600" style="font-size: 13.5px; color: #1e293b;">
                                 @if ($pasien->no_hp)
-                                    <a href="https://wa.me/{{ preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $pasien->no_hp)) }}" target="_blank" class="text-success">
-                                        <i class="fa fa-whatsapp mr-1"></i> {{$pasien->no_hp}}
+                                    <a href="https://wa.me/{{ preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $pasien->no_hp)) }}" target="_blank" class="text-success font-w700" style="text-decoration: none;" title="Chat via WhatsApp">
+                                        <i class="fa-brands fa-whatsapp mr-1" style="font-size: 15px; color: #16a34a;"></i> {{$pasien->no_hp}}
                                     </a>
                                 @else
                                     <span class="text-muted">-</span>
@@ -221,7 +221,7 @@
 
                         <div class="p-3 mb-3" style="background: #f8fafc; border-radius: 8px; border: 1px solid #edf2f7;">
                             <span class="text-muted d-block mb-1" style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">
-                                <i class="fa fa-bar-chart mr-1 text-primary"></i> Desil (DTKS/P3KE)
+                                <i class="fa-solid fa-chart-simple mr-1 text-primary"></i> Desil (DTKS/P3KE)
                             </span>
                             <div>
                                 @if ($pasien->desil)
@@ -234,7 +234,7 @@
 
                         <div class="p-3 mb-3 mb-md-0" style="background: #f8fafc; border-radius: 8px; border: 1px solid #edf2f7;">
                             <span class="text-muted d-block mb-1" style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">
-                                <i class="fa fa-user-circle-o mr-1 text-primary"></i> Wali / Orang Tua
+                                <i class="fa-solid fa-circle-user mr-1 text-primary"></i> Wali / Orang Tua
                             </span>
                             <div class="font-w600" style="font-size: 13px; color: #1e293b;">
                                 {{ $pasien->nama_wali ?: '-' }}
@@ -390,7 +390,7 @@
                     <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
                         <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%;">
                             <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
-                                <i class="fa-solid fa-hospital mr-1 text-success"></i> Omah Terapiku & Layanan
+                                <i class="fa-solid fa-hospital-user mr-1 text-primary"></i> Omah Terapiku & Layanan
                             </small>
                             <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
                                 {{ $activeRekam->upt_lokasi ?: ($activeRekam->poli ?: 'Omah Terapiku') }}
@@ -441,13 +441,11 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="tab-asesmen-link" data-toggle="tab" href="#tab-asesmen" role="tab" aria-controls="tab-asesmen" aria-selected="true">
                             <i class="fa-solid fa-clipboard-list mr-2"></i> Asesmen Baseline & Re-Evaluasi
-                            <span class="ot-tab-badge">{{ count($riwayatAssessment ?? []) }}</span>
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="tab-soap-link" data-toggle="tab" href="#tab-soap" role="tab" aria-controls="tab-soap" aria-selected="false">
                             <i class="fa-solid fa-stethoscope mr-2"></i> Log Sesi Terapi (SOAP Harian)
-                            <span class="ot-tab-badge">{{ $rekams->total() }}</span>
                         </a>
                     </li>
                 </ul>
@@ -719,18 +717,18 @@
                                                     <strong class="text-primary">{{ $row->tgl_rekam }}</strong>
                                                     @if($row->sesi_waktu)
                                                         <br><span class="badge badge-outline-primary mt-1 font-w600" style="font-size: 10.5px;">
-                                                            <i class="fa fa-clock-o mr-1"></i> {{ $row->sesi_waktu }}
+                                                            <i class="fa-solid fa-clock mr-1"></i> {{ $row->sesi_waktu }}
                                                         </span>
                                                     @endif
                                                 </td>
                                                 <td style="vertical-align: top;">
                                                     <div class="font-w600" style="color: #1e293b;">{{ $row->layanan_terapi ?: 'Terapi Terpadu' }}</div>
-                                                    <small class="text-muted"><i class="fa fa-map-marker text-danger mr-1"></i>{{ $row->upt_lokasi ?: ($row->poli ?: 'Omah Terapi') }}</small>
+                                                    <small class="text-muted"><i class="fa-solid fa-hospital-user mr-1 text-primary"></i>{{ $row->upt_lokasi ?: ($row->poli ?: 'Omah Terapi') }}</small>
                                                 </td>
                                                 <td style="vertical-align: top;">
                                                     <div class="font-w600" style="color: #1e293b;">{{ $row->dokter->nama ?? '-' }}</div>
                                                     @if($row->terapisPendamping)
-                                                        <small class="text-muted d-block"><i class="fa fa-user-plus text-info mr-1"></i>{{ $row->terapisPendamping->nama }}</small>
+                                                        <small class="text-muted d-block"><i class="fa-solid fa-user-plus text-info mr-1"></i>{{ $row->terapisPendamping->nama }}</small>
                                                     @endif
                                                 </td>
                                                 <td style="vertical-align: top;">
@@ -826,109 +824,123 @@
 <!-- ========================================================================= -->
 <div class="modal fade" id="modalDetailSOAP" tabindex="-1" role="dialog" aria-labelledby="modalDetailSOAPLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div class="modal-content" style="border-radius: 14px; border: 1px solid #dbeafe; box-shadow: 0 12px 36px rgba(30, 64, 175, 0.12); overflow: hidden;">
             
-            <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); padding: 14px 20px;">
-                <div>
-                    <h5 class="modal-title font-w700 text-white mb-0" id="modalDetailSOAPLabel" style="font-size: 16px;">
-                        <i class="fa fa-folder-open-o mr-2"></i> Detail Catatan Sesi Terapi (SOAP)
-                    </h5>
-                    <small class="text-white-50" id="modalSoapSubTitle">Rekam Medis Sesi Terapi</small>
+            <!-- Modal Header (Royal Blue Gradient & Soft Blue Accent sesuai DESIGN.md) -->
+            <div class="modal-header px-4 py-3" style="background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%); border-bottom: 1.5px solid #bfdbfe;">
+                <div class="d-flex align-items-center">
+                    <div class="mr-3" style="width: 42px; height: 42px; border-radius: 10px; background: #ffffff; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 18px; border: 1px solid #bfdbfe; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1); flex-shrink: 0;">
+                        <i class="fa-solid fa-notes-medical"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title font-w700 mb-0" id="modalDetailSOAPLabel" style="color: #1e40af !important; font-size: 16px;">
+                            Detail Catatan Sesi Terapi (SOAP)
+                        </h5>
+                        <small class="text-muted font-w500" id="modalSoapSubTitle" style="font-size: 11.5px;">Rekam Medis Sesi Terapi</small>
+                    </div>
                 </div>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.85;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; color: #64748b; opacity: 0.8;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
-            <div class="modal-body p-4" style="background: #f8fafc; max-height: 75vh; overflow-y: auto;">
+            <!-- Modal Body -->
+            <div class="modal-body p-4" style="background: #ffffff; max-height: 75vh; overflow-y: auto;">
                 
                 <!-- Sesi Meta Info Cards -->
                 <div class="row mb-3">
-                    <div class="col-md-4 col-sm-6 mb-2">
-                        <div class="p-2 px-3 rounded bg-white border">
-                            <small class="text-muted d-block font-w600" style="font-size: 11px;">Tanggal & Waktu Sesi</small>
-                            <span class="font-w700 text-dark" id="modalSoapTanggal" style="font-size: 13px;">-</span>
-                            <small class="d-block text-primary font-w600" id="modalSoapWaktu">-</small>
+                    <div class="col-md-4 col-sm-6 mb-2 mb-md-0">
+                        <div class="p-3 rounded h-100 d-flex flex-column justify-content-center" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px !important;">
+                            <small class="text-muted d-block font-w700" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px;">
+                                <i class="fa-solid fa-calendar-day text-primary mr-1"></i> Tanggal & Waktu Sesi
+                            </small>
+                            <span class="font-w700 text-dark d-block" id="modalSoapTanggal" style="font-size: 13.5px; margin-bottom: 2px;">-</span>
+                            <small class="d-block font-w600" id="modalSoapWaktu" style="color: #2563eb; font-size: 12px;">-</small>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6 mb-2">
-                        <div class="p-2 px-3 rounded bg-white border">
-                            <small class="text-muted d-block font-w600" style="font-size: 11px;">Layanan & Lokasi UPT</small>
-                            <span class="font-w700 text-dark" id="modalSoapLayanan" style="font-size: 13px;">-</span>
-                            <small class="d-block text-muted text-truncate" id="modalSoapUpt">-</small>
+                    <div class="col-md-4 col-sm-6 mb-2 mb-md-0">
+                        <div class="p-3 rounded h-100 d-flex flex-column justify-content-center" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px !important;">
+                            <small class="text-muted d-block font-w700" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px;">
+                                <i class="fa-solid fa-layer-group text-primary mr-1"></i> Layanan & Lokasi UPT
+                            </small>
+                            <span class="font-w700 text-dark d-block" id="modalSoapLayanan" style="font-size: 13.5px; margin-bottom: 2px;">-</span>
+                            <small class="d-block text-muted text-truncate" id="modalSoapUpt" style="font-size: 12px;">-</small>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-12 mb-2">
-                        <div class="p-2 px-3 rounded bg-white border">
-                            <small class="text-muted d-block font-w600" style="font-size: 11px;">Terapis Penanggung Jawab</small>
-                            <span class="font-w700 text-dark" id="modalSoapTerapis" style="font-size: 13px;">-</span>
-                            <small class="d-block text-muted" id="modalSoapTerapisRole"><i class="fa fa-user-md text-primary mr-1"></i> Terapis Pemeriksa</small>
+                    <div class="col-md-4 col-sm-12 mb-2 mb-md-0">
+                        <div class="p-3 rounded h-100 d-flex flex-column justify-content-center" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px !important;">
+                            <small class="text-muted d-block font-w700" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px;">
+                                <i class="fa-solid fa-user-doctor text-primary mr-1"></i> Terapis Penanggung Jawab
+                            </small>
+                            <span class="font-w700 text-dark d-block" id="modalSoapTerapis" style="font-size: 13.5px; margin-bottom: 2px;">-</span>
+                            <small class="d-block text-muted font-w500" id="modalSoapTerapisRole" style="font-size: 12px;"><i class="fa-solid fa-stethoscope text-primary mr-1"></i> Terapis Pemeriksa</small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Section S: Subjektif -->
-                <div class="card mb-3 border-0 shadow-xs" style="border-radius: 8px;">
-                    <div class="card-header py-2 px-3 border-bottom d-flex align-items-center" style="background: #fff8e6;">
-                        <span class="badge badge-warning text-dark font-w700 mr-2" style="font-size: 11px;">S</span>
-                        <strong class="text-dark" style="font-size: 13px;">Subjektif (Keluhan & Anamnesa Sesi Ini)</strong>
+                <div class="card mb-3 border-0" style="border-radius: 10px; border: 1px solid #fef08a !important; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.02); overflow: hidden;">
+                    <div class="card-header py-2.5 px-3 border-bottom d-flex align-items-center" style="background: #fefce8; border-color: #fef08a !important;">
+                        <span class="badge mr-2 font-w700" style="background: #fef08a; color: #854d0e; font-size: 11px; border-radius: 6px; padding: 4px 8px;">S</span>
+                        <strong style="color: #713f12; font-size: 13px;">Subjektif (Keluhan & Anamnesa Sesi Ini)</strong>
                     </div>
                     <div class="card-body p-3">
-                        <div id="modalSoapKeluhan" style="font-size: 13px; line-height: 1.5; color: #1e293b;">-</div>
+                        <div id="modalSoapKeluhan" style="font-size: 13px; line-height: 1.6; color: #1e293b;">-</div>
                     </div>
                 </div>
 
                 <!-- Section O: Objektif -->
-                <div class="card mb-3 border-0 shadow-xs" style="border-radius: 8px;">
-                    <div class="card-header py-2 px-3 border-bottom d-flex justify-content-between align-items-center" style="background: #eef6ff;">
+                <div class="card mb-3 border-0" style="border-radius: 10px; border: 1px solid #bfdbfe !important; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.02); overflow: hidden;">
+                    <div class="card-header py-2.5 px-3 border-bottom d-flex justify-content-between align-items-center" style="background: #eff6ff; border-color: #bfdbfe !important;">
                         <div class="d-flex align-items-center">
-                            <span class="badge badge-info font-w700 mr-2" style="font-size: 11px;">O</span>
-                            <strong class="text-dark" style="font-size: 13px;">Objektif (Pemeriksaan Fisik & Tanda Vital)</strong>
+                            <span class="badge mr-2 font-w700" style="background: #dbeafe; color: #1e40af; font-size: 11px; border-radius: 6px; padding: 4px 8px;">O</span>
+                            <strong style="color: #1e40af; font-size: 13px;">Objektif (Pemeriksaan Fisik & Tanda Vital)</strong>
                         </div>
                         <div id="modalSoapFilePemeriksaanContainer"></div>
                     </div>
                     <div class="card-body p-3">
-                        <div id="modalSoapPemeriksaan" style="font-size: 13px; line-height: 1.5; color: #1e293b;">-</div>
+                        <div id="modalSoapPemeriksaan" style="font-size: 13px; line-height: 1.6; color: #1e293b;">-</div>
                     </div>
                 </div>
 
                 <!-- Section A: Assessment & Diagnosa Terapi -->
-                <div class="card mb-3 border-0 shadow-xs" style="border-radius: 8px;">
-                    <div class="card-header py-2 px-3 border-bottom d-flex justify-content-between align-items-center" style="background: #fdf2f2;">
+                <div class="card mb-3 border-0" style="border-radius: 10px; border: 1px solid #fecdd3 !important; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.02); overflow: hidden;">
+                    <div class="card-header py-2.5 px-3 border-bottom d-flex justify-content-between align-items-center" style="background: #fff1f2; border-color: #fecdd3 !important;">
                         <div class="d-flex align-items-center">
-                            <span class="badge badge-danger font-w700 mr-2" style="font-size: 11px;">A</span>
-                            <strong class="text-dark" style="font-size: 13px;">Assessment (Catatan Asesmen & Diagnosa Terapi)</strong>
+                            <span class="badge mr-2 font-w700" style="background: #ffe4e6; color: #9f1239; font-size: 11px; border-radius: 6px; padding: 4px 8px;">A</span>
+                            <strong style="color: #9f1239; font-size: 13px;">Assessment (Catatan Asesmen & Diagnosa Terapi)</strong>
                         </div>
                         <div id="modalSoapAssessmentBtnContainer"></div>
                     </div>
                     <div class="card-body p-3">
-                        <div id="modalSoapAssessmentText" style="font-size: 13px; line-height: 1.5; color: #1e293b;">
+                        <div id="modalSoapAssessmentText" style="font-size: 13px; line-height: 1.6; color: #1e293b;">
                             <span class="text-muted font-italic">Belum ada catatan assessment terapi.</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Section P: Plan & Intervensi Terapi -->
-                <div class="card mb-0 border-0 shadow-xs" style="border-radius: 8px;">
-                    <div class="card-header py-2 px-3 border-bottom d-flex justify-content-between align-items-center" style="background: #eafaf1;">
+                <div class="card mb-0 border-0" style="border-radius: 10px; border: 1px solid #bbf7d0 !important; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.02); overflow: hidden;">
+                    <div class="card-header py-2.5 px-3 border-bottom d-flex justify-content-between align-items-center" style="background: #f0fdf4; border-color: #bbf7d0 !important;">
                         <div class="d-flex align-items-center">
-                            <span class="badge badge-success font-w700 mr-2" style="font-size: 11px;">P</span>
-                            <strong class="text-dark" style="font-size: 13px;">Plan (Rencana Tindakan & Intervensi Terapi)</strong>
+                            <span class="badge mr-2 font-w700" style="background: #dcfce7; color: #166534; font-size: 11px; border-radius: 6px; padding: 4px 8px;">P</span>
+                            <strong style="color: #166534; font-size: 13px;">Plan (Rencana Tindakan & Intervensi Terapi)</strong>
                         </div>
                         <div id="modalSoapFileTindakanContainer"></div>
                     </div>
                     <div class="card-body p-3">
-                        <div id="modalSoapTindakan" style="font-size: 13px; line-height: 1.5; color: #1e293b;">-</div>
+                        <div id="modalSoapTindakan" style="font-size: 13px; line-height: 1.6; color: #1e293b;">-</div>
                     </div>
                 </div>
 
             </div>
 
-            <div class="modal-footer d-flex justify-content-between align-items-center bg-white border-top py-2 px-3">
+            <!-- Modal Footer -->
+            <div class="modal-footer d-flex justify-content-between align-items-center px-4 py-2.5" style="background: #f8fafc; border-top: 1px solid #e2e8f0;">
                 <div class="d-flex align-items-center flex-wrap" id="modalSoapActionButtons" style="gap: 6px;">
                     <!-- Dynamically populated buttons for Edit (O), (A), (P) if status <= 2 -->
                 </div>
-                <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 14px;">
+                <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 16px; color: #475569;">
                     Tutup
                 </button>
             </div>
@@ -1176,9 +1188,9 @@
         // Populate Modal Fields
         $("#modalSoapSubTitle").text(norekam + " — " + layanan);
         $("#modalSoapTanggal").text(tanggal);
-        $("#modalSoapWaktu").html('<i class="fa fa-clock-o mr-1"></i> ' + (sesiwaktu !== '-' ? sesiwaktu : 'Sesi Reguler (08.00 - 13.00)'));
+        $("#modalSoapWaktu").html('<i class="fa-solid fa-clock mr-1"></i> ' + (sesiwaktu !== '-' ? sesiwaktu : 'Sesi Reguler (08.00 - 13.00)'));
         $("#modalSoapLayanan").text(layanan);
-        $("#modalSoapUpt").html('<i class="fa fa-map-marker text-danger mr-1"></i> ' + upt);
+        $("#modalSoapUpt").html('<i class="fa-solid fa-hospital-user text-primary mr-1"></i> ' + upt);
         $("#modalSoapTerapis").text(terapis);
 
         // S: Subjektif
@@ -1187,7 +1199,7 @@
         // O: Objektif
         $("#modalSoapPemeriksaan").html(pemeriksaan);
         if (filepemeriksaan) {
-            $("#modalSoapFilePemeriksaanContainer").html('<button type="button" class="btn btn-xs btn-outline-info font-w600 btn-open-preview-berkas" data-type="pemeriksaan" data-title="Dokumen / Foto Pemeriksaan Objektif (' + norekam + ')" data-url="' + filepemeriksaan + '" data-filename="Pemeriksaan-' + norekam + '"><i class="fa-solid fa-image mr-1"></i> Foto Pemeriksaan</button>');
+            $("#modalSoapFilePemeriksaanContainer").html('<button type="button" class="btn btn-xs btn-outline-info font-w600 btn-open-preview-berkas" data-type="pemeriksaan" data-title="Dokumen / Foto Pemeriksaan Objektif (' + norekam + ')" data-url="' + filepemeriksaan + '" data-filename="Pemeriksaan-' + norekam + '" style="border-radius: 6px; font-size: 11.5px;"><i class="fa-solid fa-image mr-1"></i> Foto Pemeriksaan</button>');
         } else {
             $("#modalSoapFilePemeriksaanContainer").empty();
         }
@@ -1198,11 +1210,11 @@
             assessmentContent += '<div class="font-w600 mb-2">' + $('<div>').html(diagnosa).text().replace(/\n/g, '<br>') + '</div>';
         }
         if (hasassessment) {
-            assessmentContent += '<div class="mt-2 pt-2 border-top"><span class="badge badge-success font-w600 mr-2"><i class="fa fa-check-circle mr-1"></i> Lembar Asesmen 15 Modul Terisi</span></div>';
+            assessmentContent += '<div class="mt-2 pt-2 border-top"><span class="badge font-w600 mr-2" style="background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; font-size: 11px; padding: 4px 8px; border-radius: 6px;"><i class="fa-solid fa-circle-check mr-1 text-success"></i> Lembar Asesmen 15 Modul Terisi</span></div>';
             $("#modalSoapAssessmentBtnContainer").html(
-                '<div class="btn-group">' +
-                    '<a href="' + urlassessmentshow + '" class="btn btn-xs btn-primary font-w600"><i class="fa fa-eye mr-1"></i> Lembar Asesmen</a>' +
-                    '<a href="' + urlassessmentprint + '" target="_blank" class="btn btn-xs btn-outline-info font-w600"><i class="fa fa-print mr-1"></i> Cetak</a>' +
+                '<div class="d-flex align-items-center" style="gap: 8px;">' +
+                    '<a href="' + urlassessmentshow + '" class="btn btn-xs btn-primary font-w600" style="border-radius: 6px; font-size: 11.5px; padding: 5px 12px;"><i class="fa-solid fa-eye mr-1"></i> Lembar Asesmen</a>' +
+                    '<a href="' + urlassessmentprint + '" target="_blank" class="btn btn-xs btn-outline-info font-w600" style="border-radius: 6px; font-size: 11.5px; padding: 5px 12px;"><i class="fa-solid fa-print mr-1"></i> Cetak</a>' +
                 '</div>'
             );
         } else {
@@ -1210,7 +1222,7 @@
                 assessmentContent = '<span class="text-muted font-italic">Belum ada catatan assessment klinis terapi.</span>';
             }
             @if(auth()->user()->role_display() == "Dokter" || auth()->user()->role_display() == "Admin")
-                $("#modalSoapAssessmentBtnContainer").html('<a href="' + urlassessment + '" class="btn btn-xs btn-outline-danger font-w600"><i class="fa fa-plus mr-1"></i> Isi Lembar Asesmen</a>');
+                $("#modalSoapAssessmentBtnContainer").html('<a href="' + urlassessment + '" class="btn btn-xs btn-outline-danger font-w600" style="border-radius: 6px; font-size: 11.5px;"><i class="fa-solid fa-plus mr-1"></i> Isi Lembar Asesmen</a>');
             @else
                 $("#modalSoapAssessmentBtnContainer").empty();
             @endif
@@ -1220,7 +1232,7 @@
         // P: Plan
         $("#modalSoapTindakan").html($('<div>').html(tindakan).text().replace(/\n/g, '<br>') || tindakan);
         if (filetindakan) {
-            $("#modalSoapFileTindakanContainer").html('<button type="button" class="btn btn-xs btn-outline-success font-w600 btn-open-preview-berkas" data-type="tindakan" data-title="Dokumen / Foto Tindakan Terapi (' + norekam + ')" data-url="' + filetindakan + '" data-filename="Tindakan-' + norekam + '"><i class="fa-solid fa-image mr-1"></i> Foto Tindakan</button>');
+            $("#modalSoapFileTindakanContainer").html('<button type="button" class="btn btn-xs btn-outline-success font-w600 btn-open-preview-berkas" data-type="tindakan" data-title="Dokumen / Foto Tindakan Terapi (' + norekam + ')" data-url="' + filetindakan + '" data-filename="Tindakan-' + norekam + '" style="border-radius: 6px; font-size: 11.5px;"><i class="fa-solid fa-image mr-1"></i> Foto Tindakan</button>');
         } else {
             $("#modalSoapFileTindakanContainer").empty();
         }
@@ -1229,9 +1241,9 @@
         var actionHtml = '';
         @if (auth()->user()->role_display() == "Dokter" || auth()->user()->role_display() == "Admin")
             if (status <= 2) {
-                actionHtml += '<a href="javascript:void(0)" data-toggle="modal" data-target="#addPemeriksaan" data-id="' + id + '" data-tanggal="' + tanggal + '" data-pemeriksaan="' + (btn.data('pemeriksaan') || '') + '" class="btn btn-xs btn-info addPemeriksaan font-w600 mr-1" data-dismiss="modal"><i class="fa fa-stethoscope mr-1"></i> Edit (O) Fisik</a>';
-                actionHtml += '<a href="javascript:void(0)" data-toggle="modal" data-target="#addDiagnosa" data-id="' + id + '" data-tanggal="' + tanggal + '" data-diagnosa="' + (btn.data('diagnosa') || '') + '" class="btn btn-xs btn-danger addDiagnosa font-w600 mr-1" data-dismiss="modal"><i class="fa fa-clipboard mr-1"></i> Edit (A) Assessment</a>';
-                actionHtml += '<a href="javascript:void(0)" data-toggle="modal" data-target="#addTindakan" data-id="' + id + '" data-tanggal="' + tanggal + '" data-layanan="' + layanan + '" data-tindakan="' + (btn.data('tindakan') || '') + '" class="btn btn-xs btn-success addTindakan font-w600 mr-1" data-dismiss="modal"><i class="fa fa-medkit mr-1"></i> Edit (P) Tindakan</a>';
+                actionHtml += '<a href="javascript:void(0)" data-toggle="modal" data-target="#addPemeriksaan" data-id="' + id + '" data-tanggal="' + tanggal + '" data-pemeriksaan="' + (btn.data('pemeriksaan') || '') + '" class="btn btn-xs btn-info addPemeriksaan font-w600 mr-1" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px;" data-dismiss="modal"><i class="fa-solid fa-stethoscope mr-1"></i> Edit (O) Fisik</a>';
+                actionHtml += '<a href="javascript:void(0)" data-toggle="modal" data-target="#addDiagnosa" data-id="' + id + '" data-tanggal="' + tanggal + '" data-diagnosa="' + (btn.data('diagnosa') || '') + '" class="btn btn-xs btn-danger addDiagnosa font-w600 mr-1" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px;" data-dismiss="modal"><i class="fa-solid fa-clipboard-check mr-1"></i> Edit (A) Assessment</a>';
+                actionHtml += '<a href="javascript:void(0)" data-toggle="modal" data-target="#addTindakan" data-id="' + id + '" data-tanggal="' + tanggal + '" data-layanan="' + layanan + '" data-tindakan="' + (btn.data('tindakan') || '') + '" class="btn btn-xs btn-success addTindakan font-w600 mr-1" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px;" data-dismiss="modal"><i class="fa-solid fa-hand-holding-medical mr-1"></i> Edit (P) Tindakan</a>';
             }
         @endif
 

@@ -196,22 +196,40 @@
 
            
         });
-        //end pusher
-        
-		// (function($) {
-		// 	var table = $('#example5').DataTable({
-		// 		searching: true,
-		// 		paging:true,
-		// 		select: false,
-		// 		//info: false,         
-		// 		lengthChange:false 
-				
-		// 	});
-		// 	$('#example tbody').on('click', 'tr', function () {
-		// 		var data = table.row( this ).data();
-				
-		// 	});
-		// })(jQuery);
+        // =========================================================================
+        // Konfirmasi Logout dengan SweetAlert2 (Popup Ya / Tidak)
+        // =========================================================================
+        function handleLogoutConfirm(logoutUrl) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Konfirmasi Keluar',
+                    html: 'Apakah Anda yakin ingin keluar dari akun <strong>{{ auth()->user() ? auth()->user()->name : "Omah Terapi-KU" }}</strong>?',
+                    type: 'warning',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ef4444',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: '<i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Ya, Keluar',
+                    cancelButtonText: '<i class="fa-solid fa-xmark mr-1"></i> Tidak / Batal',
+                    reverseButtons: true,
+                    focusCancel: true
+                }).then((result) => {
+                    if (result.value || result.isConfirmed) {
+                        window.location.href = logoutUrl || "{{ Route('logout') }}";
+                    }
+                });
+            } else {
+                if (confirm('Apakah Anda yakin ingin keluar dari sistem Omah Terapi-KU?')) {
+                    window.location.href = logoutUrl || "{{ Route('logout') }}";
+                }
+            }
+        }
+
+        $(document).on('click', '.btn-logout, a.text-logout, a[href="{{ Route('logout') }}"], a[href$="/logout"]', function(e) {
+            e.preventDefault();
+            var targetUrl = $(this).attr('href') || "{{ Route('logout') }}";
+            handleLogoutConfirm(targetUrl);
+        });
 	</script>
     @yield('script')
     @stack('scripts')

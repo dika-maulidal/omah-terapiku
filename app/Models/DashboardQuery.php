@@ -743,4 +743,125 @@ class DashboardQuery
             'semua' => $this->getTopTindakanTerbanyak($limit, 'semua')
         ];
     }
+
+    public function getRecentTherapistActivities($limit = 10)
+    {
+        $user = auth()->user();
+        $role = $user ? $user->role_display() : '';
+        $dokterId = null;
+        if ($role == "Dokter") {
+            $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
+            $dokterId = $dokter ? $dokter->id : null;
+        }
+
+        $query = Rekam::with(['pasien', 'dokter', 'assessment', 'terapisPendamping'])
+            ->whereNotNull('pasien_id')
+            ->when($dokterId, function ($q) use ($dokterId) {
+                $q->where(function($sq) use ($dokterId) {
+                    $sq->where('dokter_id', $dokterId)
+                       ->orWhere('terapis_pendamping_id', $dokterId);
+                });
+            });
+
+        $this->scopeUpt($query);
+
+        $recentRecords = $query->orderBy('updated_at', 'desc')
+            ->limit($limit)
+            ->get();
+
+        $activities = [];
+        foreach ($recentRecords as $rekam) {
+            $pasienName = $rekam->pasien->nama ?? 'Penerima Manfaat';
+            $pasienRm = $rekam->pasien->no_rm ?? '-';
+            $pasienId = $rekam->pasien_id;
+            $dokterName = $rekam->dokter->nama ?? 'Terapis';
+            $layanan = $rekam->layanan_terapi ?: ($rekam->poli ?: 'Terapi');
+            $upt = $rekam->upt_lokasi ?: ($rekam->poli ?: 'Omah Terapiku');
+            $waktu = $rekam->updated_at ? $rekam->updated_at->diffForHumans() : ($rekam->created_at ? $rekam->created_at->diffForHumans() : '-');
+            $timestamp = $rekam->updated_at ? $rekam->updated_at->format('d M Y, H:i') : ($rekam->created_at ? $rekam->created_at->format('d M Y, H:i') : '-');
+
+            // Deteksi jenis aktivitas & konten ringkas
+            $activityType = 'sesi';
+            $actionTitle = 'Sesi Terapi';
+            $badgeColor = '#2563eb';
+            $badgeBg = '#eff6ff';
+            $icon = 'fa-user-md';
+            $snippet = '';
+
+            if ($rekam->status == 4 || $rekam->status == 5) {
+                $activityType = 'selesai';
+                $actionTitle = 'Sesi Selesai';
+                $badgeColor = '#10b981';
+                $badgeBg = '#ecfdf5';
+                $icon = 'fa-circle-check';
+                if (!empty($rekam->tindakan) && $rekam->tindakan !== 'Belum ada catatan rencana/tindakan') {
+                    $snippet = 'Tindakan: ' . trim(html_entity_decode(strip_tags($rekam->tindakan)));
+                } else {
+                    $snippet = 'Pelayanan terapi telah diselesaikan dan diverifikasi.';
+                }
+            } elseif ($rekam->assessment) {
+                $activityType = 'assessment';
+                $actionTitle = 'Asesmen 15 Modul';
+                $badgeColor = '#1e40af';
+                $badgeBg = '#eff6ff';
+                $icon = 'fa-clipboard-list';
+                $kelengkapan = $rekam->assessment->kelengkapan ?? 0;
+                $diag = $rekam->assessment->diagnosa_medis ? ' (' . $rekam->assessment->diagnosa_medis . ')' : '';
+                $snippet = 'Form Asesmen Klinis terisi ' . $kelengkapan . '%' . $diag;
+            } elseif (!empty($rekam->tindakan) && $rekam->tindakan !== 'Belum ada catatan rencana/tindakan') {
+                $activityType = 'tindakan';
+                $actionTitle = 'Tindakan / Intervensi';
+                $badgeColor = '#0284c7';
+                $badgeBg = '#e0f2fe';
+                $icon = 'fa-hand-holding-medical';
+                $snippet = trim(html_entity_decode(strip_tags($rekam->tindakan)));
+            } elseif (!empty($rekam->pemeriksaan) && $rekam->pemeriksaan !== 'Belum ada data pemeriksaan fisik') {
+                $activityType = 'pemeriksaan';
+                $actionTitle = 'Pemeriksaan Fisik';
+                $badgeColor = '#3b82f6';
+                $badgeBg = '#eff6ff';
+                $icon = 'fa-stethoscope';
+                $snippet = trim(html_entity_decode(strip_tags($rekam->pemeriksaan)));
+            } else {
+                $activityType = 'registrasi';
+                $actionTitle = 'Pendaftaran Sesi';
+                $badgeColor = '#f59e0b';
+                $badgeBg = '#fef3c7';
+                $icon = 'fa-notes-medical';
+                $snippet = !empty($rekam->keluhan) ? 'Keluhan: ' . trim(html_entity_decode(strip_tags($rekam->keluhan))) : 'Sesi pelayanan telah dibuat dan dalam antrian.';
+            }
+
+            if (strlen($snippet) > 120) {
+                $snippet = substr($snippet, 0, 117) . '...';
+            }
+
+            // Inisial Terapis
+            $cleanName = preg_replace('/[^a-zA-Z]/', '', $dokterName);
+            $initial = strtoupper(substr($cleanName ?: 'TP', 0, 2));
+
+            $activities[] = [
+                'id' => $rekam->id,
+                'pasien_id' => $pasienId,
+                'pasien_nama' => $pasienName,
+                'pasien_rm' => $pasienRm,
+                'dokter_nama' => $dokterName,
+                'dokter_initial' => $initial,
+                'layanan' => $layanan,
+                'upt' => $upt,
+                'activity_type' => $activityType,
+                'action_title' => $actionTitle,
+                'badge_color' => $badgeColor,
+                'badge_bg' => $badgeBg,
+                'icon' => $icon,
+                'snippet' => $snippet,
+                'waktu' => $waktu,
+                'timestamp' => $timestamp,
+                'status' => $rekam->status,
+                'status_display' => $rekam->status_display(),
+                'detail_url' => route('rekam.detail', $pasienId)
+            ];
+        }
+
+        return $activities;
+    }
 }

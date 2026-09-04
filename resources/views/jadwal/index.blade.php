@@ -24,7 +24,16 @@
         color: #1e40af;
         text-transform: capitalize;
     }
-    .fc-button-primary, .fc button {
+    .fc .fc-button-group {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+    .fc .fc-button-group > * {
+        float: none !important;
+        margin: 0 !important;
+    }
+    .fc-button-primary, .fc button, .fc .fc-button {
         background: #2563eb !important;
         border-color: #2563eb !important;
         border-radius: 6px !important;
@@ -34,16 +43,26 @@
         color: #ffffff !important;
         box-shadow: none !important;
         text-shadow: none !important;
-        padding: 5px 12px !important;
+        padding: 6px 14px !important;
         height: auto !important;
+        margin: 0 4px !important;
+        display: inline-block !important;
+        float: none !important;
+        transition: all 0.15s ease !important;
     }
     .fc-button-primary:hover, .fc-button-primary:focus, .fc button:hover {
         background: #1d4ed8 !important;
         border-color: #1d4ed8 !important;
+        color: #ffffff !important;
     }
     .fc-state-active, .fc button.fc-state-active {
         background: #1e40af !important;
         border-color: #1e40af !important;
+        color: #ffffff !important;
+    }
+    .fc-state-disabled, .fc button.fc-state-disabled {
+        opacity: 0.65 !important;
+        cursor: not-allowed !important;
     }
     .fc-day-header {
         padding: 10px 0 !important;
@@ -320,10 +339,10 @@
             <div class="card-body p-4">
                 
                 <!-- Underline Tabs Header -->
-                <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 12px;">
-                    <ul class="nav ot-underline-tabs mb-0" id="jadwalTabs" role="tablist">
+                <div class="d-flex justify-content-between align-items-center flex-wrap pb-0 mb-3" style="gap: 16px; border-bottom: 2px solid #edf2f7;">
+                    <ul class="nav ot-underline-tabs mb-0" id="jadwalTabs" role="tablist" style="border-bottom: none; margin-bottom: -2px; gap: 28px;">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="tab-timeline-link" data-toggle="tab" href="#tab-timeline" role="tab" aria-controls="tab-timeline" aria-selected="true">
+                            <a class="nav-link active" id="tab-timeline-link" data-toggle="tab" href="#tab-timeline" role="tab" aria-controls="tab-timeline" aria-selected="true" style="padding: 10px 8px 14px 8px; font-size: 14.5px;">
                                 <i class="fa-solid fa-timeline mr-2"></i> Timeline Sesi Waktu
                                 <span class="badge font-w700 ml-2" style="font-size: 11px; padding: 3px 8px; border-radius: 12px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
                                     {{ $stats['total'] }} Sesi
@@ -331,14 +350,14 @@
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="tab-kalender-link" data-toggle="tab" href="#tab-kalender" role="tab" aria-controls="tab-kalender" aria-selected="false">
+                            <a class="nav-link" id="tab-kalender-link" data-toggle="tab" href="#tab-kalender" role="tab" aria-controls="tab-kalender" aria-selected="false" style="padding: 10px 8px 14px 8px; font-size: 14.5px;">
                                 <i class="fa-solid fa-calendar-days mr-2"></i> Kalender Visual Bulanan
                             </a>
                         </li>
                     </ul>
 
-                    <div>
-                        <span class="badge font-w600" style="font-size: 12px; padding: 6px 12px; border-radius: 8px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1;">
+                    <div class="pb-2">
+                        <span class="badge font-w600" style="font-size: 12px; padding: 7px 14px; border-radius: 8px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1;">
                             <i class="fa-solid fa-calendar-day mr-1 text-primary"></i>
                             {{ \Carbon\Carbon::parse($tanggal)->translatedFormat('l, d F Y') }}
                         </span>
@@ -624,6 +643,12 @@
                     left: 'prev,next today',
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
+                },
+                buttonText: {
+                    today: 'Hari Ini',
+                    month: 'Bulan',
+                    week: 'Minggu',
+                    day: 'Hari'
                 },
                 defaultView: 'month',
                 editable: false,

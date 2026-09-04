@@ -113,6 +113,64 @@
     border-color: #2563eb !important;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
 }
+#modalPasien .dataTables_wrapper .dataTables_paginate {
+    padding-top: 12px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+#modalPasien .dataTables_wrapper .dataTables_paginate .paginate_button {
+    min-width: 32px !important;
+    height: 32px !important;
+    padding: 4px 10px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    color: #475569 !important;
+    margin: 0 1px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+#modalPasien .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #eff6ff !important;
+    color: #2563eb !important;
+    border-color: #93c5fd !important;
+}
+#modalPasien .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+#modalPasien .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25) !important;
+}
+#modalPasien .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+#modalPasien .dataTables_wrapper .dataTables_paginate .paginate_button.next {
+    padding: 4px 12px !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    border: 1px solid #cbd5e1 !important;
+}
+#modalPasien .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+#modalPasien .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    color: #94a3b8 !important;
+}
+#modalPasien .dataTables_wrapper .dataTables_info {
+    font-size: 12px !important;
+    color: #64748b !important;
+    padding-top: 14px !important;
+    font-weight: 500 !important;
+}
 #modalPasien .table tbody tr {
     transition: background-color 0.15s ease;
 }
@@ -279,31 +337,31 @@
                                     $extraInfo .= ' | ' . $pasien->desil;
                                 }
                             @endphp
-                            <div class="col-12 mb-3">
-                                <div id="patientSummaryCard" class="card mb-2" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 5px solid #16a34a; box-shadow: 0 3px 10px rgba(22, 163, 74, 0.08); border-radius: 8px;">
-                                    <div class="card-body py-3 px-4">
-                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="col-12 mb-2">
+                                <div id="patientSummaryCard" class="card mb-1" style="background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%); border: 1.5px solid #bfdbfe; border-left: 4px solid #2563eb; box-shadow: 0 3px 12px rgba(37, 99, 235, 0.08); border-radius: 10px;">
+                                    <div class="card-body py-2.5 px-3">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 8px;">
                                             <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
-                                                <span class="badge badge-primary font-w600 py-1 px-2" style="font-size: 12px; border-radius: 4px;" id="sumNoRm">RM# {{ $pasien->no_rm ?? '-' }}</span>
-                                                <span class="badge badge-success font-w600 py-1 px-2" style="font-size: 12px; border-radius: 4px;" id="sumKategori">Kategori: {{ $kategoriPasien }}</span>
-                                                <h5 class="mb-0 text-dark font-w700" id="sumNama" style="font-size: 15px;">{{ $pasien->nama ?? '-' }}</h5>
+                                                <span class="badge font-w700" style="background: #ffffff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11.5px; padding: 4px 8px; border-radius: 6px;" id="sumNoRm">RM# {{ $pasien->no_rm ?? '-' }}</span>
+                                                <span class="badge font-w600" style="background: #ffffff; color: {{ $kategoriPasien == 'Anak' ? '#166534' : '#0284c7' }}; border: 1px solid {{ $kategoriPasien == 'Anak' ? '#bbf7d0' : '#bae6fd' }}; font-size: 11.5px; padding: 4px 8px; border-radius: 6px;" id="sumKategori">{{ $kategoriPasien }}</span>
+                                                <h5 class="mb-0 font-w700" id="sumNama" style="font-size: 14.5px; color: #1e3a8a;">{{ $pasien->nama ?? '-' }}</h5>
                                             </div>
-                                            <button type="button" class="btn btn-xs btn-outline-primary font-w600" data-toggle="modal" data-target="#modalPasien" style="font-size: 11.5px; border-radius: 6px;">
+                                            <button type="button" class="btn btn-xs btn-outline-primary font-w600" data-toggle="modal" data-target="#modalPasien" style="font-size: 11.5px; border-radius: 6px; padding: 3px 10px; background: #ffffff;">
                                                 <i class="fa-solid fa-rotate mr-1"></i> Ganti Pasien
                                             </button>
                                         </div>
-                                        <div class="row pt-2" style="border-top: 1px dashed #cbd5e1;">
-                                            <div class="col-md-4 col-sm-6 mb-2">
-                                                <small class="text-muted d-block font-w600" style="font-size: 11.5px;"><i class="fa-solid fa-user-group text-primary mr-1"></i> Kontak / Wali Pasien:</small>
-                                                <span class="text-dark font-w600" style="font-size: 13px;" id="sumWali">{{ $waliInfo }}</span>
+                                        <div class="row pt-2 mt-2" style="border-top: 1px dashed #bfdbfe;">
+                                            <div class="col-md-4 col-sm-6 mb-1 mb-md-0">
+                                                <small class="text-muted d-block font-w600" style="font-size: 11px;"><i class="fa-solid fa-user-group text-primary mr-1"></i> Kontak / Wali Pasien:</small>
+                                                <span class="text-dark font-w600" style="font-size: 12.5px;" id="sumWali">{{ $waliInfo }}</span>
                                             </div>
-                                            <div class="col-md-4 col-sm-6 mb-2">
-                                                <small class="text-muted d-block font-w600" style="font-size: 11.5px;"><i class="fa-solid fa-wheelchair text-primary mr-1"></i> Jenis Disabilitas:</small>
-                                                <span class="badge badge-info light font-w600" style="font-size: 11.5px;" id="sumDisabilitas">{{ $pasien->jenis_disabilitas ?: 'Umum' }}</span>
+                                            <div class="col-md-4 col-sm-6 mb-1 mb-md-0">
+                                                <small class="text-muted d-block font-w600" style="font-size: 11px;"><i class="fa-solid fa-wheelchair text-primary mr-1"></i> Jenis Disabilitas:</small>
+                                                <span class="badge badge-info light font-w600" style="font-size: 11px; padding: 2px 6px;" id="sumDisabilitas">{{ $pasien->jenis_disabilitas ?: 'Tidak Ada' }}</span>
                                             </div>
-                                            <div class="col-md-4 col-sm-6 mb-2">
-                                                <small class="text-muted d-block font-w600" style="font-size: 11.5px;"><i class="fa-solid fa-circle-info text-primary mr-1"></i> Alat Bantu / Desil:</small>
-                                                <span class="text-dark font-w500" style="font-size: 12.5px;" id="sumExtra">{{ $extraInfo }}</span>
+                                            <div class="col-md-4 col-sm-6 mb-0">
+                                                <small class="text-muted d-block font-w600" style="font-size: 11px;"><i class="fa-solid fa-circle-info text-primary mr-1"></i> Alat Bantu / Desil:</small>
+                                                <span class="text-dark font-w500" style="font-size: 12px;" id="sumExtra">{{ $extraInfo }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -425,6 +483,18 @@
             select: false,
             pageLength: 5,
             lengthChange: false,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Ketik untuk mencari...",
+                paginate: {
+                    previous: '<i class="fa-solid fa-chevron-left mr-1"></i> Prev',
+                    next: 'Next <i class="fa-solid fa-chevron-right ml-1"></i>'
+                },
+                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                infoEmpty: "Menampilkan 0 data",
+                infoFiltered: "(disaring dari _MAX_ total data)",
+                zeroRecords: "Tidak ada data penerima manfaat yang sesuai"
+            },
             ajax: "{{ route('penerima-manfaat.json') }}",
             columns: [
                 {data: 'action', name: 'action'},
@@ -487,9 +557,9 @@
         $("#sumNoRm").text("RM# " + no);
         $("#sumKategori").text(kategori);
         if (kategori === 'Anak') {
-            $("#sumKategori").removeClass('badge-secondary').addClass('badge-success');
+            $("#sumKategori").css({'color': '#166534', 'background': '#ffffff', 'border': '1px solid #bbf7d0'});
         } else {
-            $("#sumKategori").removeClass('badge-success').addClass('badge-secondary');
+            $("#sumKategori").css({'color': '#0284c7', 'background': '#ffffff', 'border': '1px solid #bae6fd'});
         }
         $("#sumNama").text(nama);
 

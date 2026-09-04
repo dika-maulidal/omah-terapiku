@@ -19,6 +19,7 @@
         $topTindakan = $allTopTindakan['bulan'];
         $allTopDiagnosa = $query->getTopDiagnosaAll(10);
         $topDiagnosa = $allTopDiagnosa['bulan'];
+        $recentActivities = $query->getRecentTherapistActivities(10);
     @endphp
 
     <!-- Dashboard Header Banner (Unified White Card) -->
@@ -676,6 +677,151 @@
             </div>
         </div>
     </div>
+
+    <!-- =========================================================================
+         SECTION: AKTIVITAS TERKINI TERAPIS (RECENT THERAPIST ACTIVITY)
+         ========================================================================= -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05); overflow: hidden;">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7; background: #ffffff;">
+                    <div class="d-flex align-items-center mb-2 mb-sm-0">
+                        <div class="d-inline-flex align-items-center justify-content-center mr-3" style="width: 40px; height: 40px; border-radius: 10px; background: #eff6ff; color: #2563eb; font-size: 17px; border: 1px solid #dbeafe; flex-shrink: 0;">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+                        <div>
+                            <h4 class="fs-16 font-w700 mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
+                                Aktivitas Terkini Terapis
+                            </h4>
+                            <p class="fs-12 text-muted mb-0">Log klinis realtime: pengisian asesmen 15 modul, pemeriksaan fisik, intervensi, dan sesi selesai</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Filter Kategori & Counter -->
+                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                        <div class="btn-group btn-group-sm" role="group" id="filterTherapistActivity" style="background: #f8fafc; padding: 3px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <button type="button" class="btn btn-xs btn-activity-filter active font-w600" data-filter="all" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: #2563eb; color: #ffffff; border: none; cursor: pointer;">Semua</button>
+                            <button type="button" class="btn btn-xs btn-activity-filter font-w600" data-filter="assessment" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: transparent; color: #64748b; border: none; cursor: pointer;">Asesmen</button>
+                            <button type="button" class="btn btn-xs btn-activity-filter font-w600" data-filter="tindakan" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: transparent; color: #64748b; border: none; cursor: pointer;">Tindakan</button>
+                            <button type="button" class="btn btn-xs btn-activity-filter font-w600" data-filter="selesai" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: transparent; color: #64748b; border: none; cursor: pointer;">Selesai</button>
+                        </div>
+                        <span class="badge badge-primary light font-w700" style="font-size: 11.5px; padding: 7px 12px; border-radius: 8px; border: 1px solid #dbeafe;">
+                            <i class="fa-solid fa-bolt mr-1 text-primary"></i> {{ count($recentActivities) }} Aktivitas
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="tableTherapistActivity" style="min-width: 860px; font-size: 12.5px;">
+                            <thead style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                                <tr style="color: #64748b; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    <th style="padding: 12px 16px; width: 140px; font-weight: 700;">Waktu</th>
+                                    <th style="padding: 12px 16px; width: 180px; font-weight: 700;">Terapis</th>
+                                    <th style="padding: 12px 16px; width: 220px; font-weight: 700;">Penerima Manfaat</th>
+                                    <th style="padding: 12px 16px; width: 170px; font-weight: 700;">Layanan & UPT</th>
+                                    <th style="padding: 12px 16px; font-weight: 700;">Aktivitas & Catatan Terapi</th>
+                                    <th style="padding: 12px 16px; width: 130px; text-align: center; font-weight: 700;">Status & Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="therapistActivityBody">
+                                @forelse($recentActivities as $act)
+                                    <tr class="activity-row-item" data-activity-type="{{ $act['activity_type'] }}" style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;">
+                                        <!-- Kolom 1: Waktu -->
+                                        <td style="padding: 14px 16px; vertical-align: middle; white-space: nowrap;">
+                                            <div class="font-w700 text-dark" style="font-size: 12px;">
+                                                <i class="fa fa-clock-o mr-1 text-primary"></i> {{ $act['waktu'] }}
+                                            </div>
+                                            <small class="text-muted d-block" style="font-size: 11px;">{{ $act['timestamp'] }}</small>
+                                        </td>
+
+                                        <!-- Kolom 2: Terapis -->
+                                        <td style="padding: 14px 16px; vertical-align: middle; white-space: nowrap;">
+                                            <div>
+                                                <strong class="text-dark d-block text-truncate" title="{{ $act['dokter_nama'] }}" style="font-size: 13px; font-weight: 700; max-width: 170px;">
+                                                    <i class="fa-solid fa-user-doctor mr-1" style="color: #2563eb; font-size: 11.5px;"></i> {{ $act['dokter_nama'] }}
+                                                </strong>
+                                                <small class="text-muted d-block mt-1" style="font-size: 11px;">Terapis Pemeriksa</small>
+                                            </div>
+                                        </td>
+
+                                        <!-- Kolom 3: Penerima Manfaat -->
+                                        <td style="padding: 14px 16px; vertical-align: middle; white-space: nowrap;">
+                                            <div>
+                                                <a href="{{ $act['detail_url'] }}" class="font-w700 text-primary hover-underline" style="color: #2563eb !important; font-size: 13px;">
+                                                    {{ $act['pasien_nama'] }}
+                                                </a>
+                                                <div class="mt-1">
+                                                    <span class="badge badge-light" style="background: #f1f5f9; border: 1px solid #e2e8f0; font-size: 10.5px; color: #475569; padding: 2px 6px;">
+                                                        <i class="fa fa-id-card-o mr-1 text-primary"></i> {{ $act['pasien_rm'] }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <!-- Kolom 4: Layanan & UPT -->
+                                        <td style="padding: 14px 16px; vertical-align: middle; white-space: nowrap;">
+                                            <div>
+                                                <span class="badge badge-primary light font-w600" style="font-size: 11px; padding: 3px 8px; border-radius: 6px;">
+                                                    {{ $act['layanan'] }}
+                                                </span>
+                                                <div class="text-muted mt-1 text-truncate" style="font-size: 11px; max-width: 150px;" title="{{ $act['upt'] }}">
+                                                    <i class="fa-solid fa-hospital-user mr-1 text-primary"></i> {{ $act['upt'] }}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <!-- Kolom 5: Aktivitas & Catatan Terapi -->
+                                        <td style="padding: 14px 16px; vertical-align: middle;">
+                                            <div style="min-width: 220px; max-width: 380px;">
+                                                <div class="mb-1">
+                                                    <span class="badge font-w600" style="background: {{ $act['badge_bg'] }}; color: {{ $act['badge_color'] }}; font-size: 11px; padding: 3px 8px; border: 1px solid {{ $act['badge_color'] }}30; border-radius: 6px;">
+                                                        <i class="fa {{ $act['icon'] }} mr-1"></i> {{ $act['action_title'] }}
+                                                    </span>
+                                                </div>
+                                                @if(!empty($act['snippet']))
+                                                    <div class="text-dark" style="font-size: 12px; line-height: 1.4; color: #334155; word-wrap: break-word; white-space: normal;">
+                                                        {{ $act['snippet'] }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </td>
+
+                                        <!-- Kolom 6: Status & Aksi -->
+                                        <td style="padding: 14px 16px; vertical-align: middle; text-align: center; white-space: nowrap;">
+                                            <div class="mb-1">
+                                                {!! $act['status_display'] !!}
+                                            </div>
+                                            <a href="{{ $act['detail_url'] }}" class="btn btn-xs btn-primary shadow-sm font-w600 mt-1 d-inline-flex align-items-center justify-content-center" title="Buka Detail Rekam Medis" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 4px 10px; border-radius: 6px; font-size: 11px; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);">
+                                                <span>Detail</span>
+                                                <i class="fa fa-arrow-right ml-1" style="font-size: 9px;"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center py-5 text-muted">
+                                            <div class="d-inline-flex align-items-center justify-content-center mb-2" style="width: 48px; height: 48px; border-radius: 50%; background: #eff6ff; color: #2563eb; font-size: 20px;">
+                                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                            </div>
+                                            <h6 class="fs-14 font-w700 text-dark mb-1">Belum Ada Aktivitas Terapis</h6>
+                                            <p class="fs-12 text-muted mb-0">Seluruh pengisian asesmen, pemeriksaan, dan intervensi terapis akan tampil otomatis di sini.</p>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                                <tr id="emptyFilterActivityRow" class="d-none">
+                                    <td colspan="6" class="text-center py-5 text-muted">
+                                        <i class="fa-solid fa-filter fs-24 mb-2 text-muted" style="opacity: 0.5;"></i>
+                                        <p class="fs-12 mb-0">Tidak ada data aktivitas dengan kategori filter yang dipilih.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -1236,6 +1382,37 @@ $(document).ready(function() {
     $('#filterPeriodeDiagnosa').on('change', function() {
         var selectedPeriode = $(this).val();
         renderTopDiagnosa(selectedPeriode);
+    });
+
+    // Filter Aktivitas Terkini Terapis
+    $('#filterTherapistActivity .btn-activity-filter').on('click', function() {
+        $('#filterTherapistActivity .btn-activity-filter').removeClass('active').css({
+            'background': 'transparent',
+            'color': '#64748b'
+        });
+        $(this).addClass('active').css({
+            'background': '#2563eb',
+            'color': '#ffffff'
+        });
+
+        var filter = $(this).data('filter');
+        var visibleCount = 0;
+
+        $('#therapistActivityBody .activity-row-item').each(function() {
+            var type = $(this).data('activity-type');
+            if (filter === 'all' || type === filter) {
+                $(this).show();
+                visibleCount++;
+            } else {
+                $(this).hide();
+            }
+        });
+
+        if (visibleCount === 0) {
+            $('#emptyFilterActivityRow').removeClass('d-none');
+        } else {
+            $('#emptyFilterActivityRow').addClass('d-none');
+        }
     });
 });
 </script>

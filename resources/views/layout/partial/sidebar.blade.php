@@ -84,7 +84,7 @@
             @endif
 
             <li>
-                <a href="{{Route('logout')}}" class="ai-icon text-logout" aria-expanded="false">
+                <a href="{{Route('logout')}}" class="ai-icon text-logout btn-logout" aria-expanded="false">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     <span class="nav-text">Logout</span>
                 </a>

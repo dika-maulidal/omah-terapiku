@@ -154,23 +154,16 @@
                                             </a>
                                         </td>
                                         <td style="vertical-align: middle;">
-                                             <div class="d-flex align-items-center">
-                                                 <div class="mr-2" style="width: 32px; height: 32px; border-radius: 8px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0;">
-                                                     {{ strtoupper(substr($row->nama ?? 'P', 0, 2)) }}
-                                                 </div>
-                                                 <div>
-                                                     <a href="{{Route('rekam.detail',$row->id)}}" class="font-w700" style="font-size: 13.5px; color: #1e293b; text-decoration: none;">
-                                                         {{$row->nama}}
-                                                     </a>
-                                                     @if ($row->jenis_disabilitas && $row->jenis_disabilitas != 'Tidak Ada')
-                                                         <div><span class="badge badge-info light font-w600 mt-1" style="font-size: 10.5px; padding: 2px 6px;">{{$row->jenis_disabilitas}}</span></div>
-                                                     @endif
-                                                     @if ($row->nama_wali)
-                                                         <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa-solid fa-user-group mr-1" style="color: #94a3b8;"></i>Wali: {{$row->nama_wali}}</small>
-                                                     @endif
-                                                 </div>
-                                             </div>
-                                         </td>
+                                            <a href="{{Route('rekam.detail',$row->id)}}" class="font-w700" style="font-size: 13.5px; color: #1e293b; text-decoration: none;">
+                                                {{$row->nama}}
+                                            </a>
+                                            @if ($row->jenis_disabilitas && $row->jenis_disabilitas != 'Tidak Ada')
+                                                <div><span class="badge badge-info light font-w600 mt-1" style="font-size: 10.5px; padding: 2px 6px;">{{$row->jenis_disabilitas}}</span></div>
+                                            @endif
+                                            @if ($row->nama_wali)
+                                                <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa-solid fa-user-group mr-1" style="color: #94a3b8;"></i>Wali: {{$row->nama_wali}}</small>
+                                            @endif
+                                        </td>
                                         <td style="vertical-align: middle; color: #334155;">{{$row->tmp_lahir}}, {{$row->tgl_lahir}}</td>
                                         <td style="vertical-align: middle; color: #334155;">{{$row->alamat_lengkap}}</td>
                                         <td style="vertical-align: middle; text-align: center;">

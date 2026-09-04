@@ -1,37 +1,42 @@
 <!-- Modal Edit / Tambah Catatan Assessment (A) Terapi & ICD-10 -->
 <div class="modal fade" id="addDiagnosa" tabindex="-1" role="dialog" aria-labelledby="addDiagnosaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document" style="max-height: 90vh;">
-        <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.25); max-height: 88vh; display: flex; flex-direction: column; overflow: hidden;">
+        <div class="modal-content" style="border-radius: 14px; border: 1px solid #dbeafe; box-shadow: 0 12px 36px rgba(30, 64, 175, 0.12); max-height: 88vh; display: flex; flex-direction: column; overflow: hidden;">
             
-            <!-- Modal Header dengan Kontras Navy Solid -->
-            <div class="modal-header" style="background: #2D4B7A !important; color: #ffffff !important; border-top-left-radius: 12px; border-top-right-radius: 12px; padding: 14px 20px; border-bottom: none;">
-                <div>
-                    <h5 class="modal-title font-w700 mb-0" id="addDiagnosaLabel" style="font-size: 16.5px; color: #ffffff !important; letter-spacing: 0.3px;">
-                        <i class="fa-solid fa-clipboard-check mr-2 text-warning"></i> Assessment (A) / Diagnosa Terapi & ICD-10
-                    </h5>
-                    <small class="d-block mt-1" style="color: #e2e8f0 !important; font-size: 12px;">Catatan kesimpulan klinis, klasifikasi diagnosa ICD-10, dan evaluasi capaian sesi</small>
+            <!-- Modal Header (Royal Blue Gradient & Soft Blue Accent sesuai DESIGN.md) -->
+            <div class="modal-header px-4 py-3" style="background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%); border-bottom: 1.5px solid #bfdbfe;">
+                <div class="d-flex align-items-center">
+                    <div class="mr-3" style="width: 42px; height: 42px; border-radius: 10px; background: #ffffff; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 18px; border: 1px solid #bfdbfe; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1); flex-shrink: 0;">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title font-w700 mb-0" id="addDiagnosaLabel" style="color: #1e40af !important; font-size: 16px;">
+                            Assessment (A) — Catatan Asesmen & Diagnosa ICD-10
+                        </h5>
+                        <small class="text-muted font-w500" style="font-size: 11.5px;">Catatan kesimpulan klinis, klasifikasi diagnosa ICD-10, dan evaluasi capaian sesi</small>
+                    </div>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #ffffff !important; opacity: 1 !important; text-shadow: none; font-size: 24px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; color: #64748b; opacity: 0.8;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <!-- Modal Body Scrollable -->
-            <div class="modal-body p-4" style="background: #f8fafc; overflow-y: auto; max-height: calc(88vh - 130px); position: relative;">
+            <div class="modal-body p-4" style="background: #ffffff; overflow-y: auto; max-height: calc(88vh - 130px); position: relative;">
                 <form action="{{Route('diagnosa.update')}}" method="POST" id="formAssessmentDiagnosa">
                     {{ csrf_field() }}
                     <input type="hidden" id="modalAssessmentRekamId" name="rekam_id" value="0">
                     <input type="hidden" id="modalAssessmentPasienId" name="pasien_id" value="{{$pasien->id}}">
                     
                     <!-- Shortcut Ke Lembar Asesmen 15 Modul -->
-                    <div class="p-3 mb-3 d-flex align-items-center justify-content-between flex-wrap rounded bg-white" style="border: 1px solid #cbd5e1; gap: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+                    <div class="p-3 mb-3 d-flex align-items-center justify-content-between flex-wrap rounded" style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px !important; gap: 8px;">
                         <div>
-                            <strong class="text-dark d-block" style="font-size: 13px;">
+                            <strong class="d-block" style="color: #1e40af; font-size: 13px;">
                                 <i class="fa-solid fa-file-medical text-primary mr-1"></i> Lembar Asesmen Komprehensif (15 Modul Klinis)
                             </strong>
                             <small class="text-muted">GMFM-88, Denver II, ROM & MMT, Body Chart Nyeri, Wicara, ADL, dsb.</small>
                         </div>
-                        <a href="javascript:void(0)" id="modalAssessmentGoToForm" class="btn btn-sm btn-outline-primary font-w700" style="font-size: 12px; padding: 6px 14px; border-radius: 6px;">
+                        <a href="javascript:void(0)" id="modalAssessmentGoToForm" class="btn btn-sm btn-primary font-w700" style="font-size: 12px; padding: 6px 14px; border-radius: 6px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);">
                             <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Buka Form Asesmen 15 Modul
                         </a>
                     </div>
@@ -46,11 +51,11 @@
                                 <i class="fa-solid fa-book-medical text-primary mr-1"></i> Klasifikasi Diagnosa ICD-10 Standar:
                                 <small class="text-muted font-w400">(Klik untuk menambahkan kode & nama diagnosa ke teks)</small>
                             </label>
-                            <div class="d-flex flex-wrap p-2 bg-white rounded border" style="gap: 6px; max-height: 110px; overflow-y: auto;">
+                            <div class="d-flex flex-wrap p-2.5 rounded border" style="background: #f8fafc; border: 1px solid #e2e8f0; gap: 6px; max-height: 110px; overflow-y: auto;">
                                 @foreach($icdList as $icdItem)
                                     <button type="button" class="btn btn-xs btn-outline-primary btn-chip-assessment font-w600" 
                                             data-text="[{{ $icdItem->code }}] {{ $icdItem->name_id }}" 
-                                            style="font-size: 11.5px; padding: 4px 9px; border-radius: 6px;">
+                                            style="font-size: 11.5px; padding: 4px 9px; border-radius: 6px; background: #ffffff;">
                                         <i class="fa-solid fa-plus mr-1"></i> <strong>{{ $icdItem->code }}</strong> - {{ $icdItem->name_id }}
                                     </button>
                                 @endforeach
@@ -64,7 +69,7 @@
                             <i class="fa-solid fa-tags text-danger mr-1"></i> Rekomendasi Preset Diagnosa / Kondisi Fungsional Terapi:
                             <small class="text-muted font-w400">(Klik untuk menambahkan langsung ke teks)</small>
                         </label>
-                        <div class="d-flex flex-wrap p-2 bg-white rounded border" style="gap: 6px; max-height: 100px; overflow-y: auto;">
+                        <div class="d-flex flex-wrap p-2.5 rounded border" style="background: #f8fafc; border: 1px solid #e2e8f0; gap: 6px; max-height: 100px; overflow-y: auto;">
                             @php
                                 $presetAssessments = [
                                     'GMFCS Level I (Mandiri Jalan Tanpa Hambatan)',
@@ -101,19 +106,19 @@
                         </label>
                         <textarea name="diagnosa" id="modalAssessmentTextarea" required class="form-control" rows="4" 
                                   placeholder="Tuliskan catatan evaluasi terapi, kode ICD-10, atau assessment perkembangan fungsional..." 
-                                  style="font-size: 13px; line-height: 1.5; border-radius: 8px;"></textarea>
+                                  style="font-size: 13px; line-height: 1.6; border-radius: 8px; border: 1.5px solid #cbd5e1;"></textarea>
                         @error('diagnosa')
                             <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                         @enderror
                     </div>
                     
-                    <!-- Sticky Footer Form Action (Selalu Terlihat & Tidak Akan Ketutup) -->
-                    <div class="modal-sticky-footer mt-4 d-flex align-items-center justify-content-between" style="position: sticky; bottom: -24px; margin-left: -24px; margin-right: -24px; margin-bottom: -24px; padding: 14px 24px; background: #ffffff; border-top: 1px solid #e2e8f0; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; box-shadow: 0 -4px 15px rgba(0,0,0,0.06); z-index: 10;">
-                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 13px; border: 1.5px solid #cbd5e1; border-radius: 6px;">
+                    <!-- Sticky Footer Form Action -->
+                    <div class="modal-sticky-footer mt-4 d-flex align-items-center justify-content-between" style="position: sticky; bottom: -24px; margin-left: -24px; margin-right: -24px; margin-bottom: -24px; padding: 12px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; box-shadow: 0 -4px 15px rgba(0,0,0,0.04); z-index: 10;">
+                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 7px 18px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 6px; color: #475569;">
                             Batal
                         </button>
-                        <button type="submit" class="btn btn-sm btn-primary font-w700 shadow-sm" style="padding: 8px 24px; font-size: 13px; border-radius: 6px;">
-                            <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Assessment
+                        <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 24px; font-size: 13px; border-radius: 6px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                            <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Assessment (A)
                         </button>
                     </div>
                 </form>
