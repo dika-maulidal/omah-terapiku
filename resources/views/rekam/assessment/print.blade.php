@@ -5,13 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lembar Assessment - {{ $pasien->nama }} (RM# {{ $pasien->no_rm }})</title>
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body {
             background-color: #f1f5f9;
             color: #1e293b;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             font-size: 13px;
+        }
+
+        .print-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #cbd5e1;
+            padding: 12px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .print-container {
@@ -24,21 +36,21 @@
         }
 
         .kop-header {
-            border-bottom: 2.5px solid #2e4b82;
+            border-bottom: 2.5px solid #1e40af;
             padding-bottom: 12px;
             margin-bottom: 20px;
         }
 
         .section-title {
-            background: #f1f5f9;
-            color: #2e4b82;
+            background: #eff6ff;
+            color: #1e40af;
             font-weight: 700;
             font-size: 13.5px;
             padding: 6px 12px;
             border-radius: 4px;
             margin-top: 18px;
             margin-bottom: 10px;
-            border-left: 4px solid #2e4b82;
+            border-left: 4px solid #2563eb;
         }
 
         .table-assessment {
@@ -67,14 +79,15 @@
 
         @media print {
             body {
-                background: #fff;
-                color: #000;
+                background: #fff !important;
+                color: #000 !important;
             }
             .print-container {
-                max-width: 100%;
-                margin: 0;
-                padding: 0;
-                box-shadow: none;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
             }
             .no-print {
                 display: none !important;
@@ -84,20 +97,35 @@
 </head>
 <body>
 
-<div class="container no-print mt-3 text-center">
-    <button onclick="window.print()" class="btn btn-primary btn-sm px-4 mr-2" style="font-weight: 600;">
-        <i class="fa fa-print mr-1"></i> Cetak Dokumen / Simpan PDF
-    </button>
-    <a href="{{ route('rekam.detail', $pasien->id) }}" class="btn btn-outline-secondary btn-sm px-3">
-        <i class="fa fa-arrow-left mr-1"></i> Kembali
-    </a>
+<!-- Sticky Action Toolbar (Hanya Tampil di Layar, Tersembunyi saat Cetak) -->
+<div class="print-toolbar no-print">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between" style="max-width: 850px; gap: 10px;">
+        <div class="d-flex align-items-center">
+            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 6px 10px; background: #2563eb;">
+                <i class="fa-solid fa-file-pdf mr-1"></i> Asesmen
+            </span>
+            <strong style="color: #1e293b; font-size: 13.5px;">{{ $pasien->nama }}</strong>
+            <span class="text-muted ml-1" style="font-size: 12px;">({{ $pasien->no_rm }})</span>
+        </div>
+        <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+            <button type="button" onclick="triggerPrintDialog()" class="btn btn-sm btn-primary font-w700" style="padding: 7px 16px; font-size: 12.5px; border-radius: 6px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);">
+                <i class="fa-solid fa-print mr-1"></i> Cetak / Simpan PDF
+            </button>
+            <button type="button" id="btnDownloadPdf" onclick="downloadPDF()" class="btn btn-sm btn-success font-w700 text-white" style="padding: 7px 16px; font-size: 12.5px; border-radius: 6px; background: linear-gradient(135deg, #10b981, #059669); border: none; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);">
+                <i class="fa-solid fa-download mr-1"></i> Unduh File PDF
+            </button>
+            <a href="{{ route('rekam.detail', $pasien->id) }}" class="btn btn-sm btn-light border font-w600" style="padding: 7px 14px; font-size: 12.5px; border-radius: 6px; color: #475569;">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+            </a>
+        </div>
+    </div>
 </div>
 
-<div class="print-container">
+<div class="print-container" id="print-area">
     <!-- Kop Header -->
     <div class="kop-header d-flex align-items-center justify-content-between">
         <div>
-            <h3 style="font-weight: 800; color: #2e4b82; margin: 0; font-size: 22px; letter-spacing: 0.5px;">OMAH TERAPIKU</h3>
+            <h3 style="font-weight: 800; color: #1e40af; margin: 0; font-size: 22px; letter-spacing: 0.5px;">OMAH TERAPIKU</h3>
             <p style="margin: 2px 0 0 0; font-size: 12px; color: #64748b;">
                 Pusat Pelayanan Terapi & Rehabilitasi Disabilitas
             </p>
@@ -106,7 +134,7 @@
             </small>
         </div>
         <div class="text-right">
-            <div style="font-size: 15px; font-weight: 700; color: #2e4b82;">LEMBAR ASSESSMENT KLINIS</div>
+            <div style="font-size: 15px; font-weight: 700; color: #1e40af;">LEMBAR ASSESSMENT KLINIS</div>
             <div style="font-size: 11.5px; color: #475569;">Tgl Asesmen: <strong>{{ $assessment->tgl_assessment ? $assessment->tgl_assessment->format('d/m/Y') : date('d/m/Y') }}</strong></div>
             <div style="font-size: 11.5px; color: #475569;">No. RM: <strong>{{ $pasien->no_rm }}</strong></div>
         </div>
@@ -1252,6 +1280,68 @@
     </div>
 
 </div>
+
+<script>
+function triggerPrintDialog() {
+    window.print();
+}
+
+function downloadPDF() {
+    var element = document.getElementById('print-area');
+    var btn = document.getElementById('btnDownloadPdf');
+    var origHtml = btn ? btn.innerHTML : '';
+    
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Mengunduh PDF...';
+    }
+
+    var opt = {
+        margin:       [8, 8, 8, 8],
+        filename:     'Lembar-Assessment-{{ Str::slug($pasien->nama) }}-{{ $pasien->no_rm }}.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save().then(function() {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> Terunduh!';
+            setTimeout(function() {
+                btn.innerHTML = origHtml;
+            }, 3000);
+        }
+    }).catch(function(err) {
+        console.error('Error generating PDF:', err);
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = origHtml;
+        }
+        // Fallback to window.print() if html2pdf fails
+        window.print();
+    });
+}
+
+// Auto-trigger on page load
+window.addEventListener('DOMContentLoaded', function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var downloadMode = urlParams.get('download');
+    var noPrint = urlParams.get('noprint');
+
+    if (downloadMode === 'pdf' || downloadMode === '1') {
+        // Otomatis download file PDF ke komputer
+        setTimeout(function() {
+            downloadPDF();
+        }, 500);
+    } else if (noPrint !== '1') {
+        // Otomatis buka dialog Cetak / Simpan sebagai PDF browser
+        setTimeout(function() {
+            triggerPrintDialog();
+        }, 400);
+    }
+});
+</script>
 
 </body>
 </html>

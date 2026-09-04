@@ -72,8 +72,19 @@ class RekamController extends Controller
                     ->when($request->filled('layanan'), function ($query) use ($request) {
                         $query->where('rekam.layanan_terapi', 'LIKE', "%{$request->layanan}%");
                     })
-                    ->with(['pasien', 'dokter', 'terapisPendamping'])
-                    ->paginate(10);
+                    ->with(['pasien', 'dokter', 'terapisPendamping']);
+
+        $perPageInput = $request->input('per_page', 10);
+        if ($perPageInput === 'all') {
+            $perPage = 1000;
+        } else {
+            $perPage = (int) $perPageInput;
+            if ($perPage <= 0) {
+                $perPage = 10;
+            }
+        }
+
+        $rekams = $rekams->paginate($perPage);
         return view('rekam.index', compact('rekams'));
     }
 

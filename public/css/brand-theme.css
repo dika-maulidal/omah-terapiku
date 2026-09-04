@@ -2327,5 +2327,118 @@ nav[role="navigation"] svg,
     }
 }
 
+/* ==========================================================================
+   PATIENT SEARCH INPUT GROUP (100% Seamless Flat Connection, Zero Curved Gap)
+   ========================================================================== */
+.patient-search-input-group {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    height: 44px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
 
+.patient-search-input-group:hover,
+.patient-search-input-group:focus-within {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15) !important;
+}
 
+.patient-search-input-group .patient-search-input,
+.patient-search-input-group input,
+.patient-search-input-group input#pasien_nama,
+.patient-search-input-group input.form-control {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    padding: 0 16px !important;
+    margin: 0 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #1e293b !important;
+    cursor: pointer !important;
+    transform: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+.patient-search-input-group .patient-search-input::placeholder,
+.patient-search-input-group input::placeholder {
+    color: #94a3b8 !important;
+    font-weight: 400 !important;
+}
+
+.patient-search-input-group .patient-search-btn,
+.patient-search-input-group button,
+.patient-search-input-group button.btn-search-pasien,
+.patient-search-input-group button.btn {
+    flex-shrink: 0 !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 20px !important;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+    box-shadow: none !important;
+    transform: none !important;
+    outline: none !important;
+    cursor: pointer !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    transition: background 0.2s ease !important;
+}
+
+.patient-search-input-group .patient-search-btn:hover,
+.patient-search-input-group button:hover,
+.patient-search-input-group button.btn-search-pasien:hover,
+.patient-search-input-group button.btn:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+    background-color: #1d4ed8 !important;
+    color: #ffffff !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.patient-search-input-group .patient-search-btn:active,
+.patient-search-input-group button:active,
+.patient-search-input-group .patient-search-btn:focus,
+.patient-search-input-group button:focus {
+    transform: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.patient-search-input-group button::before,
+.patient-search-input-group button::after,
+.patient-search-input-group .patient-search-btn::before,
+.patient-search-input-group .patient-search-btn::after {
+    display: none !important;
+    content: none !important;
+}

@@ -71,6 +71,19 @@
                                 </select>
                             </div>
 
+                            <!-- 3. Filter Shows (Per Page Limit) -->
+                            <div class="ot-filter-wrapper" style="width: 120px;" title="Tampilkan jumlah baris data per halaman">
+                                <i class="fa-solid fa-list-ol"></i>
+                                <select name="per_page" class="form-control form-control-sm ot-filter-select" onchange="this.form.submit()" style="width: 100%;">
+                                    <option value="10" {{ request('per_page', 10) == '10' ? 'selected' : '' }}>Show 10</option>
+                                    <option value="25" {{ request('per_page') == '25' ? 'selected' : '' }}>Show 25</option>
+                                    <option value="50" {{ request('per_page') == '50' ? 'selected' : '' }}>Show 50</option>
+                                    <option value="100" {{ request('per_page') == '100' ? 'selected' : '' }}>Show 100</option>
+                                    <option value="250" {{ request('per_page') == '250' ? 'selected' : '' }}>Show 250</option>
+                                    <option value="all" {{ request('per_page') == 'all' ? 'selected' : '' }}>Show Semua</option>
+                                </select>
+                            </div>
+
                             <!-- Kolom Pencarian Sejajar -->
                             <div class="ot-search-wrapper" style="min-width: 185px; max-width: 220px;">
                                 <i class="fa-solid fa-magnifying-glass ot-search-icon"></i>
@@ -81,7 +94,7 @@
                             </div>
 
                             <!-- Tombol Reset Filter -->
-                            @if(request('keyword') || request('status') || request('tab') || request('layanan'))
+                            @if(request('keyword') || request('status') || request('tab') || request('layanan') || (request('per_page') && request('per_page') != '10'))
                                 <a href="{{ Route('rekam') }}" class="btn btn-sm btn-light font-w600" style="height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; font-size: 12px; transition: all 0.2s ease;" title="Reset Filter">
                                     <i class="fa-solid fa-rotate-right mr-1" style="color: #64748b;"></i> Reset
                                 </a>
@@ -210,7 +223,7 @@
 
                     <div class="d-flex align-items-center justify-content-between p-3 flex-wrap" style="border-top: 1px solid #edf2f7; gap: 10px;">
                         <div class="dataTables_info" id="example_info" role="status" aria-live="polite" style="font-size: 12.5px; color: #64748b;">
-                            Menampilkan <strong>{{$rekams->firstItem() ?? 0}}</strong> sampai <strong>{{$rekams->firstItem() ? ($rekams->firstItem() + count($rekams) - 1) : 0}}</strong> dari <strong>{{$rekams->total()}}</strong> data rekam medis
+                            Menampilkan <strong class="text-dark">{{$rekams->firstItem() ?: 0}}</strong> sampai <strong class="text-dark">{{$rekams->lastItem() ?: 0}}</strong> dari <strong class="text-dark">{{$rekams->total()}}</strong> data rekam medis
                         </div>
                         <div>
                             {{ $rekams->appends(request()->except('page'))->links() }}

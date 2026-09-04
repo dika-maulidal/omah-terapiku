@@ -14,56 +14,53 @@ class PasienController extends Controller
 {
     public function json(Request $request)
     {
-        // return DataTables::of(Icd::query())->toJson();
-        if ($request->ajax()) {
-            return DataTables::of(Pasien::query())
-                    ->editColumn('cara_bayar', function () {
-                        return 'Gratis, tidak dipungut biaya';
-                    })
-                    ->addColumn('action',function($data){
-                        $kategori = $data->kategori_usia;
-                        $button = '<a href="javascript:void(0)" 
-                            data-id="'.$data->id.'"
-                            data-nama="'.$data->nama.'"
-                            data-no="'.$data->no_rm.'"
-                            data-metode="'.$data->cara_bayar.'"
-                            data-nohp="'.($data->no_hp ?? '').'"
-                            data-tgllahir="'.($data->tgl_lahir ?? '').'"
-                            data-kategori="'.$kategori.'"
-                            data-namawali="'.($data->nama_wali ?? '').'"
-                            data-hubunganwali="'.($data->hubungan_wali ?? '').'"
-                            data-disabilitas="'.($data->jenis_disabilitas ?? '').'"
-                            data-alatbantu="'.($data->alat_bantu ?? '').'"
-                            data-desil="'.($data->desil ?? '').'"
-                            class="btn btn-primary shadow btn-xs pilihPasien">
-                            Pilih</a>';
-                        return $button;
-                    })->rawColumns(['action'])
-                    ->toJson();
-        }
-        return DataTables::of(Pasien::query())
-        ->editColumn('cara_bayar', function () {
-            return 'Gratis, tidak dipungut biaya';
-        })
-        ->addColumn('action',function($data){
-            $kategori = $data->kategori_usia;
-            $button = '<a href="javascript:void(0)" 
-                data-id="'.$data->id.'"
-                data-nama="'.$data->nama.'"
-                data-no="'.$data->no_rm.'"
-                data-metode="'.$data->cara_bayar.'"
-                data-nohp="'.($data->no_hp ?? '').'"
-                data-tgllahir="'.($data->tgl_lahir ?? '').'"
-                data-kategori="'.$kategori.'"
-                data-namawali="'.($data->nama_wali ?? '').'"
-                data-hubunganwali="'.($data->hubungan_wali ?? '').'"
-                data-disabilitas="'.($data->jenis_disabilitas ?? '').'"
-                data-alatbantu="'.($data->alat_bantu ?? '').'"
-                data-desil="'.($data->desil ?? '').'"
-                class="btn btn-primary shadow btn-xs pilihPasien">
-                Pilih</a>';
-            return $button;
-        })->rawColumns(['action'])->toJson();
+        return DataTables::of(Pasien::query()->whereNull('deleted_at'))
+            ->editColumn('cara_bayar', function () {
+                return 'Gratis, tidak dipungut biaya';
+            })
+            ->editColumn('no_rm', function($data) {
+                return '<span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;"><i class="fa-solid fa-id-card mr-1 text-primary"></i>'.$data->no_rm.'</span>';
+            })
+            ->editColumn('nama', function($data) {
+                $disabilitas = $data->jenis_disabilitas && $data->jenis_disabilitas != 'Tidak Ada' ? $data->jenis_disabilitas : 'Non-Disabilitas';
+                return '<div><strong class="text-dark font-w700" style="font-size: 13px;">'.htmlspecialchars($data->nama, ENT_QUOTES).'</strong><small class="text-muted d-block font-w500 mt-0.5" style="font-size: 11px;"><i class="fa-solid fa-venus-mars text-primary mr-1"></i>'.($data->jk ?: '-').' &bull; <i class="fa-solid fa-wheelchair text-primary mr-1"></i>'.$disabilitas.'</small></div>';
+            })
+            ->editColumn('tgl_lahir', function($data) {
+                if (!$data->tgl_lahir) return '<span class="text-muted">-</span>';
+                $usia = \Carbon\Carbon::parse($data->tgl_lahir)->age;
+                return '<span style="font-size: 12px; font-weight: 600; color: #334155;">'.$data->tgl_lahir.'</span><small class="text-muted d-block" style="font-size: 11px;">('.$usia.' Thn &bull; '.$data->kategori_usia.')</small>';
+            })
+            ->editColumn('no_hp', function($data) {
+                $hp = $data->no_hp ?: '-';
+                $wali = $data->nama_wali ? '<small class="text-muted d-block" style="font-size: 11px;">Wali: '.htmlspecialchars($data->nama_wali, ENT_QUOTES).'</small>' : '';
+                return '<span class="text-dark font-w600" style="font-size: 12px;">'.$hp.'</span>'.$wali;
+            })
+            ->editColumn('no_bpjs', function($data) {
+                $nik = $data->nik ? '<small class="text-muted d-block" style="font-size: 11px;">NIK: '.$data->nik.'</small>' : '';
+                return '<span class="text-dark font-w600" style="font-size: 12px;">'.($data->no_bpjs ?: '-').'</span>'.$nik;
+            })
+            ->addColumn('action', function($data) {
+                $kategori = $data->kategori_usia;
+                $button = '<button type="button" 
+                    data-id="'.$data->id.'"
+                    data-nama="'.htmlspecialchars($data->nama, ENT_QUOTES).'"
+                    data-no="'.$data->no_rm.'"
+                    data-metode="'.$data->cara_bayar.'"
+                    data-nohp="'.($data->no_hp ?? '').'"
+                    data-tgllahir="'.($data->tgl_lahir ?? '').'"
+                    data-kategori="'.$kategori.'"
+                    data-namawali="'.htmlspecialchars($data->nama_wali ?? '', ENT_QUOTES).'"
+                    data-hubunganwali="'.htmlspecialchars($data->hubungan_wali ?? '', ENT_QUOTES).'"
+                    data-disabilitas="'.htmlspecialchars($data->jenis_disabilitas ?? '', ENT_QUOTES).'"
+                    data-alatbantu="'.htmlspecialchars($data->alat_bantu ?? '', ENT_QUOTES).'"
+                    data-desil="'.htmlspecialchars($data->desil ?? '', ENT_QUOTES).'"
+                    class="btn btn-primary btn-xs font-w700 shadow-sm pilihPasien"
+                    style="padding: 5px 12px; font-size: 11.5px; border-radius: 6px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; white-space: nowrap;">
+                    <i class="fa-solid fa-check mr-1"></i> Pilih</button>';
+                return $button;
+            })
+            ->rawColumns(['action', 'no_rm', 'nama', 'tgl_lahir', 'no_hp', 'no_bpjs'])
+            ->toJson();
     }
 
     public function index(Request $request)
@@ -130,9 +127,19 @@ class PasienController extends Controller
                 })
                 ->when($request->disabilitas, function ($query) use ($request) {
                     $query->where('jenis_disabilitas', 'LIKE', "%{$request->disabilitas}%");
-                })
-                ->orderBy('id', 'desc')
-                ->paginate(10);
+                });
+
+        $perPageInput = $request->input('per_page', 10);
+        if ($perPageInput === 'all') {
+            $perPage = 1000;
+        } else {
+            $perPage = (int) $perPageInput;
+            if ($perPage <= 0) {
+                $perPage = 10;
+            }
+        }
+
+        $datas = $datas->orderBy('id', 'desc')->paginate($perPage);
 
         return view('pasien.index', compact('datas'));
     }

@@ -1,4 +1,74 @@
 @extends('layout.apps')
+
+@section('style')
+<style>
+    /* Underline Tabs Navigation for Detail Penerima Manfaat */
+    .ot-underline-tabs {
+        border-bottom: 2px solid #e2e8f0;
+        display: flex;
+        gap: 24px;
+        margin-bottom: 0;
+        padding-left: 0;
+        list-style: none;
+        flex-wrap: wrap;
+    }
+    .ot-underline-tabs .nav-item {
+        margin-bottom: 0;
+    }
+    .ot-underline-tabs .nav-link {
+        background: transparent !important;
+        border: none !important;
+        border-bottom: 2.5px solid transparent !important;
+        margin-bottom: -2px;
+        padding: 12px 6px 14px 6px;
+        color: #64748b;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        border-radius: 0 !important;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none !important;
+        cursor: pointer;
+        user-select: none;
+    }
+    .ot-underline-tabs .nav-link:hover {
+        color: #1e40af;
+    }
+    .ot-underline-tabs .nav-link.active {
+        color: #2563eb !important;
+        font-weight: 700 !important;
+        border-bottom: 2.5px solid #2563eb !important;
+    }
+    .ot-underline-tabs .nav-link i {
+        font-size: 15px;
+        color: #94a3b8;
+        transition: color 0.2s ease;
+    }
+    .ot-underline-tabs .nav-link:hover i {
+        color: #1e40af;
+    }
+    .ot-underline-tabs .nav-link.active i {
+        color: #2563eb !important;
+    }
+    .ot-tab-badge {
+        font-size: 11.5px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 12px;
+        margin-left: 8px;
+        background: #f1f5f9;
+        color: #64748b;
+        transition: all 0.2s ease;
+    }
+    .ot-underline-tabs .nav-link.active .ot-tab-badge {
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
+    }
+</style>
+@endsection
+
 @section('content')
 
 @include('rekam.partial.modal-pemeriksaan')
@@ -7,29 +77,42 @@
 {{-- MODAL Diagnosa --}}
 @include('rekam.partial.modal-diagnosa')
 
-<!-- Header Section -->
-<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap" style="gap: 12px;">
-    <div>
-        <h2 class="font-w700 text-primary mb-1" style="color: var(--ot-navy) !important; font-weight: 700; font-size: 22px;">
-            Detail Penerima Manfaat
-        </h2>
-        <ol class="breadcrumb" style="background: transparent; padding: 0; margin-top: 2px; font-size: 12.5px;">
-            <li class="breadcrumb-item"><a href="{{Route('penerima-manfaat')}}">Data Penerima Manfaat</a></li>
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">{{ $pasien->nama }}</a></li>
-        </ol>
-    </div>
-    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-        <a href="{{Route('penerima-manfaat')}}" class="btn btn-sm btn-light" style="padding: 7px 14px; font-size: 12.5px; font-weight: 600; border: 1px solid #e2e8f0; border-radius: 6px;">
-            <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Daftar
-        </a>
-        @if (auth()->user()->role_display()=="Admin" || auth()->user()->role_display()=="Pendaftaran")
-            <a href="{{Route('penerima-manfaat.edit', $pasien->id)}}" class="btn btn-sm btn-info text-white shadow-sm" style="padding: 7px 14px; font-size: 12.5px; font-weight: 600; border-radius: 6px;">
-                <i class="fa-solid fa-pencil mr-1"></i> Edit Data
-            </a>
-        @endif
-        <a href="{{Route('rekam.add')}}" class="btn btn-sm btn-primary shadow-sm font-w600" style="padding: 7px 16px; font-size: 12.5px; border-radius: 6px;">
-            <i class="fa-solid fa-circle-plus mr-1"></i> Input Sesi Terapi Baru
-        </a>
+<!-- Page Header Banner (Unified White Card Sesuai DESIGN.md) -->
+<div class="card mb-4 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
+    <div class="card-body p-3 p-md-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between" style="gap: 12px;">
+            <div class="d-flex align-items-center mb-2 mb-md-0">
+                <div class="mr-3" style="width: 48px; height: 48px; border-radius: 12px; background: #eff6ff; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 22px; flex-shrink: 0;">
+                    <i class="fa-solid fa-address-card"></i>
+                </div>
+                <div>
+                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                        <h3 class="font-w700 mb-0" style="color: #1e40af; font-weight: 700; font-size: 20px;">Detail Penerima Manfaat</h3>
+                        <span class="badge font-w700" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
+                            <i class="fa-solid fa-id-card mr-1"></i> RM# {{ $pasien->no_rm }}
+                        </span>
+                    </div>
+                    <ol class="breadcrumb mb-0" style="background: transparent; padding: 0; font-size: 12px; margin-top: 4px;">
+                        <li class="breadcrumb-item"><a href="{{Route('dashboard')}}" style="color: #2563eb;">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{Route('penerima-manfaat')}}" style="color: #2563eb;">Data Penerima Manfaat</a></li>
+                        <li class="breadcrumb-item active text-muted">{{ $pasien->nama }}</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                <a href="{{Route('penerima-manfaat')}}" class="btn btn-sm btn-light font-w600" style="padding: 8px 16px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Daftar
+                </a>
+                @if (auth()->user()->role_display()=="Admin" || auth()->user()->role_display()=="Pendaftaran")
+                    <a href="{{Route('penerima-manfaat.edit', $pasien->id)}}" class="btn btn-sm btn-info text-white font-w600" style="background: #0284c7 !important; border: none !important; padding: 8px 16px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);">
+                        <i class="fa-solid fa-pencil mr-1"></i> Edit Data
+                    </a>
+                @endif
+                <a href="{{Route('rekam.add')}}" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 18px; border-radius: 8px; font-size: 12.5px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                    <i class="fa-solid fa-circle-plus mr-1"></i> Input Sesi Terapi Baru
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -40,27 +123,26 @@
 <div class="row">
     <!-- Profil Utama Penerima Manfaat -->
     <div class="col-xl-5 col-lg-5 col-md-12 mb-4">
-        <div class="card h-100" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
-            <div class="card-header pb-0 border-0 d-flex justify-content-between align-items-center">
-                <span class="badge badge-primary font-w600" style="font-size: 12px; padding: 6px 12px; border-radius: 6px;">
-                    <i class="fa-solid fa-id-card mr-1"></i> RM# {{$pasien->no_rm}}
-                </span>
-                @if ($rekamLatest)
-                    <div>{!! $rekamLatest->status_display() !!}</div>
-                @else
-                    {!! $pasien->statusPasien() !!}
-                @endif
-            </div>
-            <div class="card-body pt-3">
-                <div class="d-flex align-items-start mb-3">
-                    <div class="avatar-box mr-3 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #2D4B7A 0%, #38A5DB 100%); color: #fff; font-weight: 700; font-size: 20px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(45, 75, 122, 0.25);">
-                        {{ strtoupper(substr($pasien->nama, 0, 1)) }}
+        <div class="card" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between flex-wrap mb-3" style="gap: 10px;">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-radius: 12px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 21px; flex-shrink: 0; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-w700 mb-1" style="font-size: 17px; color: #1e293b;">{{$pasien->nama}}</h4>
+                            <div class="text-muted font-w500" style="font-size: 12.5px;">
+                                <span class="text-primary font-w600">NIK:</span> {{ $pasien->nik ?: '-' }}
+                            </div>
+                        </div>
                     </div>
                     <div>
-                        <h4 class="font-w700 mb-1" style="font-size: 17px; color: #1e293b;">{{$pasien->nama}}</h4>
-                        <div class="text-muted font-w500" style="font-size: 12.5px;">
-                            <span class="text-primary font-w600">NIK:</span> {{ $pasien->nik ?: '-' }}
-                        </div>
+                        @if ($rekamLatest)
+                            {!! $rekamLatest->status_display() !!}
+                        @else
+                            {!! $pasien->statusPasien() !!}
+                        @endif
                     </div>
                 </div>
 
@@ -112,13 +194,13 @@
 
     <!-- Data Sosial, Wali, Disabilitas & Berkas -->
     <div class="col-xl-7 col-lg-7 col-md-12 mb-4">
-        <div class="card h-100" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
-            <div class="card-header pb-0 border-0">
+        <div class="card" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+            <div class="card-header pb-0 border-0 pt-4 px-4" style="background: transparent;">
                 <h5 class="font-w700 mb-0" style="font-size: 16px; color: var(--ot-navy) !important;">
-                    <i class="fa fa-info-circle mr-2 text-primary"></i> Data Sosial & Berkas Pendukung
+                    <i class="fa-solid fa-circle-info mr-2 text-primary"></i> Data Sosial & Berkas Pendukung
                 </h5>
             </div>
-            <div class="card-body pt-3">
+            <div class="card-body pt-3 px-4 pb-4">
                 <div class="row">
                     <!-- Kolom Kiri -->
                     <div class="col-md-6">
@@ -150,7 +232,7 @@
                             </div>
                         </div>
 
-                        <div class="p-3 mb-3" style="background: #f8fafc; border-radius: 8px; border: 1px solid #edf2f7;">
+                        <div class="p-3 mb-3 mb-md-0" style="background: #f8fafc; border-radius: 8px; border: 1px solid #edf2f7;">
                             <span class="text-muted d-block mb-1" style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">
                                 <i class="fa fa-user-circle-o mr-1 text-primary"></i> Wali / Orang Tua
                             </span>
@@ -190,25 +272,39 @@
                             </div>
                         </div>
 
-                        <div class="p-3 mb-3" style="background: #f8fafc; border-radius: 8px; border: 1px solid #edf2f7;">
+                        <div class="p-3 mb-0" style="background: #f8fafc; border-radius: 8px; border: 1px solid #edf2f7;">
                             <span class="text-muted d-block mb-1" style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">
                                 <i class="fa fa-folder-open-o mr-1 text-primary"></i> Berkas Pendukung
                             </span>
                             <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
                                 @if ($pasien->file_kk != null)
-                                    <a class="btn btn-xs btn-info text-white shadow-sm" href="{{$pasien->getFileKk()}}" target="_blank" style="border-radius: 4px; font-size: 11.5px; padding: 4px 9px;">
-                                        <i class="fa fa-file-image-o mr-1"></i> Lihat KK
-                                    </a>
+                                    <button type="button" class="btn btn-xs btn-info text-white shadow-sm font-w600 btn-open-preview-berkas" 
+                                        data-type="kk" 
+                                        data-title="Kartu Keluarga (KK)" 
+                                        data-url="{{ $pasien->getFileKk() }}" 
+                                        data-filename="{{ $pasien->file_kk }}" 
+                                        style="border-radius: 6px; font-size: 11.5px; padding: 5px 12px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: none;">
+                                        <i class="fa-solid fa-id-card mr-1"></i> Lihat KK
+                                    </button>
                                 @else
-                                    <span class="badge badge-light text-muted" style="font-size: 11px;">KK: Belum Ada</span>
+                                    <span class="badge badge-light text-muted font-w500 border" style="font-size: 11px; padding: 5px 9px;">
+                                        <i class="fa-solid fa-circle-xmark mr-1 text-muted"></i> KK: Belum Ada
+                                    </span>
                                 @endif
 
                                 @if ($pasien->file_resume != null)
-                                    <a class="btn btn-xs btn-primary text-white shadow-sm" href="{{$pasien->getFileResume()}}" target="_blank" style="border-radius: 4px; font-size: 11.5px; padding: 4px 9px;">
-                                        <i class="fa fa-file-text-o mr-1"></i> Resume Berobat
-                                    </a>
+                                    <button type="button" class="btn btn-xs btn-primary text-white shadow-sm font-w600 btn-open-preview-berkas" 
+                                        data-type="resume" 
+                                        data-title="Resume Berobat / Rujukan Medis" 
+                                        data-url="{{ $pasien->getFileResume() }}" 
+                                        data-filename="{{ $pasien->file_resume }}" 
+                                        style="border-radius: 6px; font-size: 11.5px; padding: 5px 12px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important;">
+                                        <i class="fa-solid fa-file-medical mr-1"></i> Resume Berobat
+                                    </button>
                                 @else
-                                    <span class="badge badge-light text-muted" style="font-size: 11px;">Resume: Belum Ada</span>
+                                    <span class="badge badge-light text-muted font-w500 border" style="font-size: 11px; padding: 5px 9px;">
+                                        <i class="fa-solid fa-circle-xmark mr-1 text-muted"></i> Resume: Belum Ada
+                                    </span>
                                 @endif
                             </div>
                         </div>
@@ -222,116 +318,114 @@
 <!-- Card Ringkasan Sesi Terapi & Jadwal Kunjungan Terkini -->
 <div class="row mb-4">
     <div class="col-12">
-        <div class="card mb-0" style="border-radius: 12px; border: none; background: linear-gradient(135deg, #2D4B7A 0%, #1e355b 100%); color: #fff; box-shadow: 0 4px 20px rgba(45,75,122,0.18);">
-            <div class="card-body p-4">
-                @php
-                    $activeRekam = $rekamLatest ?: ($rekams->first() ?: null);
-                @endphp
+        <div class="p-4 rounded-lg shadow-sm" style="border-radius: 14px; border: 1px solid #cce5ff; background: linear-gradient(135deg, #f0f7ff 0%, #edf3fc 100%); box-shadow: 0 4px 18px rgba(37, 99, 235, 0.06); padding: 26px 26px 36px 26px !important;">
+            @php
+                $activeRekam = $rekamLatest ?: ($rekams->first() ?: null);
+            @endphp
 
-                <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 15px;">
-                    <div class="d-flex align-items-center">
-                        <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 10px; background: rgba(255,255,255,0.15); backdrop-filter: blur(4px); flex-shrink: 0;">
-                            <i class="fa-solid fa-calendar-check" style="font-size: 22px; color: #6ee7b7;"></i>
-                        </div>
-                        <div>
-                            <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                                <h5 class="text-white font-w700 mb-0" style="font-size: 16px;">Sesi Terapi & Jadwal Kunjungan Terkini</h5>
-                                @if($rekamLatest)
-                                    <span class="badge badge-warning font-w600" style="font-size: 11px;">Sesi Aktif Dalam Penanganan</span>
-                                @elseif($activeRekam)
-                                    <span class="badge badge-success font-w600" style="font-size: 11px;">Sesi Terakhir Tercatat</span>
-                                @else
-                                    <span class="badge badge-light text-muted font-w600" style="font-size: 11px;">Belum Ada Sesi Terdaftar</span>
-                                @endif
-                            </div>
-                            <p class="text-white-50 mb-0" style="font-size: 12.5px;">
-                                Informasi tanggal periksa, slot jadwal sesi terapi berkala, unit Omah Terapiku, serta terapis penanggung jawab.
-                            </p>
-                        </div>
+            <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 15px;">
+                <div class="d-flex align-items-center">
+                    <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 10px; background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; flex-shrink: 0; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);">
+                        <i class="fa-solid fa-calendar-check" style="font-size: 22px; color: #2563eb;"></i>
                     </div>
-
-                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                        @if($activeRekam && (auth()->user()->role_display() == "Admin" || auth()->user()->role_display() == "Pendaftaran"))
-                            <a href="{{ Route('rekam.edit', $activeRekam->id) }}" class="btn btn-xs btn-light font-w600 shadow-sm" style="padding: 6px 14px; border-radius: 6px; font-size: 12px;">
-                                <i class="fa-solid fa-pen-to-square mr-1 text-primary"></i> Edit Sesi Ini
-                            </a>
-                        @endif
-                        <a href="{{ Route('rekam.add') }}" class="btn btn-xs btn-info font-w600 text-white shadow-sm" style="padding: 6px 14px; border-radius: 6px; font-size: 12px;">
-                            <i class="fa-solid fa-plus-circle mr-1"></i> + Input Sesi Terapi Baru
-                        </a>
+                    <div>
+                        <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                            <h5 class="font-w700 mb-0" style="font-size: 16px; color: var(--ot-navy) !important;">Sesi Terapi & Jadwal Kunjungan Terkini</h5>
+                            @if($rekamLatest)
+                                <span class="badge badge-warning font-w600 text-dark" style="font-size: 11px; background-color: #fef08a; border: 1px solid #fde047; color: #854d0e !important;">Sesi Aktif Dalam Penanganan</span>
+                            @elseif($activeRekam)
+                                <span class="badge badge-success font-w600" style="font-size: 11px; background-color: #dcfce7; border: 1px solid #bbf7d0; color: #166534 !important;">Sesi Terakhir Tercatat</span>
+                            @else
+                                <span class="badge badge-light font-w600" style="font-size: 11px; background-color: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b !important;">Belum Ada Sesi Terdaftar</span>
+                            @endif
+                        </div>
+                        <p class="text-muted mb-0" style="font-size: 12.5px;">
+                            Informasi tanggal periksa, slot jadwal sesi terapi berkala, unit Omah Terapiku, serta terapis penanggung jawab.
+                        </p>
                     </div>
                 </div>
 
-                @if($activeRekam)
-                    <div class="row mt-3 pt-3" style="border-top: 1px solid rgba(255,255,255,0.15);">
-                        <div class="col-xl-3 col-md-6 col-12 mb-2">
-                            <div class="p-3 rounded h-100" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);">
-                                <small class="text-white-50 d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
-                                    <i class="fa-solid fa-calendar-day mr-1 text-warning"></i> Tanggal Periksa / Kunjungan
-                                </small>
-                                <span class="font-w700 text-white d-block" style="font-size: 14.5px;">
-                                    {{ \Carbon\Carbon::parse($activeRekam->tgl_rekam)->translatedFormat('l, d F Y') }}
-                                </span>
-                                <small class="text-white-50 d-block mt-1" style="font-size: 11px;">
-                                    No. Registrasi: <span class="text-white font-w600">{{ $activeRekam->no_rekam }}</span>
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6 col-12 mb-2">
-                            <div class="p-3 rounded h-100" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);">
-                                <small class="text-white-50 d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
-                                    <i class="fa-solid fa-clock mr-1 text-info"></i> Slot Jadwal Sesi Terapi
-                                </small>
-                                <span class="font-w700 text-white d-block" style="font-size: 14.5px;">
-                                    {{ $activeRekam->sesi_waktu ?: 'Sesi Reguler (Rabu)' }}
-                                </span>
-                                <small class="text-white-50 d-block mt-1" style="font-size: 11px;">
-                                    Estimasi Durasi: 30 - 45 Menit / Sesi
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6 col-12 mb-2">
-                            <div class="p-3 rounded h-100" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);">
-                                <small class="text-white-50 d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
-                                    <i class="fa-solid fa-hospital mr-1 text-success"></i> Omah Terapiku & Layanan
-                                </small>
-                                <span class="font-w700 text-white d-block" style="font-size: 14.5px;">
-                                    {{ $activeRekam->upt_lokasi ?: ($activeRekam->poli ?: 'Omah Terapiku') }}
-                                </span>
-                                <small class="text-white-50 d-block mt-1" style="font-size: 11px;">
-                                    Layanan: <span class="text-white font-w600">{{ $activeRekam->layanan_terapi ?: 'Fisioterapi' }}</span>
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6 col-12 mb-2">
-                            <div class="p-3 rounded h-100" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);">
-                                <small class="text-white-50 d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
-                                    <i class="fa-solid fa-user-doctor mr-1 text-danger"></i> Terapis Pemeriksa
-                                </small>
-                                <span class="font-w700 text-white d-block" style="font-size: 14.5px;">
-                                    {{ $activeRekam->dokter->nama ?? 'Belum Ditugaskan' }}
-                                </span>
-                                <div class="mt-1">
-                                    {!! $activeRekam->status_display() !!}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    <div class="alert alert-light mt-3 mb-0 text-dark d-flex align-items-center justify-content-between p-3" style="border-radius: 8px; font-size: 12.5px;">
-                        <div>
-                            <i class="fa-solid fa-circle-info text-primary mr-2"></i>
-                            Penerima manfaat ini belum memiliki catatan sesi terapi. Silakan daftarkan sesi terapi baru untuk memulai perawatan.
-                        </div>
-                        <a href="{{ Route('rekam.add') }}" class="btn btn-sm btn-primary font-w600" style="font-size: 12px; padding: 5px 14px;">
-                            <i class="fa-solid fa-plus mr-1"></i> Daftarkan Sesi Sekarang
+                <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                    @if($activeRekam && (auth()->user()->role_display() == "Admin" || auth()->user()->role_display() == "Pendaftaran"))
+                        <a href="{{ Route('rekam.edit', $activeRekam->id) }}" class="btn btn-xs btn-outline-primary bg-white font-w600 shadow-sm" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; border-color: #bfdbfe;">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> Edit Sesi Ini
                         </a>
-                    </div>
-                @endif
+                    @endif
+                    <a href="{{ Route('rekam.add') }}" class="btn btn-xs btn-primary font-w600 text-white shadow-sm" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important;">
+                        <i class="fa-solid fa-plus-circle mr-1"></i> + Input Sesi Terapi Baru
+                    </a>
+                </div>
             </div>
+
+            @if($activeRekam)
+                <div class="row mt-3 pt-3 mb-0" style="border-top: 1px solid #cce5ff;">
+                    <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
+                        <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%;">
+                            <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
+                                <i class="fa-solid fa-calendar-day mr-1 text-primary"></i> Tanggal Periksa / Kunjungan
+                            </small>
+                            <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
+                                {{ \Carbon\Carbon::parse($activeRekam->tgl_rekam)->translatedFormat('l, d F Y') }}
+                            </span>
+                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                                No. Registrasi: <span class="text-primary font-w600">{{ $activeRekam->no_rekam }}</span>
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
+                        <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%;">
+                            <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
+                                <i class="fa-solid fa-clock mr-1 text-info"></i> Slot Jadwal Sesi Terapi
+                            </small>
+                            <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
+                                {{ $activeRekam->sesi_waktu ?: 'Sesi Reguler (Rabu)' }}
+                            </span>
+                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                                Estimasi Durasi: 30 - 45 Menit / Sesi
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
+                        <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%;">
+                            <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
+                                <i class="fa-solid fa-hospital mr-1 text-success"></i> Omah Terapiku & Layanan
+                            </small>
+                            <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
+                                {{ $activeRekam->upt_lokasi ?: ($activeRekam->poli ?: 'Omah Terapiku') }}
+                            </span>
+                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                                Layanan: <span class="text-primary font-w600">{{ $activeRekam->layanan_terapi ?: 'Fisioterapi' }}</span>
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
+                        <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%;">
+                            <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
+                                <i class="fa-solid fa-user-doctor mr-1 text-danger"></i> Terapis Pemeriksa
+                            </small>
+                            <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
+                                {{ $activeRekam->dokter->nama ?? 'Belum Ditugaskan' }}
+                            </span>
+                            <div class="mt-1">
+                                {!! $activeRekam->status_display() !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="alert alert-light mt-3 mb-0 text-dark d-flex align-items-center justify-content-between p-3" style="border-radius: 8px; font-size: 12.5px; border: 1px solid #e2e8f0; background: #ffffff;">
+                    <div>
+                        <i class="fa-solid fa-circle-info text-primary mr-2"></i>
+                        Penerima manfaat ini belum memiliki catatan sesi terapi. Silakan daftarkan sesi terapi baru untuk memulai perawatan.
+                    </div>
+                    <a href="{{ Route('rekam.add') }}" class="btn btn-sm btn-primary font-w600" style="font-size: 12px; padding: 5px 14px;">
+                        <i class="fa-solid fa-plus mr-1"></i> Daftarkan Sesi Sekarang
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
 </div>
@@ -342,43 +436,45 @@
         <div class="card" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
             
             <!-- Card Header with Navigation Tabs & Action -->
-            <div class="card-header border-bottom d-flex justify-content-between align-items-center flex-wrap" style="padding: 16px 20px; gap: 12px;">
-                <ul class="nav nav-pills" id="pills-tab-rekam" role="tablist" style="gap: 8px;">
+            <div class="card-header border-bottom d-flex justify-content-between align-items-center flex-wrap" style="padding: 12px 24px 0 24px; gap: 12px; background: #ffffff;">
+                <ul class="nav ot-underline-tabs" id="pills-tab-rekam" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active font-w700" id="tab-asesmen-link" data-toggle="pill" href="#tab-asesmen" role="tab" aria-controls="tab-asesmen" aria-selected="true" style="border-radius: 8px; font-size: 13px; padding: 8px 18px;">
-                            <i class="fa-solid fa-clipboard-list mr-2"></i> Tab 1: Asesmen Baseline & Re-Evaluasi
-                            <span class="badge badge-light text-primary ml-1" style="font-size: 11px;">{{ count($riwayatAssessment ?? []) }}</span>
+                        <a class="nav-link active" id="tab-asesmen-link" data-toggle="tab" href="#tab-asesmen" role="tab" aria-controls="tab-asesmen" aria-selected="true">
+                            <i class="fa-solid fa-clipboard-list mr-2"></i> Asesmen Baseline & Re-Evaluasi
+                            <span class="ot-tab-badge">{{ count($riwayatAssessment ?? []) }}</span>
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link font-w700" id="tab-soap-link" data-toggle="pill" href="#tab-soap" role="tab" aria-controls="tab-soap" aria-selected="false" style="border-radius: 8px; font-size: 13px; padding: 8px 18px;">
-                            <i class="fa-solid fa-stethoscope mr-2"></i> Tab 2: Log Sesi Terapi (SOAP Harian)
-                            <span class="badge badge-light text-primary ml-1" style="font-size: 11px;">{{ $rekams->total() }}</span>
+                        <a class="nav-link" id="tab-soap-link" data-toggle="tab" href="#tab-soap" role="tab" aria-controls="tab-soap" aria-selected="false">
+                            <i class="fa-solid fa-stethoscope mr-2"></i> Log Sesi Terapi (SOAP Harian)
+                            <span class="ot-tab-badge">{{ $rekams->total() }}</span>
                         </a>
                     </li>
                 </ul>
 
-                @if ($rekamLatest)
-                    @if ($rekamLatest->status==1)
-                        @if (auth()->user()->role_display()=="Admin" || auth()->user()->role_display()=="Pendaftaran")
-                            <a href="{{Route('rekam.status',[$rekamLatest->id,2])}}" class="btn btn-sm btn-primary shadow-sm" style="font-size: 12.5px; padding: 7px 16px; border-radius: 6px;">
-                                Lanjutkan Ke Dokter <i class="fa-solid fa-arrow-right ml-1"></i>
-                            </a>
-                        @endif
-                    @elseif ($rekamLatest->status==2)
-                        @if (auth()->user()->role_display()=="Admin" || auth()->user()->role_display()=="Dokter")
-                            <a href="{{Route('rekam.status',[$rekamLatest->id,3])}}" class="btn btn-sm btn-primary shadow-sm" style="font-size: 12.5px; padding: 7px 16px; border-radius: 6px;">
-                                Selesaikan Pemeriksaan & Perawatan <i class="fa-solid fa-check ml-1"></i>
-                            </a>
-                        @endif
-                    @elseif ($rekamLatest->status==4 || $rekamLatest->status==3)
-                        @if (auth()->user()->role_display()=="Admin" || auth()->user()->role_display()=="Dokter")
-                            <a href="{{Route('rekam.status',[$rekamLatest->id,5])}}" class="btn btn-sm btn-success shadow-sm text-white" style="font-size: 12.5px; padding: 7px 16px; border-radius: 6px;">
-                                Selesaikan Rekam Medis Ini <i class="fa-solid fa-circle-check ml-1"></i>
-                            </a>
+                <div class="d-flex align-items-center mb-2" style="gap: 8px;">
+                    @if ($rekamLatest)
+                        @if ($rekamLatest->status==1)
+                            @if (auth()->user()->role_display()=="Admin" || auth()->user()->role_display()=="Pendaftaran")
+                                <a href="{{Route('rekam.status',[$rekamLatest->id,2])}}" class="btn btn-sm btn-primary shadow-sm font-w600" style="font-size: 12.5px; padding: 7px 16px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important;">
+                                    Lanjutkan Ke Dokter <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </a>
+                            @endif
+                        @elseif ($rekamLatest->status==2)
+                            @if (auth()->user()->role_display()=="Admin" || auth()->user()->role_display()=="Dokter")
+                                <a href="{{Route('rekam.status',[$rekamLatest->id,3])}}" class="btn btn-sm btn-primary shadow-sm font-w600" style="font-size: 12.5px; padding: 7px 16px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important;">
+                                    Selesaikan Pemeriksaan & Perawatan <i class="fa-solid fa-check ml-1"></i>
+                                </a>
+                            @endif
+                        @elseif ($rekamLatest->status==4 || $rekamLatest->status==3)
+                            @if (auth()->user()->role_display()=="Admin" || auth()->user()->role_display()=="Dokter")
+                                <a href="{{Route('rekam.status',[$rekamLatest->id,5])}}" class="btn btn-sm btn-success shadow-sm text-white font-w600" style="font-size: 12.5px; padding: 7px 16px; border-radius: 8px; background: #10b981 !important; border: none !important;">
+                                    Selesaikan Rekam Medis Ini <i class="fa-solid fa-circle-check ml-1"></i>
+                                </a>
+                            @endif
                         @endif
                     @endif
-                @endif
+                </div>
             </div>
 
             <div class="card-body pt-3 pb-4">
@@ -554,16 +650,19 @@
                                                     @endif
                                                 </td>
                                                 <td style="vertical-align: middle; text-align: center;">
-                                                    <div class="btn-group" role="group" style="gap: 3px;">
-                                                        <a href="{{ Route('rekam.assessment.show', $aRow->rekam_id) }}" class="btn btn-xs btn-primary shadow-xs font-w600" style="padding: 4px 8px; border-radius: 4px;" title="Lihat Lembar Asesmen">
-                                                            <i class="fa fa-eye"></i> Detail
+                                                    <div class="d-flex align-items-center justify-content-center" style="gap: 4px;">
+                                                        <a href="{{ Route('rekam.assessment.show', $aRow->rekam_id) }}" class="btn btn-xs shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 28px; height: 28px; padding: 0; border-radius: 6px; background: #2563eb; color: #ffffff;" title="Lihat Lembar Asesmen">
+                                                            <i class="fa-solid fa-eye" style="font-size: 11px;"></i>
                                                         </a>
-                                                        <a href="{{ Route('rekam.assessment.print', $aRow->rekam_id) }}" target="_blank" class="btn btn-xs btn-outline-info font-w600" style="padding: 4px 8px; border-radius: 4px;" title="Cetak Format Lembar Asesmen">
-                                                            <i class="fa fa-print"></i> Cetak
+                                                        <a href="{{ Route('rekam.assessment.print', $aRow->rekam_id) }}" target="_blank" class="btn btn-xs shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 28px; height: 28px; padding: 0; border-radius: 6px; background: #0284c7; color: #ffffff;" title="Cetak Format Lembar Asesmen">
+                                                            <i class="fa-solid fa-print" style="font-size: 11px;"></i>
+                                                        </a>
+                                                        <a href="{{ Route('rekam.assessment.print', $aRow->rekam_id) }}?download=pdf" target="_blank" class="btn btn-xs shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 28px; height: 28px; padding: 0; border-radius: 6px; background: #10b981; color: #ffffff;" title="Unduh PDF Langsung">
+                                                            <i class="fa-solid fa-download" style="font-size: 11px;"></i>
                                                         </a>
                                                         @if (auth()->user()->role_display() == "Dokter" || auth()->user()->role_display() == "Admin")
-                                                            <a href="{{ Route('rekam.assessment', $aRow->rekam_id) }}" class="btn btn-xs btn-outline-warning font-w600" style="padding: 4px 8px; border-radius: 4px;" title="Edit Form Asesmen">
-                                                                <i class="fa fa-pencil"></i>
+                                                            <a href="{{ Route('rekam.assessment', $aRow->rekam_id) }}" class="btn btn-xs shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 28px; height: 28px; padding: 0; border-radius: 6px; background: #f59e0b; color: #ffffff;" title="Edit Form Asesmen">
+                                                                <i class="fa-solid fa-pencil" style="font-size: 11px;"></i>
                                                             </a>
                                                         @endif
                                                     </div>
@@ -729,7 +828,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
             
-            <div class="modal-header text-white" style="background: linear-gradient(135deg, #2e4b82 0%, #1e355b 100%); padding: 14px 20px;">
+            <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); padding: 14px 20px;">
                 <div>
                     <h5 class="modal-title font-w700 text-white mb-0" id="modalDetailSOAPLabel" style="font-size: 16px;">
                         <i class="fa fa-folder-open-o mr-2"></i> Detail Catatan Sesi Terapi (SOAP)
@@ -832,6 +931,96 @@
                 <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 14px;">
                     Tutup
                 </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Preview Berkas Pendukung (KK, Resume & Dokumen Medis) -->
+<div class="modal fade" id="modalPreviewBerkas" tabindex="-1" role="dialog" aria-hidden="true" style="backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 880px;" role="document">
+        <div class="modal-content" style="border-radius: 14px; border: none; box-shadow: 0 12px 40px rgba(15, 23, 42, 0.28); overflow: hidden;">
+            
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between align-items-center py-3 px-4" style="background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%); color: #ffffff;">
+                <div class="d-flex align-items-center">
+                    <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; border-radius: 10px; background: rgba(255, 255, 255, 0.16); color: #ffffff; font-size: 18px; flex-shrink: 0; backdrop-filter: blur(4px);">
+                        <i id="previewDocIcon" class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title font-w700 text-white mb-0" id="previewDocTitle" style="font-size: 16px;">Preview Berkas</h5>
+                        <small class="text-white-50" style="font-size: 11.5px;">
+                            <span id="previewDocPatient">{{ $pasien->nama }}</span> &bull; RM# {{ $pasien->no_rm }} &bull; NIK: {{ $pasien->nik ?: '-' }}
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Controls & Actions -->
+                <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                    <!-- Zoom Controls (for images) -->
+                    <div class="btn-group btn-group-sm" id="previewZoomControls" style="background: rgba(255, 255, 255, 0.16); border-radius: 6px; padding: 2px;">
+                        <button type="button" class="btn btn-xs text-white" id="btnPreviewZoomOut" title="Perkecil (-)" style="border: none; padding: 4px 8px;">
+                            <i class="fa-solid fa-magnifying-glass-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-xs text-white font-w600" id="btnPreviewZoomReset" title="Reset Ukuran (100%)" style="border: none; padding: 4px 8px; font-size: 11px;">
+                            100%
+                        </button>
+                        <button type="button" class="btn btn-xs text-white" id="btnPreviewZoomIn" title="Perbesar (+)" style="border: none; padding: 4px 8px;">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </button>
+                        <button type="button" class="btn btn-xs text-white" id="btnPreviewRotate" title="Putar Gambar (90°)" style="border: none; padding: 4px 8px;">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Open in New Tab -->
+                    <a href="#" target="_blank" id="btnPreviewNewTab" class="btn btn-xs btn-light font-w600 shadow-sm" title="Buka di Tab Baru" style="border-radius: 6px; padding: 5px 10px; font-size: 11.5px;">
+                        <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Buka Tab
+                    </a>
+
+                    <!-- Download Button -->
+                    <a href="#" download id="btnPreviewDownload" class="btn btn-xs btn-success font-w600 text-white shadow-sm" title="Download Berkas" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: #10b981 !important; border: none !important;">
+                        <i class="fa-solid fa-download mr-1"></i> Unduh
+                    </a>
+
+                    <!-- Close Button -->
+                    <button type="button" class="close text-white ml-2" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; text-shadow: none; font-size: 24px; line-height: 1;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body (Viewer Canvas) -->
+            <div class="modal-body p-0" style="background: #0f172a; min-height: 480px; max-height: 72vh; overflow: auto; position: relative; display: flex; align-items: center; justify-content: center;">
+                
+                <!-- Image View Surface -->
+                <div id="previewImageWrapper" style="width: 100%; height: 100%; min-height: 480px; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 24px; user-select: none;">
+                    <img id="previewImageElement" src="" alt="Berkas Preview" style="max-width: 100%; max-height: 65vh; object-fit: contain; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: transform 0.2s ease-out; transform-origin: center center;" />
+                </div>
+
+                <!-- PDF / Iframe View Surface -->
+                <div id="previewPdfWrapper" style="width: 100%; height: 68vh; display: none;">
+                    <iframe id="previewPdfElement" src="" style="width: 100%; height: 100%; border: none; background: #ffffff;"></iframe>
+                </div>
+            </div>
+
+            <!-- Modal Footer Information Strip -->
+            <div class="modal-footer py-2.5 px-4 d-flex justify-content-between align-items-center" style="background: #ffffff; border-top: 1px solid #e2e8f0;">
+                <div class="d-flex align-items-center text-muted" style="font-size: 12px; gap: 15px;">
+                    <div>
+                        <i class="fa-solid fa-file-circle-check text-success mr-1"></i>
+                        <span id="previewDocFileName" class="font-w600 text-dark">-</span>
+                    </div>
+                    <div class="d-none d-md-block">
+                        <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Dokumen Rekam Medis Rahasia
+                    </div>
+                </div>
+                <div class="d-flex align-items-center" style="gap: 8px;">
+                    <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 16px; font-size: 12px;">
+                        Tutup
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -998,7 +1187,7 @@
         // O: Objektif
         $("#modalSoapPemeriksaan").html(pemeriksaan);
         if (filepemeriksaan) {
-            $("#modalSoapFilePemeriksaanContainer").html('<a href="' + filepemeriksaan + '" target="_blank" class="btn btn-xs btn-outline-info font-w600"><i class="fa fa-image mr-1"></i> Foto Pemeriksaan</a>');
+            $("#modalSoapFilePemeriksaanContainer").html('<button type="button" class="btn btn-xs btn-outline-info font-w600 btn-open-preview-berkas" data-type="pemeriksaan" data-title="Dokumen / Foto Pemeriksaan Objektif (' + norekam + ')" data-url="' + filepemeriksaan + '" data-filename="Pemeriksaan-' + norekam + '"><i class="fa-solid fa-image mr-1"></i> Foto Pemeriksaan</button>');
         } else {
             $("#modalSoapFilePemeriksaanContainer").empty();
         }
@@ -1031,7 +1220,7 @@
         // P: Plan
         $("#modalSoapTindakan").html($('<div>').html(tindakan).text().replace(/\n/g, '<br>') || tindakan);
         if (filetindakan) {
-            $("#modalSoapFileTindakanContainer").html('<a href="' + filetindakan + '" target="_blank" class="btn btn-xs btn-outline-success font-w600"><i class="fa fa-image mr-1"></i> Foto Tindakan</a>');
+            $("#modalSoapFileTindakanContainer").html('<button type="button" class="btn btn-xs btn-outline-success font-w600 btn-open-preview-berkas" data-type="tindakan" data-title="Dokumen / Foto Tindakan Terapi (' + norekam + ')" data-url="' + filetindakan + '" data-filename="Tindakan-' + norekam + '"><i class="fa-solid fa-image mr-1"></i> Foto Tindakan</button>');
         } else {
             $("#modalSoapFileTindakanContainer").empty();
         }
@@ -1050,6 +1239,126 @@
 
         // Open Modal
         $("#modalDetailSOAP").modal("show");
+    });
+
+    // Tab switching & URL Hash persistence
+    $(document).ready(function() {
+        function activateDetailTab(targetHash) {
+            if (!targetHash) return;
+            if (targetHash === '#tab-soap' || targetHash === 'soap' || targetHash === 'tab-soap' || targetHash === '#tab-soap-link' || targetHash === '2') {
+                $('#tab-asesmen-link').removeClass('active').attr('aria-selected', 'false');
+                $('#tab-soap-link').addClass('active').attr('aria-selected', 'true');
+                $('#tab-asesmen').removeClass('show active');
+                $('#tab-soap').addClass('show active');
+            } else if (targetHash === '#tab-asesmen' || targetHash === 'asesmen' || targetHash === 'tab-asesmen' || targetHash === '#tab-asesmen-link' || targetHash === '1') {
+                $('#tab-soap-link').removeClass('active').attr('aria-selected', 'false');
+                $('#tab-asesmen-link').addClass('active').attr('aria-selected', 'true');
+                $('#tab-soap').removeClass('show active');
+                $('#tab-asesmen').addClass('show active');
+            }
+        }
+
+        // Handle click on underline tabs
+        $('.ot-underline-tabs .nav-link').on('click', function(e) {
+            e.preventDefault();
+            var targetHash = $(this).attr('href');
+            activateDetailTab(targetHash);
+            if (history.pushState) {
+                history.pushState(null, null, targetHash);
+            } else {
+                window.location.hash = targetHash;
+            }
+        });
+
+        // Activate tab on page load if hash or query param ?tab= exists
+        var urlParams = new URLSearchParams(window.location.search);
+        var tabParam = urlParams.get('tab');
+        if (tabParam) {
+            activateDetailTab(tabParam === '2' || tabParam === 'soap' ? '#tab-soap' : '#tab-asesmen');
+        } else if (window.location.hash) {
+            activateDetailTab(window.location.hash);
+        }
+
+        $(window).on('hashchange', function() {
+            if (window.location.hash) {
+                activateDetailTab(window.location.hash);
+            }
+        });
+    });
+
+    // Interactive Document / Berkas Previewer Handler
+    var currentZoom = 1;
+    var currentRotation = 0;
+
+    function updateImageTransform() {
+        $('#previewImageElement').css('transform', 'scale(' + currentZoom + ') rotate(' + currentRotation + 'deg)');
+        $('#btnPreviewZoomReset').text(Math.round(currentZoom * 100) + '%');
+    }
+
+    $(document).on('click', '.btn-open-preview-berkas', function(e) {
+        e.preventDefault();
+        var btn = $(this);
+        var docType = btn.data('type');
+        var docTitle = btn.data('title') || 'Berkas Dokumen';
+        var docUrl = btn.data('url');
+        var docFileName = btn.data('filename') || 'dokumen';
+
+        currentZoom = 1;
+        currentRotation = 0;
+        updateImageTransform();
+
+        $('#previewDocTitle').text(docTitle);
+        $('#previewDocFileName').text(docFileName);
+        $('#btnPreviewNewTab').attr('href', docUrl);
+        $('#btnPreviewDownload').attr('href', docUrl).attr('download', docFileName);
+
+        if (docType === 'kk') {
+            $('#previewDocIcon').attr('class', 'fa-solid fa-id-card');
+        } else {
+            $('#previewDocIcon').attr('class', 'fa-solid fa-file-medical');
+        }
+
+        var isPdf = docUrl && (docUrl.toLowerCase().indexOf('.pdf') !== -1 || docFileName.toLowerCase().indexOf('.pdf') !== -1);
+
+        if (isPdf) {
+            $('#previewZoomControls').hide();
+            $('#previewImageWrapper').hide();
+            $('#previewPdfWrapper').show();
+            $('#previewPdfElement').attr('src', docUrl);
+        } else {
+            $('#previewZoomControls').show();
+            $('#previewPdfWrapper').hide();
+            $('#previewImageWrapper').show();
+            $('#previewImageElement').attr('src', docUrl);
+        }
+
+        $('#modalPreviewBerkas').modal('show');
+    });
+
+    // Zoom Controls
+    $('#btnPreviewZoomIn').on('click', function() {
+        if (currentZoom < 3) {
+            currentZoom = Math.min(3, currentZoom + 0.25);
+            updateImageTransform();
+        }
+    });
+
+    $('#btnPreviewZoomOut').on('click', function() {
+        if (currentZoom > 0.5) {
+            currentZoom = Math.max(0.5, currentZoom - 0.25);
+            updateImageTransform();
+        }
+    });
+
+    $('#btnPreviewZoomReset').on('click', function() {
+        currentZoom = 1;
+        currentRotation = 0;
+        updateImageTransform();
+    });
+
+    $('#btnPreviewRotate').on('click', function() {
+        currentRotation = (currentRotation + 90) % 360;
+        updateImageTransform();
     });
 </script>
 @endsection

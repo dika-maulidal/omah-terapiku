@@ -94,6 +94,19 @@
                                 </select>
                             </div>
 
+                            <!-- 5. Filter Shows (Per Page Limit) -->
+                            <div class="ot-filter-wrapper" style="width: 120px;" title="Tampilkan jumlah baris data per halaman">
+                                <i class="fa-solid fa-list-ol"></i>
+                                <select name="per_page" class="form-control form-control-sm ot-filter-select" onchange="this.form.submit()" style="width: 100%;">
+                                    <option value="10" {{ request('per_page', 10) == '10' ? 'selected' : '' }}>Show 10</option>
+                                    <option value="25" {{ request('per_page') == '25' ? 'selected' : '' }}>Show 25</option>
+                                    <option value="50" {{ request('per_page') == '50' ? 'selected' : '' }}>Show 50</option>
+                                    <option value="100" {{ request('per_page') == '100' ? 'selected' : '' }}>Show 100</option>
+                                    <option value="250" {{ request('per_page') == '250' ? 'selected' : '' }}>Show 250</option>
+                                    <option value="all" {{ request('per_page') == 'all' ? 'selected' : '' }}>Show Semua</option>
+                                </select>
+                            </div>
+
                             <!-- Kolom Pencarian Sejajar -->
                             <div class="ot-search-wrapper" style="min-width: 175px; max-width: 210px;">
                                 <i class="fa-solid fa-magnifying-glass ot-search-icon"></i>
@@ -104,7 +117,7 @@
                             </div>
 
                             <!-- Tombol Reset Filter -->
-                            @if(request('keyword') || request('status') || request('desil') || request('jk') || request('disabilitas'))
+                            @if(request('keyword') || request('status') || request('desil') || request('jk') || request('disabilitas') || (request('per_page') && request('per_page') != '10'))
                                 <a href="{{ Route('penerima-manfaat') }}" class="btn btn-sm btn-light font-w600" style="height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; font-size: 12px; transition: all 0.2s ease;" title="Reset Filter">
                                     <i class="fa-solid fa-rotate-right mr-1" style="color: #64748b;"></i> Reset
                                 </a>
@@ -214,7 +227,9 @@
 
                 <div class="d-flex flex-wrap align-items-center justify-content-between mt-3 pt-2">
                     <div class="dataTables_info mb-2 mb-md-0" id="example_info" role="status"
-                    aria-live="polite" style="font-size: 12.5px; color: #64748b;">Showing {{$datas->firstItem() ?: 0}} to {{$datas->perPage() * $datas->currentPage()}} of {{$datas->total()}} entries</div>
+                    aria-live="polite" style="font-size: 12.5px; color: #64748b;">
+                        Menampilkan <strong class="text-dark">{{$datas->firstItem() ?: 0}}</strong> sampai <strong class="text-dark">{{$datas->lastItem() ?: 0}}</strong> dari <strong class="text-dark">{{$datas->total()}}</strong> data penerima manfaat
+                    </div>
                     <div>
                         {{ $datas->appends(request()->except('page'))->links() }}
                     </div>

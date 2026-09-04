@@ -1,35 +1,51 @@
 @extends('layout.apps')
 @section('content')
 
-<!-- Header Section -->
-<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap" style="gap: 10px;">
-    <div>
-        <h2 class="font-w700 text-primary mb-1" style="color: var(--ot-navy) !important; font-weight: 700; font-size: 21px;">
-            <i class="fa-solid fa-clipboard-check text-primary mr-2"></i> Form Assessment Terapis
-        </h2>
-        <ol class="breadcrumb" style="background: transparent; padding: 0; margin-top: 2px; font-size: 12px;">
-            <li class="breadcrumb-item"><a href="{{Route('rekam')}}">Rekam Medis</a></li>
-            <li class="breadcrumb-item"><a href="{{Route('rekam.detail', $pasien->id)}}">{{ $pasien->nama }}</a></li>
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Form Assessment</a></li>
-        </ol>
-    </div>
-    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-        @if(isset($riwayatAssessment) && count($riwayatAssessment) > 0)
-            <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modalRiwayatAssessment" style="padding: 7px 14px; font-size: 12.5px; font-weight: 600; border-radius: 6px;">
-                <i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Asesmen ({{ count($riwayatAssessment) }})
-            </button>
-        @endif
-        <a href="{{Route('rekam.detail', $pasien->id)}}" class="btn btn-sm btn-light" style="padding: 7px 14px; font-size: 12.5px; font-weight: 600; border: 1px solid #e2e8f0; border-radius: 6px;">
-            <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Rekam Medis
-        </a>
-        @if($assessment->exists)
-            <a href="{{Route('rekam.assessment.print', $rekam->id)}}" target="_blank" class="btn btn-sm btn-info text-white shadow-sm" style="padding: 7px 14px; font-size: 12.5px; font-weight: 600; border-radius: 6px;">
-                <i class="fa-solid fa-print mr-1"></i> Cetak Lembar Asesmen
-            </a>
-        @endif
-        <button type="button" onclick="$('#formAssessment').submit()" class="btn btn-sm btn-primary shadow-sm font-w700" style="padding: 7px 18px; font-size: 12.5px; border-radius: 6px;">
-            <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Assessment
-        </button>
+<!-- Page Header Banner (Unified Card Sesuai DESIGN.md) -->
+<div class="card mb-3 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
+    <div class="card-body p-3 p-md-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between" style="gap: 12px;">
+            <div class="d-flex align-items-center mb-2 mb-md-0">
+                <div class="mr-3" style="width: 48px; height: 48px; border-radius: 12px; background: #eff6ff; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 22px; flex-shrink: 0; border: 1px solid #bfdbfe; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <div>
+                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                        <h3 class="font-w700 mb-0" style="color: #1e40af; font-size: 20px;">Form Assessment Terapis</h3>
+                        <span class="badge font-w700" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
+                            <i class="fa-solid fa-id-card mr-1"></i> {{ $pasien->no_rm }}
+                        </span>
+                    </div>
+                    <ol class="breadcrumb mb-0" style="background: transparent; padding: 0; font-size: 12px; margin-top: 4px;">
+                        <li class="breadcrumb-item"><a href="{{Route('dashboard')}}" style="color: #2563eb;">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{Route('rekam')}}" style="color: #2563eb;">Rekam Medis</a></li>
+                        <li class="breadcrumb-item"><a href="{{Route('rekam.detail', $pasien->id)}}" style="color: #2563eb;">{{ $pasien->nama }}</a></li>
+                        <li class="breadcrumb-item active text-muted">Form Assessment</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                @if(isset($riwayatAssessment) && count($riwayatAssessment) > 0)
+                    <button type="button" class="btn btn-sm font-w600" data-toggle="modal" data-target="#modalRiwayatAssessment" style="padding: 8px 14px; font-size: 12.5px; border-radius: 8px; border: 1.5px solid #2563eb; background: #eff6ff; color: #2563eb;">
+                        <i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Asesmen ({{ count($riwayatAssessment) }})
+                    </button>
+                @endif
+                <a href="{{Route('rekam.detail', $pasien->id)}}" class="btn btn-sm btn-light font-w600" style="padding: 8px 16px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Rekam Medis
+                </a>
+                @if($assessment->exists)
+                    <a href="{{Route('rekam.assessment.print', $rekam->id)}}" target="_blank" class="btn btn-sm btn-info text-white font-w600" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important; border: none !important; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);">
+                        <i class="fa-solid fa-print mr-1"></i> Cetak Asesmen
+                    </a>
+                    <a href="{{Route('rekam.assessment.print', $rekam->id)}}?download=pdf" target="_blank" class="btn btn-sm btn-success text-white font-w700" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; border: none !important; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
+                        <i class="fa-solid fa-download mr-1"></i> Unduh PDF
+                    </a>
+                @endif
+                <button type="button" onclick="$('#formAssessment').submit()" class="btn btn-sm btn-primary font-w700" style="padding: 8px 18px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Assessment
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -37,22 +53,30 @@
 @if(isset($riwayatAssessment) && count($riwayatAssessment) > 0)
 <div class="modal fade" id="modalRiwayatAssessment" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-            <div class="modal-header py-3" style="border-bottom: 1px solid #edf2f7; background: #f8fafc;">
-                <h5 class="modal-title font-w700" style="color: var(--ot-navy) !important; font-size: 16px;">
-                    <i class="fa fa-history text-primary mr-2"></i> Riwayat Asesmen Pasien Sebelumnya
-                </h5>
+        <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15); overflow: hidden;">
+            <div class="modal-header py-3 px-4" style="border-bottom: 1px solid #edf2f7; background: #eff6ff;">
+                <div class="d-flex align-items-center">
+                    <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; border-radius: 10px; background: #ffffff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 16px;">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title font-w700 mb-0" style="color: #1e40af; font-size: 16px;">
+                            Riwayat Lembar Asesmen Pasien
+                        </h5>
+                        <small class="text-muted font-w500">Daftar re-evaluasi & baseline klinis {{ $pasien->nama }}</small>
+                    </div>
+                </div>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
-            <div class="modal-body p-3">
+            <div class="modal-body p-3 p-md-4">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped" style="font-size: 12.5px;">
+                    <table class="table table-bordered table-striped" style="font-size: 12.5px; border-collapse: collapse;">
                         <thead class="bg-light">
-                            <tr>
-                                <th style="width: 5%;">#</th>
+                            <tr style="color: #1e293b;">
+                                <th style="width: 5%; text-align: center;">#</th>
                                 <th>Tanggal Asesmen</th>
-                                <th>Terapis / Dokter</th>
-                                <th>Jenis</th>
+                                <th>Terapis / Penguji</th>
+                                <th>Jenis Asesmen</th>
                                 <th>Evaluasi / Catatan</th>
                                 <th style="width: 15%; text-align: center;">Aksi</th>
                             </tr>
@@ -60,14 +84,24 @@
                         <tbody>
                             @foreach($riwayatAssessment as $k => $hist)
                                 <tr>
-                                    <td class="text-center">{{ $k + 1 }}</td>
-                                    <td><strong>{{ $hist->tgl_assessment ? $hist->tgl_assessment->format('d M Y') : '-' }}</strong></td>
-                                    <td>{{ $hist->dokter->nama ?? 'Terapis' }}</td>
-                                    <td><span class="badge badge-light">{{ $hist->jenis_assessment ?: 'General' }}</span></td>
-                                    <td style="max-width: 250px;" class="text-truncate">{{ $hist->kesimpulan ?: '-' }}</td>
-                                    <td class="text-center">
-                                        <a href="{{Route('rekam.assessment.show', $hist->rekam_id)}}" target="_blank" class="btn btn-xs btn-primary font-w600" style="border-radius: 4px; font-size: 11px;">
-                                            Lihat Detail <i class="fa fa-external-link"></i>
+                                    <td class="text-center font-w600" style="vertical-align: middle;">{{ $k + 1 }}</td>
+                                    <td style="vertical-align: middle;">
+                                        <strong class="text-primary">{{ $hist->tgl_assessment ? $hist->tgl_assessment->format('d/m/Y') : '-' }}</strong>
+                                        <br><small class="text-muted">REG# {{ $hist->rekam ? $hist->rekam->no_rekam : '-' }}</small>
+                                    </td>
+                                    <td style="vertical-align: middle;">
+                                        <strong style="color: #1e293b;">{{ $hist->dokter->nama ?? 'Terapis' }}</strong>
+                                        <br><small class="text-muted">{{ $hist->rekam->poli ?? 'Omah Terapiku' }}</small>
+                                    </td>
+                                    <td style="vertical-align: middle;">
+                                        <span class="badge badge-info light font-w600" style="font-size: 11px;">{{ $hist->jenis_assessment ?: 'General' }}</span>
+                                    </td>
+                                    <td style="vertical-align: middle; max-width: 250px;" class="text-truncate" title="{{ $hist->kesimpulan }}">
+                                        {{ $hist->kesimpulan ?: '-' }}
+                                    </td>
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        <a href="{{Route('rekam.assessment.show', $hist->rekam_id)}}" target="_blank" class="btn btn-xs btn-primary font-w600 shadow-sm" style="border-radius: 6px; font-size: 11px; padding: 5px 10px; background: #2563eb;">
+                                            Lihat Detail <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -81,39 +115,53 @@
 </div>
 @endif
 
-<!-- Identitas Penerima Manfaat Card -->
-<div class="card mb-3" style="border-radius: 10px; border: none; box-shadow: 0 2px 10px rgba(46, 75, 130, 0.05);">
-    <div class="card-body p-3">
+<!-- Identitas Penerima Manfaat Context Card -->
+<div class="card mb-3 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
+    <div class="card-body p-3 p-md-3">
         <div class="row align-items-center">
             <div class="col-lg-7 col-md-12 mb-2 mb-lg-0">
-                <div class="d-flex align-items-center">
-                    <div class="avatar-box mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #2e4b82 0%, #4a6fa5 100%); color: #fff; font-weight: 700; font-size: 17px; flex-shrink: 0;">
-                        {{ strtoupper(substr($pasien->nama, 0, 1)) }}
-                    </div>
-                    <div>
-                        <h4 class="font-w700 mb-0" style="font-size: 15.5px; color: #1e293b;">
+                <div>
+                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                        <h4 class="font-w700 mb-0" style="font-size: 16.5px; color: #1e293b;">
                             {{ $pasien->nama }}
-                            <span class="badge badge-primary light font-w600 ml-2" style="font-size: 11px;">RM# {{ $pasien->no_rm }}</span>
                         </h4>
-                        <div class="text-muted font-w500 mt-1" style="font-size: 12px;">
-                            <span><i class="fa fa-user mr-1 text-primary"></i>{{ $pasien->jk ?: '-' }}</span> &bull;
-                            <span><i class="fa fa-calendar mr-1 text-primary"></i>{{ $pasien->tgl_lahir ?: '-' }} ({{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->age . ' Thn' : '-' }})</span> &bull;
-                            <span><i class="fa fa-wheelchair mr-1 text-primary"></i>{{ $pasien->jenis_disabilitas && $pasien->jenis_disabilitas != 'Tidak Ada' ? $pasien->jenis_disabilitas : 'Umum' }}</span>
-                        </div>
+                        <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
+                            {{ $pasien->no_rm }}
+                        </span>
+                        @if($pasien->status_display)
+                            {!! $pasien->status_display !!}
+                        @endif
+                    </div>
+                    <!-- Metadata Info Pasien dengan Jarak Renggang & Rapi Sesuai Permintaan -->
+                    <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 12px;">
+                        <span class="badge badge-light border" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #334155; background: #f8fafc;">
+                            <i class="fa-solid fa-venus-mars mr-1.5 text-primary"></i> {{ $pasien->jk ?: '-' }}
+                        </span>
+                        <span class="badge badge-light border" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #334155; background: #f8fafc;">
+                            <i class="fa-solid fa-calendar mr-1.5 text-primary"></i> {{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $pasien->tgl_lahir ?: '-' }} ({{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->age . ' Thn' : '-' }})
+                        </span>
+                        <span class="badge font-w700" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
+                            <i class="fa-solid fa-wheelchair mr-1.5 text-primary"></i> {{ $pasien->jenis_disabilitas && $pasien->jenis_disabilitas != 'Tidak Ada' ? $pasien->jenis_disabilitas : 'Non-Disabilitas' }}
+                        </span>
+                        @if($pasien->nik)
+                            <span class="badge badge-light border" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; background: #f8fafc;">
+                                <i class="fa-solid fa-id-card mr-1.5 text-primary"></i> NIK: {{ $pasien->nik }}
+                            </span>
+                        @endif
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-5 col-md-12">
-                <div class="d-flex justify-content-lg-end align-items-center flex-wrap" style="gap: 12px;">
+                <div class="d-flex justify-content-lg-end align-items-center flex-wrap" style="gap: 16px;">
                     <div class="text-lg-right">
-                        <small class="text-muted d-block font-w600" style="font-size: 10.5px; text-transform: uppercase;">Layanan & Tanggal</small>
-                        <strong class="text-primary font-w700" style="font-size: 12.5px;">{{ $rekam->layanan_terapi ?: $rekam->poli }}</strong>
+                        <small class="text-muted d-block font-w600" style="font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.3px;">Layanan & Tanggal Sesi</small>
+                        <strong class="text-primary font-w700" style="font-size: 13px;">{{ $rekam->layanan_terapi ?: $rekam->poli }}</strong>
                         <small class="text-muted d-block font-w500">{{ $rekam->tgl_rekam }}</small>
                     </div>
                     <div class="pl-3" style="border-left: 2px solid #e2e8f0;">
-                        <small class="text-muted d-block font-w600" style="font-size: 10.5px; text-transform: uppercase;">Terapis Pemeriksa</small>
-                        <strong class="text-dark font-w700" style="font-size: 12.5px;">{{ $rekam->dokter->nama ?? auth()->user()->name }}</strong>
+                        <small class="text-muted d-block font-w600" style="font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.3px;">Terapis Pemeriksa</small>
+                        <strong style="color: #1e293b; font-size: 13px; font-weight: 700;">{{ $rekam->dokter->nama ?? auth()->user()->name }}</strong>
                     </div>
                 </div>
             </div>
@@ -127,1302 +175,112 @@
     <input type="hidden" name="jenis_assessment" value="{{ $assessment->jenis_assessment ?: 'General' }}">
     <input type="hidden" name="nyeri_body_chart" id="input_nyeri_body_chart" value="{{ old('nyeri_body_chart', $assessment->nyeri_body_chart) }}">
 
-    <!-- Main Card Container with Top Category & Tab Navigation -->
-    <div class="card mb-4" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
-        
+    <!-- Main Card Container with 6 Module Underline Tabs Navigation -->
+    <div class="card mb-4" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
+
         <!-- Progress Bar & Draft Auto-Save Status Bar -->
         <div class="p-3 bg-white border-bottom" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
-            <!-- Draft Restore Banner (Hidden by default, shown if local draft exists) -->
-            <div id="draftRestoreBanner" class="alert alert-warning py-2 px-3 mb-2 d-none align-items-center justify-content-between flex-wrap" style="border-radius: 8px; font-size: 12.5px; gap: 8px;">
+            <!-- Draft Restore Banner -->
+            <div id="draftRestoreBanner" class="alert alert-warning py-2 px-3 mb-2 d-none align-items-center justify-content-between flex-wrap" style="border-radius: 8px; font-size: 12.5px; gap: 8px; border: 1px solid #fde68a; background: #fffbeb;">
                 <div class="d-flex align-items-center">
-                    <i class="fa fa-history text-warning mr-2" style="font-size: 16px;"></i>
+                    <i class="fa-solid fa-history text-warning mr-2" style="font-size: 16px;"></i>
                     <span>Ditemukan <strong>Draft Asesmen Tersimpan Lokal</strong> yang belum disimpan ke server.</span>
                 </div>
                 <div class="d-flex align-items-center" style="gap: 6px;">
-                    <button type="button" class="btn btn-xs btn-warning font-w700" id="btnRestoreDraft" style="padding: 4px 10px; border-radius: 5px;">
-                        <i class="fa fa-undo mr-1"></i> Pulihkan Draft
+                    <button type="button" class="btn btn-xs btn-warning font-w700" id="btnRestoreDraft" style="padding: 4px 10px; border-radius: 6px;">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Pulihkan Draft
                     </button>
-                    <button type="button" class="btn btn-xs btn-light font-w600" id="btnDiscardDraft" style="padding: 4px 10px; border-radius: 5px; border: 1px solid #cbd5e1;">
+                    <button type="button" class="btn btn-xs btn-light font-w600" id="btnDiscardDraft" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1;">
                         Hapus Draft
                     </button>
                 </div>
             </div>
 
-            <!-- Progress Meter & Draft Status Header -->
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-1" style="gap: 8px;">
+            <!-- Progress Meter & Status Header -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-2" style="gap: 8px;">
                 <div class="d-flex align-items-center">
-                    <span class="font-w700 text-dark mr-2" style="font-size: 12.5px;">
-                        <i class="fa fa-tasks text-primary mr-1"></i> Progress Pengisian Asesmen:
+                    <span class="font-w700 text-dark mr-2" style="font-size: 13px;">
+                        <i class="fa-solid fa-list-check text-primary mr-1"></i> Progress Pengisian Asesmen:
                     </span>
-                    <strong class="text-primary font-w700" id="progressPercentText" style="font-size: 13px;">0%</strong>
-                    <small class="text-muted ml-1" id="progressModulesText">(0/15 Modul Terisi)</small>
+                    <strong class="text-primary font-w700" id="progressPercentText" style="font-size: 13.5px;">0%</strong>
+                    <small class="text-muted ml-1 font-w600" id="progressModulesText">(0/6 Modul Terisi)</small>
                 </div>
                 <div class="d-flex align-items-center" style="gap: 8px;">
-                    <span id="draftStatusBadge" class="badge badge-light border text-muted font-w600" style="font-size: 11px; padding: 4px 8px; border-radius: 5px;">
-                        <i class="fa fa-check-circle text-success mr-1"></i> Auto-Save Aktif
+                    <span id="draftStatusBadge" class="badge badge-light border text-muted font-w600" style="font-size: 11px; padding: 5px 10px; border-radius: 6px; background: #f8fafc;">
+                        <i class="fa-solid fa-circle-check text-success mr-1"></i> Auto-Save Aktif
                     </span>
-                    <!-- Switcher Mode Per Tab vs Tampilkan Semua -->
-                    <div class="btn-group btn-group-sm" role="group" style="box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-radius: 6px;">
-                        <button type="button" class="btn btn-primary active font-w600" id="btn-mode-tab" onclick="switchViewMode('tab')" style="padding: 4px 10px; font-size: 11px;">
-                            <i class="fa fa-columns mr-1"></i> Mode Kategori / Tab
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary font-w600" id="btn-mode-all" onclick="switchViewMode('all')" style="padding: 4px 10px; font-size: 11px;">
-                            <i class="fa fa-bars mr-1"></i> Tampilkan Semua
-                        </button>
-                    </div>
                 </div>
             </div>
             
             <!-- Progress Bar Line -->
-            <div class="progress" style="height: 6px; border-radius: 3px; background: #e2e8f0;">
-                <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" id="formOverallProgressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress" style="height: 7px; border-radius: 4px; background: #e2e8f0;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" id="formOverallProgressBar" role="progressbar" style="width: 0%; background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
         </div>
 
-        <!-- Level 1: 4 Main Category Navigation Pills -->
-        <div class="p-2 px-3 border-bottom" style="background: #f8fafc;">
-            <ul class="nav nav-pills category-pills flex-wrap mb-0" id="categoryTabs" style="gap: 6px;">
+        <!-- Underline Tabs Navigation 6 Modul Sesuai DESIGN.md -->
+        <div class="card-header p-0 px-3 bg-white" style="border-bottom: 2px solid #e2e8f0;">
+            <ul class="nav ot-underline-tabs flex-nowrap" id="modulTabs" role="tablist" style="overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 4px;">
                 <li class="nav-item">
-                    <button type="button" class="nav-link active category-btn font-w700" data-category="cat-motorik" style="border-radius: 8px; font-size: 12.5px; padding: 7px 14px; border: 1.5px solid #2e4b82;">
-                        <i class="fa fa-child mr-1"></i> 1. Motorik & ADL
-                        <span class="badge badge-light ml-1 cat-count" id="badge-cat-motorik">0/3</span>
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button type="button" class="nav-link category-btn font-w700" data-category="cat-sensorik" style="border-radius: 8px; font-size: 12.5px; padding: 7px 14px; border: 1.5px solid #cbd5e1; background: white; color: #475569;">
-                        <i class="fa fa-eye mr-1"></i> 2. Sensorik & Khusus
-                        <span class="badge badge-light ml-1 cat-count" id="badge-cat-sensorik">0/3</span>
-                    </button>
+                    <a class="nav-link active" id="tab-modul1-btn" data-toggle="tab" href="#modul-1" role="tab" data-module-index="1">
+                        <i class="fa-solid fa-eye-low-vision mr-1"></i> Modul 1: Penglihatan & Psikososial
+                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-1">0/2</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link category-btn font-w700" data-category="cat-fisik" style="border-radius: 8px; font-size: 12.5px; padding: 7px 14px; border: 1.5px solid #cbd5e1; background: white; color: #475569;">
-                        <i class="fa fa-heartbeat mr-1"></i> 3. Pemeriksaan Fisik
-                        <span class="badge badge-light ml-1 cat-count" id="badge-cat-fisik">0/5</span>
-                    </button>
+                    <a class="nav-link" id="tab-modul2-btn" data-toggle="tab" href="#modul-2" role="tab" data-module-index="2">
+                        <i class="fa-solid fa-child-reaching mr-1"></i> Modul 2: Motorik Dasar & ADL
+                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-2">0/3</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link category-btn font-w700" data-category="cat-rencana" style="border-radius: 8px; font-size: 12.5px; padding: 7px 14px; border: 1.5px solid #cbd5e1; background: white; color: #475569;">
-                        <i class="fa fa-calendar-check-o mr-1"></i> 4. Perkembangan & Rencana
-                        <span class="badge badge-light ml-1 cat-count" id="badge-cat-rencana">0/4</span>
-                    </button>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Level 2: Sub-Tabs Bar (Filtered by Active Category) -->
-        <div class="card-header p-2 px-3 d-flex align-items-center justify-content-between flex-wrap" style="background: #ffffff; border-bottom: 1px solid #edf2f7; gap: 8px;">
-            <ul class="nav nav-pills assessment-tabs flex-wrap mb-0" id="assessmentTab" style="gap: 4px;">
-                <!-- Category 1: Motorik & ADL (Tabs 1, 2, 3) -->
-                <li class="nav-item subtab-item" data-parent-cat="cat-motorik">
-                    <a class="nav-link active font-w600" id="tab-motorik-btn" href="#tab-motorik" data-target-section="#tab-motorik">
-                        <i class="fa fa-child mr-1"></i> 1. Motorik <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
+                    <a class="nav-link" id="tab-modul3-btn" data-toggle="tab" href="#modul-3" role="tab" data-module-index="3">
+                        <i class="fa-solid fa-heart-pulse mr-1"></i> Modul 3: Evaluasi Fisik & Nyeri
+                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-3">0/2</span>
                     </a>
                 </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-motorik">
-                    <a class="nav-link font-w600" id="tab-gmfm-btn" href="#tab-gmfm" data-target-section="#tab-gmfm">
-                        <i class="fa fa-th-list mr-1"></i> 2. GMFM-88 <span class="badge badge-primary light font-w600 ml-1">88 Item</span> <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab-modul4-btn" data-toggle="tab" href="#modul-4" role="tab" data-module-index="4">
+                        <i class="fa-solid fa-brain mr-1"></i> Modul 4: Neurologis & Gait
+                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-4">0/4</span>
                     </a>
                 </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-motorik">
-                    <a class="nav-link font-w600" id="tab-adl-btn" href="#tab-adl" data-target-section="#tab-adl">
-                        <i class="fa fa-tasks mr-1"></i> 3. Aktivitas (ADL) <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab-modul5-btn" data-toggle="tab" href="#modul-5" role="tab" data-module-index="5">
+                        <i class="fa-solid fa-clipboard-list mr-1"></i> Modul 5: Instrumen Khusus
+                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-5">0/2</span>
                     </a>
                 </li>
-
-                <!-- Category 2: Sensorik & Khusus (Tabs 4, 5, 11) -->
-                <li class="nav-item subtab-item" data-parent-cat="cat-sensorik" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-wicara-btn" href="#tab-wicara" data-target-section="#tab-wicara">
-                        <i class="fa fa-comments mr-1"></i> 4. Wicara <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-sensorik" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-penglihatan-btn" href="#tab-penglihatan" data-target-section="#tab-penglihatan">
-                        <i class="fa fa-eye mr-1"></i> 5. Penglihatan <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-sensorik" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-sensoris-btn" href="#tab-sensoris" data-target-section="#tab-sensoris">
-                        <i class="fa fa-hand-paper-o mr-1"></i> 11. Sensoris & Vestibular <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-
-                <!-- Category 3: Pemeriksaan Fisik (Tabs 6, 7, 8, 9, 10) -->
-                <li class="nav-item subtab-item" data-parent-cat="cat-fisik" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-nyeri-btn" href="#tab-nyeri" data-target-section="#tab-nyeri">
-                        <i class="fa fa-heartbeat mr-1"></i> 6. Nyeri & Body Chart <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-fisik" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-rom-btn" href="#tab-rom" data-target-section="#tab-rom">
-                        <i class="fa fa-wheelchair mr-1"></i> 7. ROM & MMT <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-fisik" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-neuro-btn" href="#tab-neuro" data-target-section="#tab-neuro">
-                        <i class="fa fa-bolt mr-1"></i> 8. Neurologis <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-fisik" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-postur-btn" href="#tab-postur" data-target-section="#tab-postur">
-                        <i class="fa fa-male mr-1"></i> 9. Postur & Keseimbangan <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-fisik" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-gait-btn" href="#tab-gait" data-target-section="#tab-gait">
-                        <i class="fa fa-blind mr-1"></i> 10. Gait (Pola Jalan) <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-
-                <!-- Category 4: Perkembangan & Rencana (Tabs 12, 13, 14, 15) -->
-                <li class="nav-item subtab-item" data-parent-cat="cat-rencana" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-psikososial-btn" href="#tab-psikososial" data-target-section="#tab-psikososial">
-                        <i class="fa fa-users mr-1"></i> 12. Psikososial <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-rencana" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-perencanaan-btn" href="#tab-perencanaan" data-target-section="#tab-perencanaan">
-                        <i class="fa fa-calendar-check-o mr-1"></i> 13. Perencanaan Terapi <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-rencana" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-evaluasi-btn" href="#tab-evaluasi" data-target-section="#tab-evaluasi">
-                        <i class="fa fa-file-text-o mr-1"></i> 14. Evaluasi & Target <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item subtab-item" data-parent-cat="cat-rencana" style="display: none;">
-                    <a class="nav-link font-w600" id="tab-denver-btn" href="#tab-denver" data-target-section="#tab-denver">
-                        <i class="fa fa-graduation-cap mr-1"></i> 15. Skala Denver (DDST II) <span class="badge badge-primary light font-w600 ml-1">19 Task</span> <span class="tab-check-icon d-none text-success ml-1"><i class="fa fa-check-circle"></i></span>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab-modul6-btn" data-toggle="tab" href="#modul-6" role="tab" data-module-index="6">
+                        <i class="fa-solid fa-notes-medical mr-1"></i> Modul 6: Rencana Terapi & TTD
+                        <span class="badge badge-light ml-1 font-w600 counter-pill" id="badge-modul-6">0/2</span>
                     </a>
                 </li>
             </ul>
         </div>
 
-        <div class="card-body p-4">
-            <div id="assessmentTabContent">
+        <div class="card-body p-3 p-md-4">
+            <div class="tab-content" id="modulTabContent">
 
-                <!-- 1. BAGIAN KEMAMPUAN MOTORIK -->
-                <div class="tab-pane-box" id="tab-motorik">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            1. Kemampuan Motorik
-                        </h5>
-                    </div>
+            <!-- ======================================================== -->
+            <!-- MODUL 1: STATUS PENGLIHATAN & PSIKOSOSIAL -->
+            <!-- ======================================================== -->
+            <div class="tab-pane fade show active" id="modul-1" role="tabpanel" aria-labelledby="tab-modul1-btn">
 
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">1</span>
-                            Kemampuan Motorik
-                        </h5>
-                        <small class="text-muted">Pilih opsi penilaian kemampuan gerak & motorik</small>
-                    </div>
-
-                    <div class="row">
-                        <!-- Mengangkat Kepala -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Mengangkat Kepala
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $val1 = old('motorik_mengangkat_kepala', $assessment->motorik_mengangkat_kepala); @endphp
-                                    @foreach(['Mampu', 'Tidak Mampu'] as $opt)
-                                        <label class="radio-pill-card {{ $val1 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="motorik_mengangkat_kepala" value="{{ $opt }}" {{ $val1 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Posisi Tengkurap -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Posisi Tengkurap
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $val2 = old('motorik_posisi_tengkurap', $assessment->motorik_posisi_tengkurap); @endphp
-                                    @foreach(['Mampu Sendiri', 'Sedikit Dibantu', 'Tidak Mampu'] as $opt)
-                                        <label class="radio-pill-card {{ $val2 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="motorik_posisi_tengkurap" value="{{ $opt }}" {{ $val2 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Posisi Duduk -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Posisi Duduk
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $val3 = old('motorik_posisi_duduk', $assessment->motorik_posisi_duduk); @endphp
-                                    @foreach(['Mampu Sendiri dan Stabil', 'Mampu Sendiri dan Tidak Stabil', 'Didudukkan', 'Tidak Mampu'] as $opt)
-                                        <label class="radio-pill-card {{ $val3 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="motorik_posisi_duduk" value="{{ $opt }}" {{ $val3 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Merangkak -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Merangkak
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $val4 = old('motorik_merangkak', $assessment->motorik_merangkak); @endphp
-                                    @foreach(['Mampu', 'Ngesot', 'Tidak Mampu'] as $opt)
-                                        <label class="radio-pill-card {{ $val4 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="motorik_merangkak" value="{{ $opt }}" {{ $val4 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Berlutut -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Berlutut
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $val5 = old('motorik_berlutut', $assessment->motorik_berlutut); @endphp
-                                    @foreach(['Mampu', 'Tidak Mampu'] as $opt)
-                                        <label class="radio-pill-card {{ $val5 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="motorik_berlutut" value="{{ $opt }}" {{ $val5 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Berjalan -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Berjalan
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $val6 = old('motorik_berjalan', $assessment->motorik_berjalan); @endphp
-                                    @foreach(['Mampu Mandiri', 'Pakai Alat Bantu', 'Dibantu Orang Lain'] as $opt)
-                                        <label class="radio-pill-card {{ $val6 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="motorik_berjalan" value="{{ $opt }}" {{ $val6 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Catatan Motorik -->
-                    <div class="form-group mb-3">
-                        <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Motorik (Opsional)</label>
-                        <textarea name="motorik_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait kemampuan motorik..." style="font-size: 12.5px;">{{ old('motorik_catatan', $assessment->motorik_catatan) }}</textarea>
-                    </div>
-
-                    <div class="d-flex justify-content-end mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-gmfm-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 2 (GMFM-88) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 2. BAGIAN GMFM-88 TERPADU (DIMENSI A s/d E) -->
-                <div class="tab-pane-box" id="tab-gmfm" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            2. Gross Motor Function Measure (GMFM-88) Terpadu
-                        </h5>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <div>
-                            <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                                <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">2</span>
-                                Gross Motor Function Measure (GMFM-88)
+                <!-- Subtest: Subtest 1.1 - Status Penglihatan -->
+                <div class="assessment-subtest-card mb-4" id="subtest-penglihatan">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 1.1</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-eye mr-1 text-primary"></i> Status Penglihatan
                             </h5>
-                            <small class="text-muted">Instrumen evaluasi motorik kasar standar emas (Gold Standard) pediatrik & neuromotor</small>
                         </div>
+                        <small class="text-muted font-w600">Pemeriksaan fungsi visual, fiksasi & respon rangsang cahaya</small>
                     </div>
-
-                    <!-- Keterangan Skala Penilaian & Konsep Medis -->
-                    <div class="card mb-3 border-0" style="background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
-                        <div class="card-body p-3">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap mb-2">
-                                <span class="font-w700 text-dark" style="font-size: 13px;">
-                                    <i class="fa fa-info-circle text-primary mr-1"></i> Panduan Skala Skor GMFM (0 - 3):
-                                </span>
-                                <small class="text-muted">Skala Penilaian Baku GMFM-88</small>
-                            </div>
-                            <div class="row" style="font-size: 12px;">
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="p-2 rounded bg-white border h-100">
-                                        <strong class="text-danger d-block mb-1"><span class="badge badge-danger mr-1">0</span> Tidak Memulai</strong>
-                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Tidak dapat memulai / melakukan gerakan sama sekali (0%).</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="p-2 rounded bg-white border h-100">
-                                        <strong class="text-warning d-block mb-1"><span class="badge badge-warning text-dark mr-1">1</span> Memulai</strong>
-                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Memulai gerakan tetapi menyelesaikan kurang dari 10% (< 10%).</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="p-2 rounded bg-white border h-100">
-                                        <strong class="text-primary d-block mb-1"><span class="badge badge-primary mr-1">2</span> Selesai Sebagian</strong>
-                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Menyelesaikan sebagian aktivitas gerakan (10% s/d < 100%).</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="p-2 rounded bg-white border h-100">
-                                        <strong class="text-success d-block mb-1"><span class="badge badge-success mr-1">3</span> Selesai Sempurna</strong>
-                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Menyelesaikan seluruh aktivitas mandiri & sempurna (100%).</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dimensi Navigasi Sub-Pills (A, B, C, D, E) -->
-                    <div class="d-flex align-items-center flex-wrap mb-3 p-2 rounded justify-content-between" style="background: #f1f5f9; gap: 8px;">
-                        <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
-                            <button type="button" class="btn btn-sm btn-primary active font-w700 gmfm-dim-btn" data-target-dim="#gmfm-pane-a" style="border-radius: 6px; font-size: 12px; padding: 6px 12px;">
-                                <i class="fa fa-bed mr-1"></i> A: Berbaring & Berguling <span class="badge badge-light text-primary ml-1">17</span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-primary font-w700 gmfm-dim-btn" data-target-dim="#gmfm-pane-b" style="border-radius: 6px; font-size: 12px; padding: 6px 12px;">
-                                <i class="fa fa-street-view mr-1"></i> B: Duduk <span class="badge badge-light text-primary ml-1">20</span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-primary font-w700 gmfm-dim-btn" data-target-dim="#gmfm-pane-c" style="border-radius: 6px; font-size: 12px; padding: 6px 12px;">
-                                <i class="fa fa-child mr-1"></i> C: Merangkak & Berlutut <span class="badge badge-light text-primary ml-1">14</span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-primary font-w700 gmfm-dim-btn" data-target-dim="#gmfm-pane-d" style="border-radius: 6px; font-size: 12px; padding: 6px 12px;">
-                                <i class="fa fa-male mr-1"></i> D: Berdiri <span class="badge badge-light text-primary ml-1">13</span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-primary font-w700 gmfm-dim-btn" data-target-dim="#gmfm-pane-e" style="border-radius: 6px; font-size: 12px; padding: 6px 12px;">
-                                <i class="fa fa-running mr-1"></i> E: Jalan, Lari & Melompat <span class="badge badge-light text-primary ml-1">24</span>
-                            </button>
-                        </div>
-                        <div class="d-flex align-items-center ml-auto p-1 px-2 rounded" style="background: white; border: 1px solid #cbd5e1;">
-                            <span class="font-w700 text-dark mr-2" style="font-size: 11.5px;">TOTAL GMFM-88:</span>
-                            <span class="badge badge-dark font-w700 mr-1" id="gmfm-total-live-badge-score" style="font-size: 12px;">{{ old('gmfm_total_score', $assessment->gmfm_total_score ?? 0) }} / 264</span>
-                            <span class="badge badge-success font-w700" id="gmfm-total-live-badge-persen" style="font-size: 12px;">{{ number_format(old('gmfm_total_persen', $assessment->gmfm_total_persen ?? 0), 1) }}%</span>
-                            <input type="hidden" name="gmfm_total_score" id="input-gmfm-total-score" value="{{ old('gmfm_total_score', $assessment->gmfm_total_score ?? 0) }}">
-                            <input type="hidden" name="gmfm_total_persen" id="input-gmfm-total-persen" value="{{ old('gmfm_total_persen', $assessment->gmfm_total_persen ?? 0) }}">
-                        </div>
-                    </div>
-
-                    <!-- ============================================== -->
-                    <!-- SUB-PANE DIMENSI A: BERBARING & BERGULING     -->
-                    <!-- ============================================== -->
-                    <div class="gmfm-dim-pane" id="gmfm-pane-a">
-                        @php
-                            $saved_gmfm_a_scores = is_array($assessment->gmfm_dimensi_a_scores) ? $assessment->gmfm_dimensi_a_scores : [];
-                            $saved_a_total = old('gmfm_dimensi_a_total', $assessment->gmfm_dimensi_a_total ?? 0);
-                            $saved_a_persen = old('gmfm_dimensi_a_persen', $assessment->gmfm_dimensi_a_persen ?? 0);
-                        @endphp
-                        <!-- Summary Score Card Dimensi A -->
-                        <div class="card mb-3 border-0" style="background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);">
-                            <div class="card-body p-3">
-                                <div class="row align-items-center">
-                                    <div class="col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
-                                        <small class="text-white-50 text-uppercase font-w600" style="letter-spacing: 0.5px;">Skor Dimensi A (Berbaring & Berguling)</small>
-                                        <h3 class="mb-0 text-white font-w700" style="font-size: 24px;">
-                                            <span id="gmfm-a-live-total">{{ $saved_a_total ?: 0 }}</span> <span style="font-size: 15px; opacity: 0.8;">/ 51</span>
-                                        </h3>
-                                        <input type="hidden" name="gmfm_dimensi_a_total" id="input-gmfm-a-total" value="{{ $saved_a_total }}">
-                                        <input type="hidden" name="gmfm_dimensi_a_persen" id="input-gmfm-a-persen" value="{{ $saved_a_persen }}">
-                                    </div>
-                                    <div class="col-md-5 col-12 mb-2 mb-md-0">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <small class="text-white font-w600">Capaian Dimensi A:</small>
-                                            <strong class="text-white" id="gmfm-a-live-persen">{{ number_format($saved_a_persen, 1) }}%</strong>
-                                        </div>
-                                        <div class="progress" style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.25);">
-                                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" id="gmfm-a-live-progress" role="progressbar" style="width: {{ $saved_a_persen }}%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-12 text-center text-md-right">
-                                        <small class="text-white-50 d-block font-w600 mb-1">Interpretasi Dimensi A:</small>
-                                        <span class="badge badge-light font-w700 text-dark px-3 py-2" id="gmfm-a-live-interpretation" style="font-size: 11.5px; border-radius: 6px;">
-                                            @if($saved_a_persen >= 80)
-                                                Sangat Baik (Mandiri)
-                                            @elseif($saved_a_persen >= 50)
-                                                Sedang (Perlu Stimulasi)
-                                            @elseif($saved_a_total > 0)
-                                                Keterbatasan Signifikan
-                                            @else
-                                                Belum Dinilai
-                                            @endif
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 17 Item Dimensi A List (Matrix Grid) -->
-                        @php $gmfm_a_items = config('gmfm.dimensions.A.items', []); @endphp
-                        <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
-                                <thead style="background: #f1f5f9; color: #334155; font-size: 11.5px;">
-                                    <tr>
-                                        <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
-                                        <th style="width: 48%; vertical-align: middle;">Posisi & Deskripsi Gerakan Aktivitas (Dimensi A)</th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">0<br><small class="font-w500">(Tidak)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">1<br><small class="font-w500">(Mulai)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dbeafe; color: #1e40af;">2<br><small class="font-w500">(Sebagian)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">3<br><small class="font-w500">(Sempurna)</small></th>
-                                        <th style="width: 10%; text-align: center; vertical-align: middle; background: #f8fafc; color: #64748b;">NT<br><small class="font-w500">(Tdk Diuji)</small></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($gmfm_a_items as $no => $item)
-                                        @php $valA = isset($saved_gmfm_a_scores[$no]) ? $saved_gmfm_a_scores[$no] : (old('gmfm_dimensi_a_scores.'.$no, '')); @endphp
-                                        <tr>
-                                            <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $no }}</td>
-                                            <td style="vertical-align: middle;">
-                                                <span class="badge badge-light text-primary font-w600 mb-1" style="font-size: 10.5px; border: 1px solid #cbd5e1;">{{ $item['position'] }}</span>
-                                                <div class="font-w600 text-dark" style="line-height: 1.35; font-size: 12px;">{{ $item['action'] }}</div>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_a_scores[{{ $no }}]" value="0" class="gmfm-a-radio matrix-input" {{ $valA === '0' || $valA === 0 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator danger">0</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_a_scores[{{ $no }}]" value="1" class="gmfm-a-radio matrix-input" {{ $valA === '1' || $valA === 1 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator warning">1</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfdff;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_a_scores[{{ $no }}]" value="2" class="gmfm-a-radio matrix-input" {{ $valA === '2' || $valA === 2 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator info">2</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_a_scores[{{ $no }}]" value="3" class="gmfm-a-radio matrix-input" {{ $valA === '3' || $valA === 3 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator success">3</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_a_scores[{{ $no }}]" value="NT" class="gmfm-a-radio matrix-input" {{ $valA === 'NT' ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator muted">NT</span>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Catatan Observasi Dimensi A -->
-                        <div class="form-group mb-3">
-                            <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi GMFM Dimensi A (Opsional)</label>
-                            <textarea name="gmfm_dimensi_a_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait Dimensi A (kontrol kepala, berguling, prone on elbows)..." style="font-size: 12.5px;">{{ old('gmfm_dimensi_a_catatan', $assessment->gmfm_dimensi_a_catatan) }}</textarea>
-                        </div>
-                    </div>
-
-                    <!-- ============================================== -->
-                    <!-- SUB-PANE DIMENSI B: DUDUK (SITTING)            -->
-                    <!-- ============================================== -->
-                    <div class="gmfm-dim-pane" id="gmfm-pane-b" style="display: none;">
-                        @php
-                            $saved_gmfm_b_scores = is_array($assessment->gmfm_dimensi_b_scores) ? $assessment->gmfm_dimensi_b_scores : [];
-                            $saved_b_total = old('gmfm_dimensi_b_total', $assessment->gmfm_dimensi_b_total ?? 0);
-                            $saved_b_persen = old('gmfm_dimensi_b_persen', $assessment->gmfm_dimensi_b_persen ?? 0);
-                        @endphp
-                        <!-- Summary Score Card Dimensi B -->
-                        <div class="card mb-3 border-0" style="background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); color: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.15);">
-                            <div class="card-body p-3">
-                                <div class="row align-items-center">
-                                    <div class="col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
-                                        <small class="text-white-50 text-uppercase font-w600" style="letter-spacing: 0.5px;">Skor Dimensi B (Duduk)</small>
-                                        <h3 class="mb-0 text-white font-w700" style="font-size: 24px;">
-                                            <span id="gmfm-b-live-total">{{ $saved_b_total ?: 0 }}</span> <span style="font-size: 15px; opacity: 0.8;">/ 60</span>
-                                        </h3>
-                                        <input type="hidden" name="gmfm_dimensi_b_total" id="input-gmfm-b-total" value="{{ $saved_b_total }}">
-                                        <input type="hidden" name="gmfm_dimensi_b_persen" id="input-gmfm-b-persen" value="{{ $saved_b_persen }}">
-                                    </div>
-                                    <div class="col-md-5 col-12 mb-2 mb-md-0">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <small class="text-white font-w600">Capaian Dimensi B:</small>
-                                            <strong class="text-white" id="gmfm-b-live-persen">{{ number_format($saved_b_persen, 1) }}%</strong>
-                                        </div>
-                                        <div class="progress" style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.25);">
-                                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" id="gmfm-b-live-progress" role="progressbar" style="width: {{ $saved_b_persen }}%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-12 text-center text-md-right">
-                                        <small class="text-white-50 d-block font-w600 mb-1">Interpretasi Dimensi B:</small>
-                                        <span class="badge badge-light font-w700 text-dark px-3 py-2" id="gmfm-b-live-interpretation" style="font-size: 11.5px; border-radius: 6px;">
-                                            @if($saved_b_persen >= 80)
-                                                Sangat Baik (Mandiri)
-                                            @elseif($saved_b_persen >= 50)
-                                                Sedang (Perlu Stimulasi)
-                                            @elseif($saved_b_total > 0)
-                                                Keterbatasan Signifikan
-                                            @else
-                                                Belum Dinilai
-                                            @endif
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 20 Item Dimensi B List (Matrix Grid) -->
-                        @php $gmfm_b_items = config('gmfm.dimensions.B.items', []); @endphp
-                        <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
-                                <thead style="background: #f1f5f9; color: #334155; font-size: 11.5px;">
-                                    <tr>
-                                        <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
-                                        <th style="width: 48%; vertical-align: middle;">Posisi & Deskripsi Gerakan Aktivitas (Dimensi B - Duduk)</th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">0<br><small class="font-w500">(Tidak)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">1<br><small class="font-w500">(Mulai)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dbeafe; color: #1e40af;">2<br><small class="font-w500">(Sebagian)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">3<br><small class="font-w500">(Sempurna)</small></th>
-                                        <th style="width: 10%; text-align: center; vertical-align: middle; background: #f8fafc; color: #64748b;">NT<br><small class="font-w500">(Tdk Diuji)</small></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($gmfm_b_items as $no => $item)
-                                        @php $valB = isset($saved_gmfm_b_scores[$no]) ? $saved_gmfm_b_scores[$no] : (old('gmfm_dimensi_b_scores.'.$no, '')); @endphp
-                                        <tr>
-                                            <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $no }}</td>
-                                            <td style="vertical-align: middle;">
-                                                <span class="badge badge-light text-primary font-w600 mb-1" style="font-size: 10.5px; border: 1px solid #cbd5e1;">{{ $item['position'] }}</span>
-                                                <div class="font-w600 text-dark" style="line-height: 1.35; font-size: 12px;">{{ $item['action'] }}</div>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_b_scores[{{ $no }}]" value="0" class="gmfm-b-radio matrix-input" {{ $valB === '0' || $valB === 0 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator danger">0</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_b_scores[{{ $no }}]" value="1" class="gmfm-b-radio matrix-input" {{ $valB === '1' || $valB === 1 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator warning">1</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfdff;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_b_scores[{{ $no }}]" value="2" class="gmfm-b-radio matrix-input" {{ $valB === '2' || $valB === 2 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator info">2</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_b_scores[{{ $no }}]" value="3" class="gmfm-b-radio matrix-input" {{ $valB === '3' || $valB === 3 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator success">3</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_b_scores[{{ $no }}]" value="NT" class="gmfm-b-radio matrix-input" {{ $valB === 'NT' ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator muted">NT</span>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Catatan Observasi Dimensi B -->
-                        <div class="form-group mb-3">
-                            <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi GMFM Dimensi B (Opsional)</label>
-                            <textarea name="gmfm_dimensi_b_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait Dimensi B (kontrol duduk, protektif ekstensi, transisi merangkak)..." style="font-size: 12.5px;">{{ old('gmfm_dimensi_b_catatan', $assessment->gmfm_dimensi_b_catatan) }}</textarea>
-                        </div>
-                    </div>
-
-                    <!-- ============================================== -->
-                    <!-- SUB-PANE DIMENSI C: MERANGKAK & BERLUTUT       -->
-                    <!-- ============================================== -->
-                    <div class="gmfm-dim-pane" id="gmfm-pane-c" style="display: none;">
-                        @php
-                            $saved_gmfm_c_scores = is_array($assessment->gmfm_dimensi_c_scores) ? $assessment->gmfm_dimensi_c_scores : [];
-                            $saved_c_total = old('gmfm_dimensi_c_total', $assessment->gmfm_dimensi_c_total ?? 0);
-                            $saved_c_persen = old('gmfm_dimensi_c_persen', $assessment->gmfm_dimensi_c_persen ?? 0);
-                        @endphp
-                        <!-- Summary Score Card Dimensi C -->
-                        <div class="card mb-3 border-0" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(109, 40, 217, 0.15);">
-                            <div class="card-body p-3">
-                                <div class="row align-items-center">
-                                    <div class="col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
-                                        <small class="text-white-50 text-uppercase font-w600" style="letter-spacing: 0.5px;">Skor Dimensi C (Merangkak & Berlutut)</small>
-                                        <h3 class="mb-0 text-white font-w700" style="font-size: 24px;">
-                                            <span id="gmfm-c-live-total">{{ $saved_c_total ?: 0 }}</span> <span style="font-size: 15px; opacity: 0.8;">/ 42</span>
-                                        </h3>
-                                        <input type="hidden" name="gmfm_dimensi_c_total" id="input-gmfm-c-total" value="{{ $saved_c_total }}">
-                                        <input type="hidden" name="gmfm_dimensi_c_persen" id="input-gmfm-c-persen" value="{{ $saved_c_persen }}">
-                                    </div>
-                                    <div class="col-md-5 col-12 mb-2 mb-md-0">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <small class="text-white font-w600">Capaian Dimensi C:</small>
-                                            <strong class="text-white" id="gmfm-c-live-persen">{{ number_format($saved_c_persen, 1) }}%</strong>
-                                        </div>
-                                        <div class="progress" style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.25);">
-                                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" id="gmfm-c-live-progress" role="progressbar" style="width: {{ $saved_c_persen }}%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-12 text-center text-md-right">
-                                        <small class="text-white-50 d-block font-w600 mb-1">Interpretasi Dimensi C:</small>
-                                        <span class="badge badge-light font-w700 text-dark px-3 py-2" id="gmfm-c-live-interpretation" style="font-size: 11.5px; border-radius: 6px;">
-                                            @if($saved_c_persen >= 80)
-                                                Sangat Baik (Mandiri)
-                                            @elseif($saved_c_persen >= 50)
-                                                Sedang (Perlu Stimulasi)
-                                            @elseif($saved_c_total > 0)
-                                                Keterbatasan Signifikan
-                                            @else
-                                                Belum Dinilai
-                                            @endif
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 14 Item Dimensi C List (Matrix Grid) -->
-                        @php $gmfm_c_items = config('gmfm.dimensions.C.items', []); @endphp
-                        <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
-                                <thead style="background: #f1f5f9; color: #334155; font-size: 11.5px;">
-                                    <tr>
-                                        <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
-                                        <th style="width: 48%; vertical-align: middle;">Posisi & Deskripsi Gerakan Aktivitas (Dimensi C - Merangkak & Berlutut)</th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">0<br><small class="font-w500">(Tidak)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">1<br><small class="font-w500">(Mulai)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dbeafe; color: #1e40af;">2<br><small class="font-w500">(Sebagian)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">3<br><small class="font-w500">(Sempurna)</small></th>
-                                        <th style="width: 10%; text-align: center; vertical-align: middle; background: #f8fafc; color: #64748b;">NT<br><small class="font-w500">(Tdk Diuji)</small></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($gmfm_c_items as $no => $item)
-                                        @php $valC = isset($saved_gmfm_c_scores[$no]) ? $saved_gmfm_c_scores[$no] : (old('gmfm_dimensi_c_scores.'.$no, '')); @endphp
-                                        <tr>
-                                            <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $no }}</td>
-                                            <td style="vertical-align: middle;">
-                                                <span class="badge badge-light text-primary font-w600 mb-1" style="font-size: 10.5px; border: 1px solid #cbd5e1;">{{ $item['position'] }}</span>
-                                                <div class="font-w600 text-dark" style="line-height: 1.35; font-size: 12px;">{{ $item['action'] }}</div>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_c_scores[{{ $no }}]" value="0" class="gmfm-c-radio matrix-input" {{ $valC === '0' || $valC === 0 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator danger">0</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_c_scores[{{ $no }}]" value="1" class="gmfm-c-radio matrix-input" {{ $valC === '1' || $valC === 1 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator warning">1</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfdff;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_c_scores[{{ $no }}]" value="2" class="gmfm-c-radio matrix-input" {{ $valC === '2' || $valC === 2 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator info">2</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_c_scores[{{ $no }}]" value="3" class="gmfm-c-radio matrix-input" {{ $valC === '3' || $valC === 3 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator success">3</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_c_scores[{{ $no }}]" value="NT" class="gmfm-c-radio matrix-input" {{ $valC === 'NT' ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator muted">NT</span>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Catatan Observasi Dimensi C -->
-                        <div class="form-group mb-3">
-                            <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi GMFM Dimensi C (Opsional)</label>
-                            <textarea name="gmfm_dimensi_c_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait Dimensi C (stabilitas posisi 4-poin, pola merangkak resiprokal, keseimbangan berlutut)..." style="font-size: 12.5px;">{{ old('gmfm_dimensi_c_catatan', $assessment->gmfm_dimensi_c_catatan) }}</textarea>
-                        </div>
-                    </div>
-
-                    <!-- ============================================== -->
-                    <!-- SUB-PANE DIMENSI D: BERDIRI (STANDING)         -->
-                    <!-- ============================================== -->
-                    <div class="gmfm-dim-pane" id="gmfm-pane-d" style="display: none;">
-                        @php
-                            $saved_gmfm_d_scores = is_array($assessment->gmfm_dimensi_d_scores) ? $assessment->gmfm_dimensi_d_scores : [];
-                            $saved_d_total = old('gmfm_dimensi_d_total', $assessment->gmfm_dimensi_d_total ?? 0);
-                            $saved_d_persen = old('gmfm_dimensi_d_persen', $assessment->gmfm_dimensi_d_persen ?? 0);
-                        @endphp
-                        <!-- Summary Score Card Dimensi D -->
-                        <div class="card mb-3 border-0" style="background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%); color: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(234, 88, 12, 0.15);">
-                            <div class="card-body p-3">
-                                <div class="row align-items-center">
-                                    <div class="col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
-                                        <small class="text-white-50 text-uppercase font-w600" style="letter-spacing: 0.5px;">Skor Dimensi D (Berdiri)</small>
-                                        <h3 class="mb-0 text-white font-w700" style="font-size: 24px;">
-                                            <span id="gmfm-d-live-total">{{ $saved_d_total ?: 0 }}</span> <span style="font-size: 15px; opacity: 0.8;">/ 39</span>
-                                        </h3>
-                                        <input type="hidden" name="gmfm_dimensi_d_total" id="input-gmfm-d-total" value="{{ $saved_d_total }}">
-                                        <input type="hidden" name="gmfm_dimensi_d_persen" id="input-gmfm-d-persen" value="{{ $saved_d_persen }}">
-                                    </div>
-                                    <div class="col-md-5 col-12 mb-2 mb-md-0">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <small class="text-white font-w600">Capaian Dimensi D:</small>
-                                            <strong class="text-white" id="gmfm-d-live-persen">{{ number_format($saved_d_persen, 1) }}%</strong>
-                                        </div>
-                                        <div class="progress" style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.25);">
-                                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" id="gmfm-d-live-progress" role="progressbar" style="width: {{ $saved_d_persen }}%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-12 text-center text-md-right">
-                                        <small class="text-white-50 d-block font-w600 mb-1">Interpretasi Dimensi D:</small>
-                                        <span class="badge badge-light font-w700 text-dark px-3 py-2" id="gmfm-d-live-interpretation" style="font-size: 11.5px; border-radius: 6px;">
-                                            @if($saved_d_persen >= 80)
-                                                Sangat Baik (Mandiri)
-                                            @elseif($saved_d_persen >= 50)
-                                                Sedang (Perlu Stimulasi)
-                                            @elseif($saved_d_total > 0)
-                                                Keterbatasan Signifikan
-                                            @else
-                                                Belum Dinilai
-                                            @endif
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 13 Item Dimensi D List (Matrix Grid) -->
-                        @php $gmfm_d_items = config('gmfm.dimensions.D.items', []); @endphp
-                        <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
-                                <thead style="background: #f1f5f9; color: #334155; font-size: 11.5px;">
-                                    <tr>
-                                        <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
-                                        <th style="width: 48%; vertical-align: middle;">Posisi & Deskripsi Gerakan Aktivitas (Dimensi D - Berdiri)</th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">0<br><small class="font-w500">(Tidak)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">1<br><small class="font-w500">(Mulai)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dbeafe; color: #1e40af;">2<br><small class="font-w500">(Sebagian)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">3<br><small class="font-w500">(Sempurna)</small></th>
-                                        <th style="width: 10%; text-align: center; vertical-align: middle; background: #f8fafc; color: #64748b;">NT<br><small class="font-w500">(Tdk Diuji)</small></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($gmfm_d_items as $no => $item)
-                                        @php $valD = isset($saved_gmfm_d_scores[$no]) ? $saved_gmfm_d_scores[$no] : (old('gmfm_dimensi_d_scores.'.$no, '')); @endphp
-                                        <tr>
-                                            <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $no }}</td>
-                                            <td style="vertical-align: middle;">
-                                                <span class="badge badge-light text-primary font-w600 mb-1" style="font-size: 10.5px; border: 1px solid #cbd5e1;">{{ $item['position'] }}</span>
-                                                <div class="font-w600 text-dark" style="line-height: 1.35; font-size: 12px;">{{ $item['action'] }}</div>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_d_scores[{{ $no }}]" value="0" class="gmfm-d-radio matrix-input" {{ $valD === '0' || $valD === 0 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator danger">0</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_d_scores[{{ $no }}]" value="1" class="gmfm-d-radio matrix-input" {{ $valD === '1' || $valD === 1 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator warning">1</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfdff;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_d_scores[{{ $no }}]" value="2" class="gmfm-d-radio matrix-input" {{ $valD === '2' || $valD === 2 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator info">2</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_d_scores[{{ $no }}]" value="3" class="gmfm-d-radio matrix-input" {{ $valD === '3' || $valD === 3 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator success">3</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_d_scores[{{ $no }}]" value="NT" class="gmfm-d-radio matrix-input" {{ $valD === 'NT' ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator muted">NT</span>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Catatan Observasi Dimensi D -->
-                        <div class="form-group mb-3">
-                            <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi GMFM Dimensi D (Opsional)</label>
-                            <textarea name="gmfm_dimensi_d_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait Dimensi D (keseimbangan statis/dinamis berdiri, single leg stance, sit-to-stand, jongkok)..." style="font-size: 12.5px;">{{ old('gmfm_dimensi_d_catatan', $assessment->gmfm_dimensi_d_catatan) }}</textarea>
-                        </div>
-                    </div>
-
-                    <!-- ============================================== -->
-                    <!-- SUB-PANE DIMENSI E: BERJALAN, BERLARI & LOMPAT -->
-                    <!-- ============================================== -->
-                    <div class="gmfm-dim-pane" id="gmfm-pane-e" style="display: none;">
-                        @php
-                            $saved_gmfm_e_scores = is_array($assessment->gmfm_dimensi_e_scores) ? $assessment->gmfm_dimensi_e_scores : [];
-                            $saved_e_total = old('gmfm_dimensi_e_total', $assessment->gmfm_dimensi_e_total ?? 0);
-                            $saved_e_persen = old('gmfm_dimensi_e_persen', $assessment->gmfm_dimensi_e_persen ?? 0);
-                        @endphp
-                        <!-- Summary Score Card Dimensi E -->
-                        <div class="card mb-3 border-0" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15);">
-                            <div class="card-body p-3">
-                                <div class="row align-items-center">
-                                    <div class="col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
-                                        <small class="text-white-50 text-uppercase font-w600" style="letter-spacing: 0.5px;">Skor Dimensi E (Jalan, Lari & Lompat)</small>
-                                        <h3 class="mb-0 text-white font-w700" style="font-size: 24px;">
-                                            <span id="gmfm-e-live-total">{{ $saved_e_total ?: 0 }}</span> <span style="font-size: 15px; opacity: 0.8;">/ 72</span>
-                                        </h3>
-                                        <input type="hidden" name="gmfm_dimensi_e_total" id="input-gmfm-e-total" value="{{ $saved_e_total }}">
-                                        <input type="hidden" name="gmfm_dimensi_e_persen" id="input-gmfm-e-persen" value="{{ $saved_e_persen }}">
-                                    </div>
-                                    <div class="col-md-5 col-12 mb-2 mb-md-0">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <small class="text-white font-w600">Capaian Dimensi E:</small>
-                                            <strong class="text-white" id="gmfm-e-live-persen">{{ number_format($saved_e_persen, 1) }}%</strong>
-                                        </div>
-                                        <div class="progress" style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.25);">
-                                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" id="gmfm-e-live-progress" role="progressbar" style="width: {{ $saved_e_persen }}%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-12 text-center text-md-right">
-                                        <small class="text-white-50 d-block font-w600 mb-1">Interpretasi Dimensi E:</small>
-                                        <span class="badge badge-light font-w700 text-dark px-3 py-2" id="gmfm-e-live-interpretation" style="font-size: 11.5px; border-radius: 6px;">
-                                            @if($saved_e_persen >= 80)
-                                                Sangat Baik (Mandiri)
-                                            @elseif($saved_e_persen >= 50)
-                                                Sedang (Perlu Stimulasi)
-                                            @elseif($saved_e_total > 0)
-                                                Keterbatasan Signifikan
-                                            @else
-                                                Belum Dinilai
-                                            @endif
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 24 Item Dimensi E List (Matrix Grid) -->
-                        @php $gmfm_e_items = config('gmfm.dimensions.E.items', []); @endphp
-                        <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
-                                <thead style="background: #f1f5f9; color: #334155; font-size: 11.5px;">
-                                    <tr>
-                                        <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
-                                        <th style="width: 48%; vertical-align: middle;">Posisi & Deskripsi Gerakan Aktivitas (Dimensi E - Jalan, Lari & Melompat)</th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">0<br><small class="font-w500">(Tidak)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">1<br><small class="font-w500">(Mulai)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dbeafe; color: #1e40af;">2<br><small class="font-w500">(Sebagian)</small></th>
-                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">3<br><small class="font-w500">(Sempurna)</small></th>
-                                        <th style="width: 10%; text-align: center; vertical-align: middle; background: #f8fafc; color: #64748b;">NT<br><small class="font-w500">(Tdk Diuji)</small></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($gmfm_e_items as $no => $item)
-                                        @php $valE = isset($saved_gmfm_e_scores[$no]) ? $saved_gmfm_e_scores[$no] : (old('gmfm_dimensi_e_scores.'.$no, '')); @endphp
-                                        <tr>
-                                            <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $no }}</td>
-                                            <td style="vertical-align: middle;">
-                                                <span class="badge badge-light text-primary font-w600 mb-1" style="font-size: 10.5px; border: 1px solid #cbd5e1;">{{ $item['position'] }}</span>
-                                                <div class="font-w600 text-dark" style="line-height: 1.35; font-size: 12px;">{{ $item['action'] }}</div>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_e_scores[{{ $no }}]" value="0" class="gmfm-e-radio matrix-input" {{ $valE === '0' || $valE === 0 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator danger">0</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_e_scores[{{ $no }}]" value="1" class="gmfm-e-radio matrix-input" {{ $valE === '1' || $valE === 1 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator warning">1</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfdff;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_e_scores[{{ $no }}]" value="2" class="gmfm-e-radio matrix-input" {{ $valE === '2' || $valE === 2 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator info">2</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_e_scores[{{ $no }}]" value="3" class="gmfm-e-radio matrix-input" {{ $valE === '3' || $valE === 3 ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator success">3</span>
-                                                </label>
-                                            </td>
-                                            <td class="text-center matrix-cell" style="vertical-align: middle;">
-                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                    <input type="radio" name="gmfm_dimensi_e_scores[{{ $no }}]" value="NT" class="gmfm-e-radio matrix-input" {{ $valE === 'NT' ? 'checked' : '' }}>
-                                                    <span class="matrix-score-indicator muted">NT</span>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Catatan Observasi Dimensi E -->
-                        <div class="form-group mb-3">
-                            <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi GMFM Dimensi E (Opsional)</label>
-                            <textarea name="gmfm_dimensi_e_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait Dimensi E (pola jalan menyamping/mundur, kemampuan melompat, menendang bola, naik/turun tangga tanpa pegangan)..." style="font-size: 12.5px;">{{ old('gmfm_dimensi_e_catatan', $assessment->gmfm_dimensi_e_catatan) }}</textarea>
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-motorik-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Motorik Kasar & Halus
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-adl-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 3 (ADL) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 3. BAGIAN KEMAMPUAN AKTIVITAS SEHARI-HARI (ADL) -->
-                <div class="tab-pane-box" id="tab-adl" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            3. Kemampuan Aktivitas Sehari-hari (ADL)
-                        </h5>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">3</span>
-                            Kemampuan Aktivitas Sehari-hari (ADL)
-                        </h5>
-                        <small class="text-muted">Pilih opsi kemandirian aktivitas sehari-hari</small>
-                    </div>
-
-                    <div class="row">
-                        <!-- Kontak Mata -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Kontak Mata
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $adl1 = old('adl_kontak_mata', $assessment->adl_kontak_mata); @endphp
-                                    @foreach(['Ada', 'Tidak Ada'] as $opt)
-                                        <label class="radio-pill-card {{ $adl1 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="adl_kontak_mata" value="{{ $opt }}" {{ $adl1 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bisa Duduk Tenang -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Bisa Duduk Tenang Saat Beraktivitas
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $adl2 = old('adl_duduk_tenang', $assessment->adl_duduk_tenang); @endphp
-                                    @foreach(['Bisa', 'Tidak Bisa'] as $opt)
-                                        <label class="radio-pill-card {{ $adl2 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="adl_duduk_tenang" value="{{ $opt }}" {{ $adl2 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Gerakan Berulang dan Tidak Bertujuan -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Gerakan Berulang & Tanpa Tujuan
-                                    <small class="text-muted font-w400 d-block">(Tepuk tangan, kibas tangan, dll.)</small>
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $adl3 = old('adl_gerakan_berulang', $assessment->adl_gerakan_berulang); @endphp
-                                    @foreach(['Bisa', 'Tidak Bisa'] as $opt)
-                                        <label class="radio-pill-card {{ $adl3 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="adl_gerakan_berulang" value="{{ $opt }}" {{ $adl3 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Merespon Saat Dipanggil Nama -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Merespon Saat Dipanggil Nama
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $adl4 = old('adl_respon_nama', $assessment->adl_respon_nama); @endphp
-                                    @foreach(['Bisa', 'Tidak Bisa'] as $opt)
-                                        <label class="radio-pill-card {{ $adl4 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="adl_respon_nama" value="{{ $opt }}" {{ $adl4 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Makan -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Makan
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $adl5 = old('adl_makan', $assessment->adl_makan); @endphp
-                                    @foreach(['Mandiri', 'Dibantu Sebagian', 'Bergantung Kepada Orang Lain'] as $opt)
-                                        <label class="radio-pill-card {{ $adl5 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="adl_makan" value="{{ $opt }}" {{ $adl5 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mandi -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Mandi
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $adl6 = old('adl_mandi', $assessment->adl_mandi); @endphp
-                                    @foreach(['Mandiri', 'Dibantu Sebagian', 'Bergantung Kepada Orang Lain'] as $opt)
-                                        <label class="radio-pill-card {{ $adl6 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="adl_mandi" value="{{ $opt }}" {{ $adl6 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Berpakaian -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Berpakaian
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $adl7 = old('adl_berpakaian', $assessment->adl_berpakaian); @endphp
-                                    @foreach(['Mandiri', 'Dibantu Sebagian', 'Bergantung Kepada Orang Lain'] as $opt)
-                                        <label class="radio-pill-card {{ $adl7 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="adl_berpakaian" value="{{ $opt }}" {{ $adl7 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- BAK -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> BAK (Buang Air Kecil)
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $adl8 = old('adl_bak', $assessment->adl_bak); @endphp
-                                    @foreach(['Mandiri', 'Dibantu Sebagian', 'Bergantung Kepada Orang Lain'] as $opt)
-                                        <label class="radio-pill-card {{ $adl8 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="adl_bak" value="{{ $opt }}" {{ $adl8 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- BAB -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> BAB (Buang Air Besar)
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $adl9 = old('adl_bab', $assessment->adl_bab); @endphp
-                                    @foreach(['Mandiri', 'Dibantu Sebagian', 'Bergantung Kepada Orang Lain'] as $opt)
-                                        <label class="radio-pill-card {{ $adl9 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="adl_bab" value="{{ $opt }}" {{ $adl9 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Catatan ADL -->
-                    <div class="form-group mb-3">
-                        <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Aktivitas Sehari-hari (Opsional)</label>
-                        <textarea name="adl_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait kemandirian & aktivitas..." style="font-size: 12.5px;">{{ old('adl_catatan', $assessment->adl_catatan) }}</textarea>
-                    </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-gmfm-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke GMFM-88
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-wicara-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 4 (Wicara) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 4. BAGIAN KEMAMPUAN WICARA -->
-                <div class="tab-pane-box" id="tab-wicara" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            4. Kemampuan Wicara & Komunikasi
-                        </h5>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">4</span>
-                            Kemampuan Wicara & Komunikasi
-                        </h5>
-                        <small class="text-muted">Pilih opsi komunikasi, organ bicara, dan fungsi menelan</small>
-                    </div>
-
-                    <div class="row">
-                        <!-- Kemampuan Berkomunikasi -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Kemampuan Berkomunikasi
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $wic1 = old('wicara_komunikasi', $assessment->wicara_komunikasi); @endphp
-                                    @foreach(['Verbal (Lisan)', 'Non-Verbal (Gesture)', 'Bergantung Sepenuhnya dengan Orang Lain'] as $opt)
-                                        <label class="radio-pill-card {{ $wic1 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="wicara_komunikasi" value="{{ $opt }}" {{ $wic1 == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Kondisi Organ Bicara dan Pendengaran -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Kondisi Organ Bicara dan Pendengaran
-                                </label>
-                                <div class="d-flex flex-wrap option-group mb-2" style="gap: 8px;">
-                                    @php $wic2 = old('wicara_organ', $assessment->wicara_organ); @endphp
-                                    @foreach(['Normal', 'Ada Kelainan'] as $opt)
-                                        <label class="radio-pill-card {{ $wic2 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="wicara_organ" value="{{ $opt }}" {{ $wic2 == $opt ? 'checked' : '' }} onchange="toggleOrganKelainan(this.value)">
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                                <div id="wrap-organ-kelainan" class="mt-2" style="{{ $wic2 == 'Ada Kelainan' ? '' : 'display: none;' }}">
-                                    <input type="text" name="wicara_organ_keterangan" class="form-control form-control-sm" value="{{ old('wicara_organ_keterangan', $assessment->wicara_organ_keterangan) }}" placeholder="Sebutkan kelainan (Gangguan Pendengaran, Bibir Sumbing, Air Liur Berlebih)..." style="font-size: 12.5px; height: 36px;">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Kemampuan Makan, Minum, Mengunyah, dan Menelan -->
-                        <div class="col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-check-circle text-primary mr-1"></i> Kemampuan Makan, Minum, Mengunyah, dan Menelan
-                                </label>
-                                <div class="d-flex flex-wrap option-group mb-2" style="gap: 8px;">
-                                    @php $wic3 = old('wicara_makan_menelan', $assessment->wicara_makan_menelan); @endphp
-                                    @foreach(['Mampu', 'Mampu dengan Hambatan', 'Tidak Mampu'] as $opt)
-                                        <label class="radio-pill-card {{ $wic3 == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="wicara_makan_menelan" value="{{ $opt }}" {{ $wic3 == $opt ? 'checked' : '' }} onchange="toggleMenelanKeterangan(this.value)">
-                                            <span>
-                                                {{ $opt }}
-                                                @if($opt == 'Mampu dengan Hambatan')
-                                                    <small class="font-w400 text-muted">(Tersedak, Sulit Menelan)</small>
-                                                @elseif($opt == 'Tidak Mampu')
-                                                    <small class="font-w400 text-muted">(Alat/Sonde)</small>
-                                                @endif
-                                            </span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                                <div id="wrap-menelan-keterangan" class="mt-2" style="{{ ($wic3 == 'Mampu dengan Hambatan' || $wic3 == 'Tidak Mampu') ? '' : 'display: none;' }}">
-                                    <input type="text" name="wicara_makan_menelan_keterangan" class="form-control form-control-sm" value="{{ old('wicara_makan_menelan_keterangan', $assessment->wicara_makan_menelan_keterangan) }}" placeholder="Keterangan tambahan (Sering tersedak makanan padat, menggunakan NGT/sonde)..." style="font-size: 12.5px; height: 36px;">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Catatan Wicara -->
-                    <div class="form-group mb-3">
-                        <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Wicara (Opsional)</label>
-                        <textarea name="wicara_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait kemampuan wicara..." style="font-size: 12.5px;">{{ old('wicara_catatan', $assessment->wicara_catatan) }}</textarea>
-                    </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-adl-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke ADL
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-penglihatan-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 4 (Penglihatan) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 4. BAGIAN STATUS PENGLIHATAN (NETRA) -->
-                <div class="tab-pane-box" id="tab-penglihatan" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            4. Status Penglihatan
-                        </h5>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">4</span>
-                            Status Penglihatan (Asesmen Netra)
-                        </h5>
-                        <small class="text-muted">Kondisi fungsi visual, onset, visus, dan alat bantu</small>
-                    </div>
-
-                    <div class="row">
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <div class="row">
                         <!-- Klasifikasi -->
                         <div class="col-md-6 col-12 mb-3">
                             <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
@@ -1606,92 +464,49 @@
                                     $saved_alat = is_array($assessment->penglihatan_alat_bantu) ? $assessment->penglihatan_alat_bantu : [];
                                 @endphp
 
-                                <div class="row">
-                                    <!-- Tongkat Putih -->
-                                    <div class="col-md-6 col-12 mb-2">
-                                        <div class="p-2 rounded" style="background: #ffffff; border: 1px solid #e2e8f0;">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="penglihatan_alat_bantu[]" value="Tongkat putih" class="custom-control-input" id="alat_tongkat" {{ in_array('Tongkat putih', $saved_alat) ? 'checked' : '' }} onchange="toggleTongkatTeknik(this.checked)">
-                                                <label class="custom-control-label font-w700 text-dark" for="alat_tongkat" style="cursor: pointer; font-size: 12.5px;">
-                                                    Tongkat putih
-                                                </label>
-                                            </div>
-                                            <div id="wrap-teknik-tongkat" class="mt-2 pl-4" style="{{ in_array('Tongkat putih', $saved_alat) ? '' : 'display: none;' }}">
-                                                <small class="text-muted d-block mb-1 font-w600">Teknik Tongkat:</small>
-                                                <div class="d-flex flex-wrap" style="gap: 6px;">
-                                                    @php $tek = old('penglihatan_teknik_tongkat', $assessment->penglihatan_teknik_tongkat); @endphp
-                                                    @foreach(['Sweep', 'Diagonal', 'Tidak tahu'] as $t_opt)
-                                                        <label class="radio-pill-card py-1 px-2 {{ $tek == $t_opt ? 'active' : '' }}" style="font-size: 11.5px;">
-                                                            <input type="radio" name="penglihatan_teknik_tongkat" value="{{ $t_opt }}" {{ $tek == $t_opt ? 'checked' : '' }}>
-                                                            <span>{{ $t_opt }}</span>
-                                                        </label>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="d-flex flex-wrap" style="gap: 8px;">
+                                    @php
+                                        $alatOpts = [
+                                            'Tongkat putih',
+                                            'Kacamata / Low Vision Aid',
+                                            'Tidak menggunakan alat bantu',
+                                            'Guide dog / Pendamping manusia',
+                                            'Screen reader / Teknologi assistive',
+                                        ];
+                                    @endphp
+                                    @foreach($alatOpts as $aOpt)
+                                        <label class="check-pill-card {{ in_array($aOpt, $saved_alat) ? 'active' : '' }}">
+                                            <input type="checkbox" name="penglihatan_alat_bantu[]" value="{{ $aOpt }}" {{ in_array($aOpt, $saved_alat) ? 'checked' : '' }} @if($aOpt == 'Tongkat putih') id="alat_tongkat" onchange="toggleTongkatTeknik(this.checked)" @endif>
+                                            <span>{{ $aOpt }}</span>
+                                        </label>
+                                    @endforeach
+                                    <label class="check-pill-card {{ in_array('Lainnya', $saved_alat) ? 'active' : '' }}">
+                                        <input type="checkbox" name="penglihatan_alat_bantu[]" value="Lainnya" id="alat_lainnya" {{ in_array('Lainnya', $saved_alat) ? 'checked' : '' }} onchange="toggleAlatLainnya(this.checked)">
+                                        <span>Lainnya</span>
+                                    </label>
+                                </div>
 
-                                    <!-- Kacamata / Low Vision Aid -->
-                                    <div class="col-md-6 col-12 mb-2">
-                                        <div class="p-2 rounded" style="background: #ffffff; border: 1px solid #e2e8f0; height: 100%;">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="penglihatan_alat_bantu[]" value="Kacamata / Low Vision Aid" class="custom-control-input" id="alat_kacamata" {{ in_array('Kacamata / Low Vision Aid', $saved_alat) ? 'checked' : '' }}>
-                                                <label class="custom-control-label font-w600 text-dark" for="alat_kacamata" style="cursor: pointer; font-size: 12.5px;">
-                                                    Kacamata / Low Vision Aid
-                                                </label>
-                                            </div>
-                                        </div>
+                                <!-- Wrap Teknik Tongkat Putih (Jika Tongkat Putih Dipilih) -->
+                                <div id="wrap-teknik-tongkat" class="mt-2 p-2.5 rounded" style="background: #ffffff; border: 1px solid #bfdbfe; max-width: 520px; {{ in_array('Tongkat putih', $saved_alat) ? '' : 'display: none;' }}">
+                                    <small class="text-primary d-block mb-1.5 font-w700" style="font-size: 12px;"><i class="fa fa-info-circle mr-1"></i> Teknik Tongkat Putih yang Dikuasai:</small>
+                                    <div class="d-flex flex-wrap" style="gap: 6px;">
+                                        @php $tek = old('penglihatan_teknik_tongkat', $assessment->penglihatan_teknik_tongkat); @endphp
+                                        @foreach(['Sweep', 'Diagonal', 'Tidak tahu'] as $t_opt)
+                                            <label class="radio-pill-card py-1 px-2.5 {{ $tek == $t_opt ? 'active' : '' }}" style="font-size: 12px;">
+                                                <input type="radio" name="penglihatan_teknik_tongkat" value="{{ $t_opt }}" {{ $tek == $t_opt ? 'checked' : '' }}>
+                                                <span>{{ $t_opt }}</span>
+                                            </label>
+                                        @endforeach
                                     </div>
+                                </div>
 
-                                    <!-- Tidak menggunakan alat bantu -->
-                                    <div class="col-md-6 col-12 mb-2">
-                                        <div class="p-2 rounded" style="background: #ffffff; border: 1px solid #e2e8f0; height: 100%;">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="penglihatan_alat_bantu[]" value="Tidak menggunakan alat bantu" class="custom-control-input" id="alat_tidak_ada" {{ in_array('Tidak menggunakan alat bantu', $saved_alat) ? 'checked' : '' }}>
-                                                <label class="custom-control-label font-w600 text-dark" for="alat_tidak_ada" style="cursor: pointer; font-size: 12.5px;">
-                                                    Tidak menggunakan alat bantu
-                                                </label>
-                                            </div>
+                                <!-- Wrap Alat Bantu Lainnya (Jika Lainnya Dipilih) -->
+                                <div id="wrap-alat-lainnya" class="mt-2" style="max-width: 520px; {{ in_array('Lainnya', $saved_alat) ? '' : 'display: none;' }}">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-light font-w600 text-primary" style="font-size: 12px;">Alat Bantu Lainnya:</span>
                                         </div>
-                                    </div>
-
-                                    <!-- Guide dog / Pendamping manusia -->
-                                    <div class="col-md-6 col-12 mb-2">
-                                        <div class="p-2 rounded" style="background: #ffffff; border: 1px solid #e2e8f0; height: 100%;">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="penglihatan_alat_bantu[]" value="Guide dog / Pendamping manusia" class="custom-control-input" id="alat_guide" {{ in_array('Guide dog / Pendamping manusia', $saved_alat) ? 'checked' : '' }}>
-                                                <label class="custom-control-label font-w600 text-dark" for="alat_guide" style="cursor: pointer; font-size: 12.5px;">
-                                                    Guide dog / Pendamping manusia
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Screen reader / Teknologi assistive -->
-                                    <div class="col-md-6 col-12 mb-2">
-                                        <div class="p-2 rounded" style="background: #ffffff; border: 1px solid #e2e8f0; height: 100%;">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="penglihatan_alat_bantu[]" value="Screen reader / Teknologi assistive" class="custom-control-input" id="alat_screen" {{ in_array('Screen reader / Teknologi assistive', $saved_alat) ? 'checked' : '' }}>
-                                                <label class="custom-control-label font-w600 text-dark" for="alat_screen" style="cursor: pointer; font-size: 12.5px;">
-                                                    Screen reader / Teknologi assistive
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Lainnya -->
-                                    <div class="col-md-6 col-12 mb-2">
-                                        <div class="p-2 rounded" style="background: #ffffff; border: 1px solid #e2e8f0; height: 100%;">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="penglihatan_alat_bantu[]" value="Lainnya" class="custom-control-input" id="alat_lainnya" {{ in_array('Lainnya', $saved_alat) ? 'checked' : '' }} onchange="toggleAlatLainnya(this.checked)">
-                                                <label class="custom-control-label font-w600 text-dark" for="alat_lainnya" style="cursor: pointer; font-size: 12.5px;">
-                                                    Lainnya
-                                                </label>
-                                            </div>
-                                            <div id="wrap-alat-lainnya" class="mt-1" style="{{ in_array('Lainnya', $saved_alat) ? '' : 'display: none;' }}">
-                                                <input type="text" name="penglihatan_alat_bantu_lainnya" class="form-control form-control-sm" value="{{ old('penglihatan_alat_bantu_lainnya', $assessment->penglihatan_alat_bantu_lainnya) }}" placeholder="Sebutkan alat bantu lainnya..." style="font-size: 12px; height: 34px;">
-                                            </div>
-                                        </div>
+                                        <input type="text" name="penglihatan_alat_bantu_lainnya" class="form-control" value="{{ old('penglihatan_alat_bantu_lainnya', $assessment->penglihatan_alat_bantu_lainnya) }}" placeholder="Sebutkan alat bantu lainnya..." style="height: 38px; font-size: 12.5px;">
                                     </div>
                                 </div>
                             </div>
@@ -1700,37 +515,544 @@
 
                     <!-- Catatan Status Penglihatan -->
                     <div class="form-group mb-3">
-                        <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Tambahan Asesmen Penglihatan (Opsional)</label>
-                        <textarea name="penglihatan_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait kondisi penglihatan / orientasi mobilitas..." style="font-size: 12.5px;">{{ old('penglihatan_catatan', $assessment->penglihatan_catatan) }}</textarea>
+                        <label class="font-w700 text-dark mb-1" style="font-size: 13px;">
+                            <i class="fa-solid fa-notes-medical text-primary mr-1"></i> Catatan Tambahan Asesmen Penglihatan (Opsional)
+                        </label>
+                        <textarea name="penglihatan_catatan" class="form-control" rows="3" placeholder="Tuliskan catatan khusus terkait kondisi lapang pandang, penglihatan, orientasi spasial / mobilitas..." style="font-size: 13px; min-height: 85px;">{{ old('penglihatan_catatan', $assessment->penglihatan_catatan) }}</textarea>
                     </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-wicara-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Wicara
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-nyeri-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 5 (Nyeri) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
+                        
                     </div>
                 </div>
 
-                <!-- 5. BAGIAN INTENSITAS NYERI & BODY CHART -->
-                <div class="tab-pane-box" id="tab-nyeri" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            5. Intensitas Nyeri & Body Chart
-                        </h5>
+                <!-- Subtest: Subtest 1.2 - Faktor Psikososial & Kontekstual -->
+                <div class="assessment-subtest-card mb-4" id="subtest-psikososial">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 1.2</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-users mr-1 text-primary"></i> Faktor Psikososial & Kontekstual
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Kondisi keluarga, lingkungan tempat tinggal & kesiapan stimulasi</small>
+                    </div>
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <div class="row">
+                        <!-- 1. Pekerjaan / Hobi Terdampak -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded h-100" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-briefcase text-primary mr-1"></i> Pekerjaan / Aktivitas / Hobi Terdampak
+                                </label>
+                                <textarea name="psikososial_pekerjaan_hobi" class="form-control" rows="3" placeholder="Sebutkan pekerjaan, sekolah, atau kegiatan/hobi pasien yang terganggu akibat kondisi saat ini..." style="font-size: 12.5px;">{{ old('psikososial_pekerjaan_hobi', $assessment->psikososial_pekerjaan_hobi) }}</textarea>
+                            </div>
+                        </div>
+
+                        <!-- 2. Dukungan Sosial -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded h-100" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-home text-primary mr-1"></i> Dukungan Sosial & Lingkungan Keluarga
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $duk_sos = old('psikososial_dukungan_sosial', $assessment->psikososial_dukungan_sosial); @endphp
+                                    @foreach(['Baik (keluarga mendukung)', 'Cukup', 'Kurang / tinggal sendiri'] as $opt)
+                                        <label class="radio-pill-card {{ $duk_sos == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="psikososial_dukungan_sosial" value="{{ $opt }}" {{ $duk_sos == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Faktor Psikologis -->
+                        <div class="col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-heart text-primary mr-1"></i> Faktor Psikologis & Respon Emosional
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $fak_psi = old('psikososial_faktor_psikologis', $assessment->psikososial_faktor_psikologis); @endphp
+                                    @foreach(['Tidak ada kekhawatiran', 'Cemas / Anxiety', 'Depresi', 'Fear-avoidance behavior', 'Katastrofisasi', 'Stres tinggi'] as $opt)
+                                        <label class="radio-pill-card {{ $fak_psi == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="psikososial_faktor_psikologis" value="{{ $opt }}" {{ $fak_psi == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Harapan / Ekspektasi Pasien -->
+                        <div class="col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-bullseye text-primary mr-1"></i> Harapan / Ekspektasi Pasien & Keluarga Terhadap Terapi
+                                </label>
+                                <textarea name="psikososial_harapan_pasien" class="form-control" rows="3" placeholder="Tuliskan target atau ekspektasi yang ingin dicapai penerima manfaat / keluarga (misal: bisa berjalan mandiri, mengurangi nyeri, kembali beraktivitas normal)..." style="font-size: 13px; min-height: 85px;">{{ old('psikososial_harapan_pasien', $assessment->psikososial_harapan_pasien) }}</textarea>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">5</span>
-                            Intensitas Nyeri & Body Chart
-                        </h5>
-                        <small class="text-muted">Skala Nyeri (0 - 10 VAS / NRS), Sifat Nyeri, dan Pemetaan Lokasi Tubuh</small>
+                    <!-- Catatan Tambahan Psikososial -->
+                    <div class="form-group mb-3">
+                        <label class="font-w700 text-dark mb-1" style="font-size: 13px;">
+                            <i class="fa-solid fa-notes-medical text-primary mr-1"></i> Catatan Observasi Psikososial & Kontekstual (Opsional)
+                        </label>
+                        <textarea name="psikososial_catatan" class="form-control" rows="3" placeholder="Tuliskan catatan tambahan mengenai kondisi lingkungan, kesiapan motivasi pasien, atau hambatan psikososial lainnya..." style="font-size: 13px; min-height: 85px;">{{ old('psikososial_catatan', $assessment->psikososial_catatan) }}</textarea>
+                    </div>
+                        
+                    </div>
+                </div>
+                <!-- Modul 1 Navigation Footer -->
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 module-nav-footer" style="border-top: 1px solid #edf2f7;">
+                    <div></div>
+                    <button type="button" class="btn btn-primary font-w600 shadow-sm" onclick="goToModule(2)" style="padding: 9px 20px; font-size: 13px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none;">
+                        Lanjut ke Modul 2: Motorik Dasar & ADL <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- MODUL 2: MOTORIK DASAR & ADL -->
+            <!-- ======================================================== -->
+            <div class="tab-pane fade" id="modul-2" role="tabpanel" aria-labelledby="tab-modul2-btn">
+
+                <!-- Subtest: Subtest 2.1 - Kemampuan Motorik Dasar -->
+                <div class="assessment-subtest-card mb-4" id="subtest-motorik">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 2.1</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-child-reaching mr-1 text-primary"></i> Kemampuan Motorik Dasar
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Penilaian kontrol kepala, tengkurap, duduk, merangkak, berlutut & berjalan</small>
+                    </div>
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <div class="row">
+                        <!-- Mengangkat Kepala -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Mengangkat Kepala
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $val1 = old('motorik_mengangkat_kepala', $assessment->motorik_mengangkat_kepala); @endphp
+                                    @foreach(['Mampu', 'Tidak Mampu'] as $opt)
+                                        <label class="radio-pill-card {{ $val1 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="motorik_mengangkat_kepala" value="{{ $opt }}" {{ $val1 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Posisi Tengkurap -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Posisi Tengkurap
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $val2 = old('motorik_posisi_tengkurap', $assessment->motorik_posisi_tengkurap); @endphp
+                                    @foreach(['Mampu Sendiri', 'Sedikit Dibantu', 'Tidak Mampu'] as $opt)
+                                        <label class="radio-pill-card {{ $val2 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="motorik_posisi_tengkurap" value="{{ $opt }}" {{ $val2 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Posisi Duduk -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Posisi Duduk
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $val3 = old('motorik_posisi_duduk', $assessment->motorik_posisi_duduk); @endphp
+                                    @foreach(['Mampu Sendiri dan Stabil', 'Mampu Sendiri dan Tidak Stabil', 'Didudukkan', 'Tidak Mampu'] as $opt)
+                                        <label class="radio-pill-card {{ $val3 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="motorik_posisi_duduk" value="{{ $opt }}" {{ $val3 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Merangkak -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Merangkak
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $val4 = old('motorik_merangkak', $assessment->motorik_merangkak); @endphp
+                                    @foreach(['Mampu', 'Ngesot', 'Tidak Mampu'] as $opt)
+                                        <label class="radio-pill-card {{ $val4 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="motorik_merangkak" value="{{ $opt }}" {{ $val4 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Berlutut -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Berlutut
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $val5 = old('motorik_berlutut', $assessment->motorik_berlutut); @endphp
+                                    @foreach(['Mampu', 'Tidak Mampu'] as $opt)
+                                        <label class="radio-pill-card {{ $val5 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="motorik_berlutut" value="{{ $opt }}" {{ $val5 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Berjalan -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Berjalan
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $val6 = old('motorik_berjalan', $assessment->motorik_berjalan); @endphp
+                                    @foreach(['Mampu Mandiri', 'Pakai Alat Bantu', 'Dibantu Orang Lain'] as $opt)
+                                        <label class="radio-pill-card {{ $val6 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="motorik_berjalan" value="{{ $opt }}" {{ $val6 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Skala Nyeri 0 - 10 Visual Rating Card -->
+                    <!-- Catatan Motorik -->
+                    <div class="form-group mb-3">
+                        <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Motorik (Opsional)</label>
+                        <textarea name="motorik_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait kemampuan motorik..." style="font-size: 12.5px;">{{ old('motorik_catatan', $assessment->motorik_catatan) }}</textarea>
+                    </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Subtest: Subtest 2.2 - Kemampuan Aktivitas Sehari-hari (ADL) -->
+                <div class="assessment-subtest-card mb-4" id="subtest-adl">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 2.2</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-person-walking mr-1 text-primary"></i> Kemampuan Aktivitas Sehari-hari (ADL)
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Skoring kemandirian aktivitas fungsional dasar & Indeks Barthel</small>
+                    </div>
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <div class="row">
+                        <!-- Kontak Mata -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Kontak Mata
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $adl1 = old('adl_kontak_mata', $assessment->adl_kontak_mata); @endphp
+                                    @foreach(['Ada', 'Tidak Ada'] as $opt)
+                                        <label class="radio-pill-card {{ $adl1 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="adl_kontak_mata" value="{{ $opt }}" {{ $adl1 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bisa Duduk Tenang -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Bisa Duduk Tenang Saat Beraktivitas
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $adl2 = old('adl_duduk_tenang', $assessment->adl_duduk_tenang); @endphp
+                                    @foreach(['Bisa', 'Tidak Bisa'] as $opt)
+                                        <label class="radio-pill-card {{ $adl2 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="adl_duduk_tenang" value="{{ $opt }}" {{ $adl2 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gerakan Berulang dan Tidak Bertujuan -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Gerakan Berulang & Tanpa Tujuan
+                                    <small class="text-muted font-w400 d-block">(Tepuk tangan, kibas tangan, dll.)</small>
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $adl3 = old('adl_gerakan_berulang', $assessment->adl_gerakan_berulang); @endphp
+                                    @foreach(['Bisa', 'Tidak Bisa'] as $opt)
+                                        <label class="radio-pill-card {{ $adl3 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="adl_gerakan_berulang" value="{{ $opt }}" {{ $adl3 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Merespon Saat Dipanggil Nama -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Merespon Saat Dipanggil Nama
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $adl4 = old('adl_respon_nama', $assessment->adl_respon_nama); @endphp
+                                    @foreach(['Bisa', 'Tidak Bisa'] as $opt)
+                                        <label class="radio-pill-card {{ $adl4 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="adl_respon_nama" value="{{ $opt }}" {{ $adl4 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Makan -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Makan
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $adl5 = old('adl_makan', $assessment->adl_makan); @endphp
+                                    @foreach(['Mandiri', 'Dibantu Sebagian', 'Bergantung Kepada Orang Lain'] as $opt)
+                                        <label class="radio-pill-card {{ $adl5 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="adl_makan" value="{{ $opt }}" {{ $adl5 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mandi -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Mandi
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $adl6 = old('adl_mandi', $assessment->adl_mandi); @endphp
+                                    @foreach(['Mandiri', 'Dibantu Sebagian', 'Bergantung Kepada Orang Lain'] as $opt)
+                                        <label class="radio-pill-card {{ $adl6 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="adl_mandi" value="{{ $opt }}" {{ $adl6 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Berpakaian -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Berpakaian
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $adl7 = old('adl_berpakaian', $assessment->adl_berpakaian); @endphp
+                                    @foreach(['Mandiri', 'Dibantu Sebagian', 'Bergantung Kepada Orang Lain'] as $opt)
+                                        <label class="radio-pill-card {{ $adl7 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="adl_berpakaian" value="{{ $opt }}" {{ $adl7 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BAK -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> BAK (Buang Air Kecil)
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $adl8 = old('adl_bak', $assessment->adl_bak); @endphp
+                                    @foreach(['Mandiri', 'Dibantu Sebagian', 'Bergantung Kepada Orang Lain'] as $opt)
+                                        <label class="radio-pill-card {{ $adl8 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="adl_bak" value="{{ $opt }}" {{ $adl8 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BAB -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> BAB (Buang Air Besar)
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $adl9 = old('adl_bab', $assessment->adl_bab); @endphp
+                                    @foreach(['Mandiri', 'Dibantu Sebagian', 'Bergantung Kepada Orang Lain'] as $opt)
+                                        <label class="radio-pill-card {{ $adl9 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="adl_bab" value="{{ $opt }}" {{ $adl9 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Catatan ADL -->
+                    <div class="form-group mb-3">
+                        <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Aktivitas Sehari-hari (Opsional)</label>
+                        <textarea name="adl_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait kemandirian & aktivitas..." style="font-size: 12.5px;">{{ old('adl_catatan', $assessment->adl_catatan) }}</textarea>
+                    </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Subtest: Subtest 2.3 - Kemampuan Wicara & Komunikasi -->
+                <div class="assessment-subtest-card mb-4" id="subtest-wicara">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 2.3</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-comments mr-1 text-primary"></i> Kemampuan Wicara & Komunikasi
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Artikulasi, pemahaman bahasa, respon suara & komunikasi verbal/non-verbal</small>
+                    </div>
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <div class="row">
+                        <!-- Kemampuan Berkomunikasi -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Kemampuan Berkomunikasi
+                                </label>
+                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
+                                    @php $wic1 = old('wicara_komunikasi', $assessment->wicara_komunikasi); @endphp
+                                    @foreach(['Verbal (Lisan)', 'Non-Verbal (Gesture)', 'Bergantung Sepenuhnya dengan Orang Lain'] as $opt)
+                                        <label class="radio-pill-card {{ $wic1 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="wicara_komunikasi" value="{{ $opt }}" {{ $wic1 == $opt ? 'checked' : '' }}>
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kondisi Organ Bicara dan Pendengaran -->
+                        <div class="col-md-6 col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Kondisi Organ Bicara dan Pendengaran
+                                </label>
+                                <div class="d-flex flex-wrap option-group mb-2" style="gap: 8px;">
+                                    @php $wic2 = old('wicara_organ', $assessment->wicara_organ); @endphp
+                                    @foreach(['Normal', 'Ada Kelainan'] as $opt)
+                                        <label class="radio-pill-card {{ $wic2 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="wicara_organ" value="{{ $opt }}" {{ $wic2 == $opt ? 'checked' : '' }} onchange="toggleOrganKelainan(this.value)">
+                                            <span>{{ $opt }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <div id="wrap-organ-kelainan" class="mt-2" style="{{ $wic2 == 'Ada Kelainan' ? '' : 'display: none;' }}">
+                                    <input type="text" name="wicara_organ_keterangan" class="form-control form-control-sm" value="{{ old('wicara_organ_keterangan', $assessment->wicara_organ_keterangan) }}" placeholder="Sebutkan kelainan (Gangguan Pendengaran, Bibir Sumbing, Air Liur Berlebih)..." style="font-size: 12.5px; height: 36px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kemampuan Makan, Minum, Mengunyah, dan Menelan -->
+                        <div class="col-12 mb-3">
+                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                    <i class="fa fa-check-circle text-primary mr-1"></i> Kemampuan Makan, Minum, Mengunyah, dan Menelan
+                                </label>
+                                <div class="d-flex flex-wrap option-group mb-2" style="gap: 8px;">
+                                    @php $wic3 = old('wicara_makan_menelan', $assessment->wicara_makan_menelan); @endphp
+                                    @foreach(['Mampu', 'Mampu dengan Hambatan', 'Tidak Mampu'] as $opt)
+                                        <label class="radio-pill-card {{ $wic3 == $opt ? 'active' : '' }}">
+                                            <input type="radio" name="wicara_makan_menelan" value="{{ $opt }}" {{ $wic3 == $opt ? 'checked' : '' }} onchange="toggleMenelanKeterangan(this.value)">
+                                            <span>
+                                                {{ $opt }}
+                                                @if($opt == 'Mampu dengan Hambatan')
+                                                    <small class="font-w400 text-muted">(Tersedak, Sulit Menelan)</small>
+                                                @elseif($opt == 'Tidak Mampu')
+                                                    <small class="font-w400 text-muted">(Alat/Sonde)</small>
+                                                @endif
+                                            </span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <div id="wrap-menelan-keterangan" class="mt-2" style="{{ ($wic3 == 'Mampu dengan Hambatan' || $wic3 == 'Tidak Mampu') ? '' : 'display: none;' }}">
+                                    <input type="text" name="wicara_makan_menelan_keterangan" class="form-control form-control-sm" value="{{ old('wicara_makan_menelan_keterangan', $assessment->wicara_makan_menelan_keterangan) }}" placeholder="Keterangan tambahan (Sering tersedak makanan padat, menggunakan NGT/sonde)..." style="font-size: 12.5px; height: 36px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Catatan Wicara -->
+                    <div class="form-group mb-3">
+                        <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Wicara (Opsional)</label>
+                        <textarea name="wicara_catatan" class="form-control" rows="3" placeholder="Tuliskan catatan khusus terkait kemampuan wicara..." style="font-size: 12.5px; min-height: 85px;">{{ old('wicara_catatan', $assessment->wicara_catatan) }}</textarea>
+                    </div>
+                        
+                    </div>
+                </div>
+                <!-- Modul 2 Navigation Footer -->
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 module-nav-footer" style="border-top: 1px solid #edf2f7;">
+                    <button type="button" class="btn btn-light font-w600" onclick="goToModule(1)" style="padding: 9px 18px; font-size: 13px; border-radius: 8px; border: 1px solid #cbd5e1; color: #475569;">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Modul 1
+                    </button>
+                    <button type="button" class="btn btn-primary font-w600 shadow-sm" onclick="goToModule(3)" style="padding: 9px 20px; font-size: 13px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none;">
+                        Lanjut ke Modul 3: Evaluasi Fisik & Nyeri <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- MODUL 3: EVALUASI FISIK & NYERI -->
+            <!-- ======================================================== -->
+            <div class="tab-pane fade" id="modul-3" role="tabpanel" aria-labelledby="tab-modul3-btn">
+
+                <!-- Subtest: Subtest 3.1 - Intensitas Nyeri & Anatomi Body Chart -->
+                <div class="assessment-subtest-card mb-4" id="subtest-nyeri">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 3.1</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-heart-pulse mr-1 text-primary"></i> Intensitas Nyeri & Anatomi Body Chart
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Penilaian skala nyeri (VAS/Wong-Baker Faces) & penandaan area keluhan anatomis</small>
+                    </div>
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <!-- Skala Nyeri 0 - 10 Visual Rating Card -->
                     <div class="assessment-box p-3 rounded mb-4" style="background: #f8fafc; border: 1px solid #edf2f7;">
                         <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap">
                             <label class="font-w700 text-dark mb-0" style="font-size: 13.5px;">
@@ -1914,34 +1236,23 @@
                         <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Keluhan Nyeri (Opsional)</label>
                         <textarea name="nyeri_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait faktor pemicu, durasi nyeri, respon kompres/terapi..." style="font-size: 12.5px;">{{ old('nyeri_catatan', $assessment->nyeri_catatan) }}</textarea>
                     </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-penglihatan-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Status Penglihatan
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-rom-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 6 (ROM & MMT) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
+                        
                     </div>
                 </div>
 
-                <!-- 6. BAGIAN LINGKUP GERAK SENDI (ROM) & KEKUATAN OTOT (MMT) -->
-                <div class="tab-pane-box" id="tab-rom" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            6. Lingkup Gerak Sendi (ROM) & Kekuatan Otot
-                        </h5>
+                <!-- Subtest: Subtest 3.2 - Lingkup Gerak Sendi (ROM) & Kekuatan Otot (MMT) -->
+                <div class="assessment-subtest-card mb-4" id="subtest-rom">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 3.2</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-bone mr-1 text-primary"></i> Lingkup Gerak Sendi (ROM) & Kekuatan Otot (MMT)
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Pengukuran derajat rentang gerak sendi ekstremitas & grading Manual Muscle Testing (0-5)</small>
                     </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">6</span>
-                            Lingkup Gerak Sendi (ROM) & Kekuatan Otot
-                        </h5>
-                        <small class="text-muted">Pemeriksaan Range of Motion & Manual Muscle Testing (MMT 0-5)</small>
-                    </div>
-
-                    <!-- Petunjuk Ringkas Medis -->
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <!-- Petunjuk Ringkas Medis -->
                     <div class="alert alert-light border py-2 px-3 mb-3" style="font-size: 12px; border-radius: 8px; background: #fafcff; border-color: #e2e8f0;">
                         <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 8px;">
                             <div>
@@ -2033,34 +1344,38 @@
                         <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Khusus ROM & Kekuatan Otot (Opsional)</label>
                         <textarea name="rom_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait keterbatasan gerak, nyeri saat akhir gerakan, spasme otot..." style="font-size: 12.5px;">{{ old('rom_catatan', $assessment->rom_catatan) }}</textarea>
                     </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-nyeri-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Intensitas Nyeri
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-neuro-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 7 (Neurologis) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
+                        
                     </div>
                 </div>
+                <!-- Modul 3 Navigation Footer -->
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 module-nav-footer" style="border-top: 1px solid #edf2f7;">
+                    <button type="button" class="btn btn-light font-w600" onclick="goToModule(2)" style="padding: 9px 18px; font-size: 13px; border-radius: 8px; border: 1px solid #cbd5e1; color: #475569;">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Modul 2
+                    </button>
+                    <button type="button" class="btn btn-primary font-w600 shadow-sm" onclick="goToModule(4)" style="padding: 9px 20px; font-size: 13px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none;">
+                        Lanjut ke Modul 4: Pemeriksaan Neurologis & Gait <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
 
-                <!-- 7. BAGIAN PEMERIKSAAN NEUROLOGIS -->
-                <div class="tab-pane-box" id="tab-neuro" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            7. Pemeriksaan Neurologis
-                        </h5>
+            <!-- ======================================================== -->
+            <!-- MODUL 4: PEMERIKSAAN NEUROLOGIS & GAIT -->
+            <!-- ======================================================== -->
+            <div class="tab-pane fade" id="modul-4" role="tabpanel" aria-labelledby="tab-modul4-btn">
+
+                <!-- Subtest: Subtest 4.1 - Pemeriksaan Neurologis -->
+                <div class="assessment-subtest-card mb-4" id="subtest-neuro">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 4.1</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-brain mr-1 text-primary"></i> Pemeriksaan Neurologis
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Tonus otot (Skala Modifikasi Ashworth), refleks fisiologis & refleks patologis</small>
                     </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">7</span>
-                            Pemeriksaan Neurologis (Sistem Saraf)
-                        </h5>
-                        <small class="text-muted">Sensasi, Refleks Fisiologis Tendon (D/S), Tes Koordinasi, dan Tonus Otot</small>
-                    </div>
-
-                    <div class="row">
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <div class="row">
                         <!-- 1. Sensasi -->
                         <div class="col-md-6 col-12 mb-3">
                             <div class="assessment-box p-3 rounded h-100" style="background: #f8fafc; border: 1px solid #edf2f7;">
@@ -2193,34 +1508,23 @@
                         <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Neurologis (Opsional)</label>
                         <textarea name="neuro_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait pemeriksaan saraf, tes provokasi (Lasegue/Phalen), dll..." style="font-size: 12.5px;">{{ old('neuro_catatan', $assessment->neuro_catatan) }}</textarea>
                     </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-rom-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke ROM & MMT
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-postur-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 8 (Postur & Keseimbangan) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
+                        
                     </div>
                 </div>
 
-                <!-- 8. BAGIAN PEMERIKSAAN POSTUR & KESEIMBANGAN -->
-                <div class="tab-pane-box" id="tab-postur" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            8. Pemeriksaan Postur & Keseimbangan
-                        </h5>
+                <!-- Subtest: Subtest 4.2 - Pemeriksaan Postur & Keseimbangan -->
+                <div class="assessment-subtest-card mb-4" id="subtest-postur">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 4.2</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-person mr-1 text-primary"></i> Pemeriksaan Postur & Keseimbangan
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Analisis deviasi postur tubuh, kesimetrisan & stabilitas keseimbangan statis/dinamis</small>
                     </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">8</span>
-                            Pemeriksaan Postur & Keseimbangan
-                        </h5>
-                        <small class="text-muted">Observasi Postur Tubuh & Uji Risiko Jatuh (BBS, TUG, Romberg, OLS, FES-I)</small>
-                    </div>
-
-                    <!-- 1. Temuan Postur (Palpasi & Observasi) -->
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <!-- 1. Temuan Postur (Palpasi & Observasi) -->
                     <div class="assessment-box p-3 rounded mb-4" style="background: #f8fafc; border: 1px solid #edf2f7;">
                         <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13.5px;">
                             <i class="fa fa-male text-primary mr-1"></i> 1. Temuan Postur (Palpasi & Observasi)
@@ -2398,34 +1702,23 @@
                         <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Keseimbangan & Strategi Kompensasi (Opsional)</label>
                         <textarea name="postur_keseimbangan_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait pola jalan, strategi kompensasi, penggunaan alat bantu jalan, dll..." style="font-size: 12.5px;">{{ old('postur_keseimbangan_catatan', $assessment->postur_keseimbangan_catatan) }}</textarea>
                     </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-neuro-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Neurologis
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-gait-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 9 (Gait) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
+                        
                     </div>
                 </div>
 
-                <!-- 9. BAGIAN PEMERIKSAAN GAYA BERJALAN (GAIT) -->
-                <div class="tab-pane-box" id="tab-gait" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            9. Pemeriksaan Gaya Berjalan (Gait)
-                        </h5>
+                <!-- Subtest: Subtest 4.3 - Pemeriksaan Gaya Berjalan (Gait) -->
+                <div class="assessment-subtest-card mb-4" id="subtest-gait">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 4.3</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-person-walking-arrow-right mr-1 text-primary"></i> Pemeriksaan Gaya Berjalan (Gait)
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Pola langkah, deviasi fase berjalan (stance/swing) & penggunaan alat bantu mobilitas</small>
                     </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">9</span>
-                            Pemeriksaan Gaya Berjalan (Gait)
-                        </h5>
-                        <small class="text-muted">Karakteristik Siklus Berjalan, Uji 10-Meter Walk Test (10MWT), dan Catatan Khusus</small>
-                    </div>
-
-                    <!-- 1. Karakteristik Gait -->
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <!-- 1. Karakteristik Gait -->
                     <div class="assessment-box p-3 rounded mb-4" style="background: #f8fafc; border: 1px solid #edf2f7;">
                         <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13.5px;">
                             <i class="fa fa-blind text-primary mr-1"></i> 1. Karakteristik Pola Berjalan (Gait Pattern)
@@ -2523,34 +1816,23 @@
                         </label>
                         <textarea name="gait_catatan" class="form-control" rows="3" placeholder="Tuliskan catatan khusus terkait orientasi spasial, adaptasi langkah, teknik ayunan tongkat..." style="font-size: 12.5px;">{{ old('gait_catatan', $assessment->gait_catatan) }}</textarea>
                     </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-postur-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Postur & Keseimbangan
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-sensoris-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 10 (Sensoris & Vestibular) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
+                        
                     </div>
                 </div>
 
-                <!-- 10. BAGIAN PEMERIKSAAN SENSORIS, PROPRIOSEPSI & VESTIBULAR -->
-                <div class="tab-pane-box" id="tab-sensoris" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            10. Pemeriksaan Sensoris, Propriosepsi & Vestibular
-                        </h5>
+                <!-- Subtest: Subtest 4.4 - Pemeriksaan Sensoris, Propriosepsi & Skrining Vestibular -->
+                <div class="assessment-subtest-card mb-4" id="subtest-sensoris">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 4.4</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-hand mr-1 text-primary"></i> Pemeriksaan Sensoris, Propriosepsi & Skrining Vestibular
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Sensibilitas taktil, proprioseptif & skrining respon sistem vestibular</small>
                     </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">10</span>
-                            Pemeriksaan Sensoris, Propriosepsi & Vestibular
-                        </h5>
-                        <small class="text-muted">Sensasi taktil, uji propriosepsi & kinesthesia, skrining vestibular, serta lokasi defisit sensoris</small>
-                    </div>
-
-                    <!-- Sub-Bagian A: Sensasi Taktil -->
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <!-- Sub-Bagian A: Sensasi Taktil -->
                     <div class="card mb-3 border-0" style="background: #f8fafc; border-radius: 8px;">
                         <div class="card-body p-3">
                             <h6 class="font-w700 text-dark mb-3" style="font-size: 13.5px;">
@@ -2758,124 +2040,891 @@
                         <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Sensoris & Vestibular (Opsional)</label>
                         <textarea name="sensoris_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan tambahan terkait pemeriksaan sensoris, propriosepsi, atau skrining vestibular..." style="font-size: 12.5px;">{{ old('sensoris_catatan', $assessment->sensoris_catatan) }}</textarea>
                     </div>
+                        
+                    </div>
+                </div>
+                <!-- Modul 4 Navigation Footer -->
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 module-nav-footer" style="border-top: 1px solid #edf2f7;">
+                    <button type="button" class="btn btn-light font-w600" onclick="goToModule(3)" style="padding: 9px 18px; font-size: 13px; border-radius: 8px; border: 1px solid #cbd5e1; color: #475569;">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Modul 3
+                    </button>
+                    <button type="button" class="btn btn-primary font-w600 shadow-sm" onclick="goToModule(5)" style="padding: 9px 20px; font-size: 13px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none;">
+                        Lanjut ke Modul 5: Instrumen Khusus (GMFM & Denver) <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
 
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-gait-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Gaya Berjalan (Gait)
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-psikososial-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 11 (Psikososial) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
+            <!-- ======================================================== -->
+            <!-- MODUL 5: INSTRUMEN KHUSUS (GMFM & DENVER) -->
+            <!-- ======================================================== -->
+            <div class="tab-pane fade" id="modul-5" role="tabpanel" aria-labelledby="tab-modul5-btn">
+
+                <!-- Subtest: Subtest 5.1 - Gross Motor Function Measure (GMFM-88) -->
+                <div class="assessment-subtest-card mb-4" id="subtest-gmfm">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 5.1</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-list-check mr-1 text-primary"></i> Gross Motor Function Measure (GMFM-88)
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Pengukuran fungsi motorik kasar 88-Item (Dimensi A, B, C, D, E) & kalkulasi otomatis</small>
+                    </div>
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <!-- Keterangan Skala Penilaian & Konsep Medis -->
+                    <div class="card mb-3 border-0" style="background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap mb-2">
+                                <span class="font-w700 text-dark" style="font-size: 13px;">
+                                    <i class="fa fa-info-circle text-primary mr-1"></i> Panduan Skala Skor GMFM (0 - 3):
+                                </span>
+                                <small class="text-muted">Skala Penilaian Baku GMFM-88</small>
+                            </div>
+                            <div class="row" style="font-size: 12px;">
+                                <div class="col-md-3 col-6 mb-2">
+                                    <div class="p-2 rounded bg-white border h-100">
+                                        <strong class="text-danger d-block mb-1"><span class="badge badge-danger mr-1">0</span> Tidak Memulai</strong>
+                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Tidak dapat memulai / melakukan gerakan sama sekali (0%).</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6 mb-2">
+                                    <div class="p-2 rounded bg-white border h-100">
+                                        <strong class="text-warning d-block mb-1"><span class="badge badge-warning text-dark mr-1">1</span> Memulai</strong>
+                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Memulai gerakan tetapi menyelesaikan kurang dari 10% (< 10%).</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6 mb-2">
+                                    <div class="p-2 rounded bg-white border h-100">
+                                        <strong class="text-primary d-block mb-1"><span class="badge badge-primary mr-1">2</span> Selesai Sebagian</strong>
+                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Menyelesaikan sebagian aktivitas gerakan (10% s/d < 100%).</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6 mb-2">
+                                    <div class="p-2 rounded bg-white border h-100">
+                                        <strong class="text-success d-block mb-1"><span class="badge badge-success mr-1">3</span> Selesai Sempurna</strong>
+                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Menyelesaikan seluruh aktivitas mandiri & sempurna (100%).</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dimensi Navigasi Underline Tabs (A, B, C, D, E) & Total Summary -->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap mb-3 border-bottom" style="border-color: #e2e8f0; gap: 8px;">
+                        <ul class="nav nav-tabs border-bottom-0 gmfm-dim-tabs" style="gap: 4px; margin-bottom: -1px;">
+                            <li class="nav-item">
+                                <a href="#gmfm-pane-a" class="nav-link gmfm-dim-btn active" data-target-dim="#gmfm-pane-a">
+                                    <i class="fa fa-bed mr-1.5 text-primary"></i> A: Berbaring & Berguling
+                                    <span class="badge-counter">17</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#gmfm-pane-b" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-pane-b">
+                                    <i class="fa fa-street-view mr-1.5 text-muted"></i> B: Duduk
+                                    <span class="badge-counter">20</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#gmfm-pane-c" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-pane-c">
+                                    <i class="fa fa-child mr-1.5 text-muted"></i> C: Merangkak & Berlutut
+                                    <span class="badge-counter">14</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#gmfm-pane-d" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-pane-d">
+                                    <i class="fa fa-male mr-1.5 text-muted"></i> D: Berdiri
+                                    <span class="badge-counter">13</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#gmfm-pane-e" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-pane-e">
+                                    <i class="fa fa-running mr-1.5 text-muted"></i> E: Jalan, Lari & Lompat
+                                    <span class="badge-counter">24</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="d-flex align-items-center p-1.5 px-3 mb-2 rounded" style="background: #f8fafc; border: 1px solid #e2e8f0; gap: 8px;">
+                            <span class="font-w700 text-dark" style="font-size: 11.5px;"><i class="fa-solid fa-calculator text-primary mr-1"></i> TOTAL GMFM-88:</span>
+                            <span class="badge badge-dark font-w700" id="gmfm-total-live-badge-score" style="font-size: 12px; padding: 4px 8px; border-radius: 6px;">{{ old('gmfm_total_score', $assessment->gmfm_total_score ?? 0) }} / 264</span>
+                            <span class="badge badge-success font-w700" id="gmfm-total-live-badge-persen" style="font-size: 12px; padding: 4px 8px; border-radius: 6px;">{{ number_format(old('gmfm_total_persen', $assessment->gmfm_total_persen ?? 0), 1) }}%</span>
+                            <input type="hidden" name="gmfm_total_score" id="input-gmfm-total-score" value="{{ old('gmfm_total_score', $assessment->gmfm_total_score ?? 0) }}">
+                            <input type="hidden" name="gmfm_total_persen" id="input-gmfm-total-persen" value="{{ old('gmfm_total_persen', $assessment->gmfm_total_persen ?? 0) }}">
+                        </div>
+                    </div>
+
+                    <!-- ============================================== -->
+                    <!-- SUB-PANE DIMENSI A: BERBARING & BERGULING     -->
+                    <!-- ============================================== -->
+                    <div class="gmfm-dim-pane" id="gmfm-pane-a">
+                        @php
+                            $saved_gmfm_a_scores = is_array($assessment->gmfm_dimensi_a_scores) ? $assessment->gmfm_dimensi_a_scores : [];
+                            $saved_a_total = old('gmfm_dimensi_a_total', $assessment->gmfm_dimensi_a_total ?? 0);
+                            $saved_a_persen = old('gmfm_dimensi_a_persen', $assessment->gmfm_dimensi_a_persen ?? 0);
+                        @endphp
+                        <!-- Summary Score Card Dimensi A (Light Blue Medis) -->
+                        <div class="card mb-3 gmfm-dim-score-card">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
+                                        <small class="font-w700 text-uppercase d-block mb-1" style="color: #1e40af; font-size: 11px; letter-spacing: 0.5px;">
+                                            <i class="fa fa-bed mr-1 text-primary"></i> Skor Dimensi A (Berbaring & Berguling)
+                                        </small>
+                                        <h3 class="mb-0 font-w800" style="color: #1e3a8a; font-size: 26px;">
+                                            <span id="gmfm-a-live-total">{{ $saved_a_total ?: 0 }}</span> <span style="font-size: 15px; color: #64748b; font-weight: 600;">/ 51</span>
+                                        </h3>
+                                        <input type="hidden" name="gmfm_dimensi_a_total" id="input-gmfm-a-total" value="{{ $saved_a_total }}">
+                                        <input type="hidden" name="gmfm_dimensi_a_persen" id="input-gmfm-a-persen" value="{{ $saved_a_persen }}">
+                                    </div>
+                                    <div class="col-md-5 col-12 mb-2 mb-md-0">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="font-w700" style="color: #334155; font-size: 12px;">Capaian Dimensi A:</small>
+                                            <strong class="text-primary font-w800" id="gmfm-a-live-persen" style="font-size: 13px;">{{ number_format($saved_a_persen, 1) }}%</strong>
+                                        </div>
+                                        <div class="progress" style="height: 10px; border-radius: 5px; background: #dbeafe;">
+                                            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" id="gmfm-a-live-progress" role="progressbar" style="width: {{ $saved_a_persen }}%; background-color: #2563eb !important;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12 text-center text-md-right">
+                                        <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px;">Interpretasi Dimensi A:</small>
+                                        <span class="badge font-w700 px-3 py-2" id="gmfm-a-live-interpretation" style="font-size: 11.5px; border-radius: 6px;">
+                                            @if($saved_a_persen >= 80)
+                                                Sangat Baik (Mandiri)
+                                            @elseif($saved_a_persen >= 50)
+                                                Sedang (Perlu Stimulasi)
+                                            @elseif($saved_a_total > 0)
+                                                Keterbatasan Signifikan
+                                            @else
+                                                Belum Dinilai
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 17 Item Dimensi A List (Matrix Grid) -->
+                        @php $gmfm_a_items = config('gmfm.dimensions.A.items', []); @endphp
+                        <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
+                                <thead style="background: #f1f5f9; color: #334155; font-size: 11.5px;">
+                                    <tr>
+                                        <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
+                                        <th style="width: 48%; vertical-align: middle;">Posisi & Deskripsi Gerakan Aktivitas (Dimensi A)</th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">0<br><small class="font-w500">(Tidak)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">1<br><small class="font-w500">(Mulai)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dbeafe; color: #1e40af;">2<br><small class="font-w500">(Sebagian)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">3<br><small class="font-w500">(Sempurna)</small></th>
+                                        <th style="width: 10%; text-align: center; vertical-align: middle; background: #f8fafc; color: #64748b;">NT<br><small class="font-w500">(Tdk Diuji)</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($gmfm_a_items as $no => $item)
+                                        @php $valA = isset($saved_gmfm_a_scores[$no]) ? $saved_gmfm_a_scores[$no] : (old('gmfm_dimensi_a_scores.'.$no, '')); @endphp
+                                        <tr>
+                                            <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $no }}</td>
+                                            <td style="vertical-align: middle;">
+                                                <span class="badge badge-light text-primary font-w600 mb-1" style="font-size: 10.5px; border: 1px solid #cbd5e1;">{{ $item['position'] }}</span>
+                                                <div class="font-w600 text-dark" style="line-height: 1.35; font-size: 12px;">{{ $item['action'] }}</div>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_a_scores[{{ $no }}]" value="0" class="gmfm-a-radio matrix-input" {{ $valA === '0' || $valA === 0 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator danger">0</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_a_scores[{{ $no }}]" value="1" class="gmfm-a-radio matrix-input" {{ $valA === '1' || $valA === 1 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator warning">1</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfdff;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_a_scores[{{ $no }}]" value="2" class="gmfm-a-radio matrix-input" {{ $valA === '2' || $valA === 2 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator info">2</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_a_scores[{{ $no }}]" value="3" class="gmfm-a-radio matrix-input" {{ $valA === '3' || $valA === 3 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator success">3</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_a_scores[{{ $no }}]" value="NT" class="gmfm-a-radio matrix-input" {{ $valA === 'NT' ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator muted">NT</span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Catatan Observasi Dimensi A -->
+                        <div class="form-group mb-3">
+                            <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi GMFM Dimensi A (Opsional)</label>
+                            <textarea name="gmfm_dimensi_a_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait Dimensi A (kontrol kepala, berguling, prone on elbows)..." style="font-size: 12.5px;">{{ old('gmfm_dimensi_a_catatan', $assessment->gmfm_dimensi_a_catatan) }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- ============================================== -->
+                    <!-- SUB-PANE DIMENSI B: DUDUK (SITTING)            -->
+                    <!-- ============================================== -->
+                    <div class="gmfm-dim-pane" id="gmfm-pane-b" style="display: none;">
+                        @php
+                            $saved_gmfm_b_scores = is_array($assessment->gmfm_dimensi_b_scores) ? $assessment->gmfm_dimensi_b_scores : [];
+                            $saved_b_total = old('gmfm_dimensi_b_total', $assessment->gmfm_dimensi_b_total ?? 0);
+                            $saved_b_persen = old('gmfm_dimensi_b_persen', $assessment->gmfm_dimensi_b_persen ?? 0);
+                        @endphp
+                        <!-- Summary Score Card Dimensi B (Light Blue Medis) -->
+                        <div class="card mb-3 gmfm-dim-score-card">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
+                                        <small class="font-w700 text-uppercase d-block mb-1" style="color: #1e40af; font-size: 11px; letter-spacing: 0.5px;">
+                                            <i class="fa fa-street-view mr-1 text-primary"></i> Skor Dimensi B (Duduk)
+                                        </small>
+                                        <h3 class="mb-0 font-w800" style="color: #1e3a8a; font-size: 26px;">
+                                            <span id="gmfm-b-live-total">{{ $saved_b_total ?: 0 }}</span> <span style="font-size: 15px; color: #64748b; font-weight: 600;">/ 60</span>
+                                        </h3>
+                                        <input type="hidden" name="gmfm_dimensi_b_total" id="input-gmfm-b-total" value="{{ $saved_b_total }}">
+                                        <input type="hidden" name="gmfm_dimensi_b_persen" id="input-gmfm-b-persen" value="{{ $saved_b_persen }}">
+                                    </div>
+                                    <div class="col-md-5 col-12 mb-2 mb-md-0">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="font-w700" style="color: #334155; font-size: 12px;">Capaian Dimensi B:</small>
+                                            <strong class="text-primary font-w800" id="gmfm-b-live-persen" style="font-size: 13px;">{{ number_format($saved_b_persen, 1) }}%</strong>
+                                        </div>
+                                        <div class="progress" style="height: 10px; border-radius: 5px; background: #dbeafe;">
+                                            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" id="gmfm-b-live-progress" role="progressbar" style="width: {{ $saved_b_persen }}%; background-color: #2563eb !important;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12 text-center text-md-right">
+                                        <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px;">Interpretasi Dimensi B:</small>
+                                        <span class="badge font-w700 px-3 py-2" id="gmfm-b-live-interpretation" style="font-size: 11.5px; border-radius: 6px;">
+                                            @if($saved_b_persen >= 80)
+                                                Sangat Baik (Mandiri)
+                                            @elseif($saved_b_persen >= 50)
+                                                Sedang (Perlu Stimulasi)
+                                            @elseif($saved_b_total > 0)
+                                                Keterbatasan Signifikan
+                                            @else
+                                                Belum Dinilai
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 20 Item Dimensi B List (Matrix Grid) -->
+                        @php $gmfm_b_items = config('gmfm.dimensions.B.items', []); @endphp
+                        <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
+                                <thead style="background: #f1f5f9; color: #334155; font-size: 11.5px;">
+                                    <tr>
+                                        <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
+                                        <th style="width: 48%; vertical-align: middle;">Posisi & Deskripsi Gerakan Aktivitas (Dimensi B - Duduk)</th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">0<br><small class="font-w500">(Tidak)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">1<br><small class="font-w500">(Mulai)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dbeafe; color: #1e40af;">2<br><small class="font-w500">(Sebagian)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">3<br><small class="font-w500">(Sempurna)</small></th>
+                                        <th style="width: 10%; text-align: center; vertical-align: middle; background: #f8fafc; color: #64748b;">NT<br><small class="font-w500">(Tdk Diuji)</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($gmfm_b_items as $no => $item)
+                                        @php $valB = isset($saved_gmfm_b_scores[$no]) ? $saved_gmfm_b_scores[$no] : (old('gmfm_dimensi_b_scores.'.$no, '')); @endphp
+                                        <tr>
+                                            <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $no }}</td>
+                                            <td style="vertical-align: middle;">
+                                                <span class="badge badge-light text-primary font-w600 mb-1" style="font-size: 10.5px; border: 1px solid #cbd5e1;">{{ $item['position'] }}</span>
+                                                <div class="font-w600 text-dark" style="line-height: 1.35; font-size: 12px;">{{ $item['action'] }}</div>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_b_scores[{{ $no }}]" value="0" class="gmfm-b-radio matrix-input" {{ $valB === '0' || $valB === 0 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator danger">0</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_b_scores[{{ $no }}]" value="1" class="gmfm-b-radio matrix-input" {{ $valB === '1' || $valB === 1 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator warning">1</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfdff;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_b_scores[{{ $no }}]" value="2" class="gmfm-b-radio matrix-input" {{ $valB === '2' || $valB === 2 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator info">2</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_b_scores[{{ $no }}]" value="3" class="gmfm-b-radio matrix-input" {{ $valB === '3' || $valB === 3 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator success">3</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_b_scores[{{ $no }}]" value="NT" class="gmfm-b-radio matrix-input" {{ $valB === 'NT' ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator muted">NT</span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Catatan Observasi Dimensi B -->
+                        <div class="form-group mb-3">
+                            <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi GMFM Dimensi B (Opsional)</label>
+                            <textarea name="gmfm_dimensi_b_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait Dimensi B (kontrol duduk, protektif ekstensi, transisi merangkak)..." style="font-size: 12.5px;">{{ old('gmfm_dimensi_b_catatan', $assessment->gmfm_dimensi_b_catatan) }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- ============================================== -->
+                    <!-- SUB-PANE DIMENSI C: MERANGKAK & BERLUTUT       -->
+                    <!-- ============================================== -->
+                    <div class="gmfm-dim-pane" id="gmfm-pane-c" style="display: none;">
+                        @php
+                            $saved_gmfm_c_scores = is_array($assessment->gmfm_dimensi_c_scores) ? $assessment->gmfm_dimensi_c_scores : [];
+                            $saved_c_total = old('gmfm_dimensi_c_total', $assessment->gmfm_dimensi_c_total ?? 0);
+                            $saved_c_persen = old('gmfm_dimensi_c_persen', $assessment->gmfm_dimensi_c_persen ?? 0);
+                        @endphp
+                        <!-- Summary Score Card Dimensi C (Light Blue Medis) -->
+                        <div class="card mb-3 gmfm-dim-score-card">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
+                                        <small class="font-w700 text-uppercase d-block mb-1" style="color: #1e40af; font-size: 11px; letter-spacing: 0.5px;">
+                                            <i class="fa fa-child mr-1 text-primary"></i> Skor Dimensi C (Merangkak & Berlutut)
+                                        </small>
+                                        <h3 class="mb-0 font-w800" style="color: #1e3a8a; font-size: 26px;">
+                                            <span id="gmfm-c-live-total">{{ $saved_c_total ?: 0 }}</span> <span style="font-size: 15px; color: #64748b; font-weight: 600;">/ 42</span>
+                                        </h3>
+                                        <input type="hidden" name="gmfm_dimensi_c_total" id="input-gmfm-c-total" value="{{ $saved_c_total }}">
+                                        <input type="hidden" name="gmfm_dimensi_c_persen" id="input-gmfm-c-persen" value="{{ $saved_c_persen }}">
+                                    </div>
+                                    <div class="col-md-5 col-12 mb-2 mb-md-0">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="font-w700" style="color: #334155; font-size: 12px;">Capaian Dimensi C:</small>
+                                            <strong class="text-primary font-w800" id="gmfm-c-live-persen" style="font-size: 13px;">{{ number_format($saved_c_persen, 1) }}%</strong>
+                                        </div>
+                                        <div class="progress" style="height: 10px; border-radius: 5px; background: #dbeafe;">
+                                            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" id="gmfm-c-live-progress" role="progressbar" style="width: {{ $saved_c_persen }}%; background-color: #2563eb !important;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12 text-center text-md-right">
+                                        <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px;">Interpretasi Dimensi C:</small>
+                                        <span class="badge font-w700 px-3 py-2" id="gmfm-c-live-interpretation" style="font-size: 11.5px; border-radius: 6px;">
+                                            @if($saved_c_persen >= 80)
+                                                Sangat Baik (Mandiri)
+                                            @elseif($saved_c_persen >= 50)
+                                                Sedang (Perlu Stimulasi)
+                                            @elseif($saved_c_total > 0)
+                                                Keterbatasan Signifikan
+                                            @else
+                                                Belum Dinilai
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 14 Item Dimensi C List (Matrix Grid) -->
+                        @php $gmfm_c_items = config('gmfm.dimensions.C.items', []); @endphp
+                        <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
+                                <thead style="background: #f1f5f9; color: #334155; font-size: 11.5px;">
+                                    <tr>
+                                        <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
+                                        <th style="width: 48%; vertical-align: middle;">Posisi & Deskripsi Gerakan Aktivitas (Dimensi C - Merangkak & Berlutut)</th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">0<br><small class="font-w500">(Tidak)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">1<br><small class="font-w500">(Mulai)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dbeafe; color: #1e40af;">2<br><small class="font-w500">(Sebagian)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">3<br><small class="font-w500">(Sempurna)</small></th>
+                                        <th style="width: 10%; text-align: center; vertical-align: middle; background: #f8fafc; color: #64748b;">NT<br><small class="font-w500">(Tdk Diuji)</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($gmfm_c_items as $no => $item)
+                                        @php $valC = isset($saved_gmfm_c_scores[$no]) ? $saved_gmfm_c_scores[$no] : (old('gmfm_dimensi_c_scores.'.$no, '')); @endphp
+                                        <tr>
+                                            <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $no }}</td>
+                                            <td style="vertical-align: middle;">
+                                                <span class="badge badge-light text-primary font-w600 mb-1" style="font-size: 10.5px; border: 1px solid #cbd5e1;">{{ $item['position'] }}</span>
+                                                <div class="font-w600 text-dark" style="line-height: 1.35; font-size: 12px;">{{ $item['action'] }}</div>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_c_scores[{{ $no }}]" value="0" class="gmfm-c-radio matrix-input" {{ $valC === '0' || $valC === 0 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator danger">0</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_c_scores[{{ $no }}]" value="1" class="gmfm-c-radio matrix-input" {{ $valC === '1' || $valC === 1 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator warning">1</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfdff;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_c_scores[{{ $no }}]" value="2" class="gmfm-c-radio matrix-input" {{ $valC === '2' || $valC === 2 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator info">2</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_c_scores[{{ $no }}]" value="3" class="gmfm-c-radio matrix-input" {{ $valC === '3' || $valC === 3 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator success">3</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_c_scores[{{ $no }}]" value="NT" class="gmfm-c-radio matrix-input" {{ $valC === 'NT' ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator muted">NT</span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Catatan Observasi Dimensi C -->
+                        <div class="form-group mb-3">
+                            <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi GMFM Dimensi C (Opsional)</label>
+                            <textarea name="gmfm_dimensi_c_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait Dimensi C (stabilitas posisi 4-poin, pola merangkak resiprokal, keseimbangan berlutut)..." style="font-size: 12.5px;">{{ old('gmfm_dimensi_c_catatan', $assessment->gmfm_dimensi_c_catatan) }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- ============================================== -->
+                    <!-- SUB-PANE DIMENSI D: BERDIRI (STANDING)         -->
+                    <!-- ============================================== -->
+                    <div class="gmfm-dim-pane" id="gmfm-pane-d" style="display: none;">
+                        @php
+                            $saved_gmfm_d_scores = is_array($assessment->gmfm_dimensi_d_scores) ? $assessment->gmfm_dimensi_d_scores : [];
+                            $saved_d_total = old('gmfm_dimensi_d_total', $assessment->gmfm_dimensi_d_total ?? 0);
+                            $saved_d_persen = old('gmfm_dimensi_d_persen', $assessment->gmfm_dimensi_d_persen ?? 0);
+                        @endphp
+                        <!-- Summary Score Card Dimensi D (Light Blue Medis) -->
+                        <div class="card mb-3 gmfm-dim-score-card">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
+                                        <small class="font-w700 text-uppercase d-block mb-1" style="color: #1e40af; font-size: 11px; letter-spacing: 0.5px;">
+                                            <i class="fa fa-male mr-1 text-primary"></i> Skor Dimensi D (Berdiri)
+                                        </small>
+                                        <h3 class="mb-0 font-w800" style="color: #1e3a8a; font-size: 26px;">
+                                            <span id="gmfm-d-live-total">{{ $saved_d_total ?: 0 }}</span> <span style="font-size: 15px; color: #64748b; font-weight: 600;">/ 39</span>
+                                        </h3>
+                                        <input type="hidden" name="gmfm_dimensi_d_total" id="input-gmfm-d-total" value="{{ $saved_d_total }}">
+                                        <input type="hidden" name="gmfm_dimensi_d_persen" id="input-gmfm-d-persen" value="{{ $saved_d_persen }}">
+                                    </div>
+                                    <div class="col-md-5 col-12 mb-2 mb-md-0">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="font-w700" style="color: #334155; font-size: 12px;">Capaian Dimensi D:</small>
+                                            <strong class="text-primary font-w800" id="gmfm-d-live-persen" style="font-size: 13px;">{{ number_format($saved_d_persen, 1) }}%</strong>
+                                        </div>
+                                        <div class="progress" style="height: 10px; border-radius: 5px; background: #dbeafe;">
+                                            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" id="gmfm-d-live-progress" role="progressbar" style="width: {{ $saved_d_persen }}%; background-color: #2563eb !important;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12 text-center text-md-right">
+                                        <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px;">Interpretasi Dimensi D:</small>
+                                        <span class="badge font-w700 px-3 py-2" id="gmfm-d-live-interpretation" style="font-size: 11.5px; border-radius: 6px;">
+                                            @if($saved_d_persen >= 80)
+                                                Sangat Baik (Mandiri)
+                                            @elseif($saved_d_persen >= 50)
+                                                Sedang (Perlu Stimulasi)
+                                            @elseif($saved_d_total > 0)
+                                                Keterbatasan Signifikan
+                                            @else
+                                                Belum Dinilai
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 13 Item Dimensi D List (Matrix Grid) -->
+                        @php $gmfm_d_items = config('gmfm.dimensions.D.items', []); @endphp
+                        <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
+                                <thead style="background: #f1f5f9; color: #334155; font-size: 11.5px;">
+                                    <tr>
+                                        <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
+                                        <th style="width: 48%; vertical-align: middle;">Posisi & Deskripsi Gerakan Aktivitas (Dimensi D - Berdiri)</th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">0<br><small class="font-w500">(Tidak)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">1<br><small class="font-w500">(Mulai)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dbeafe; color: #1e40af;">2<br><small class="font-w500">(Sebagian)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">3<br><small class="font-w500">(Sempurna)</small></th>
+                                        <th style="width: 10%; text-align: center; vertical-align: middle; background: #f8fafc; color: #64748b;">NT<br><small class="font-w500">(Tdk Diuji)</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($gmfm_d_items as $no => $item)
+                                        @php $valD = isset($saved_gmfm_d_scores[$no]) ? $saved_gmfm_d_scores[$no] : (old('gmfm_dimensi_d_scores.'.$no, '')); @endphp
+                                        <tr>
+                                            <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $no }}</td>
+                                            <td style="vertical-align: middle;">
+                                                <span class="badge badge-light text-primary font-w600 mb-1" style="font-size: 10.5px; border: 1px solid #cbd5e1;">{{ $item['position'] }}</span>
+                                                <div class="font-w600 text-dark" style="line-height: 1.35; font-size: 12px;">{{ $item['action'] }}</div>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_d_scores[{{ $no }}]" value="0" class="gmfm-d-radio matrix-input" {{ $valD === '0' || $valD === 0 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator danger">0</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_d_scores[{{ $no }}]" value="1" class="gmfm-d-radio matrix-input" {{ $valD === '1' || $valD === 1 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator warning">1</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfdff;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_d_scores[{{ $no }}]" value="2" class="gmfm-d-radio matrix-input" {{ $valD === '2' || $valD === 2 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator info">2</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_d_scores[{{ $no }}]" value="3" class="gmfm-d-radio matrix-input" {{ $valD === '3' || $valD === 3 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator success">3</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_d_scores[{{ $no }}]" value="NT" class="gmfm-d-radio matrix-input" {{ $valD === 'NT' ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator muted">NT</span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Catatan Observasi Dimensi D -->
+                        <div class="form-group mb-3">
+                            <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi GMFM Dimensi D (Opsional)</label>
+                            <textarea name="gmfm_dimensi_d_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait Dimensi D (keseimbangan statis/dinamis berdiri, single leg stance, sit-to-stand, jongkok)..." style="font-size: 12.5px;">{{ old('gmfm_dimensi_d_catatan', $assessment->gmfm_dimensi_d_catatan) }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- ============================================== -->
+                    <!-- SUB-PANE DIMENSI E: BERJALAN, BERLARI & LOMPAT -->
+                    <!-- ============================================== -->
+                    <div class="gmfm-dim-pane" id="gmfm-pane-e" style="display: none;">
+                        @php
+                            $saved_gmfm_e_scores = is_array($assessment->gmfm_dimensi_e_scores) ? $assessment->gmfm_dimensi_e_scores : [];
+                            $saved_e_total = old('gmfm_dimensi_e_total', $assessment->gmfm_dimensi_e_total ?? 0);
+                            $saved_e_persen = old('gmfm_dimensi_e_persen', $assessment->gmfm_dimensi_e_persen ?? 0);
+                        @endphp
+                        <!-- Summary Score Card Dimensi E (Light Blue Medis) -->
+                        <div class="card mb-3 gmfm-dim-score-card">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
+                                        <small class="font-w700 text-uppercase d-block mb-1" style="color: #1e40af; font-size: 11px; letter-spacing: 0.5px;">
+                                            <i class="fa fa-running mr-1 text-primary"></i> Skor Dimensi E (Jalan, Lari & Lompat)
+                                        </small>
+                                        <h3 class="mb-0 font-w800" style="color: #1e3a8a; font-size: 26px;">
+                                            <span id="gmfm-e-live-total">{{ $saved_e_total ?: 0 }}</span> <span style="font-size: 15px; color: #64748b; font-weight: 600;">/ 72</span>
+                                        </h3>
+                                        <input type="hidden" name="gmfm_dimensi_e_total" id="input-gmfm-e-total" value="{{ $saved_e_total }}">
+                                        <input type="hidden" name="gmfm_dimensi_e_persen" id="input-gmfm-e-persen" value="{{ $saved_e_persen }}">
+                                    </div>
+                                    <div class="col-md-5 col-12 mb-2 mb-md-0">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="font-w700" style="color: #334155; font-size: 12px;">Capaian Dimensi E:</small>
+                                            <strong class="text-primary font-w800" id="gmfm-e-live-persen" style="font-size: 13px;">{{ number_format($saved_e_persen, 1) }}%</strong>
+                                        </div>
+                                        <div class="progress" style="height: 10px; border-radius: 5px; background: #dbeafe;">
+                                            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" id="gmfm-e-live-progress" role="progressbar" style="width: {{ $saved_e_persen }}%; background-color: #2563eb !important;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12 text-center text-md-right">
+                                        <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px;">Interpretasi Dimensi E:</small>
+                                        <span class="badge font-w700 px-3 py-2" id="gmfm-e-live-interpretation" style="font-size: 11.5px; border-radius: 6px;">
+                                            @if($saved_e_persen >= 80)
+                                                Sangat Baik (Mandiri)
+                                            @elseif($saved_e_persen >= 50)
+                                                Sedang (Perlu Stimulasi)
+                                            @elseif($saved_e_total > 0)
+                                                Keterbatasan Signifikan
+                                            @else
+                                                Belum Dinilai
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 24 Item Dimensi E List (Matrix Grid) -->
+                        @php $gmfm_e_items = config('gmfm.dimensions.E.items', []); @endphp
+                        <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
+                                <thead style="background: #f1f5f9; color: #334155; font-size: 11.5px;">
+                                    <tr>
+                                        <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
+                                        <th style="width: 48%; vertical-align: middle;">Posisi & Deskripsi Gerakan Aktivitas (Dimensi E - Jalan, Lari & Melompat)</th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">0<br><small class="font-w500">(Tidak)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">1<br><small class="font-w500">(Mulai)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dbeafe; color: #1e40af;">2<br><small class="font-w500">(Sebagian)</small></th>
+                                        <th style="width: 9%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">3<br><small class="font-w500">(Sempurna)</small></th>
+                                        <th style="width: 10%; text-align: center; vertical-align: middle; background: #f8fafc; color: #64748b;">NT<br><small class="font-w500">(Tdk Diuji)</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($gmfm_e_items as $no => $item)
+                                        @php $valE = isset($saved_gmfm_e_scores[$no]) ? $saved_gmfm_e_scores[$no] : (old('gmfm_dimensi_e_scores.'.$no, '')); @endphp
+                                        <tr>
+                                            <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $no }}</td>
+                                            <td style="vertical-align: middle;">
+                                                <span class="badge badge-light text-primary font-w600 mb-1" style="font-size: 10.5px; border: 1px solid #cbd5e1;">{{ $item['position'] }}</span>
+                                                <div class="font-w600 text-dark" style="line-height: 1.35; font-size: 12px;">{{ $item['action'] }}</div>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_e_scores[{{ $no }}]" value="0" class="gmfm-e-radio matrix-input" {{ $valE === '0' || $valE === 0 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator danger">0</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_e_scores[{{ $no }}]" value="1" class="gmfm-e-radio matrix-input" {{ $valE === '1' || $valE === 1 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator warning">1</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfdff;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_e_scores[{{ $no }}]" value="2" class="gmfm-e-radio matrix-input" {{ $valE === '2' || $valE === 2 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator info">2</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_e_scores[{{ $no }}]" value="3" class="gmfm-e-radio matrix-input" {{ $valE === '3' || $valE === 3 ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator success">3</span>
+                                                </label>
+                                            </td>
+                                            <td class="text-center matrix-cell" style="vertical-align: middle;">
+                                                <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                    <input type="radio" name="gmfm_dimensi_e_scores[{{ $no }}]" value="NT" class="gmfm-e-radio matrix-input" {{ $valE === 'NT' ? 'checked' : '' }}>
+                                                    <span class="matrix-score-indicator muted">NT</span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Catatan Observasi Dimensi E -->
+                        <div class="form-group mb-3">
+                            <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi GMFM Dimensi E (Opsional)</label>
+                            <textarea name="gmfm_dimensi_e_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait Dimensi E (pola jalan menyamping/mundur, kemampuan melompat, menendang bola, naik/turun tangga tanpa pegangan)..." style="font-size: 12.5px;">{{ old('gmfm_dimensi_e_catatan', $assessment->gmfm_dimensi_e_catatan) }}</textarea>
+                        </div>
+                    </div>
+                        
                     </div>
                 </div>
 
-                <!-- 11. BAGIAN FAKTOR PSIKOSOSIAL & KONTEKSTUAL -->
-                <div class="tab-pane-box" id="tab-psikososial" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            11. Faktor Psikososial & Kontekstual
-                        </h5>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">11</span>
-                            Faktor Psikososial & Kontekstual
-                        </h5>
-                        <small class="text-muted">Pekerjaan/hobi terdampak, faktor psikologis, dukungan keluarga/sosial, dan ekspektasi pemulihan</small>
-                    </div>
-
-                    <div class="row">
-                        <!-- 1. Pekerjaan / Hobi Terdampak -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded h-100" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-briefcase text-primary mr-1"></i> Pekerjaan / Aktivitas / Hobi Terdampak
-                                </label>
-                                <textarea name="psikososial_pekerjaan_hobi" class="form-control" rows="3" placeholder="Sebutkan pekerjaan, sekolah, atau kegiatan/hobi pasien yang terganggu akibat kondisi saat ini..." style="font-size: 12.5px;">{{ old('psikososial_pekerjaan_hobi', $assessment->psikososial_pekerjaan_hobi) }}</textarea>
-                            </div>
+                <!-- Subtest: Subtest 5.2 - Skala Perkembangan Denver II (DDST II) -->
+                <div class="assessment-subtest-card mb-4" id="subtest-denver">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 5.2</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-graduation-cap mr-1 text-primary"></i> Skala Perkembangan Denver II (DDST II)
+                            </h5>
                         </div>
+                        <small class="text-muted font-w600">Skrining 19 task tumbuh kembang anak (Personal-Sosial, Motorik Halus, Bahasa, Motorik Kasar)</small>
+                    </div>
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        @php
+                        $saved_denver_data = is_array($assessment->denver_data) ? $assessment->denver_data : [];
+                        $saved_denver_pass = old('denver_pass_count', $assessment->denver_pass_count ?? 0);
+                        $saved_denver_fail = old('denver_fail_count', $assessment->denver_fail_count ?? 0);
+                        $saved_denver_refusal = old('denver_refusal_count', $assessment->denver_refusal_count ?? 0);
+                        $saved_denver_no = old('denver_no_count', $assessment->denver_no_count ?? 0);
+                        $saved_denver_kesimpulan = old('denver_kesimpulan', $assessment->denver_kesimpulan ?? 'Belum Dinilai');
 
-                        <!-- 2. Dukungan Sosial -->
-                        <div class="col-md-6 col-12 mb-3">
-                            <div class="assessment-box p-3 rounded h-100" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-home text-primary mr-1"></i> Dukungan Sosial & Lingkungan Keluarga
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $duk_sos = old('psikososial_dukungan_sosial', $assessment->psikososial_dukungan_sosial); @endphp
-                                    @foreach(['Baik (keluarga mendukung)', 'Cukup', 'Kurang / tinggal sendiri'] as $opt)
-                                        <label class="radio-pill-card {{ $duk_sos == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="psikososial_dukungan_sosial" value="{{ $opt }}" {{ $duk_sos == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
+                        $denver_sectors = config('denver.sectors', []);
+                    @endphp
+
+                    <!-- Summary Score Card Skala Denver (Light Blue Medis Sesuai Header) -->
+                    <div class="card mb-4 gmfm-dim-score-card">
+                        <div class="card-body p-3">
+                            <div class="row align-items-center">
+                                <div class="col-lg-7 col-12 mb-3 mb-lg-0">
+                                    <small class="font-w700 text-uppercase d-block mb-1" style="color: #1e40af; font-size: 11px; letter-spacing: 0.5px;">
+                                        <i class="fa-solid fa-chart-pie mr-1 text-primary"></i> Rekapitulasi Hasil Skrining DDST II (19 Task)
+                                    </small>
+                                    <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 8px;">
+                                        <span class="badge px-3 py-2 font-w700" style="background: #10b981; color: white; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(16, 185, 129, 0.2);">
+                                            <i class="fa fa-check mr-1"></i> Pass (P): <strong id="denver-live-p">{{ $saved_denver_pass }}</strong>
+                                        </span>
+                                        <span class="badge px-3 py-2 font-w700" style="background: #ef4444; color: white; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(239, 68, 68, 0.2);">
+                                            <i class="fa fa-times mr-1"></i> Fail (F): <strong id="denver-live-f">{{ $saved_denver_fail }}</strong>
+                                        </span>
+                                        <span class="badge px-3 py-2 font-w700" style="background: #f59e0b; color: white; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(245, 158, 11, 0.2);">
+                                            <i class="fa fa-ban mr-1"></i> Refusal (R): <strong id="denver-live-r">{{ $saved_denver_refusal }}</strong>
+                                        </span>
+                                        <span class="badge px-3 py-2 font-w700" style="background: #64748b; color: white; font-size: 12px; border-radius: 6px;">
+                                            <i class="fa fa-minus-circle mr-1"></i> No Opp (NO): <strong id="denver-live-no">{{ $saved_denver_no }}</strong>
+                                        </span>
+                                    </div>
+                                    <input type="hidden" name="denver_pass_count" id="input-denver-pass" value="{{ $saved_denver_pass }}">
+                                    <input type="hidden" name="denver_fail_count" id="input-denver-fail" value="{{ $saved_denver_fail }}">
+                                    <input type="hidden" name="denver_refusal_count" id="input-denver-refusal" value="{{ $saved_denver_refusal }}">
+                                    <input type="hidden" name="denver_no_count" id="input-denver-no" value="{{ $saved_denver_no }}">
+                                    <input type="hidden" name="denver_kesimpulan" id="input-denver-kesimpulan" value="{{ $saved_denver_kesimpulan }}">
+                                </div>
+                                <div class="col-lg-5 col-12 text-lg-right">
+                                    <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px;">Interpretasi Klinis Otomatis:</small>
+                                    <span class="badge px-3 py-2 font-w700 text-uppercase" id="denver-live-badge-kesimpulan" style="font-size: 12.5px; border-radius: 6px; {{ $saved_denver_kesimpulan == 'Normal (Sesuai Usia)' ? 'background:#10b981;color:white;' : ($saved_denver_kesimpulan == 'Suspect (Meragukan)' ? 'background:#f59e0b;color:white;' : ($saved_denver_kesimpulan == 'Keterlambatan Perkembangan' ? 'background:#ef4444;color:white;' : 'background:#e2e8f0;color:#1e293b;')) }}">
+                                        {{ $saved_denver_kesimpulan ?: 'Belum Dinilai' }}
+                                    </span>
+                                    <div class="text-muted font-w600 mt-1" id="denver-live-desc-kesimpulan" style="font-size: 11.5px; line-height: 1.35;">
+                                        @if($saved_denver_kesimpulan == 'Normal (Sesuai Usia)')
+                                            Semua task perkembangan tercapai sesuai kelompok usia.
+                                        @elseif($saved_denver_kesimpulan == 'Suspect (Meragukan)')
+                                            Ditemukan 1-2 kegagalan task. Disarankan re-screening 1-2 minggu.
+                                        @elseif($saved_denver_kesimpulan == 'Keterlambatan Perkembangan')
+                                            Ditemukan ≥3 kegagalan task lintas sektor. Perlu program terapi intensif.
+                                        @elseif($saved_denver_kesimpulan == 'Untestable (Menolak Pengujian)')
+                                            Anak menolak ≥2 pengujian. Uji ulang saat kooperatif.
+                                        @else
+                                            Pilih status task (P/F/R/NO) di bawah untuk memicu kalkulasi.
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- 3. Faktor Psikologis -->
-                        <div class="col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-heart text-primary mr-1"></i> Faktor Psikologis & Respon Emosional
-                                </label>
-                                <div class="d-flex flex-wrap option-group" style="gap: 8px;">
-                                    @php $fak_psi = old('psikososial_faktor_psikologis', $assessment->psikososial_faktor_psikologis); @endphp
-                                    @foreach(['Tidak ada kekhawatiran', 'Cemas / Anxiety', 'Depresi', 'Fear-avoidance behavior', 'Katastrofisasi', 'Stres tinggi'] as $opt)
-                                        <label class="radio-pill-card {{ $fak_psi == $opt ? 'active' : '' }}">
-                                            <input type="radio" name="psikososial_faktor_psikologis" value="{{ $opt }}" {{ $fak_psi == $opt ? 'checked' : '' }}>
-                                            <span>{{ $opt }}</span>
-                                        </label>
-                                    @endforeach
+                    <!-- 4 Sectors Task List (Matrix Grid) -->
+                    @foreach($denver_sectors as $sKey => $sector)
+                        <div class="card mb-3 border" style="border-radius: 8px; border-color: #e2e8f0;">
+                            <div class="card-header py-2 px-3 d-flex align-items-center justify-content-between" style="background: {{ $sector['bg_header'] }}; border-bottom: 1px solid #e2e8f0;">
+                                <h6 class="font-w700 mb-0" style="color: {{ $sector['badge_color'] }}; font-size: 13.5px;">
+                                    {{ $sector['title'] }}
+                                </h6>
+                                <span class="badge badge-light border font-w600" style="font-size: 11px;">{{ count($sector['tasks']) }} Task</span>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
+                                        <thead style="background: #fafafa; color: #475569; font-size: 11.5px;">
+                                            <tr>
+                                                <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
+                                                <th style="width: 32%; vertical-align: middle;">Nama Task Perkembangan</th>
+                                                <th style="width: 12%; text-align: center; vertical-align: middle;">Rentang Usia</th>
+                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">Pass<br><small class="font-w700">(P)</small></th>
+                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">Fail<br><small class="font-w700">(F)</small></th>
+                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">Refusal<br><small class="font-w700">(R)</small></th>
+                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #f1f5f9; color: #475569;">No Opp<br><small class="font-w700">(NO)</small></th>
+                                                <th style="width: 20%; vertical-align: middle;">Catatan Terapis</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($sector['tasks'] as $tKey => $task)
+                                                @php
+                                                    $itemVal = $saved_denver_data[$tKey]['score'] ?? (old('denver_data.'.$tKey.'.score', ''));
+                                                    $itemNote = $saved_denver_data[$tKey]['catatan'] ?? (old('denver_data.'.$tKey.'.catatan', ''));
+                                                @endphp
+                                                <tr>
+                                                    <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $task['no'] }}</td>
+                                                    <td style="vertical-align: middle;">
+                                                        <strong class="text-dark" style="font-size: 12.5px;">{{ $task['name'] }}</strong>
+                                                    </td>
+                                                    <td class="text-center" style="vertical-align: middle;">
+                                                        <span class="badge badge-light border font-w600" style="font-size: 11px; color: #475569;">{{ $task['age'] }}</span>
+                                                    </td>
+                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
+                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="P" class="denver-radio matrix-input" {{ $itemVal === 'P' ? 'checked' : '' }}>
+                                                            <span class="matrix-score-indicator success">P</span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
+                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="F" class="denver-radio matrix-input" {{ $itemVal === 'F' ? 'checked' : '' }}>
+                                                            <span class="matrix-score-indicator danger">F</span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
+                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="R" class="denver-radio matrix-input" {{ $itemVal === 'R' ? 'checked' : '' }}>
+                                                            <span class="matrix-score-indicator warning">R</span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #f8fafc;">
+                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="NO" class="denver-radio matrix-input" {{ $itemVal === 'NO' ? 'checked' : '' }}>
+                                                            <span class="matrix-score-indicator muted">NO</span>
+                                                        </label>
+                                                    </td>
+                                                    <td style="vertical-align: middle;">
+                                                        <input type="text" name="denver_data[{{ $tKey }}][catatan]" value="{{ $itemNote }}" class="form-control form-control-sm" placeholder="Catatan respon..." style="font-size: 11.5px;">
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
+                    @endforeach
 
-                        <!-- 4. Harapan / Ekspektasi Pasien -->
-                        <div class="col-12 mb-3">
-                            <div class="assessment-box p-3 rounded" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
-                                    <i class="fa fa-bullseye text-primary mr-1"></i> Harapan / Ekspektasi Pasien & Keluarga Terhadap Terapi
-                                </label>
-                                <textarea name="psikososial_harapan_pasien" class="form-control" rows="2" placeholder="Tuliskan target atau ekspektasi yang ingin dicapai penerima manfaat / keluarga (misal: bisa berjalan mandiri, mengurangi nyeri, kembali beraktivitas normal)..." style="font-size: 12.5px;">{{ old('psikososial_harapan_pasien', $assessment->psikososial_harapan_pasien) }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Catatan Tambahan Psikososial -->
+                    <!-- Catatan Khusus Skala Denver -->
                     <div class="form-group mb-3">
-                        <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Psikososial & Kontekstual (Opsional)</label>
-                        <textarea name="psikososial_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan tambahan mengenai kondisi lingkungan, kesiapan motivasi pasien, atau hambatan psikososial lainnya..." style="font-size: 12.5px;">{{ old('psikososial_catatan', $assessment->psikososial_catatan) }}</textarea>
+                        <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Skala Denver / DDST II (Opsional)</label>
+                        <textarea name="denver_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait skrining perkembangan Denver II, respon adaptasi anak, stimulasi orang tua..." style="font-size: 12.5px;">{{ old('denver_catatan', $assessment->denver_catatan) }}</textarea>
                     </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-sensoris-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Sensoris & Vestibular
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-perencanaan-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 12 (Perencanaan Terapi) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
+                        
                     </div>
                 </div>
+                <!-- Modul 5 Navigation Footer -->
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 module-nav-footer" style="border-top: 1px solid #edf2f7;">
+                    <button type="button" class="btn btn-light font-w600" onclick="goToModule(4)" style="padding: 9px 18px; font-size: 13px; border-radius: 8px; border: 1px solid #cbd5e1; color: #475569;">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Modul 4
+                    </button>
+                    <button type="button" class="btn btn-primary font-w600 shadow-sm" onclick="goToModule(6)" style="padding: 9px 20px; font-size: 13px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none;">
+                        Lanjut ke Modul 6: Rencana Terapi & TTD <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
 
-                <!-- 12. BAGIAN PERENCANAAN TERAPI -->
-                <div class="tab-pane-box" id="tab-perencanaan" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            12. Perencanaan Terapi & Intervensi
-                        </h5>
+            <!-- ======================================================== -->
+            <!-- MODUL 6: RENCANA TERAPI & TTD -->
+            <!-- ======================================================== -->
+            <div class="tab-pane fade" id="modul-6" role="tabpanel" aria-labelledby="tab-modul6-btn">
+
+                <!-- Subtest: Subtest 6.1 - Perencanaan Terapi & Modalitas Intervensi -->
+                <div class="assessment-subtest-card mb-4" id="subtest-perencanaan">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 6.1</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-notes-medical mr-1 text-primary"></i> Perencanaan Terapi & Modalitas Intervensi
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Penetapan tujuan intervensi klinis, modalitas terapi & frekuensi latihan program</small>
                     </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">12</span>
-                            Perencanaan Terapi & Program Intervensi
-                        </h5>
-                        <small class="text-muted">Pilih opsi modalitas fisik, manual terapi, latihan terapi, edukasi, dan dosis terapi</small>
-                    </div>
-
-                    <!-- Kategori Intervensi Terapi Grid -->
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <!-- Kategori Intervensi Terapi Grid -->
                     <div class="row">
                         <!-- 1. Modalitas Fisik -->
                         <div class="col-lg-6 col-12 mb-3">
@@ -3055,274 +3104,120 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-psikososial-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Faktor Psikososial
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-evaluasi-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 13 (Evaluasi & Target) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
+                        
                     </div>
                 </div>
 
-                <!-- 13. BAGIAN EVALUASI & TARGET TERAPI -->
-                <div class="tab-pane-box" id="tab-evaluasi" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            13. Evaluasi Klinis & Target Program
-                        </h5>
+                <!-- Subtest: Subtest 6.2 - Kesimpulan Klinis, Rekomendasi & Konfirmasi Terapis -->
+                <div class="assessment-subtest-card mb-4" id="subtest-evaluasi">
+                    <div class="subtest-header d-flex align-items-center justify-content-between flex-wrap p-3" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px 8px 0 0; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; gap: 8px;">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-primary mr-2" style="font-size: 11.5px; padding: 4px 8px; border-radius: 4px; background: #2563eb;">Subtest 6.2</span>
+                            <h5 class="font-w700 mb-0" style="font-size: 15px; color: #1e40af;">
+                                <i class="fa-solid fa-signature mr-1 text-primary"></i> Kesimpulan Klinis, Rekomendasi & Konfirmasi Terapis
+                            </h5>
+                        </div>
+                        <small class="text-muted font-w600">Ringkasan evaluasi menyeluruh, target program lanjutan, Home Exercise & verifikasi terapis</small>
                     </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">13</span>
-                            Kesimpulan, Evaluasi Klinis & Target Terapi
-                        </h5>
-                        <small class="text-muted">Tuliskan kesimpulan klinis komprehensif terapis dan target program terapi lanjutan</small>
-                    </div>
-
-                    <!-- Kesimpulan & Target Program Bebas -->
+                    <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
+                        <!-- Kesimpulan & Target Program Bebas -->
                     <div class="row">
                         <div class="col-md-6 col-12 mb-3">
                             <div class="assessment-box p-3 rounded h-100" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13.5px;">
                                     <i class="fa fa-file-text-o text-primary mr-1"></i> Kesimpulan & Evaluasi Klinis Terapis
                                 </label>
-                                <textarea name="kesimpulan" class="form-control" rows="6" placeholder="Ringkasan hasil evaluasi asesmen klinis menyeluruh, temuan utama fisioterapi/terapi okupasi/wicara..." style="font-size: 13px;">{{ old('kesimpulan', $assessment->kesimpulan) }}</textarea>
+                                <textarea name="kesimpulan" class="form-control" rows="7" placeholder="Ringkasan hasil evaluasi asesmen klinis menyeluruh, temuan utama fisioterapi/terapi okupasi/wicara..." style="font-size: 13.5px; min-height: 160px; line-height: 1.6;">{{ old('kesimpulan', $assessment->kesimpulan) }}</textarea>
                             </div>
                         </div>
 
                         <div class="col-md-6 col-12 mb-3">
                             <div class="assessment-box p-3 rounded h-100" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13px;">
+                                <label class="font-w700 text-dark mb-2 d-block" style="font-size: 13.5px;">
                                     <i class="fa fa-calendar-check-o text-primary mr-1"></i> Rencana Program Terapi Lanjutan & Target
                                 </label>
-                                <textarea name="rencana_terapi" class="form-control" rows="6" placeholder="Target jangka pendek & panjang, panduan latihan mandiri di rumah (Home Exercise Program), jadwal supervisi lanjutan..." style="font-size: 13px;">{{ old('rencana_terapi', $assessment->rencana_terapi) }}</textarea>
+                                <textarea name="rencana_terapi" class="form-control" rows="7" placeholder="Target jangka pendek & panjang, panduan latihan mandiri di rumah (Home Exercise Program), jadwal supervisi lanjutan..." style="font-size: 13.5px; min-height: 160px; line-height: 1.6;">{{ old('rencana_terapi', $assessment->rencana_terapi) }}</textarea>
                             </div>
                         </div>
                     </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-perencanaan-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Perencanaan Terapi
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary next-tab-btn" data-target-tab="#tab-denver-btn" style="padding: 7px 18px; font-size: 12.5px;">
-                            Lanjut ke Bagian 15 (Skala Denver) <i class="fa fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 15. BAGIAN SKALA DENVER (DDST II) -->
-                <div class="tab-pane-box" id="tab-denver" style="display: none;">
-                    <div class="section-title-banner p-2 px-3 rounded mb-3" style="background: #edf3fc; border-left: 4px solid #2e4b82; display: none;">
-                        <h5 class="font-w700 mb-0 text-primary" style="font-size: 15px;">
-                            15. Skala Perkembangan Denver II (DDST II)
-                        </h5>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 section-header-tab" style="border-bottom: 1px solid #edf2f7;">
-                        <h5 class="font-w700 mb-0" style="font-size: 15.5px; color: var(--ot-navy) !important;">
-                            <span class="badge badge-primary mr-2" style="font-size: 12px; padding: 4px 8px; border-radius: 4px;">15</span>
-                            Skala Perkembangan Denver (DDST II)
-                        </h5>
-                        <small class="text-muted">Skrining perkembangan anak pada 4 domain: Personal Sosial, Motorik Halus, Bahasa, dan Motorik Kasar</small>
-                    </div>
-
-                    @php
-                        $saved_denver_data = is_array($assessment->denver_data) ? $assessment->denver_data : [];
-                        $saved_denver_pass = old('denver_pass_count', $assessment->denver_pass_count ?? 0);
-                        $saved_denver_fail = old('denver_fail_count', $assessment->denver_fail_count ?? 0);
-                        $saved_denver_refusal = old('denver_refusal_count', $assessment->denver_refusal_count ?? 0);
-                        $saved_denver_no = old('denver_no_count', $assessment->denver_no_count ?? 0);
-                        $saved_denver_kesimpulan = old('denver_kesimpulan', $assessment->denver_kesimpulan ?? 'Belum Dinilai');
-
-                        $denver_sectors = config('denver.sectors', []);
-                    @endphp
-
-                    <!-- Summary Score Card Skala Denver -->
-                    <div class="card mb-4 border-0" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.15);">
-                        <div class="card-body p-3">
-                            <div class="row align-items-center">
-                                <div class="col-lg-7 col-12 mb-3 mb-lg-0">
-                                    <small class="text-white-50 text-uppercase font-w600" style="letter-spacing: 0.5px; font-size: 11px;">Rekapitulasi Hasil Skrining DDST II (19 Task)</small>
-                                    <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 8px;">
-                                        <span class="badge px-3 py-2 font-w700" style="background: #10b981; color: white; font-size: 12px; border-radius: 6px;">
-                                            <i class="fa fa-check mr-1"></i> Pass (P): <strong id="denver-live-p">{{ $saved_denver_pass }}</strong>
-                                        </span>
-                                        <span class="badge px-3 py-2 font-w700" style="background: #ef4444; color: white; font-size: 12px; border-radius: 6px;">
-                                            <i class="fa fa-times mr-1"></i> Fail (F): <strong id="denver-live-f">{{ $saved_denver_fail }}</strong>
-                                        </span>
-                                        <span class="badge px-3 py-2 font-w700" style="background: #f59e0b; color: white; font-size: 12px; border-radius: 6px;">
-                                            <i class="fa fa-ban mr-1"></i> Refusal (R): <strong id="denver-live-r">{{ $saved_denver_refusal }}</strong>
-                                        </span>
-                                        <span class="badge px-3 py-2 font-w700" style="background: #64748b; color: white; font-size: 12px; border-radius: 6px;">
-                                            <i class="fa fa-minus-circle mr-1"></i> No Opp (NO): <strong id="denver-live-no">{{ $saved_denver_no }}</strong>
-                                        </span>
+                        
+                    <!-- Konfirmasi Verifikasi Terapis -->
+                    <div class="mt-4 p-3 rounded" style="background: #eff6ff; border: 1px solid #bfdbfe;">
+                        <div class="row align-items-center">
+                            <div class="col-md-7 col-12 mb-2 mb-md-0">
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 10px; background: #ffffff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 18px; flex-shrink: 0;">
+                                        <i class="fa-solid fa-user-doctor"></i>
                                     </div>
-                                    <input type="hidden" name="denver_pass_count" id="input-denver-pass" value="{{ $saved_denver_pass }}">
-                                    <input type="hidden" name="denver_fail_count" id="input-denver-fail" value="{{ $saved_denver_fail }}">
-                                    <input type="hidden" name="denver_refusal_count" id="input-denver-refusal" value="{{ $saved_denver_refusal }}">
-                                    <input type="hidden" name="denver_no_count" id="input-denver-no" value="{{ $saved_denver_no }}">
-                                    <input type="hidden" name="denver_kesimpulan" id="input-denver-kesimpulan" value="{{ $saved_denver_kesimpulan }}">
-                                </div>
-                                <div class="col-lg-5 col-12 text-lg-right">
-                                    <small class="text-white-50 d-block font-w600 mb-1" style="font-size: 11px;">Interpretasi Klinis Otomatis:</small>
-                                    <span class="badge px-3 py-2 font-w700 text-uppercase" id="denver-live-badge-kesimpulan" style="font-size: 13px; border-radius: 6px; {{ $saved_denver_kesimpulan == 'Normal (Sesuai Usia)' ? 'background:#10b981;color:white;' : ($saved_denver_kesimpulan == 'Suspect (Meragukan)' ? 'background:#f59e0b;color:white;' : ($saved_denver_kesimpulan == 'Keterlambatan Perkembangan' ? 'background:#ef4444;color:white;' : 'background:#e2e8f0;color:#1e293b;')) }}">
-                                        {{ $saved_denver_kesimpulan ?: 'Belum Dinilai' }}
-                                    </span>
-                                    <div class="text-white-50 mt-1" id="denver-live-desc-kesimpulan" style="font-size: 11px;">
-                                        @if($saved_denver_kesimpulan == 'Normal (Sesuai Usia)')
-                                            Semua task perkembangan tercapai sesuai kelompok usia.
-                                        @elseif($saved_denver_kesimpulan == 'Suspect (Meragukan)')
-                                            Ditemukan 1-2 kegagalan task. Disarankan re-screening 1-2 minggu.
-                                        @elseif($saved_denver_kesimpulan == 'Keterlambatan Perkembangan')
-                                            Ditemukan ≥3 kegagalan task lintas sektor. Perlu program terapi intensif.
-                                        @elseif($saved_denver_kesimpulan == 'Untestable (Menolak Pengujian)')
-                                            Anak menolak ≥2 pengujian. Uji ulang saat kooperatif.
-                                        @else
-                                            Pilih status task (P/F/R/NO) di bawah untuk memicu kalkulasi.
-                                        @endif
+                                    <div>
+                                        <strong style="color: #1e40af; font-size: 13.5px;" class="d-block">Konfirmasi & Tanda Tangan Terapis Pemeriksa</strong>
+                                        <small class="text-muted">Asesmen klinis akan divalidasi dan tersimpan di riwayat rekam medis pasien.</small>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- 4 Sectors Task List (Matrix Grid) -->
-                    @foreach($denver_sectors as $sKey => $sector)
-                        <div class="card mb-3 border" style="border-radius: 8px; border-color: #e2e8f0;">
-                            <div class="card-header py-2 px-3 d-flex align-items-center justify-content-between" style="background: {{ $sector['bg_header'] }}; border-bottom: 1px solid #e2e8f0;">
-                                <h6 class="font-w700 mb-0" style="color: {{ $sector['badge_color'] }}; font-size: 13.5px;">
-                                    {{ $sector['title'] }}
-                                </h6>
-                                <span class="badge badge-light border font-w600" style="font-size: 11px;">{{ count($sector['tasks']) }} Task</span>
-                            </div>
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
-                                        <thead style="background: #fafafa; color: #475569; font-size: 11.5px;">
-                                            <tr>
-                                                <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
-                                                <th style="width: 32%; vertical-align: middle;">Nama Task Perkembangan</th>
-                                                <th style="width: 12%; text-align: center; vertical-align: middle;">Rentang Usia</th>
-                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">Pass<br><small class="font-w700">(P)</small></th>
-                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">Fail<br><small class="font-w700">(F)</small></th>
-                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">Refusal<br><small class="font-w700">(R)</small></th>
-                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #f1f5f9; color: #475569;">No Opp<br><small class="font-w700">(NO)</small></th>
-                                                <th style="width: 20%; vertical-align: middle;">Catatan Terapis</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($sector['tasks'] as $tKey => $task)
-                                                @php
-                                                    $itemVal = $saved_denver_data[$tKey]['score'] ?? (old('denver_data.'.$tKey.'.score', ''));
-                                                    $itemNote = $saved_denver_data[$tKey]['catatan'] ?? (old('denver_data.'.$tKey.'.catatan', ''));
-                                                @endphp
-                                                <tr>
-                                                    <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $task['no'] }}</td>
-                                                    <td style="vertical-align: middle;">
-                                                        <strong class="text-dark" style="font-size: 12.5px;">{{ $task['name'] }}</strong>
-                                                    </td>
-                                                    <td class="text-center" style="vertical-align: middle;">
-                                                        <span class="badge badge-light border font-w600" style="font-size: 11px; color: #475569;">{{ $task['age'] }}</span>
-                                                    </td>
-                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
-                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="P" class="denver-radio matrix-input" {{ $itemVal === 'P' ? 'checked' : '' }}>
-                                                            <span class="matrix-score-indicator success">P</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
-                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="F" class="denver-radio matrix-input" {{ $itemVal === 'F' ? 'checked' : '' }}>
-                                                            <span class="matrix-score-indicator danger">F</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
-                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="R" class="denver-radio matrix-input" {{ $itemVal === 'R' ? 'checked' : '' }}>
-                                                            <span class="matrix-score-indicator warning">R</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #f8fafc;">
-                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="NO" class="denver-radio matrix-input" {{ $itemVal === 'NO' ? 'checked' : '' }}>
-                                                            <span class="matrix-score-indicator muted">NO</span>
-                                                        </label>
-                                                    </td>
-                                                    <td style="vertical-align: middle;">
-                                                        <input type="text" name="denver_data[{{ $tKey }}][catatan]" value="{{ $itemNote }}" class="form-control form-control-sm" placeholder="Catatan respon..." style="font-size: 11.5px;">
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="col-md-5 col-12 text-md-right">
+                                <span class="badge font-w700 mr-2" style="font-size: 12px; padding: 6px 12px; border-radius: 6px; background: #ffffff; color: #1e40af; border: 1px solid #bfdbfe;">
+                                    <i class="fa-solid fa-user-check mr-1 text-primary"></i> {{ $rekam->dokter->nama ?? auth()->user()->name }}
+                                </span>
+                                <small class="text-muted d-block mt-1">Tanggal: <strong>{{ $assessment->tgl_assessment ? $assessment->tgl_assessment->format('d/m/Y') : date('d/m/Y') }}</strong></small>
                             </div>
                         </div>
-                    @endforeach
-
-                    <!-- Catatan Khusus Skala Denver -->
-                    <div class="form-group mb-3">
-                        <label class="font-w600 text-dark mb-1" style="font-size: 12.5px;">Catatan Observasi Skala Denver / DDST II (Opsional)</label>
-                        <textarea name="denver_catatan" class="form-control" rows="2" placeholder="Tuliskan catatan khusus terkait skrining perkembangan Denver II, respon adaptasi anak, stimulasi orang tua..." style="font-size: 12.5px;">{{ old('denver_catatan', $assessment->denver_catatan) }}</textarea>
                     </div>
-
-                    <div class="d-flex justify-content-between mt-3 pt-2 tab-navigation-footer" style="border-top: 1px solid #edf2f7;">
-                        <button type="button" class="btn btn-sm btn-light prev-tab-btn" data-target-tab="#tab-evaluasi-btn" style="padding: 7px 16px; font-size: 12.5px;">
-                            <i class="fa fa-arrow-left mr-1"></i> Kembali ke Evaluasi & Target
-                        </button>
-                        <button type="submit" name="action" value="save" class="btn btn-sm btn-primary font-w600" style="padding: 7px 20px; font-size: 12.5px;">
-                            <i class="fa fa-save mr-1"></i> Simpan Assessment
-                        </button>
                     </div>
                 </div>
-
+                <!-- Modul 6 Navigation Footer -->
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 module-nav-footer" style="border-top: 1px solid #edf2f7;">
+                    <button type="button" class="btn btn-light font-w600" onclick="goToModule(5)" style="padding: 9px 18px; font-size: 13px; border-radius: 8px; border: 1px solid #cbd5e1; color: #475569;">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Modul 5: Instrumen Khusus (GMFM & Denver)
+                    </button>
+                    <small class="text-muted font-w600">
+                        <i class="fa-solid fa-check-double text-success mr-1"></i> Modul Terakhir (Simpan data melalui tombol di bawah)
+                    </small>
+                </div>
+            </div>
             </div>
         </div>
 
-        <!-- Unified Card Footer Action Buttons -->
-        <div class="card-footer py-3 px-4 d-flex align-items-center justify-content-between flex-wrap" style="background: #fafbfd; border-top: 1px solid #edf2f7; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; gap: 10px;">
-            <div class="text-muted font-w500" style="font-size: 12px;">
-                <i class="fa fa-lock text-success mr-1"></i> Data asesmen tersimpan langsung ke rekam medis penerima manfaat.
+        <!-- Card Footer Note -->
+        <div class="card-footer py-3 px-4 d-flex align-items-center justify-content-between flex-wrap" style="background: #fafbfd; border-top: 1px solid #edf2f7; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; gap: 8px;">
+            <div class="text-muted font-w500" style="font-size: 12.5px;">
+                <i class="fa-solid fa-lock text-success mr-1"></i> Seluruh data asesmen tersimpan langsung ke rekam medis penerima manfaat.
             </div>
-            <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                <a href="{{Route('rekam.detail', $pasien->id)}}" class="btn btn-sm btn-light" style="padding: 7px 16px; font-weight: 600; font-size: 12.5px; border-radius: 6px; border: 1px solid #cbd5e1;">
-                    Batal
-                </a>
-                <button type="submit" name="action" value="save" class="btn btn-sm btn-primary font-w700" style="padding: 7px 20px; font-size: 12.5px; border-radius: 6px;">
-                    <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Assessment
-                </button>
-                <button type="submit" name="action" value="save_and_print" class="btn btn-sm btn-success text-white font-w700" style="padding: 7px 18px; font-size: 12.5px; border-radius: 6px;">
-                    <i class="fa-solid fa-print mr-1"></i> Simpan & Cetak
-                </button>
-            </div>
+            <small class="text-muted font-w500">
+                <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Terenkripsi & Validasi Rekam Medis Digital
+            </small>
         </div>
     </div>
 
+
     <!-- Floating Sticky Bottom Action Bar (Selalu Terlihat di Layar) -->
-    <div class="assessment-sticky-action-bar mb-4" style="position: sticky; bottom: 15px; z-index: 1040; background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(10px); border: 1.5px solid #cbd5e1; border-radius: 12px; box-shadow: 0 8px 30px rgba(46, 75, 130, 0.18); padding: 12px 20px;">
+    <div class="assessment-sticky-action-bar mb-4" style="position: sticky; bottom: 15px; z-index: 1040; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12); padding: 12px 20px;">
         <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 12px;">
             <div class="d-flex align-items-center flex-wrap" style="gap: 10px;">
-                <span class="badge badge-primary font-w700" style="font-size: 12px; padding: 6px 12px; border-radius: 6px;">
-                    <i class="fa-solid fa-tasks mr-1"></i> Progress: <span class="sticky-progress-percent">0%</span>
+                <span class="badge font-w700" style="font-size: 12px; padding: 6px 12px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
+                    <i class="fa-solid fa-list-check mr-1 text-primary"></i> Progress: <span class="sticky-progress-percent text-primary font-w700">0%</span>
                 </span>
-                <span class="text-dark font-w600 d-none d-sm-inline" style="font-size: 12.5px;">
-                    <i class="fa-solid fa-circle-check text-success mr-1"></i> Tekan tombol simpan kapan saja tanpa harus scroll ke bawah
+                <span class="badge font-w700" id="stickyModuleBadge" style="font-size: 12px; padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #475569; border: 1px solid #cbd5e1;">
+                    <i class="fa-solid fa-layer-group mr-1 text-primary"></i> Modul <span id="stickyCurrentModuleNumber">1</span> dari 6
                 </span>
             </div>
             <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                <button type="button" class="btn btn-sm btn-light font-w600" onclick="$('html, body').animate({scrollTop: 0}, 250)" style="padding: 7px 12px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 6px;" title="Ke Atas">
+                <button type="button" class="btn btn-sm btn-light font-w600" id="stickyBtnPrevModul" onclick="stepModule(-1)" style="padding: 8px 14px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;" title="Modul Sebelumnya" disabled>
+                    <i class="fa-solid fa-chevron-left mr-1"></i> Prev Modul
+                </button>
+                <button type="button" class="btn btn-sm btn-light font-w600" id="stickyBtnNextModul" onclick="stepModule(1)" style="padding: 8px 14px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;" title="Modul Berikutnya">
+                    Next Modul <i class="fa-solid fa-chevron-right ml-1"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-light font-w600" onclick="$('html, body').animate({scrollTop: 0}, 250)" style="padding: 8px 14px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;" title="Ke Atas">
                     <i class="fa-solid fa-arrow-up"></i>
                 </button>
-                <a href="{{Route('rekam.detail', $pasien->id)}}" class="btn btn-sm btn-light font-w600" style="padding: 7px 16px; font-size: 12.5px; border-radius: 6px; border: 1px solid #cbd5e1;">
+                <a href="{{Route('rekam.detail', $pasien->id)}}" class="btn btn-sm btn-light font-w600" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; border: 1px solid #cbd5e1; color: #475569;">
                     Batal
                 </a>
-                <button type="submit" name="action" value="save" class="btn btn-sm btn-primary font-w700 shadow-sm" style="padding: 7px 22px; font-size: 12.5px; border-radius: 6px;">
-                    <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Assessment
+                <button type="submit" name="action" value="save" class="btn btn-sm btn-primary font-w700 shadow-sm" style="padding: 8px 22px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan
                 </button>
-                <button type="submit" name="action" value="save_and_print" class="btn btn-sm btn-success font-w700 text-white shadow-sm" style="padding: 7px 18px; font-size: 12.5px; border-radius: 6px;">
+                <button type="submit" name="action" value="save_and_print" class="btn btn-sm btn-success font-w700 text-white shadow-sm" style="padding: 8px 20px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; border: none !important; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
                     <i class="fa-solid fa-print mr-1"></i> Simpan & Cetak
                 </button>
             </div>
@@ -3334,149 +3229,68 @@
 
 @section('style')
 <style>
-/* Custom Assessment Tab Navigation */
-.assessment-tabs .nav-link {
-    background: #ffffff;
-    color: #475569;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 8px !important;
-    padding: 6px 9px;
-    font-size: 11.5px;
+/* Underline Tabs Navigation Sesuai DESIGN.md */
+.ot-underline-tabs {
+    border-bottom: 2px solid #e2e8f0;
+}
+.ot-underline-tabs .nav-link {
+    border: none !important;
+    border-bottom: 3px solid transparent !important;
+    background: transparent !important;
+    color: #64748b !important;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 12px 18px;
+    border-radius: 0 !important;
     transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.assessment-tabs .nav-link:hover {
-    background: #f1f5fb;
-    color: #0f172a;
-    border-color: #cbd5e1;
-}
-
-.assessment-tabs .nav-link.active {
-    background: #2e4b82 !important;
-    color: #ffffff !important;
-    border-color: #2e4b82 !important;
-    box-shadow: 0 2px 8px rgba(46, 75, 130, 0.2);
-}
-
-.assessment-tabs .nav-link.active .badge {
-    background: #ffffff !important;
-    color: #2e4b82 !important;
-}
-
-/* Category Nav Buttons */
-.category-btn {
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-.category-btn.active {
-    background: #2e4b82 !important;
-    color: #ffffff !important;
-    border-color: #2e4b82 !important;
-    box-shadow: 0 2px 8px rgba(46, 75, 130, 0.25);
-}
-.category-btn.active .cat-count {
-    background: rgba(255,255,255,0.2) !important;
-    color: #ffffff !important;
-}
-
-/* Matrix Grid Table Styling */
-.matrix-grid-table th {
-    vertical-align: middle !important;
-    font-weight: 700;
-}
-.matrix-grid-table td {
-    vertical-align: middle !important;
-    padding: 6px 4px !important;
-}
-.matrix-cell {
-    padding: 0 !important;
-    text-align: center;
-}
-.matrix-radio-label {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    padding: 8px 4px;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-    position: relative;
-    user-select: none;
-    transition: background 0.15s ease;
-}
-.matrix-radio-label:hover {
-    background: rgba(46, 75, 130, 0.08) !important;
-}
-.matrix-input {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-}
-.matrix-score-indicator {
+    white-space: nowrap;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    font-size: 11.5px;
-    font-weight: 700;
-    border: 1.5px solid #cbd5e1;
-    background: #ffffff;
+}
+.ot-underline-tabs .nav-link:hover {
+    color: #2563eb !important;
+    background: #f8fafc !important;
+}
+.ot-underline-tabs .nav-link.active {
+    color: #2563eb !important;
+    border-bottom-color: #2563eb !important;
+    font-weight: 700 !important;
+    background: #eff6ff !important;
+}
+.ot-underline-tabs .nav-link .counter-pill {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    background: #f1f5f9;
     color: #475569;
-    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
 }
-.matrix-radio-label:hover .matrix-score-indicator {
-    border-color: #3b82f6;
-    transform: scale(1.1);
-}
-.matrix-input:checked + .matrix-score-indicator {
-    transform: scale(1.15);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-}
-.matrix-input:checked + .matrix-score-indicator.danger {
-    background: #dc2626 !important;
-    border-color: #dc2626 !important;
-    color: #ffffff !important;
-}
-.matrix-input:checked + .matrix-score-indicator.warning {
-    background: #d97706 !important;
-    border-color: #d97706 !important;
-    color: #ffffff !important;
-}
-.matrix-input:checked + .matrix-score-indicator.info {
-    background: #2563eb !important;
-    border-color: #2563eb !important;
-    color: #ffffff !important;
-}
-.matrix-input:checked + .matrix-score-indicator.success {
-    background: #16a34a !important;
-    border-color: #16a34a !important;
-    color: #ffffff !important;
-}
-.matrix-input:checked + .matrix-score-indicator.muted {
-    background: #64748b !important;
-    border-color: #64748b !important;
-    color: #ffffff !important;
+.ot-underline-tabs .nav-link.active .counter-pill {
+    background: #2563eb;
+    color: #ffffff;
 }
 
-/* Radio & Checkbox Interactive Pill Cards with Visible Bullet & Checkbox Indicator */
+/* Subtest Card Styling */
+.assessment-subtest-card {
+    transition: all 0.2s ease;
+}
+.assessment-subtest-card .subtest-header {
+    transition: all 0.2s ease;
+}
+
+/* Radio & Checkbox Card Pills - Sesuai Standar Penerima Manfaat Baru */
 .radio-pill-card, .check-pill-card {
     display: inline-flex;
     align-items: center;
-    padding: 7px 14px;
-    background: #ffffff;
     border: 1.5px solid #cbd5e1;
     border-radius: 8px;
-    cursor: pointer;
-    font-size: 12.5px;
+    padding: 7px 16px;
+    font-size: 13px;
     font-weight: 500;
+    cursor: pointer;
+    background: #ffffff;
     color: #334155;
-    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
     margin-bottom: 0;
     position: relative;
@@ -3484,98 +3298,136 @@
 
 .radio-pill-card:hover, .check-pill-card:hover {
     background: #f8fafc;
-    border-color: #3b82f6;
-    color: #1e3a8a;
+    border-color: #93c5fd;
+    color: #1e40af;
     transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.12);
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
 }
 
-.radio-pill-card input[type="radio"], .check-pill-card input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-    margin: 0;
-}
-
-/* Visible Radio Bullet Icon ( ) -> (•) */
-.radio-pill-card::before {
-    content: "";
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    min-width: 16px;
-    border: 2px solid #94a3b8;
+/* Custom Styled Radio */
+.radio-pill-card input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    min-width: 17px;
+    border: 1.8px solid #94a3b8;
     border-radius: 50%;
-    margin-right: 8px;
-    background: #ffffff;
-    transition: all 0.18s ease;
-    box-sizing: border-box;
-    vertical-align: middle;
-}
-
-.radio-pill-card:hover::before {
-    border-color: #2563eb;
-}
-
-.radio-pill-card.active {
-    background: #eff6ff !important;
-    border-color: #2563eb !important;
-    color: #1d4ed8 !important;
-    font-weight: 700 !important;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.18) !important;
-}
-
-.radio-pill-card.active::before {
-    border-color: #2563eb !important;
-    background: #2563eb !important;
-    box-shadow: inset 0 0 0 3.5px #ffffff !important;
-}
-
-/* Visible Checkbox Square Icon [ ] -> [✓] */
-.check-pill-card::before {
-    content: "";
+    outline: none;
+    cursor: pointer;
+    margin: 0 9px 0 0;
+    background-color: #ffffff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 16px;
-    height: 16px;
-    min-width: 16px;
-    border: 2px solid #94a3b8;
-    border-radius: 4px;
-    margin-right: 8px;
-    background: #ffffff;
-    transition: all 0.18s ease;
-    box-sizing: border-box;
-    font-family: FontAwesome;
-    font-size: 10.5px;
-    color: transparent;
     vertical-align: middle;
+    transition: all 0.15s ease;
+    position: relative;
+    flex-shrink: 0;
 }
 
-.check-pill-card:hover::before {
+.radio-pill-card:hover input[type="radio"] {
     border-color: #2563eb;
 }
 
-.check-pill-card.active {
+.radio-pill-card input[type="radio"]:checked {
+    border-color: #2563eb !important;
+    background-color: #2563eb !important;
+    box-shadow: inset 0 0 0 3.5px #ffffff !important;
+}
+
+.radio-pill-card.active,
+.radio-pill-card:has(input:checked) {
     background: #eff6ff !important;
     border-color: #2563eb !important;
-    color: #1d4ed8 !important;
-    font-weight: 700 !important;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.18) !important;
+    color: #1e40af !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.14) !important;
 }
 
-.check-pill-card.active::before {
-    content: "\f00c";
+/* Custom Styled Checkbox - IDENTIK DENGAN PENERIMA MANFAAT BARU */
+.check-pill-card input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    min-width: 17px;
+    border: 1.8px solid #94a3b8;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    margin: 0 9px 0 0;
+    background-color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    transition: all 0.15s ease;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.check-pill-card:hover input[type="checkbox"] {
+    border-color: #2563eb;
+}
+
+.check-pill-card input[type="checkbox"]:checked {
+    background-color: #2563eb !important;
     border-color: #2563eb !important;
-    background: #2563eb !important;
-    color: #ffffff !important;
 }
 
-/* Special Badge Exceptions */
-.denver-pill::before {
-    display: none !important;
+/* Custom Crisp White Checkmark inside the Blue Box */
+.check-pill-card input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 9px;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    top: 1px;
+    left: 4.5px;
+}
+
+.check-pill-card.active,
+.check-pill-card:has(input:checked) {
+    background: #eff6ff !important;
+    border-color: #2563eb !important;
+    color: #1e40af !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.14) !important;
+}
+
+/* Bootstrap custom-checkbox enhancement */
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+}
+
+/* Global Textarea & Notes Enhancement */
+#formAssessment textarea.form-control {
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    padding: 10px 14px !important;
+    min-height: 85px;
+    transition: all 0.2s ease !important;
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+}
+
+#formAssessment textarea.form-control:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+    background-color: #ffffff !important;
+}
+
+#formAssessment textarea.form-control::placeholder {
+    color: #94a3b8 !important;
+    font-size: 12.5px !important;
 }
 
 .assessment-box {
@@ -3589,45 +3441,153 @@
 
 /* Pain Scale Buttons */
 .pain-scale-btn {
-    flex: 1;
-    min-width: 36px;
-    padding: 6px 2px;
-    background: #f8fafc;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 6px;
-    color: #334155;
     transition: all 0.15s ease;
+    font-weight: 600;
 }
-
 .pain-scale-btn:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
 }
-
 .pain-scale-btn.active {
-    background: #2e4b82;
-    border-color: #2e4b82;
-    color: #ffffff;
-    box-shadow: 0 2px 6px rgba(46, 75, 130, 0.25);
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    outline: 2.5px solid #2563eb;
 }
 
-.pain-scale-btn.mini {
-    padding: 4px 1px;
-    min-width: 26px;
-    font-size: 11px;
+/* Matrix table styling */
+.matrix-grid-table th {
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+    vertical-align: middle;
 }
 
-/* Symbol Selector Buttons */
-.symbol-btn {
+.matrix-grid-table td {
+    vertical-align: middle;
+    font-size: 12.5px;
+}
+
+.matrix-grid-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* GMFM Matrix Buttons */
+.gmfm-score-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 11.5px;
+    font-weight: 700;
+    font-size: 12px;
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+    cursor: pointer;
     transition: all 0.15s ease;
 }
-.symbol-btn.active {
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    filter: brightness(0.95);
+
+.gmfm-score-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.gmfm-score-btn.active {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+}
+
+.gmfm-score-btn.score-0.active { background: #64748b !important; border-color: #64748b !important; }
+.gmfm-score-btn.score-1.active { background: #f59e0b !important; border-color: #f59e0b !important; }
+.gmfm-score-btn.score-2.active { background: #3b82f6 !important; border-color: #3b82f6 !important; }
+.gmfm-score-btn.score-3.active { background: #10b981 !important; border-color: #10b981 !important; }
+
+/* Sticky bottom action bar shadow */
+.assessment-sticky-action-bar {
+    transition: all 0.25s ease;
+}
+
+/* GMFM Dimensions Underline Tabs */
+.gmfm-dim-tabs {
+    border-bottom: 2px solid #e2e8f0 !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 0 !important;
+}
+.gmfm-dim-tabs .gmfm-dim-btn {
+    border: none !important;
+    border-bottom: 2.5px solid transparent !important;
+    background: transparent !important;
+    color: #64748b !important;
+    font-weight: 600 !important;
+    font-size: 12.5px !important;
+    padding: 10px 14px !important;
+    border-radius: 8px 8px 0 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    transition: all 0.18s ease;
+    cursor: pointer;
+    margin-bottom: -2px;
+}
+.gmfm-dim-tabs .gmfm-dim-btn:hover {
+    color: #2563eb !important;
+    background: #f8fafc !important;
+}
+.gmfm-dim-tabs .gmfm-dim-btn.active {
+    color: #1e40af !important;
+    background: #eff6ff !important;
+    border-bottom: 2.5px solid #2563eb !important;
+    font-weight: 700 !important;
+}
+.gmfm-dim-tabs .gmfm-dim-btn .badge-counter {
+    font-size: 10.5px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    color: #475569;
+    margin-left: 6px;
+    font-weight: 700;
+    transition: all 0.18s ease;
+}
+.gmfm-dim-tabs .gmfm-dim-btn.active .badge-counter {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+/* GMFM Dimension Score Summary Card (Light Blue Medis Sesuai Header) */
+.gmfm-dim-score-card {
+    background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%) !important;
+    border: 1px solid #bfdbfe !important;
+    border-left: 4px solid #2563eb !important;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.05) !important;
+    color: #1e293b !important;
+}
+
+/* Denver DDST II Interactive Badges */
+.denver-badge-opt {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease;
+    border: 1px solid #cbd5e1;
+    opacity: 0.65;
+}
+.denver-badge-opt:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+.denver-badge-opt.active {
+    opacity: 1 !important;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
     font-weight: 800 !important;
 }
 </style>
@@ -3635,111 +3595,60 @@
 
 @section('script')
 <script>
-var currentViewMode = 'tab'; // 'tab' or 'all'
-var activeCategory = 'cat-motorik';
+var currentModule = 1;
+var totalModules = 6;
 var draftStorageKey = 'omahterapi_draft_assessment_' + {{ $rekam->id }};
 var autoSaveTimer = null;
 
-function switchViewMode(mode) {
-    currentViewMode = mode;
-
-    if (mode === 'all') {
-        // Mode Tampilkan Semua Bagian
-        $('#btn-mode-all').addClass('btn-primary active text-white').removeClass('btn-outline-secondary');
-        $('#btn-mode-tab').removeClass('btn-primary active text-white').addClass('btn-outline-secondary');
-        
-        $('.subtab-item').show();
-        $('.tab-pane-box').show().addClass('mb-4 pb-3').css({
-            'border-bottom': '2px dashed #edf2f7'
-        });
-        $('.tab-pane-box:last').css('border-bottom', 'none');
-        
-        $('.tab-navigation-footer').hide();
-        $('.section-header-tab').hide();
-        $('.section-title-banner').show();
-        $('.assessment-tabs .nav-link').removeClass('active');
-    } else {
-        // Mode Per Tab
-        $('#btn-mode-tab').addClass('btn-primary active text-white').removeClass('btn-outline-secondary');
-        $('#btn-mode-all').removeClass('btn-primary active text-white').addClass('btn-outline-secondary');
-        
-        $('.tab-pane-box').removeClass('mb-4 pb-3').css({
-            'border-bottom': 'none'
-        }).hide();
-        
-        $('.tab-navigation-footer').show();
-        $('.section-header-tab').show();
-        $('.section-title-banner').hide();
-        
-        // Filter subtabs for active category
-        filterSubtabsByCategory(activeCategory);
-    }
-}
-
-function filterSubtabsByCategory(catName) {
-    activeCategory = catName;
-    
-    // Update Category Pills Active State
-    $('.category-btn').each(function() {
-        if ($(this).data('category') === catName) {
-            $(this).addClass('active').css({
-                'background': '#2e4b82',
-                'color': '#ffffff',
-                'border-color': '#2e4b82'
-            });
-        } else {
-            $(this).removeClass('active').css({
-                'background': '#ffffff',
-                'color': '#475569',
-                'border-color': '#cbd5e1'
-            });
-        }
-    });
-
-    if (currentViewMode === 'tab') {
-        // Hide all subtabs, show only for this category
-        $('.subtab-item').hide();
-        var currentSubtabs = $('.subtab-item[data-parent-cat="' + catName + '"]');
-        currentSubtabs.show();
-
-        // Activate the first subtab in this category
-        var firstLink = currentSubtabs.first().find('.nav-link');
-        if (firstLink.length > 0) {
-            firstLink.trigger('click');
-        }
-    }
-}
-
-// ----------------------------------------------------
-// OVERALL PROGRESS & TAB CHECKMARK BADGE TRACKER
-// ----------------------------------------------------
-var moduleTabIds = [
-    'tab-motorik', 'tab-gmfm', 'tab-adl', 'tab-wicara', 'tab-penglihatan',
-    'tab-nyeri', 'tab-rom', 'tab-neuro', 'tab-postur', 'tab-gait',
-    'tab-sensoris', 'tab-psikososial', 'tab-perencanaan', 'tab-evaluasi', 'tab-denver'
-];
-
-var categoryMapping = {
-    'cat-motorik': ['tab-motorik', 'tab-gmfm', 'tab-adl'],
-    'cat-sensorik': ['tab-wicara', 'tab-penglihatan', 'tab-sensoris'],
-    'cat-fisik': ['tab-nyeri', 'tab-rom', 'tab-neuro', 'tab-postur', 'tab-gait'],
-    'cat-rencana': ['tab-psikososial', 'tab-perencanaan', 'tab-evaluasi', 'tab-denver']
+// Module to Subtests Mapping
+var moduleSubtests = {
+    1: ['subtest-penglihatan', 'subtest-psikososial'],
+    2: ['subtest-motorik', 'subtest-adl', 'subtest-wicara'],
+    3: ['subtest-nyeri', 'subtest-rom'],
+    4: ['subtest-neuro', 'subtest-postur', 'subtest-gait', 'subtest-sensoris'],
+    5: ['subtest-gmfm', 'subtest-denver'],
+    6: ['subtest-perencanaan', 'subtest-evaluasi']
 };
 
-function isTabFilled(tabId) {
-    var pane = $('#' + tabId);
+function goToModule(moduleIndex) {
+    if (moduleIndex < 1 || moduleIndex > totalModules) return;
+    currentModule = moduleIndex;
+
+    // Trigger tab activation
+    $('#tab-modul' + moduleIndex + '-btn').tab('show');
+
+    // Update Sticky Module Counter & Buttons
+    $('#stickyCurrentModuleNumber').text(moduleIndex);
+    $('#stickyBtnPrevModul').prop('disabled', moduleIndex === 1);
+    $('#stickyBtnNextModul').prop('disabled', moduleIndex === totalModules);
+
+    // Scroll to top of main card smoothly
+    $('html, body').animate({
+        scrollTop: $('#formAssessment').offset().top - 80
+    }, 250);
+}
+
+function stepModule(direction) {
+    goToModule(currentModule + direction);
+}
+
+// ----------------------------------------------------
+// SUBTEST FILL STATUS CHECKER
+// ----------------------------------------------------
+function isSubtestFilled(subtestId) {
+    var pane = $('#' + subtestId);
     if (!pane.length) return false;
 
-    // Check GMFM tab specifically
-    if (tabId === 'tab-gmfm') {
+    // Check GMFM specifically
+    if (subtestId === 'subtest-gmfm') {
         return pane.find('.gmfm-a-radio:checked, .gmfm-b-radio:checked, .gmfm-c-radio:checked, .gmfm-d-radio:checked, .gmfm-e-radio:checked').length > 0;
     }
-    // Check Denver tab specifically
-    if (tabId === 'tab-denver') {
+    // Check Denver specifically
+    if (subtestId === 'subtest-denver') {
         return pane.find('.denver-radio:checked').length > 0;
     }
-    // Check Nyeri & Body Chart tab specifically
-    if (tabId === 'tab-nyeri') {
+    // Check Nyeri & Body Chart specifically
+    if (subtestId === 'subtest-nyeri') {
         if ($('#input_nyeri_body_chart').val() || $('#input-score-istirahat').val() || $('#input-score-aktivitas').val()) {
             return true;
         }
@@ -3760,37 +3669,40 @@ function isTabFilled(tabId) {
 }
 
 function updateFormOverallProgress() {
-    var totalModules = moduleTabIds.length;
-    var filledCount = 0;
+    var totalSubtests = 15;
+    var filledSubtestsCount = 0;
+    var filledModulesCount = 0;
 
-    moduleTabIds.forEach(function(tabId) {
-        var filled = isTabFilled(tabId);
-        var btn = $('#' + tabId + '-btn');
-        if (filled) {
-            filledCount++;
-            btn.find('.tab-check-icon').removeClass('d-none');
+    for (var m = 1; m <= totalModules; m++) {
+        var subtests = moduleSubtests[m];
+        var moduleFilledCount = 0;
+        
+        subtests.forEach(function(sId) {
+            if (isSubtestFilled(sId)) {
+                moduleFilledCount++;
+                filledSubtestsCount++;
+            }
+        });
+
+        // Update Module Tab Badge
+        $('#badge-modul-' + m).text(moduleFilledCount + '/' + subtests.length);
+        if (moduleFilledCount === subtests.length) {
+            $('#badge-modul-' + m).removeClass('badge-light').addClass('badge-success text-white');
         } else {
-            btn.find('.tab-check-icon').addClass('d-none');
+            $('#badge-modul-' + m).removeClass('badge-success text-white').addClass('badge-light');
         }
-    });
 
-    var pct = Math.round((filledCount / totalModules) * 100);
+        if (moduleFilledCount > 0) {
+            filledModulesCount++;
+        }
+    }
+
+    var pct = Math.round((filledSubtestsCount / totalSubtests) * 100);
     $('#progressPercentText').text(pct + '%');
     $('.sticky-progress-percent').text(pct + '%');
-    $('#progressModulesText').text('(' + filledCount + '/' + totalModules + ' Modul Terisi)');
+    $('#progressModulesText').text('(' + filledModulesCount + '/' + totalModules + ' Modul Terisi)');
     $('#formOverallProgressBar').css('width', pct + '%').attr('aria-valuenow', pct);
-
-    // Update Category Badges
-    for (var cat in categoryMapping) {
-        var catTabs = categoryMapping[cat];
-        var catFilled = 0;
-        catTabs.forEach(function(tId) {
-            if (isTabFilled(tId)) catFilled++;
-        });
-        $('#badge-' + cat).text(catFilled + '/' + catTabs.length);
-    }
 }
-
 // ----------------------------------------------------
 // LOCALSTORAGE AUTO-SAVE DRAFT & RESTORE
 // ----------------------------------------------------
@@ -3851,54 +3763,169 @@ function checkExistingDraft() {
 function restoreDraftData() {
     try {
         var saved = localStorage.getItem(draftStorageKey);
-        if (!saved) return;
+        if (!saved) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'info', title: 'Tidak Ada Draft', text: 'Tidak ditemukan data draft yang tersimpan di peramban ini.', timer: 2000, showConfirmButton: false });
+            } else {
+                alert('Tidak ada data draft yang ditemukan.');
+            }
+            return;
+        }
         var parsed = JSON.parse(saved);
         var data = parsed.data;
+        if (!data) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'warning', title: 'Draft Kosong', text: 'Data draft yang tersimpan kosong atau tidak valid.', timer: 2000, showConfirmButton: false });
+            } else {
+                alert('Data draft kosong atau tidak valid.');
+            }
+            return;
+        }
 
+        // 1. Reset all radios and checkboxes first
+        $('#formAssessment input[type="checkbox"]').prop('checked', false);
+        $('#formAssessment input[type="radio"]').prop('checked', false);
+        $('.radio-pill-card, .check-pill-card, .denver-badge-opt').removeClass('active');
+
+        // 2. Iterate and fill form data
         for (var name in data) {
             var val = data[name];
             var elem = $('[name="' + name + '"]');
+            if (!elem.length) continue;
 
             if (elem.is(':radio')) {
-                elem.filter('[value="' + val + '"]').prop('checked', true).trigger('change');
+                var targetRadio = elem.filter('[value="' + val + '"]');
+                if (targetRadio.length) {
+                    targetRadio.prop('checked', true);
+                    targetRadio.closest('.radio-pill-card').addClass('active');
+                }
             } else if (Array.isArray(val)) {
                 // Checkbox array
                 elem.each(function() {
                     if (val.indexOf($(this).val()) !== -1) {
-                        $(this).prop('checked', true).trigger('change');
+                        $(this).prop('checked', true);
+                        $(this).closest('.check-pill-card').addClass('active');
                     }
                 });
+            } else if (elem.is(':checkbox')) {
+                if (val && val !== '0' && val !== 0) {
+                    elem.prop('checked', true);
+                    elem.closest('.check-pill-card').addClass('active');
+                }
             } else {
-                elem.val(val).trigger('input');
+                elem.val(val);
             }
         }
 
-        // Trigger updates
-        updateGmfmALiveScore();
-        updateGmfmBLiveScore();
-        updateGmfmCLiveScore();
-        updateGmfmDLiveScore();
-        updateGmfmELiveScore();
-        updateDenverLiveScore();
-        updateFormOverallProgress();
+        // 3. Update Pain Scale UI buttons
+        if (data.nyeri_skala_istirahat !== undefined && data.nyeri_skala_istirahat !== null && data.nyeri_skala_istirahat !== '') {
+            var valIst = data.nyeri_skala_istirahat;
+            var btnIst = $('.pain-scale-btn[data-target="#input-score-istirahat"][data-val="' + valIst + '"]');
+            if (btnIst.length) {
+                btnIst.closest('.pain-scale-group').find('.pain-scale-btn').removeClass('active');
+                btnIst.addClass('active');
+                var bgIst = valIst == 0 ? '#10b981' : (valIst <= 3 ? '#3b82f6' : (valIst <= 6 ? '#f59e0b' : '#ef4444'));
+                $('#badge-skala-istirahat').text(valIst + ' / 10').css({ 'background': bgIst, 'color': '#ffffff' });
+            }
+        }
+        if (data.nyeri_skala_aktivitas !== undefined && data.nyeri_skala_aktivitas !== null && data.nyeri_skala_aktivitas !== '') {
+            var valAkt = data.nyeri_skala_aktivitas;
+            var btnAkt = $('.pain-scale-btn[data-target="#input-score-aktivitas"][data-val="' + valAkt + '"]');
+            if (btnAkt.length) {
+                btnAkt.closest('.pain-scale-group').find('.pain-scale-btn').removeClass('active');
+                btnAkt.addClass('active');
+                var bgAkt = valAkt == 0 ? '#10b981' : (valAkt <= 3 ? '#3b82f6' : (valAkt <= 6 ? '#f59e0b' : '#ef4444'));
+                $('#badge-skala-aktivitas').text(valAkt + ' / 10').css({ 'background': bgAkt, 'color': '#ffffff' });
+            }
+        }
 
+        // 4. Restore Denver Badge UI buttons
+        $('.denver-radio:checked').each(function() {
+            var group = $(this).closest('.denver-btn-group');
+            var val = $(this).val();
+            group.find('.denver-badge-opt').removeClass('active');
+            group.find('.denver-badge-opt[data-val="' + val + '"]').addClass('active');
+        });
+
+        // 5. Restore Body Chart Image if present
         if (data.nyeri_body_chart) {
             existingChartData = data.nyeri_body_chart;
             hasLoadedExisting = false;
             loadExistingChartImage();
         }
 
+        // 6. Run calculations
+        updateGmfmALiveScore();
+        updateGmfmBLiveScore();
+        updateGmfmCLiveScore();
+        updateGmfmDLiveScore();
+        updateGmfmELiveScore();
+        updateGmfmTotalScore();
+        updateDenverLiveScore();
+        togglePerencanaanLainnya();
+
+        // 7. Sync toggle wrappers
+        toggleTongkatTeknik($('#alat_tongkat').is(':checked'));
+        toggleAlatLainnya($('#alat_lainnya').is(':checked'));
+        toggleSifatLainnya($('#check_sifat_lainnya').is(':checked'));
+        toggleKoorLainnya($('#check_koor_lainnya').is(':checked'));
+        toggleOrganKelainan($('input[name="wicara_organ_bicara"]:checked').val());
+        toggleMenelanKeterangan($('input[name="wicara_makan_menelan"]:checked').val());
+
+        // 8. Update overall progress
+        updateFormOverallProgress();
+
+        // 9. Hide restore banner & notify user
         $('#draftRestoreBanner').removeClass('d-flex').addClass('d-none');
-        alert('Draft asesmen berhasil dipulihkan!');
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Draft Dipulihkan!',
+                text: 'Seluruh isian asesmen dari penyimpanan lokal berhasil dimuat kembali.',
+                timer: 2200,
+                showConfirmButton: false
+            });
+        } else {
+            alert('Draft asesmen berhasil dipulihkan!');
+        }
     } catch(e) {
-        alert('Gagal memulihkan draft: ' + e.message);
+        console.error('Draft restore error:', e);
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({ icon: 'error', title: 'Gagal Memulihkan Draft', text: e.message });
+        } else {
+            alert('Gagal memulihkan draft: ' + e.message);
+        }
     }
 }
 
 function discardDraftData() {
-    if (confirm('Hapus draft asesmen yang tersimpan secara lokal?')) {
+    var proceed = function() {
         localStorage.removeItem(draftStorageKey);
         $('#draftRestoreBanner').removeClass('d-flex').addClass('d-none');
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({ icon: 'info', title: 'Draft Dihapus', text: 'Draft lokal telah dibersihkan.', timer: 1500, showConfirmButton: false });
+        }
+    };
+
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'Hapus Draft?',
+            text: 'Draft lokal akan dihapus permanen dari peramban.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Ya, Hapus Draft',
+            cancelButtonText: 'Batal'
+        }).then(function(res) {
+            if (res.isConfirmed) {
+                proceed();
+            }
+        });
+    } else {
+        if (confirm('Hapus draft asesmen yang tersimpan secara lokal?')) {
+            proceed();
+        }
     }
 }
 
@@ -3909,7 +3936,7 @@ function setAllRomNormal() {
     $('#tab-rom input[type="radio"]').each(function() {
         var val = $(this).val();
         if (val === 'Full / Bebas' || val === 'Normal (5/5)' || val === '5' || val === 'Normal') {
-            $(this).prop('checked', true).trigger('change');
+            $(this).prop('checked', true).closest('.radio-pill-card').addClass('active');
         }
     });
     $('#tab-rom select').each(function() {
@@ -3918,7 +3945,7 @@ function setAllRomNormal() {
             return t.indexOf('normal') !== -1 || t.indexOf('5/5') !== -1 || t.indexOf('full') !== -1;
         });
         if (opt.length > 0) {
-            $(this).val(opt.val()).trigger('change');
+            $(this).val(opt.val());
         }
     });
     updateFormOverallProgress();
@@ -3929,7 +3956,7 @@ function setAllNeuroNormal() {
     $('#tab-neuro input[type="radio"]').each(function() {
         var val = $(this).val();
         if (val === 'Normal (++)' || val === 'Negatif (-)' || val === 'Normal (Eutoni)' || val === 'Negatif' || val === 'Normal') {
-            $(this).prop('checked', true).trigger('change');
+            $(this).prop('checked', true).closest('.radio-pill-card').addClass('active');
         }
     });
     updateFormOverallProgress();
@@ -3940,7 +3967,7 @@ function setAllGaitNormal() {
     $('#tab-gait input[type="radio"]').each(function() {
         var val = $(this).val();
         if (val === 'Normal' || val === 'Lengkap (Heel strike s/d Push-off)' || val === 'Mandiri Tanpa Alat Bantu' || val === 'Baik (Stabil)') {
-            $(this).prop('checked', true).trigger('change');
+            $(this).prop('checked', true).closest('.radio-pill-card').addClass('active');
         }
     });
     updateFormOverallProgress();
@@ -3951,7 +3978,7 @@ function setAllSensorisNormal() {
     $('#tab-sensoris input[type="radio"]').each(function() {
         var val = $(this).val();
         if (val === 'Normal' || val === 'Negatif' || val === 'Responsif') {
-            $(this).prop('checked', true).trigger('change');
+            $(this).prop('checked', true).closest('.radio-pill-card').addClass('active');
         }
     });
     updateFormOverallProgress();
@@ -4087,490 +4114,269 @@ if (canvas) {
     });
 }
 
-// ----------------------------------------------------
-// DOCUMENT READY INITIALIZATION
-// ----------------------------------------------------
-$(document).ready(function() {
-    // 1. Category Switcher Pills
-    $(document).on('click', '.category-btn', function() {
-        var catName = $(this).data('category');
-        filterSubtabsByCategory(catName);
-    });
-
-    // 2. Direct Subtab Clicking
-    $(document).on('click', '.assessment-tabs .nav-link', function(e) {
-        e.preventDefault();
-        var targetPaneId = $(this).attr('href');
-
-        if (currentViewMode === 'all') {
-            $('.assessment-tabs .nav-link').removeClass('active');
-            $(this).addClass('active');
-            if ($(targetPaneId).length && $(targetPaneId).offset()) {
-                $('html, body').animate({
-                    scrollTop: $(targetPaneId).offset().top - 90
-                }, 300);
-            }
-            return;
-        }
-
-        // Mode Per Tab
-        $('.assessment-tabs .nav-link').removeClass('active');
-        $(this).addClass('active');
-
-        $('.tab-pane-box').hide();
-        $(targetPaneId).fadeIn(150, function() {
-            // If opening Nyeri tab, redraw canvas if needed
-            if (targetPaneId === '#tab-nyeri') {
-                if (markers.length > 0 || !existingChartData) {
-                    drawBodyChart();
-                }
-            }
-        });
-
-        if ($('#assessmentTab').length && $('#assessmentTab').offset()) {
-            $('html, body').animate({
-                scrollTop: $('#assessmentTab').offset().top - 80
-            }, 200);
+// ====================================================
+// GLOBAL GMFM & DENVER CALCULATION FUNCTIONS
+// ====================================================
+function updateGmfmALiveScore() {
+    var totalScore = 0;
+    var answeredCount = 0;
+    $('.gmfm-a-radio:checked').each(function() {
+        var val = $(this).val();
+        if (val !== 'NT' && !isNaN(val)) {
+            totalScore += parseInt(val, 10);
+            answeredCount++;
         }
     });
+    var maxScore = 51;
+    var percentage = ((totalScore / maxScore) * 100).toFixed(1);
+    $('#gmfm-a-live-total').text(totalScore);
+    $('#gmfm-a-live-persen').text(percentage + '%');
+    $('#gmfm-a-live-progress').css('width', percentage + '%');
+    $('#input-gmfm-a-total').val(totalScore);
+    $('#input-gmfm-a-persen').val(percentage);
 
-    // 3. Next / Prev Tab Buttons
-    $(document).on('click', '.next-tab-btn, .prev-tab-btn', function() {
-        var targetTabBtnId = $(this).data('target-tab');
-        var targetSubtab = $(targetTabBtnId).closest('.subtab-item');
-        var parentCat = targetSubtab.data('parent-cat');
-        if (parentCat && parentCat !== activeCategory) {
-            filterSubtabsByCategory(parentCat);
-        }
-        $(targetTabBtnId).trigger('click');
-    });
-
-    // 4. Set All Normal Accelerator Buttons
-    $(document).on('click', '.btn-preset-rom-normal', function() {
-        setAllRomNormal();
-    });
-    $(document).on('click', '.btn-preset-neuro-normal', function() {
-        setAllNeuroNormal();
-    });
-    $(document).on('click', '.btn-preset-gait-normal', function() {
-        setAllGaitNormal();
-    });
-    $(document).on('click', '.btn-preset-sensoris-normal', function() {
-        setAllSensorisNormal();
-    });
-
-    // 5. Draft Restore & Discard Handlers
-    $(document).on('click', '#btnRestoreDraft', function() {
-        restoreDraftData();
-    });
-    $(document).on('click', '#btnDiscardDraft', function() {
-        discardDraftData();
-    });
-
-    // Symbol Picker Selection
-    $(document).on('click', '.symbol-btn', function() {
-        $('.symbol-btn').each(function() {
-            var col = $(this).data('color');
-            $(this).removeClass('active').css({
-                'background': '#ffffff',
-                'color': col
-            });
-        });
-        
-        var sym = $(this).data('symbol');
-        var col = $(this).data('color');
-        currentSymbol = sym;
-        currentColor = col;
-        
-        $(this).addClass('active').css({
-            'background': col,
-            'color': '#ffffff'
-        });
-    });
-
-    // Clear Body Chart Button
-    $(document).on('click', '#btn-clear-body-chart', function() {
-        if (confirm('Bersihkan semua tanda pada gambar tubuh?')) {
-            markers = [];
-            existingChartData = null;
-            $('#input_nyeri_body_chart').val('');
-            drawBodyChart();
-            updateFormOverallProgress();
-            triggerAutoSave();
-        }
-    });
-
-    // Undo Body Chart Button
-    $(document).on('click', '#btn-undo-body-chart', function() {
-        if (markers.length > 0) {
-            markers.pop();
-            if (markers.length === 0 && !existingChartData) {
-                $('#input_nyeri_body_chart').val('');
-            }
-            drawBodyChart();
-            updateFormOverallProgress();
-            triggerAutoSave();
-        }
-    });
-
-    // Form Submit Sync for Body Chart Canvas & LocalStorage clear
-    $('form').on('submit', function() {
-        if (canvas && markers.length > 0) {
-            drawBodyChart();
-            $('#input_nyeri_body_chart').val(canvas.toDataURL('image/png'));
-        }
-        localStorage.removeItem(draftStorageKey);
-    });
-
-    // Pain Scale 0 - 10 Visual Rating Button Handler
-    $(document).on('click', '.pain-scale-btn', function() {
-        var targetInput = $(this).data('target');
-        var targetLabel = $(this).data('label');
-        var val = $(this).data('val');
-        
-        $(this).closest('.pain-scale-group').find('.pain-scale-btn').removeClass('active');
-        $(this).addClass('active');
-        
-        $(targetInput).val(val);
-        var bg = val == 0 ? '#10b981' : (val <= 3 ? '#3b82f6' : (val <= 6 ? '#f59e0b' : '#ef4444'));
-        $(targetLabel).text(val + ' / 10').css({
-            'background': bg,
-            'color': '#ffffff'
-        });
-        updateFormOverallProgress();
-        triggerAutoSave();
-    });
-
-    // Radio Pill Selection
-    $(document).on('change', '.radio-pill-card input[type="radio"]', function() {
-        var groupName = this.name;
-        if (groupName) {
-            $('input[type="radio"]').filter(function() {
-                return this.name === groupName;
-            }).each(function() {
-                if (this.checked) {
-                    $(this).closest('.radio-pill-card').addClass('active');
-                } else {
-                    $(this).closest('.radio-pill-card').removeClass('active');
-                }
-            });
-        }
-        updateFormOverallProgress();
-        triggerAutoSave();
-    });
-
-    $(document).on('click', '.radio-pill-card', function(e) {
-        var radio = $(this).find('input[type="radio"]')[0];
-        if (radio) {
-            if (!radio.checked) {
-                radio.checked = true;
-                $(radio).trigger('change');
-            }
-        }
-    });
-
-    // Checkbox Pill Selection
-    $(document).on('change', '.check-pill-card input[type="checkbox"]', function() {
-        if ($(this).is(':checked')) {
-            $(this).closest('.check-pill-card').addClass('active');
-        } else {
-            $(this).closest('.check-pill-card').removeClass('active');
-        }
-        updateFormOverallProgress();
-        triggerAutoSave();
-    });
-
-    // Form inputs change trigger auto-save & progress update
-    $(document).on('input change', '#formAssessment input, #formAssessment textarea, #formAssessment select', function() {
-        updateFormOverallProgress();
-        triggerAutoSave();
-    });
-
-    // GMFM Sub-Dimension Switcher
-    $(document).on('click', '.gmfm-dim-btn', function(e) {
-        e.preventDefault();
-        var targetPane = $(this).data('target-dim');
-        $('.gmfm-dim-btn').removeClass('btn-primary active').addClass('btn-outline-primary');
-        $(this).removeClass('btn-outline-primary').addClass('btn-primary active');
-        $('.gmfm-dim-pane').hide();
-        $(targetPane).fadeIn(150);
-    });
-
-    // GMFM Calculations
-    function updateGmfmALiveScore() {
-        var totalScore = 0;
-        var answeredCount = 0;
-        $('.gmfm-a-radio:checked').each(function() {
-            var val = $(this).val();
-            if (val !== 'NT' && !isNaN(val)) {
-                totalScore += parseInt(val, 10);
-                answeredCount++;
-            }
-        });
-        var maxScore = 51;
-        var percentage = ((totalScore / maxScore) * 100).toFixed(1);
-        $('#gmfm-a-live-total').text(totalScore);
-        $('#gmfm-a-live-persen').text(percentage + '%');
-        $('#gmfm-a-live-progress').css('width', percentage + '%');
-        $('#input-gmfm-a-total').val(totalScore);
-        $('#input-gmfm-a-persen').val(percentage);
-
-        var badgeText = 'Belum Dinilai';
-        var badgeClass = 'badge-light text-dark';
-        if (percentage >= 80) {
-            badgeText = 'Sangat Baik (Mandiri)'; badgeClass = 'badge-success text-white';
-        } else if (percentage >= 50) {
-            badgeText = 'Sedang (Perlu Stimulasi)'; badgeClass = 'badge-info text-white';
-        } else if (totalScore > 0 || answeredCount > 0) {
-            badgeText = 'Keterbatasan Signifikan'; badgeClass = 'badge-warning text-dark';
-        }
-        $('#gmfm-a-live-interpretation').text(badgeText).removeClass('badge-light badge-success badge-info badge-warning text-dark text-white').addClass(badgeClass);
-        updateGmfmTotalScore();
+    var badgeText = 'Belum Dinilai';
+    var badgeClass = 'badge-light text-dark';
+    if (percentage >= 80) {
+        badgeText = 'Sangat Baik (Mandiri)'; badgeClass = 'badge-success text-white';
+    } else if (percentage >= 50) {
+        badgeText = 'Sedang (Perlu Stimulasi)'; badgeClass = 'badge-info text-white';
+    } else if (totalScore > 0 || answeredCount > 0) {
+        badgeText = 'Keterbatasan Signifikan'; badgeClass = 'badge-warning text-dark';
     }
-    $(document).on('change', '.gmfm-a-radio', updateGmfmALiveScore);
+    $('#gmfm-a-live-interpretation').text(badgeText).removeClass('badge-light badge-success badge-info badge-warning text-dark text-white').addClass(badgeClass);
+    updateGmfmTotalScore();
+}
 
-    function updateGmfmBLiveScore() {
-        var totalScore = 0;
-        var answeredCount = 0;
-        $('.gmfm-b-radio:checked').each(function() {
-            var val = $(this).val();
-            if (val !== 'NT' && !isNaN(val)) {
-                totalScore += parseInt(val, 10);
-                answeredCount++;
-            }
-        });
-        var maxScore = 60;
-        var percentage = ((totalScore / maxScore) * 100).toFixed(1);
-        $('#gmfm-b-live-total').text(totalScore);
-        $('#gmfm-b-live-persen').text(percentage + '%');
-        $('#gmfm-b-live-progress').css('width', percentage + '%');
-        $('#input-gmfm-b-total').val(totalScore);
-        $('#input-gmfm-b-persen').val(percentage);
-
-        var badgeText = 'Belum Dinilai';
-        var badgeClass = 'badge-light text-dark';
-        if (percentage >= 80) {
-            badgeText = 'Sangat Baik (Mandiri)'; badgeClass = 'badge-success text-white';
-        } else if (percentage >= 50) {
-            badgeText = 'Sedang (Perlu Stimulasi)'; badgeClass = 'badge-info text-white';
-        } else if (totalScore > 0 || answeredCount > 0) {
-            badgeText = 'Keterbatasan Signifikan'; badgeClass = 'badge-warning text-dark';
+function updateGmfmBLiveScore() {
+    var totalScore = 0;
+    var answeredCount = 0;
+    $('.gmfm-b-radio:checked').each(function() {
+        var val = $(this).val();
+        if (val !== 'NT' && !isNaN(val)) {
+            totalScore += parseInt(val, 10);
+            answeredCount++;
         }
-        $('#gmfm-b-live-interpretation').text(badgeText).removeClass('badge-light badge-success badge-info badge-warning text-dark text-white').addClass(badgeClass);
-        updateGmfmTotalScore();
+    });
+    var maxScore = 60;
+    var percentage = ((totalScore / maxScore) * 100).toFixed(1);
+    $('#gmfm-b-live-total').text(totalScore);
+    $('#gmfm-b-live-persen').text(percentage + '%');
+    $('#gmfm-b-live-progress').css('width', percentage + '%');
+    $('#input-gmfm-b-total').val(totalScore);
+    $('#input-gmfm-b-persen').val(percentage);
+
+    var badgeText = 'Belum Dinilai';
+    var badgeClass = 'badge-light text-dark';
+    if (percentage >= 80) {
+        badgeText = 'Sangat Baik (Mandiri)'; badgeClass = 'badge-success text-white';
+    } else if (percentage >= 50) {
+        badgeText = 'Sedang (Perlu Stimulasi)'; badgeClass = 'badge-info text-white';
+    } else if (totalScore > 0 || answeredCount > 0) {
+        badgeText = 'Keterbatasan Signifikan'; badgeClass = 'badge-warning text-dark';
     }
-    $(document).on('change', '.gmfm-b-radio', updateGmfmBLiveScore);
+    $('#gmfm-b-live-interpretation').text(badgeText).removeClass('badge-light badge-success badge-info badge-warning text-dark text-white').addClass(badgeClass);
+    updateGmfmTotalScore();
+}
 
-    function updateGmfmCLiveScore() {
-        var totalScore = 0;
-        var answeredCount = 0;
-        $('.gmfm-c-radio:checked').each(function() {
-            var val = $(this).val();
-            if (val !== 'NT' && !isNaN(val)) {
-                totalScore += parseInt(val, 10);
-                answeredCount++;
-            }
-        });
-        var maxScore = 42;
-        var percentage = ((totalScore / maxScore) * 100).toFixed(1);
-        $('#gmfm-c-live-total').text(totalScore);
-        $('#gmfm-c-live-persen').text(percentage + '%');
-        $('#gmfm-c-live-progress').css('width', percentage + '%');
-        $('#input-gmfm-c-total').val(totalScore);
-        $('#input-gmfm-c-persen').val(percentage);
-
-        var badgeText = 'Belum Dinilai';
-        var badgeClass = 'badge-light text-dark';
-        if (percentage >= 80) {
-            badgeText = 'Sangat Baik (Mandiri)'; badgeClass = 'badge-success text-white';
-        } else if (percentage >= 50) {
-            badgeText = 'Sedang (Perlu Stimulasi)'; badgeClass = 'badge-info text-white';
-        } else if (totalScore > 0 || answeredCount > 0) {
-            badgeText = 'Keterbatasan Signifikan'; badgeClass = 'badge-warning text-dark';
+function updateGmfmCLiveScore() {
+    var totalScore = 0;
+    var answeredCount = 0;
+    $('.gmfm-c-radio:checked').each(function() {
+        var val = $(this).val();
+        if (val !== 'NT' && !isNaN(val)) {
+            totalScore += parseInt(val, 10);
+            answeredCount++;
         }
-        $('#gmfm-c-live-interpretation').text(badgeText).removeClass('badge-light badge-success badge-info badge-warning text-dark text-white').addClass(badgeClass);
-        updateGmfmTotalScore();
+    });
+    var maxScore = 42;
+    var percentage = ((totalScore / maxScore) * 100).toFixed(1);
+    $('#gmfm-c-live-total').text(totalScore);
+    $('#gmfm-c-live-persen').text(percentage + '%');
+    $('#gmfm-c-live-progress').css('width', percentage + '%');
+    $('#input-gmfm-c-total').val(totalScore);
+    $('#input-gmfm-c-persen').val(percentage);
+
+    var badgeText = 'Belum Dinilai';
+    var badgeClass = 'badge-light text-dark';
+    if (percentage >= 80) {
+        badgeText = 'Sangat Baik (Mandiri)'; badgeClass = 'badge-success text-white';
+    } else if (percentage >= 50) {
+        badgeText = 'Sedang (Perlu Stimulasi)'; badgeClass = 'badge-info text-white';
+    } else if (totalScore > 0 || answeredCount > 0) {
+        badgeText = 'Keterbatasan Signifikan'; badgeClass = 'badge-warning text-dark';
     }
-    $(document).on('change', '.gmfm-c-radio', updateGmfmCLiveScore);
+    $('#gmfm-c-live-interpretation').text(badgeText).removeClass('badge-light badge-success badge-info badge-warning text-dark text-white').addClass(badgeClass);
+    updateGmfmTotalScore();
+}
 
-    function updateGmfmDLiveScore() {
-        var totalScore = 0;
-        var answeredCount = 0;
-        $('.gmfm-d-radio:checked').each(function() {
-            var val = $(this).val();
-            if (val !== 'NT' && !isNaN(val)) {
-                totalScore += parseInt(val, 10);
-                answeredCount++;
-            }
-        });
-        var maxScore = 39;
-        var percentage = ((totalScore / maxScore) * 100).toFixed(1);
-        $('#gmfm-d-live-total').text(totalScore);
-        $('#gmfm-d-live-persen').text(percentage + '%');
-        $('#gmfm-d-live-progress').css('width', percentage + '%');
-        $('#input-gmfm-d-total').val(totalScore);
-        $('#input-gmfm-d-persen').val(percentage);
-
-        var badgeText = 'Belum Dinilai';
-        var badgeClass = 'badge-light text-dark';
-        if (percentage >= 80) {
-            badgeText = 'Sangat Baik (Mandiri)'; badgeClass = 'badge-success text-white';
-        } else if (percentage >= 50) {
-            badgeText = 'Sedang (Perlu Stimulasi)'; badgeClass = 'badge-info text-white';
-        } else if (totalScore > 0 || answeredCount > 0) {
-            badgeText = 'Keterbatasan Signifikan'; badgeClass = 'badge-warning text-dark';
+function updateGmfmDLiveScore() {
+    var totalScore = 0;
+    var answeredCount = 0;
+    $('.gmfm-d-radio:checked').each(function() {
+        var val = $(this).val();
+        if (val !== 'NT' && !isNaN(val)) {
+            totalScore += parseInt(val, 10);
+            answeredCount++;
         }
-        $('#gmfm-d-live-interpretation').text(badgeText).removeClass('badge-light badge-success badge-info badge-warning text-dark text-white').addClass(badgeClass);
-        updateGmfmTotalScore();
+    });
+    var maxScore = 39;
+    var percentage = ((totalScore / maxScore) * 100).toFixed(1);
+    $('#gmfm-d-live-total').text(totalScore);
+    $('#gmfm-d-live-persen').text(percentage + '%');
+    $('#gmfm-d-live-progress').css('width', percentage + '%');
+    $('#input-gmfm-d-total').val(totalScore);
+    $('#input-gmfm-d-persen').val(percentage);
+
+    var badgeText = 'Belum Dinilai';
+    var badgeClass = 'badge-light text-dark';
+    if (percentage >= 80) {
+        badgeText = 'Sangat Baik (Mandiri)'; badgeClass = 'badge-success text-white';
+    } else if (percentage >= 50) {
+        badgeText = 'Sedang (Perlu Stimulasi)'; badgeClass = 'badge-info text-white';
+    } else if (totalScore > 0 || answeredCount > 0) {
+        badgeText = 'Keterbatasan Signifikan'; badgeClass = 'badge-warning text-dark';
     }
-    $(document).on('change', '.gmfm-d-radio', updateGmfmDLiveScore);
+    $('#gmfm-d-live-interpretation').text(badgeText).removeClass('badge-light badge-success badge-info badge-warning text-dark text-white').addClass(badgeClass);
+    updateGmfmTotalScore();
+}
 
-    function updateGmfmELiveScore() {
-        var totalScore = 0;
-        var answeredCount = 0;
-        $('.gmfm-e-radio:checked').each(function() {
-            var val = $(this).val();
-            if (val !== 'NT' && !isNaN(val)) {
-                totalScore += parseInt(val, 10);
-                answeredCount++;
-            }
-        });
-        var maxScore = 72;
-        var percentage = ((totalScore / maxScore) * 100).toFixed(1);
-        $('#gmfm-e-live-total').text(totalScore);
-        $('#gmfm-e-live-persen').text(percentage + '%');
-        $('#gmfm-e-live-progress').css('width', percentage + '%');
-        $('#input-gmfm-e-total').val(totalScore);
-        $('#input-gmfm-e-persen').val(percentage);
-
-        var badgeText = 'Belum Dinilai';
-        var badgeClass = 'badge-light text-dark';
-        if (percentage >= 80) {
-            badgeText = 'Sangat Baik (Mandiri)'; badgeClass = 'badge-success text-white';
-        } else if (percentage >= 50) {
-            badgeText = 'Sedang (Perlu Stimulasi)'; badgeClass = 'badge-info text-white';
-        } else if (totalScore > 0 || answeredCount > 0) {
-            badgeText = 'Keterbatasan Signifikan'; badgeClass = 'badge-warning text-dark';
+function updateGmfmELiveScore() {
+    var totalScore = 0;
+    var answeredCount = 0;
+    $('.gmfm-e-radio:checked').each(function() {
+        var val = $(this).val();
+        if (val !== 'NT' && !isNaN(val)) {
+            totalScore += parseInt(val, 10);
+            answeredCount++;
         }
-        $('#gmfm-e-live-interpretation').text(badgeText).removeClass('badge-light badge-success badge-info badge-warning text-dark text-white').addClass(badgeClass);
-        updateGmfmTotalScore();
+    });
+    var maxScore = 72;
+    var percentage = ((totalScore / maxScore) * 100).toFixed(1);
+    $('#gmfm-e-live-total').text(totalScore);
+    $('#gmfm-e-live-persen').text(percentage + '%');
+    $('#gmfm-e-live-progress').css('width', percentage + '%');
+    $('#input-gmfm-e-total').val(totalScore);
+    $('#input-gmfm-e-persen').val(percentage);
+
+    var badgeText = 'Belum Dinilai';
+    var badgeClass = 'badge-light text-dark';
+    if (percentage >= 80) {
+        badgeText = 'Sangat Baik (Mandiri)'; badgeClass = 'badge-success text-white';
+    } else if (percentage >= 50) {
+        badgeText = 'Sedang (Perlu Stimulasi)'; badgeClass = 'badge-info text-white';
+    } else if (totalScore > 0 || answeredCount > 0) {
+        badgeText = 'Keterbatasan Signifikan'; badgeClass = 'badge-warning text-dark';
     }
-    $(document).on('change', '.gmfm-e-radio', updateGmfmELiveScore);
+    $('#gmfm-e-live-interpretation').text(badgeText).removeClass('badge-light badge-success badge-info badge-warning text-dark text-white').addClass(badgeClass);
+    updateGmfmTotalScore();
+}
 
-    function updateGmfmTotalScore() {
-        var aTot = parseInt($('#input-gmfm-a-total').val() || 0, 10);
-        var bTot = parseInt($('#input-gmfm-b-total').val() || 0, 10);
-        var cTot = parseInt($('#input-gmfm-c-total').val() || 0, 10);
-        var dTot = parseInt($('#input-gmfm-d-total').val() || 0, 10);
-        var eTot = parseInt($('#input-gmfm-e-total').val() || 0, 10);
+function updateGmfmTotalScore() {
+    var aTot = parseInt($('#input-gmfm-a-total').val() || 0, 10);
+    var bTot = parseInt($('#input-gmfm-b-total').val() || 0, 10);
+    var cTot = parseInt($('#input-gmfm-c-total').val() || 0, 10);
+    var dTot = parseInt($('#input-gmfm-d-total').val() || 0, 10);
+    var eTot = parseInt($('#input-gmfm-e-total').val() || 0, 10);
 
-        var aPct = parseFloat($('#input-gmfm-a-persen').val() || 0);
-        var bPct = parseFloat($('#input-gmfm-b-persen').val() || 0);
-        var cPct = parseFloat($('#input-gmfm-c-persen').val() || 0);
-        var dPct = parseFloat($('#input-gmfm-d-persen').val() || 0);
-        var ePct = parseFloat($('#input-gmfm-e-persen').val() || 0);
+    var aPct = parseFloat($('#input-gmfm-a-persen').val() || 0);
+    var bPct = parseFloat($('#input-gmfm-b-persen').val() || 0);
+    var cPct = parseFloat($('#input-gmfm-c-persen').val() || 0);
+    var dPct = parseFloat($('#input-gmfm-d-persen').val() || 0);
+    var ePct = parseFloat($('#input-gmfm-e-persen').val() || 0);
 
-        var totalScore = aTot + bTot + cTot + dTot + eTot;
-        var avgPct = ((aPct + bPct + cPct + dPct + ePct) / 5).toFixed(1);
+    var totalScore = aTot + bTot + cTot + dTot + eTot;
+    var avgPct = ((aPct + bPct + cPct + dPct + ePct) / 5).toFixed(1);
 
-        $('#gmfm-total-live-badge-score').text(totalScore + ' / 264');
-        $('#gmfm-total-live-badge-persen').text(avgPct + '%');
-        $('#input-gmfm-total-score').val(totalScore);
-        $('#input-gmfm-total-persen').val(avgPct);
+    $('#gmfm-total-live-badge-score').text(totalScore + ' / 264');
+    $('#gmfm-total-live-badge-persen').text(avgPct + '%');
+    $('#input-gmfm-total-score').val(totalScore);
+    $('#input-gmfm-total-persen').val(avgPct);
+}
+
+function updateDenverLiveScore() {
+    var pCount = 0;
+    var fCount = 0;
+    var rCount = 0;
+    var noCount = 0;
+
+    $('.denver-radio:checked').each(function() {
+        var val = $(this).val();
+        if (val === 'P') pCount++;
+        else if (val === 'F') fCount++;
+        else if (val === 'R') rCount++;
+        else if (val === 'NO') noCount++;
+    });
+
+    $('#denver-live-p').text(pCount);
+    $('#denver-live-f').text(fCount);
+    $('#denver-live-r').text(rCount);
+    $('#denver-live-no').text(noCount);
+
+    $('#input-denver-pass').val(pCount);
+    $('#input-denver-fail').val(fCount);
+    $('#input-denver-refusal').val(rCount);
+    $('#input-denver-no').val(noCount);
+
+    var totalTested = pCount + fCount + rCount + noCount;
+    var kesimpulan = 'Belum Dinilai';
+    var desc = 'Pilih status task (P/F/R/NO) di bawah untuk memicu kalkulasi.';
+    var badgeStyle = 'background: #e2e8f0; color: #1e293b;';
+
+    if (totalTested > 0) {
+        if (rCount >= 2) {
+            kesimpulan = 'Untestable (Menolak Pengujian)';
+            desc = 'Anak menolak ≥2 pengujian. Disarankan uji ulang saat anak lebih tenang/kooperatif.';
+            badgeStyle = 'background: #475569; color: white;';
+        } else if (fCount >= 3) {
+            kesimpulan = 'Keterlambatan Perkembangan';
+            desc = 'Ditemukan ≥3 kegagalan task lintas sektor. Direkomendasikan evaluasi diagnostik & program terapi intensif.';
+            badgeStyle = 'background: #ef4444; color: white;';
+        } else if (fCount >= 1) {
+            kesimpulan = 'Suspect (Meragukan)';
+            desc = 'Ditemukan 1-2 kegagalan task. Disarankan re-screening ulang dalam 1–2 minggu atau stimulasi terarah.';
+            badgeStyle = 'background: #f59e0b; color: white;';
+        } else if (pCount > 0) {
+            kesimpulan = 'Normal (Sesuai Usia)';
+            desc = 'Semua task perkembangan tercapai dengan baik sesuai kelompok usia anak.';
+            badgeStyle = 'background: #10b981; color: white;';
+        }
     }
 
-    // Skala Denver Live Scoring
-    function updateDenverLiveScore() {
-        var pCount = 0;
-        var fCount = 0;
-        var rCount = 0;
-        var noCount = 0;
+    $('#denver-live-badge-kesimpulan').text(kesimpulan).attr('style', 'font-size: 13px; border-radius: 6px; ' + badgeStyle);
+    $('#denver-live-desc-kesimpulan').text(desc);
+    $('#input-denver-kesimpulan').val(kesimpulan);
+}
 
-        $('.denver-radio:checked').each(function() {
-            var val = $(this).val();
-            if (val === 'P') pCount++;
-            else if (val === 'F') fCount++;
-            else if (val === 'R') rCount++;
-            else if (val === 'NO') noCount++;
-        });
-
-        $('#denver-live-p').text(pCount);
-        $('#denver-live-f').text(fCount);
-        $('#denver-live-r').text(rCount);
-        $('#denver-live-no').text(noCount);
-
-        $('#input-denver-pass').val(pCount);
-        $('#input-denver-fail').val(fCount);
-        $('#input-denver-refusal').val(rCount);
-        $('#input-denver-no').val(noCount);
-
-        var totalTested = pCount + fCount + rCount + noCount;
-        var kesimpulan = 'Belum Dinilai';
-        var desc = 'Pilih status task (P/F/R/NO) di bawah untuk memicu kalkulasi.';
-        var badgeStyle = 'background: #e2e8f0; color: #1e293b;';
-
-        if (totalTested > 0) {
-            if (rCount >= 2) {
-                kesimpulan = 'Untestable (Menolak Pengujian)';
-                desc = 'Anak menolak ≥2 pengujian. Disarankan uji ulang saat anak lebih tenang/kooperatif.';
-                badgeStyle = 'background: #475569; color: white;';
-            } else if (fCount >= 3) {
-                kesimpulan = 'Keterlambatan Perkembangan';
-                desc = 'Ditemukan ≥3 kegagalan task lintas sektor. Direkomendasikan evaluasi diagnostik & program terapi intensif.';
-                badgeStyle = 'background: #ef4444; color: white;';
-            } else if (fCount >= 1) {
-                kesimpulan = 'Suspect (Meragukan)';
-                desc = 'Ditemukan 1-2 kegagalan task. Disarankan re-screening ulang dalam 1–2 minggu atau stimulasi terarah.';
-                badgeStyle = 'background: #f59e0b; color: white;';
-            } else if (pCount > 0) {
-                kesimpulan = 'Normal (Sesuai Usia)';
-                desc = 'Semua task perkembangan tercapai dengan baik sesuai kelompok usia anak.';
-                badgeStyle = 'background: #10b981; color: white;';
-            }
-        }
-
-        $('#denver-live-badge-kesimpulan').text(kesimpulan).attr('style', 'font-size: 13px; border-radius: 6px; ' + badgeStyle);
-        $('#denver-live-desc-kesimpulan').text(desc);
-        $('#input-denver-kesimpulan').val(kesimpulan);
+function togglePerencanaanLainnya() {
+    var isModalitasLainnya = $('input[name="rencana_modalitas_fisik[]"][value="Lainnya"]').is(':checked');
+    if (isModalitasLainnya) {
+        $('#wrap_modalitas_lainnya').removeClass('d-none');
+    } else {
+        $('#wrap_modalitas_lainnya').addClass('d-none');
     }
-    $(document).on('change', '.denver-radio', updateDenverLiveScore);
 
-    function togglePerencanaanLainnya() {
-        var isModalitasLainnya = $('input[name="rencana_modalitas_fisik[]"][value="Lainnya"]').is(':checked');
-        if (isModalitasLainnya) {
-            $('#wrap_modalitas_lainnya').removeClass('d-none');
-        } else {
-            $('#wrap_modalitas_lainnya').addClass('d-none');
-        }
-
-        var isManualLainnya = $('input[name="rencana_manual_terapi[]"][value="Lainnya"]').is(':checked');
-        if (isManualLainnya) {
-            $('#wrap_manual_lainnya').removeClass('d-none');
-        } else {
-            $('#wrap_manual_lainnya').addClass('d-none');
-        }
-
-        var isLatihanLainnya = $('input[name="rencana_latihan_terapi[]"][value="Lainnya"]').is(':checked');
-        if (isLatihanLainnya) {
-            $('#wrap_latihan_lainnya').removeClass('d-none');
-        } else {
-            $('#wrap_latihan_lainnya').addClass('d-none');
-        }
-
-        var isEdukasiLainnya = $('input[name="rencana_edukasi_konseling[]"][value="Lainnya"]').is(':checked');
-        if (isEdukasiLainnya) {
-            $('#wrap_edukasi_lainnya').removeClass('d-none');
-        } else {
-            $('#wrap_edukasi_lainnya').addClass('d-none');
-        }
+    var isManualLainnya = $('input[name="rencana_manual_terapi[]"][value="Lainnya"]').is(':checked');
+    if (isManualLainnya) {
+        $('#wrap_manual_lainnya').removeClass('d-none');
+    } else {
+        $('#wrap_manual_lainnya').addClass('d-none');
     }
-    $(document).on('change', 'input[name="rencana_modalitas_fisik[]"], input[name="rencana_manual_terapi[]"], input[name="rencana_latihan_terapi[]"], input[name="rencana_edukasi_konseling[]"]', togglePerencanaanLainnya);
-    togglePerencanaanLainnya();
 
-    // Initial check and progress update
-    updateFormOverallProgress();
-    checkExistingDraft();
-});
+    var isLatihanLainnya = $('input[name="rencana_latihan_terapi[]"][value="Lainnya"]').is(':checked');
+    if (isLatihanLainnya) {
+        $('#wrap_latihan_lainnya').removeClass('d-none');
+    } else {
+        $('#wrap_latihan_lainnya').addClass('d-none');
+    }
+
+    var isEdukasiLainnya = $('input[name="rencana_edukasi_konseling[]"][value="Lainnya"]').is(':checked');
+    if (isEdukasiLainnya) {
+        $('#wrap_edukasi_lainnya').removeClass('d-none');
+    } else {
+        $('#wrap_edukasi_lainnya').addClass('d-none');
+    }
+}
 
 function toggleOrganKelainan(val) {
     if (val === 'Ada Kelainan') {
@@ -4620,5 +4426,235 @@ function toggleKoorLainnya(isChecked) {
         $('#wrap-koor-lainnya').slideUp(150);
     }
 }
+
+// ----------------------------------------------------
+// DOCUMENT READY INITIALIZATION
+// ----------------------------------------------------
+$(document).ready(function() {
+    // 1. Module Underline Tabs Navigation
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var modIdx = parseInt($(e.target).data('module-index')) || 1;
+        currentModule = modIdx;
+        $('#stickyCurrentModuleNumber').text(modIdx);
+        $('#stickyBtnPrevModul').prop('disabled', modIdx === 1);
+        $('#stickyBtnNextModul').prop('disabled', modIdx === totalModules);
+        updateFormOverallProgress();
+
+        if (modIdx === 3) {
+            setTimeout(function() {
+                if (markers.length > 0 || !existingChartData) {
+                    drawBodyChart();
+                }
+            }, 100);
+        }
+    });
+
+    // 2. Set All Normal Accelerator Buttons
+    $(document).on('click', '.btn-preset-rom-normal', function() {
+        setAllRomNormal();
+    });
+    $(document).on('click', '.btn-preset-neuro-normal', function() {
+        setAllNeuroNormal();
+    });
+    $(document).on('click', '.btn-preset-gait-normal', function() {
+        setAllGaitNormal();
+    });
+    $(document).on('click', '.btn-preset-sensoris-normal', function() {
+        setAllSensorisNormal();
+    });
+
+    // 3. Draft Restore & Discard Handlers
+    $(document).on('click', '#btnRestoreDraft', function() {
+        restoreDraftData();
+    });
+    $(document).on('click', '#btnDiscardDraft', function() {
+        discardDraftData();
+    });
+
+    // 4. Symbol Picker Selection
+    $(document).on('click', '.symbol-btn', function() {
+        $('.symbol-btn').each(function() {
+            var col = $(this).data('color');
+            $(this).removeClass('active').css({
+                'background': '#ffffff',
+                'color': col
+            });
+        });
+        
+        var sym = $(this).data('symbol');
+        var col = $(this).data('color');
+        currentSymbol = sym;
+        currentColor = col;
+        
+        $(this).addClass('active').css({
+            'background': col,
+            'color': '#ffffff'
+        });
+    });
+
+    // 5. Clear Body Chart Button
+    $(document).on('click', '#btn-clear-body-chart', function() {
+        var clearAction = function() {
+            markers = [];
+            existingChartData = null;
+            $('#input_nyeri_body_chart').val('');
+            drawBodyChart();
+            updateFormOverallProgress();
+            triggerAutoSave();
+        };
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Bersihkan Gambar Tubuh?',
+                text: 'Semua tanda simbol pada gambar tubuh akan dihapus.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Bersihkan',
+                cancelButtonText: 'Batal'
+            }).then(function(res) {
+                if (res.isConfirmed) {
+                    clearAction();
+                }
+            });
+        } else {
+            if (confirm('Bersihkan semua tanda pada gambar tubuh?')) {
+                clearAction();
+            }
+        }
+    });
+
+    // 6. Undo Body Chart Button
+    $(document).on('click', '#btn-undo-body-chart', function() {
+        if (markers.length > 0) {
+            markers.pop();
+            if (markers.length === 0 && !existingChartData) {
+                $('#input_nyeri_body_chart').val('');
+            }
+            drawBodyChart();
+            updateFormOverallProgress();
+            triggerAutoSave();
+        }
+    });
+
+    // 7. Form Submit Sync for Body Chart Canvas & LocalStorage clear
+    $('form').on('submit', function() {
+        if (canvas && markers.length > 0) {
+            drawBodyChart();
+            $('#input_nyeri_body_chart').val(canvas.toDataURL('image/png'));
+        }
+        localStorage.removeItem(draftStorageKey);
+    });
+
+    // 8. Pain Scale 0 - 10 Visual Rating Button Handler
+    $(document).on('click', '.pain-scale-btn', function() {
+        var targetInput = $(this).data('target');
+        var targetLabel = $(this).data('label');
+        var val = $(this).data('val');
+        
+        $(this).closest('.pain-scale-group').find('.pain-scale-btn').removeClass('active');
+        $(this).addClass('active');
+        
+        $(targetInput).val(val);
+        var bg = val == 0 ? '#10b981' : (val <= 3 ? '#3b82f6' : (val <= 6 ? '#f59e0b' : '#ef4444'));
+        $(targetLabel).text(val + ' / 10').css({
+            'background': bg,
+            'color': '#ffffff'
+        });
+        updateFormOverallProgress();
+        triggerAutoSave();
+    });
+
+    // 9. Radio Pill Selection
+    $(document).on('change', '.radio-pill-card input[type="radio"]', function() {
+        var groupName = this.name;
+        if (groupName) {
+            $('input[type="radio"]').filter(function() {
+                return this.name === groupName;
+            }).each(function() {
+                if (this.checked) {
+                    $(this).closest('.radio-pill-card').addClass('active');
+                } else {
+                    $(this).closest('.radio-pill-card').removeClass('active');
+                }
+            });
+        }
+        updateFormOverallProgress();
+        triggerAutoSave();
+    });
+
+    $(document).on('click', '.radio-pill-card', function(e) {
+        var radio = $(this).find('input[type="radio"]')[0];
+        if (radio) {
+            if (!radio.checked) {
+                radio.checked = true;
+                $(radio).trigger('change');
+            }
+        }
+    });
+
+    // 10. Checkbox Pill Selection
+    $(document).on('change', '.check-pill-card input[type="checkbox"]', function() {
+        if ($(this).is(':checked')) {
+            $(this).closest('.check-pill-card').addClass('active');
+        } else {
+            $(this).closest('.check-pill-card').removeClass('active');
+        }
+        updateFormOverallProgress();
+        triggerAutoSave();
+    });
+
+    // 11. Denver Badge Option Buttons
+    $(document).on('click', '.denver-badge-opt', function() {
+        var val = $(this).data('val');
+        var group = $(this).closest('.denver-btn-group');
+        group.find('.denver-badge-opt').removeClass('active');
+        $(this).addClass('active');
+        var radio = group.find('input[type="radio"][value="' + val + '"]');
+        radio.prop('checked', true).trigger('change');
+    });
+
+    // 12. Form inputs change trigger auto-save & progress update
+    $(document).on('input change', '#formAssessment input, #formAssessment textarea, #formAssessment select', function() {
+        updateFormOverallProgress();
+        triggerAutoSave();
+    });
+
+    // 13. GMFM Sub-Dimension Switcher
+    $(document).on('click', '.gmfm-dim-btn', function(e) {
+        e.preventDefault();
+        var targetPane = $(this).data('target-dim');
+        $('.gmfm-dim-btn').removeClass('active');
+        $(this).addClass('active');
+        $('.gmfm-dim-pane').hide();
+        $(targetPane).fadeIn(150);
+    });
+
+    // 14. Event listeners for GMFM
+    $(document).on('change', '.gmfm-a-radio', updateGmfmALiveScore);
+    $(document).on('change', '.gmfm-b-radio', updateGmfmBLiveScore);
+    $(document).on('change', '.gmfm-c-radio', updateGmfmCLiveScore);
+    $(document).on('change', '.gmfm-d-radio', updateGmfmDLiveScore);
+    $(document).on('change', '.gmfm-e-radio', updateGmfmELiveScore);
+
+    // 15. Event listeners for Denver
+    $(document).on('change', '.denver-radio', updateDenverLiveScore);
+
+    // 16. Event listeners for Perencanaan Terapi
+    $(document).on('change', 'input[name="rencana_modalitas_fisik[]"], input[name="rencana_manual_terapi[]"], input[name="rencana_latihan_terapi[]"], input[name="rencana_edukasi_konseling[]"]', togglePerencanaanLainnya);
+    togglePerencanaanLainnya();
+
+    // 17. Initial calculations on load
+    updateGmfmALiveScore();
+    updateGmfmBLiveScore();
+    updateGmfmCLiveScore();
+    updateGmfmDLiveScore();
+    updateGmfmELiveScore();
+    updateDenverLiveScore();
+    updateFormOverallProgress();
+    checkExistingDraft();
+});
 </script>
+
 @endsection

@@ -173,20 +173,23 @@
 
         .help-admin-link {
             margin-top: 16px;
-            font-size: 12px;
+            font-size: 12.5px;
             color: #64748b;
         }
 
         .help-admin-link a {
-            color: #1888f0;
+            color: #2563eb;
             font-weight: 600;
             text-decoration: none;
             cursor: pointer;
             transition: color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .help-admin-link a:hover {
-            color: #0d47a1;
+            color: #1d4ed8;
             text-decoration: underline;
         }
 
@@ -196,6 +199,287 @@
             color: #94a3b8;
             border-top: 1px solid #f1f5f9;
             padding-top: 14px;
+        }
+
+        /* Modal Bantuan Admin Custom Styling */
+        .modal-admin-dialog {
+            max-width: 500px;
+            margin: 1.75rem auto;
+        }
+
+        .modal-admin-content {
+            border-radius: 16px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 25px 50px -12px rgba(30, 64, 175, 0.25), 0 10px 20px -5px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+            background: #ffffff;
+            text-align: left;
+        }
+
+        .modal-admin-header {
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+            padding: 18px 22px;
+            border-bottom: none;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-admin-header::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 140px;
+            background: radial-gradient(circle at right center, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .modal-admin-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 20px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-admin-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            line-height: 1.25;
+            letter-spacing: -0.2px;
+        }
+
+        .modal-admin-subtitle {
+            font-size: 11.5px;
+            color: rgba(255, 255, 255, 0.88);
+            font-weight: 500;
+            margin-top: 3px;
+            display: block;
+        }
+
+        .modal-admin-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0;
+            line-height: 1;
+            z-index: 2;
+        }
+
+        .modal-admin-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            transform: rotate(90deg);
+        }
+
+        .modal-admin-body {
+            padding: 20px 22px;
+            background: #ffffff;
+        }
+
+        .help-intro-card {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .help-intro-card i {
+            color: #2563eb;
+            font-size: 16px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .help-intro-card p {
+            font-size: 12.5px;
+            color: #1e40af;
+            line-height: 1.5;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .contact-card-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 13px 15px;
+            margin-bottom: 12px;
+            transition: all 0.22s ease;
+        }
+
+        .contact-card-item:hover {
+            border-color: #cbd5e1;
+            background: #ffffff;
+            box-shadow: 0 4px 14px rgba(46, 75, 130, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .contact-card-item.featured {
+            background: #ffffff;
+            border: 1.5px solid #6ee7b7;
+            box-shadow: 0 3px 12px rgba(16, 185, 129, 0.08);
+        }
+
+        .contact-card-item.featured:hover {
+            border-color: #10b981;
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.15);
+        }
+
+        .contact-badge-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .btn-contact-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 7px;
+            transition: all 0.2s ease;
+            text-decoration: none !important;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-contact-action.btn-wa {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff !important;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.28);
+        }
+
+        .btn-contact-action.btn-wa:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.38);
+            transform: translateY(-1px);
+        }
+
+        .btn-contact-action.btn-copy {
+            background: #f1f5f9;
+            color: #334155 !important;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-contact-action.btn-copy:hover {
+            background: #e2e8f0;
+            color: #1e293b !important;
+        }
+
+        .btn-contact-action.btn-email {
+            background: #eff6ff;
+            color: #2563eb !important;
+            border: 1px solid #bfdbfe;
+        }
+
+        .btn-contact-action.btn-email:hover {
+            background: #dbeafe;
+            color: #1d4ed8 !important;
+        }
+
+        /* Quick Tips Section */
+        .quick-tips-accordion {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 14px;
+        }
+
+        .quick-tips-header {
+            background: #f8fafc;
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #1e40af;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+
+        .quick-tips-header:hover {
+            background: #eff6ff;
+        }
+
+        .quick-tips-body {
+            padding: 12px 14px;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            font-size: 12px;
+            color: #475569;
+        }
+
+        .quick-tips-list {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .quick-tips-list li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 8px;
+            line-height: 1.45;
+        }
+
+        .quick-tips-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .quick-tips-list li::before {
+            content: "•";
+            position: absolute;
+            left: 4px;
+            top: -1px;
+            color: #2563eb;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .modal-admin-footer {
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 12px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
     </style>
 </head>
@@ -244,7 +528,7 @@
         <div class="help-admin-link">
             <span>Kendala saat login? </span>
             <a href="javascript:void(0)" data-toggle="modal" data-target="#modalBantuanAdmin">
-                Hubungi Admin
+                <i class="fa-solid fa-circle-question mr-1"></i> Hubungi Admin
             </a>
         </div>
 
@@ -254,44 +538,161 @@
         </div>
     </div>
 
-    <!-- Modal Bantuan Admin -->
+    <!-- Modal Bantuan Admin (Desain Modern Sesuai DESIGN.md) -->
     <div class="modal fade" id="modalBantuanAdmin" tabindex="-1" role="dialog" aria-labelledby="modalBantuanAdminLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content" style="border-radius: 8px; border: none; text-align: left; box-shadow: 0 15px 35px rgba(24, 44, 79, 0.25);">
-                <div class="modal-header" style="background: #edf3fc; border-bottom: 1px solid #e2e8f0; padding: 14px 18px;">
-                    <h5 class="modal-title" id="modalBantuanAdminLabel" style="font-size: 15px; font-weight: 700; color: #2e4b82; margin: 0;">
-                        <i class="fa-solid fa-headset mr-1"></i> Bantuan & Layanan Akun
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
-                        <span aria-hidden="true">&times;</span>
+        <div class="modal-dialog modal-admin-dialog modal-dialog-centered" role="document">
+            <div class="modal-content modal-admin-content">
+                
+                <!-- Modal Header: Royal Blue & Ocean Navy Theme -->
+                <div class="modal-header modal-admin-header">
+                    <div class="d-flex align-items-center">
+                        <div class="modal-admin-icon mr-3">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-admin-title" id="modalBantuanAdminLabel">
+                                Pusat Bantuan & Layanan Akun
+                            </h5>
+                            <span class="modal-admin-subtitle">
+                                <i class="fa-solid fa-shield-halved mr-1"></i> SIM Rekam Medis Omah Terapi-KU
+                            </span>
+                        </div>
+                    </div>
+                    <button type="button" class="modal-admin-close" data-dismiss="modal" aria-label="Close" title="Tutup Pop-up">
+                        <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <div class="modal-body p-4">
-                    <p style="font-size: 13px; color: #475569; margin-bottom: 16px; line-height: 1.5;">
-                        Jika Anda mengalami kendala seperti lupa kata sandi, akun terkunci, atau memerlukan aktivasi hak akses (Dokter, Terapis, Pendaftaran, Admin), silakan hubungi tim pengelola sistem:
-                    </p>
-                    <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px;">
-                        <strong style="font-size: 13px; color: #1e293b; display: block; margin-bottom: 2px;">
-                            <i class="fa-solid fa-user-shield text-primary mr-1"></i> Admin / Pengelola Sistem
-                        </strong>
-                        <span style="font-size: 12px; color: #64748b;">Dinas Sosial Provinsi Jawa Timur</span>
+
+                <!-- Modal Body -->
+                <div class="modal-admin-body">
+                    
+                    <!-- Alert Pengantar -->
+                    <div class="help-intro-card">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <p>
+                            Mengalami kendala login, lupa kata sandi, atau memerlukan aktivasi hak akses (Dokter, Terapis, Pendaftaran)? Tim Pengelola SIM Rekam Medis siap membantu Anda.
+                        </p>
                     </div>
-                    <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px;">
-                        <strong style="font-size: 13px; color: #1e293b; display: block; margin-bottom: 2px;">
-                            <i class="fa-brands fa-whatsapp text-success mr-1"></i> Kontak Helpdesk / WhatsApp
-                        </strong>
-                        <span style="font-size: 12px; color: #64748b;">Hubungi koordinator IT untuk proses reset password akun</span>
+
+                    <!-- Kontak 1: WhatsApp Helpdesk (Featured Card) -->
+                    <div class="contact-card-item featured">
+                        <div class="d-flex align-items-start justify-content-between mb-2">
+                            <div class="d-flex align-items-center">
+                                <div class="contact-badge-icon mr-3" style="background: #ecfdf5; color: #10b981; border: 1px solid #a7f3d0;">
+                                    <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center" style="gap: 6px;">
+                                        <strong style="font-size: 13.5px; color: #0f172a; font-weight: 700;">Helpdesk WhatsApp IT</strong>
+                                        <span class="badge" style="background: #d1fae5; color: #065f46; font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 10px;">
+                                            <i class="fa-solid fa-bolt mr-1"></i>Respon Cepat
+                                        </span>
+                                    </div>
+                                    <span style="font-size: 12px; color: #64748b; display: block; margin-top: 1px;">
+                                        Layanan reset password & aktivasi akun
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between pt-2 border-top" style="border-color: #f1f5f9 !important; gap: 8px;">
+                            <span class="font-w600 text-dark" style="font-size: 13px; letter-spacing: 0.3px;">
+                                <i class="fa-solid fa-phone-volume mr-1 text-muted" style="font-size: 11px;"></i> +62 812-3456-7890
+                            </span>
+                            <div class="d-flex align-items-center" style="gap: 6px;">
+                                <button type="button" class="btn-contact-action btn-copy" onclick="copyContactText('+6281234567890', 'Nomor WhatsApp')">
+                                    <i class="fa-regular fa-copy"></i> Salin
+                                </button>
+                                <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Omah%20Terapi-KU%2C%20saya%20mengalami%20kendala%20saat%20login%20ke%20sistem.%20Mohon%20bantuannya." target="_blank" class="btn-contact-action btn-wa">
+                                    <i class="fa-brands fa-whatsapp"></i> Chat WhatsApp
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 6px; padding: 12px 14px;">
-                        <strong style="font-size: 13px; color: #1e293b; display: block; margin-bottom: 2px;">
-                            <i class="fa-solid fa-clock text-warning mr-1"></i> Jam Layanan
-                        </strong>
-                        <span style="font-size: 12px; color: #64748b;">Senin – Jumat (08.00 – 16.00 WIB)</span>
+
+                    <!-- Kontak 2: Email Layanan Pengelola -->
+                    <div class="contact-card-item">
+                        <div class="d-flex align-items-start justify-content-between mb-2">
+                            <div class="d-flex align-items-center">
+                                <div class="contact-badge-icon mr-3" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <strong style="font-size: 13.5px; color: #0f172a; font-weight: 700; display: block;">Email Layanan SIM</strong>
+                                    <span style="font-size: 12px; color: #64748b; display: block; margin-top: 1px;">
+                                        omahterapiku@dinsos.jatimprov.go.id
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between pt-2 border-top" style="border-color: #f1f5f9 !important; gap: 8px;">
+                            <span class="text-muted" style="font-size: 11.5px;">
+                                <i class="fa-solid fa-clock mr-1"></i> Respon max 1x24 jam
+                            </span>
+                            <div class="d-flex align-items-center" style="gap: 6px;">
+                                <button type="button" class="btn-contact-action btn-copy" onclick="copyContactText('omahterapiku@dinsos.jatimprov.go.id', 'Alamat Email')">
+                                    <i class="fa-regular fa-copy"></i> Salin
+                                </button>
+                                <a href="mailto:omahterapiku@dinsos.jatimprov.go.id?subject=Kendala%20Akun%20SIM%20Omah%20Terapi-KU" class="btn-contact-action btn-email">
+                                    <i class="fa-solid fa-paper-plane"></i> Kirim Email
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kontak 3: Unit Kerja & Jam Operasional -->
+                    <div class="contact-card-item mb-0">
+                        <div class="d-flex align-items-start">
+                            <div class="contact-badge-icon mr-3" style="background: #f8fafc; color: #475569; border: 1px solid #e2e8f0;">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 4px;">
+                                    <strong style="font-size: 13px; color: #0f172a; font-weight: 700;">Dinas Sosial Provinsi Jawa Timur</strong>
+                                    <span class="badge" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 6px;">
+                                        <i class="fa-regular fa-clock mr-1"></i>08.00 – 16.00 WIB
+                                    </span>
+                                </div>
+                                <span style="font-size: 11.5px; color: #64748b; display: block; margin-top: 2px;">
+                                    Seksi Rehabilitasi Sosial & Pengelola UPT Omah Terapi-KU
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panduan Cepat Kendala (Quick Accordion) -->
+                    <div class="quick-tips-accordion">
+                        <div class="quick-tips-header" data-toggle="collapse" data-target="#collapseQuickTips" aria-expanded="false" aria-controls="collapseQuickTips">
+                            <span><i class="fa-solid fa-circle-question mr-1 text-primary"></i> Panduan Cepat Kendala Akun</span>
+                            <i class="fa-solid fa-chevron-down" style="font-size: 10px; transition: transform 0.2s ease;"></i>
+                        </div>
+                        <div class="collapse" id="collapseQuickTips">
+                            <div class="quick-tips-body">
+                                <ul class="quick-tips-list">
+                                    <li><strong>Lupa Kata Sandi:</strong> Hubungi admin via WhatsApp dan sebutkan Nama Lengkap serta NIP untuk verifikasi identitas akun.</li>
+                                    <li><strong>Aktivasi Hak Akses:</strong> Untuk peran baru (Dokter, Terapis, Pendaftaran), minta verifikasi akun melalui Kepala UPT / Koordinator Sistem.</li>
+                                    <li><strong>Gagal Login:</strong> Pastikan Caps Lock mati dan periksa kembali penulisan username/password Anda.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-admin-footer">
+                    <div class="d-flex align-items-center text-muted" style="font-size: 11.5px;">
+                        <i class="fa-solid fa-circle-check text-success mr-1"></i> Layanan Resmi Dinsos Jatim
+                    </div>
+                    <div class="d-flex align-items-center" style="gap: 8px;">
+                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="border-radius: 8px; font-size: 12.5px; color: #475569; border: 1px solid #cbd5e1; padding: 7px 16px;">
+                            Tutup
+                        </button>
+                        <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Omah%20Terapi-KU%2C%20saya%20mengalami%20kendala%20saat%20login%20ke%20sistem.%20Mohon%20bantuannya." target="_blank" class="btn btn-sm btn-primary font-w600" style="border-radius: 8px; font-size: 12.5px; padding: 7px 16px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                            <i class="fa-brands fa-whatsapp mr-1"></i> Hubungi WhatsApp
+                        </a>
                     </div>
                 </div>
-                <div class="modal-footer py-2 px-3" style="background: #fafbfc; border-top: 1px solid #edf2f7;">
-                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" style="border-radius: 4px; padding: 6px 16px;">Tutup</button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -299,6 +700,53 @@
     <!-- JavaScript Dependencies -->
     <script src="{{asset('vendor/global/global.min.js')}}"></script>
     <script src="{{asset('vendor/toastr/js/toastr.min.js')}}"></script>
+
+    <!-- Script Interaktif: Salin Teks ke Clipboard -->
+    <script>
+        function copyContactText(text, label) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showCopySuccess(label);
+                }).catch(function() {
+                    fallbackCopyText(text, label);
+                });
+            } else {
+                fallbackCopyText(text, label);
+            }
+        }
+
+        function fallbackCopyText(text, label) {
+            var tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand("copy");
+                showCopySuccess(label);
+            } catch (err) {
+                if (typeof toastr !== 'undefined') {
+                    toastr.error('Gagal menyalin teks', 'Error');
+                } else {
+                    alert('Gagal menyalin: ' + text);
+                }
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        function showCopySuccess(label) {
+            if (typeof toastr !== 'undefined') {
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right",
+                    "timeOut": "3000"
+                };
+                toastr.success(label + ' berhasil disalin ke clipboard!', 'Tersalin');
+            } else {
+                alert(label + ' berhasil disalin!');
+            }
+        }
+    </script>
 
     <!-- Script Toggle Show/Hide Password -->
     <script>
@@ -316,6 +764,14 @@
                     this.classList.toggle('fa-eye-slash');
                 });
             }
+
+            // Animate Chevron on quick tips accordion toggle
+            $('#collapseQuickTips').on('show.bs.collapse', function () {
+                $('.quick-tips-header .fa-chevron-down').css('transform', 'rotate(180deg)');
+            });
+            $('#collapseQuickTips').on('hide.bs.collapse', function () {
+                $('.quick-tips-header .fa-chevron-down').css('transform', 'rotate(0deg)');
+            });
         });
     </script>
 
