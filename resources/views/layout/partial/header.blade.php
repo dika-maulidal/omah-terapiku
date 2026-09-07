@@ -14,7 +14,7 @@
                         <button type="button" class="btn btn-tanya-ai" id="btnOpenAiAssistant" title="Tanya AI Asisten Terapi & Klinis (Omah Terapi-KU)">
                             <span class="ai-agent-icon"><i class="fa-solid fa-robot"></i></span>
                             <span class="ai-btn-text">Tanya AI</span>
-                            <span class="badge ml-1" style="font-size: 9px; padding: 2px 5px; border-radius: 8px; font-weight: 700; background: rgba(255, 255, 255, 0.22); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.35);">AI</span>
+                            <span class="badge ml-1 ai-btn-badge" style="font-size: 9px; padding: 2px 5px; border-radius: 8px; font-weight: 700; background: rgba(255, 255, 255, 0.22); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.35);">AI</span>
                         </button>
                     </li>
 

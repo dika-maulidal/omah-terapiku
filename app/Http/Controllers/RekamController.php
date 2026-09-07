@@ -22,16 +22,26 @@ class RekamController extends Controller
     {
         $user = auth()->user();
         $role = $user->role_display();
+
+        if ($request->has('upt')) {
+            $selectedUpt = $request->upt;
+            session(['selected_upt' => $request->upt]);
+        } else {
+            $selectedUpt = session('selected_upt', 'all');
+        }
+
+        $activeUpts = Poli::where('status', 1)->orderBy('nama', 'asc')->get();
+
         $rekams = Rekam::latest('rekam.created_at')
                     ->select('rekam.*')
                     ->leftJoin('pasien', function($join) {
                         $join->on('rekam.pasien_id', '=', 'pasien.id');
                     })
-                    ->when(session('selected_upt'), function ($query) {
-                        $upt = session('selected_upt');
-                        $query->where(function ($q) use ($upt) {
-                            $q->where('rekam.poli', 'LIKE', "%{$upt}%")
-                              ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");
+                    ->when($selectedUpt && $selectedUpt !== 'all' && $selectedUpt !== '', function ($query) use ($selectedUpt) {
+                        $query->where(function ($q) use ($selectedUpt) {
+                            $q->where('rekam.poli', 'LIKE', "%{$selectedUpt}%")
+                              ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$selectedUpt}%")
+                              ->orWhere('pasien.upt_lokasi', 'LIKE', "%{$selectedUpt}%");
                         });
                     })
                     ->when($request->keyword, function ($query) use ($request) {
@@ -85,7 +95,7 @@ class RekamController extends Controller
         }
 
         $rekams = $rekams->paginate($perPage);
-        return view('rekam.index', compact('rekams'));
+        return view('rekam.index', compact('rekams', 'activeUpts', 'selectedUpt'));
     }
 
     public function exportCsv(Request $request)
@@ -93,16 +103,18 @@ class RekamController extends Controller
         $user = auth()->user();
         $role = $user->role_display();
 
+        $selectedUpt = $request->filled('upt') ? $request->upt : session('selected_upt', 'all');
+
         $rekams = Rekam::latest('rekam.created_at')
                     ->select('rekam.*')
                     ->leftJoin('pasien', function($join) {
                         $join->on('rekam.pasien_id', '=', 'pasien.id');
                     })
-                    ->when(session('selected_upt'), function ($query) {
-                        $upt = session('selected_upt');
-                        $query->where(function ($q) use ($upt) {
-                            $q->where('rekam.poli', 'LIKE', "%{$upt}%")
-                              ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");
+                    ->when($selectedUpt && $selectedUpt !== 'all' && $selectedUpt !== '', function ($query) use ($selectedUpt) {
+                        $query->where(function ($q) use ($selectedUpt) {
+                            $q->where('rekam.poli', 'LIKE', "%{$selectedUpt}%")
+                              ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$selectedUpt}%")
+                              ->orWhere('pasien.upt_lokasi', 'LIKE', "%{$selectedUpt}%");
                         });
                     })
                     ->when($request->keyword, function ($query) use ($request) {
@@ -239,7 +251,11 @@ class RekamController extends Controller
     {
         $poli = Poli::where('status', 1)->get();
         $dokters = Dokter::where('status', 1)->get();
-        return view('rekam.add', compact('poli', 'dokters'));
+        $selectedPasien = null;
+        if ($request->filled('pasien_id')) {
+            $selectedPasien = Pasien::find($request->pasien_id);
+        }
+        return view('rekam.add', compact('poli', 'dokters', 'selectedPasien'));
     }
 
     public function edit(Request $request, $id)

@@ -527,13 +527,25 @@
     0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.5)); }
     50% { transform: scale(1.14); filter: drop-shadow(0 0 7px rgba(56, 189, 248, 0.9)); color: #7dd3fc; }
 }
-@media (max-width: 767px) {
-    .ai-btn-text {
-        display: none;
+@media (max-width: 767.98px) {
+    .ai-btn-text,
+    .ai-btn-badge {
+        display: none !important;
     }
     .btn-tanya-ai {
-        padding: 7px 10px !important;
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        padding: 0 !important;
         border-radius: 50% !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0 !important;
+    }
+    .btn-tanya-ai .ai-agent-icon {
+        font-size: 16px !important;
+        margin: 0 !important;
     }
 }
 </style>

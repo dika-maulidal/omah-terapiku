@@ -107,9 +107,9 @@ class PasienController extends Controller
                 ->when($request->desil, function ($query) use ($request) {
                     $desil = $request->desil;
                     if ($desil === 'prioritas') {
-                        $query->whereIn('desil', ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4', 'Desil 5']);
-                    } elseif ($desil === 'desil_6_10') {
-                        $query->whereIn('desil', ['Desil 6', 'Desil 7', 'Desil 8', 'Desil 9', 'Desil 10']);
+                        $query->whereIn('desil', ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4']);
+                    } elseif ($desil === 'desil_5_10' || $desil === 'desil_6_10') {
+                        $query->whereIn('desil', ['Desil 5', 'Desil 6', 'Desil 7', 'Desil 8', 'Desil 9', 'Desil 10']);
                     } elseif ($desil === 'non_desil') {
                         $query->where(function ($q) {
                             $q->where('desil', 'Non-Desil')
@@ -181,9 +181,9 @@ class PasienController extends Controller
                 ->when($request->desil, function ($query) use ($request) {
                     $desil = $request->desil;
                     if ($desil === 'prioritas') {
-                        $query->whereIn('desil', ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4', 'Desil 5']);
-                    } elseif ($desil === 'desil_6_10') {
-                        $query->whereIn('desil', ['Desil 6', 'Desil 7', 'Desil 8', 'Desil 9', 'Desil 10']);
+                        $query->whereIn('desil', ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4']);
+                    } elseif ($desil === 'desil_5_10' || $desil === 'desil_6_10') {
+                        $query->whereIn('desil', ['Desil 5', 'Desil 6', 'Desil 7', 'Desil 8', 'Desil 9', 'Desil 10']);
                     } elseif ($desil === 'non_desil') {
                         $query->where(function ($q) {
                             $q->where('desil', 'Non-Desil')

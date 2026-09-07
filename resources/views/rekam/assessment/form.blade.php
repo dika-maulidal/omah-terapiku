@@ -10,12 +10,7 @@
                     <i class="fa-solid fa-clipboard-check"></i>
                 </div>
                 <div>
-                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                        <h3 class="font-w700 mb-0" style="color: #1e40af; font-size: 20px;">Form Assessment Terapis</h3>
-                        <span class="badge font-w700" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                            <i class="fa-solid fa-id-card mr-1"></i> {{ $pasien->no_rm }}
-                        </span>
-                    </div>
+                    <h3 class="font-w700 mb-0" style="color: #1e40af; font-size: 20px;">Form Assessment Terapis</h3>
                     <ol class="breadcrumb mb-0" style="background: transparent; padding: 0; font-size: 12px; margin-top: 4px;">
                         <li class="breadcrumb-item"><a href="{{Route('dashboard')}}" style="color: #2563eb;">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="{{Route('rekam')}}" style="color: #2563eb;">Rekam Medis</a></li>
@@ -3204,9 +3199,6 @@
             <div class="text-muted font-w500" style="font-size: 12.5px;">
                 <i class="fa-solid fa-lock text-success mr-1"></i> Seluruh data asesmen tersimpan langsung ke rekam medis penerima manfaat.
             </div>
-            <small class="text-muted font-w500">
-                <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Terenkripsi & Validasi Rekam Medis Digital
-            </small>
         </div>
     </div>
 

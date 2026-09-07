@@ -284,6 +284,10 @@
                             </h5>
                         </div>
 
+                        @php
+                            $initPasien = isset($selectedPasien) && $selectedPasien ? $selectedPasien : (old('pasien_id') ? \App\Models\Pasien::find(old('pasien_id')) : null);
+                        @endphp
+
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Tanggal Periksa <span class="text-danger">*</span></label>
@@ -295,12 +299,12 @@
 
                             <div class="col-md-8 mb-3">
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Penerima Manfaat <span class="text-danger">*</span></label>
-                                <input type="hidden" class="form-control" id="pasien_id" name="pasien_id" value="{{old('pasien_id')}}">
+                                <input type="hidden" class="form-control" id="pasien_id" name="pasien_id" value="{{ old('pasien_id', $initPasien ? $initPasien->id : '') }}">
                                 
                                 <!-- Seamless Unified Patient Search Input Group (100% Nyatu Tanpa Celah / Gap Melengkung) -->
                                 <div class="patient-search-input-group" data-toggle="modal" data-target="#modalPasien">
                                     <input type="text" id="pasien_nama" class="patient-search-input font-w600"
-                                      value="{{old('pasien_nama') ? old('pasien_nama') : ''}}"
+                                      value="{{ old('pasien_nama', $initPasien ? $initPasien->nama : '') }}"
                                       name="pasien_nama" readonly placeholder="Klik untuk mencari dan memilih penerima manfaat...">
                                     <button class="patient-search-btn font-w700" type="button"> 
                                         <i class="fa-solid fa-magnifying-glass mr-1"></i> Cari Pasien
@@ -316,13 +320,13 @@
 
                             <!-- Summary Card Ringkasan Pasien Otomatis -->
                             <div class="col-12 mb-2">
-                                <div id="patientSummaryCard" class="card mb-2" style="display: none; background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%); border: 1.5px solid #bfdbfe; border-left: 4px solid #2563eb; box-shadow: 0 3px 12px rgba(37, 99, 235, 0.08); border-radius: 10px;">
+                                <div id="patientSummaryCard" class="card mb-2" style="{{ $initPasien ? '' : 'display: none;' }} background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%); border: 1.5px solid #bfdbfe; border-left: 4px solid #2563eb; box-shadow: 0 3px 12px rgba(37, 99, 235, 0.08); border-radius: 10px;">
                                     <div class="card-body py-2.5 px-3">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 8px;">
                                             <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
-                                                <span class="badge font-w700" style="background: #ffffff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11.5px; padding: 4px 8px; border-radius: 6px;" id="sumNoRm">RM# -</span>
-                                                <span class="badge font-w600" style="background: #ffffff; color: #0284c7; border: 1px solid #bae6fd; font-size: 11.5px; padding: 4px 8px; border-radius: 6px;" id="sumKategori">Dewasa</span>
-                                                <h5 class="mb-0 font-w700" id="sumNama" style="font-size: 14.5px; color: #1e3a8a;">-</h5>
+                                                <span class="badge font-w700" style="background: #ffffff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11.5px; padding: 4px 8px; border-radius: 6px;" id="sumNoRm">RM# {{ $initPasien ? $initPasien->no_rm : '-' }}</span>
+                                                <span class="badge font-w600" style="background: #ffffff; color: {{ ($initPasien && $initPasien->kategori_usia == 'Anak') ? '#166534' : '#0284c7' }}; border: 1px solid {{ ($initPasien && $initPasien->kategori_usia == 'Anak') ? '#bbf7d0' : '#bae6fd' }}; font-size: 11.5px; padding: 4px 8px; border-radius: 6px;" id="sumKategori">{{ $initPasien ? ($initPasien->kategori_usia ?: 'Dewasa') : 'Dewasa' }}</span>
+                                                <h5 class="mb-0 font-w700" id="sumNama" style="font-size: 14.5px; color: #1e3a8a;">{{ $initPasien ? $initPasien->nama : '-' }}</h5>
                                             </div>
                                             <button type="button" class="btn btn-xs btn-outline-primary font-w600" data-toggle="modal" data-target="#modalPasien" style="font-size: 11.5px; border-radius: 6px; padding: 3px 10px; background: #ffffff;">
                                                 <i class="fa-solid fa-rotate mr-1"></i> Ganti Pasien
@@ -331,22 +335,38 @@
                                         <div class="row pt-2 mt-2" style="border-top: 1px dashed #bfdbfe;">
                                             <div class="col-md-4 col-sm-6 mb-1 mb-md-0">
                                                 <small class="text-muted d-block font-w600" style="font-size: 11px;"><i class="fa-solid fa-user-group text-primary mr-1"></i> Kontak / Wali Pasien:</small>
-                                                <span class="text-dark font-w600" style="font-size: 12.5px;" id="sumWali">-</span>
+                                                <span class="text-dark font-w600" style="font-size: 12.5px;" id="sumWali">
+                                                    @if($initPasien)
+                                                        @if($initPasien->nama_wali)
+                                                            {{ $initPasien->nama_wali }}{{ $initPasien->hubungan_wali ? ' (' . $initPasien->hubungan_wali . ')' : '' }}{{ $initPasien->no_hp ? ' - ' . $initPasien->no_hp : '' }}
+                                                        @else
+                                                            {{ $initPasien->no_hp ? 'HP: ' . $initPasien->no_hp : '-' }}
+                                                        @endif
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </span>
                                             </div>
                                             <div class="col-md-4 col-sm-6 mb-1 mb-md-0">
                                                 <small class="text-muted d-block font-w600" style="font-size: 11px;"><i class="fa-solid fa-wheelchair text-primary mr-1"></i> Jenis Disabilitas:</small>
-                                                <span class="badge badge-info light font-w600" style="font-size: 11px; padding: 2px 6px;" id="sumDisabilitas">-</span>
+                                                <span class="badge badge-info light font-w600" style="font-size: 11px; padding: 2px 6px;" id="sumDisabilitas">{{ $initPasien ? ($initPasien->jenis_disabilitas ?: 'Tidak Ada') : '-' }}</span>
                                             </div>
                                             <div class="col-md-4 col-sm-6 mb-0">
                                                 <small class="text-muted d-block font-w600" style="font-size: 11px;"><i class="fa-solid fa-circle-info text-primary mr-1"></i> Alat Bantu / Desil:</small>
-                                                <span class="text-dark font-w500" style="font-size: 12px;" id="sumExtra">-</span>
+                                                <span class="text-dark font-w500" style="font-size: 12px;" id="sumExtra">
+                                                    @if($initPasien)
+                                                        {{ ($initPasien->alat_bantu && $initPasien->alat_bantu !== 'Tidak Ada') ? $initPasien->alat_bantu : 'Tanpa alat bantu' }}{{ $initPasien->desil ? ' | ' . $initPasien->desil : '' }}
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Alert info pendaftaran jika belum terdaftar -->
-                                <div id="alertPasienBelumTerdaftar" class="alert alert-light py-1.5 px-3 mb-0 d-flex align-items-center justify-content-between flex-wrap" style="border-radius: 8px; border: 1px dashed #cbd5e1; background-color: #f8fafc; font-size: 12px; gap: 8px;">
+                                <div id="alertPasienBelumTerdaftar" class="alert alert-light py-1.5 px-3 mb-0 d-flex align-items-center justify-content-between flex-wrap" style="{{ $initPasien ? 'display: none !important;' : '' }} border-radius: 8px; border: 1px dashed #cbd5e1; background-color: #f8fafc; font-size: 12px; gap: 8px;">
                                     <span class="text-muted">
                                         <i class="fa-solid fa-circle-info text-primary mr-1"></i> Penerima manfaat belum terdaftar di sistem?
                                     </span>
@@ -368,7 +388,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Omah Terapi / Lokasi UPT <span class="text-danger">*</span></label>
                                 @php
-                                    $selectedPoli = old('poli', request('upt', request('poli', session('selected_upt'))));
+                                    $selectedPoli = old('poli', request('upt', request('poli', ($initPasien && $initPasien->upt_lokasi ? $initPasien->upt_lokasi : session('selected_upt')))));
                                 @endphp
                                 <select name="poli" id="poli" class="form-control" required style="height: 44px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">
                                     <option value="">--Pilih Omah Terapiku--</option>

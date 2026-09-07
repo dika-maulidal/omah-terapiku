@@ -23,7 +23,7 @@
                 <a href="{{Route('rekam.add')}}" class="btn btn-sm btn-primary font-w600" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 16px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); font-size: 13px;">
                     <i class="fa-solid fa-circle-plus mr-1"></i> Input Sesi Terapi
                 </a>
-                <a href="{{Route('rekam.export-csv', ['keyword' => request('keyword'), 'status' => request('status', request('tab')), 'layanan' => request('layanan')])}}" class="btn btn-sm font-w600" style="border: 1px solid #a7f3d0; border-radius: 8px; background: #ecfdf5; color: #059669; padding: 8px 14px; font-size: 13px; transition: all 0.2s ease;" title="Download data rekam medis ke CSV">
+                <a href="{{Route('rekam.export-csv', ['keyword' => request('keyword'), 'status' => request('status', request('tab')), 'layanan' => request('layanan'), 'upt' => request('upt', session('selected_upt'))])}}" class="btn btn-sm font-w600" style="border: 1px solid #a7f3d0; border-radius: 8px; background: #ecfdf5; color: #059669; padding: 8px 14px; font-size: 13px; transition: all 0.2s ease;" title="Download data rekam medis ke CSV">
                     <i class="fa-solid fa-file-csv mr-1"></i> Export CSV
                 </a>
             </div>
@@ -47,6 +47,19 @@
                     <!-- Filter & Pencarian Sejajar -->
                     <div class="flex-grow-1 d-flex justify-content-xl-end">
                         <form method="get" action="{{ url()->current() }}" class="d-flex align-items-center flex-wrap" style="gap: 6px; max-width: 100%;">
+                            <!-- 0. Filter Lokasi UPT -->
+                            <div class="ot-filter-wrapper" style="width: 175px;">
+                                <i class="fa-solid fa-hospital-user"></i>
+                                <select name="upt" class="form-control form-control-sm ot-filter-select" onchange="this.form.submit()" title="Filter Lokasi UPT" style="width: 100%;">
+                                    <option value="all" {{ (!session('selected_upt') || session('selected_upt') == 'all' || request('upt') == 'all') ? 'selected' : '' }}>Semua Lokasi UPT</option>
+                                    @foreach($activeUpts as $u)
+                                        <option value="{{ $u->nama }}" {{ ((session('selected_upt') == $u->nama && request('upt') !== 'all') || request('upt') == $u->nama) ? 'selected' : '' }}>
+                                            {{ $u->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <!-- 1. Filter Status -->
                             <div class="ot-filter-wrapper" style="width: 140px;">
                                 <i class="fa-solid fa-circle-check"></i>
@@ -94,8 +107,8 @@
                             </div>
 
                             <!-- Tombol Reset Filter -->
-                            @if(request('keyword') || request('status') || request('tab') || request('layanan') || (request('per_page') && request('per_page') != '10'))
-                                <a href="{{ Route('rekam') }}" class="btn btn-sm btn-light font-w600" style="height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; font-size: 12px; transition: all 0.2s ease;" title="Reset Filter">
+                            @if(request('keyword') || request('status') || request('tab') || request('layanan') || (request('upt') && request('upt') != 'all') || (session('selected_upt') && session('selected_upt') != 'all') || (request('per_page') && request('per_page') != '10'))
+                                <a href="{{ Route('rekam', ['upt' => 'all']) }}" class="btn btn-sm btn-light font-w600" style="height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; font-size: 12px; transition: all 0.2s ease;" title="Reset Filter">
                                     <i class="fa-solid fa-rotate-right mr-1" style="color: #64748b;"></i> Reset
                                 </a>
                             @endif

@@ -80,12 +80,7 @@
                     <i class="fa-solid fa-address-card"></i>
                 </div>
                 <div>
-                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                        <h3 class="font-w700 mb-0" style="color: #1e40af; font-weight: 700; font-size: 20px;">Detail Penerima Manfaat</h3>
-                        <span class="badge font-w700" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                            <i class="fa-solid fa-id-card mr-1"></i> RM# {{ $pasien->no_rm }}
-                        </span>
-                    </div>
+                    <h3 class="font-w700 mb-0" style="color: #1e40af; font-weight: 700; font-size: 20px;">Detail Penerima Manfaat</h3>
                     <ol class="breadcrumb mb-0" style="background: transparent; padding: 0; font-size: 12px; margin-top: 4px;">
                         <li class="breadcrumb-item"><a href="{{Route('dashboard')}}" style="color: #2563eb;">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="{{Route('penerima-manfaat')}}" style="color: #2563eb;">Data Penerima Manfaat</a></li>
@@ -102,7 +97,7 @@
                         <i class="fa-solid fa-pencil mr-1"></i> Edit Data
                     </a>
                 @endif
-                <a href="{{Route('rekam.add')}}" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 18px; border-radius: 8px; font-size: 12.5px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                <a href="{{Route('rekam.add', ['pasien_id' => $pasien->id])}}" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 18px; border-radius: 8px; font-size: 12.5px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
                     <i class="fa-solid fa-circle-plus mr-1"></i> Input Sesi Terapi Baru
                 </a>
             </div>
@@ -126,8 +121,10 @@
                         </div>
                         <div>
                             <h4 class="font-w700 mb-1" style="font-size: 17px; color: #1e293b;">{{$pasien->nama}}</h4>
-                            <div class="text-muted font-w500" style="font-size: 12.5px;">
-                                <span class="text-primary font-w600">NIK:</span> {{ $pasien->nik ?: '-' }}
+                            <div class="text-muted font-w500" style="font-size: 12.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                <span style="color: #1e40af; font-weight: 600;">No. RM: {{ $pasien->no_rm }}</span>
+                                <span class="text-muted">&bull;</span>
+                                <span style="color: #64748b;">NIK: {{ $pasien->nik ?: '-' }}</span>
                             </div>
                         </div>
                     </div>
@@ -146,6 +143,11 @@
                         $now = \Carbon\Carbon::now();
                         $usia = $b_day ? $b_day->diffInYears($now) . ' Tahun' : '-';
                     @endphp
+
+                    <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                        <span class="text-muted"><i class="fa-solid fa-id-card mr-2 text-primary"></i>No. Rekam Medis (RM)</span>
+                        <span class="font-w700" style="color: #1e293b; font-size: 13.5px;">{{ $pasien->no_rm }}</span>
+                    </div>
 
                     <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
                         <span class="text-muted"><i class="fa-solid fa-calendar mr-2 text-primary"></i>TTL / Usia</span>
@@ -339,16 +341,13 @@
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                    @if($activeRekam && (auth()->user()->role_display() == "Admin" || auth()->user()->role_display() == "Pendaftaran"))
+                @if($activeRekam && (auth()->user()->role_display() == "Admin" || auth()->user()->role_display() == "Pendaftaran"))
+                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
                         <a href="{{ Route('rekam.edit', $activeRekam->id) }}" class="btn btn-xs btn-outline-primary bg-white font-w600 shadow-sm" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; border-color: #bfdbfe;">
                             <i class="fa-solid fa-pen-to-square mr-1"></i> Edit Sesi Ini
                         </a>
-                    @endif
-                    <a href="{{ Route('rekam.add') }}" class="btn btn-xs btn-primary font-w600 text-white shadow-sm" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important;">
-                        <i class="fa-solid fa-plus-circle mr-1"></i> + Input Sesi Terapi Baru
-                    </a>
-                </div>
+                    </div>
+                @endif
             </div>
 
             @if($activeRekam)
@@ -415,7 +414,7 @@
                         <i class="fa-solid fa-circle-info text-primary mr-2"></i>
                         Penerima manfaat ini belum memiliki catatan sesi terapi. Silakan daftarkan sesi terapi baru untuk memulai perawatan.
                     </div>
-                    <a href="{{ Route('rekam.add') }}" class="btn btn-sm btn-primary font-w600" style="font-size: 12px; padding: 5px 14px;">
+                    <a href="{{ Route('rekam.add', ['pasien_id' => $pasien->id]) }}" class="btn btn-sm btn-primary font-w600" style="font-size: 12px; padding: 5px 14px;">
                         <i class="fa-solid fa-plus mr-1"></i> Daftarkan Sesi Sekarang
                     </a>
                 </div>
@@ -682,7 +681,7 @@
                             <h6 class="font-w700 text-dark mb-0" style="font-size: 14px;">
                                 <i class="fa fa-history text-primary mr-1"></i> Log Catatan SOAP Sesi Terapi Harian (Rabu Rutin)
                             </h6>
-                            <a href="{{ Route('rekam.add') }}" class="btn btn-xs btn-primary font-w600 shadow-sm" style="padding: 5px 12px; border-radius: 6px;">
+                            <a href="{{ Route('rekam.add', ['pasien_id' => $pasien->id]) }}" class="btn btn-xs btn-primary font-w600 shadow-sm" style="padding: 5px 12px; border-radius: 6px;">
                                 <i class="fa fa-plus-circle mr-1"></i> Input Sesi Baru
                             </a>
                         </div>
@@ -1286,9 +1285,10 @@
             }
         @endif
 
-        // Tombol Cetak Sesi SOAP Lengkap & Cetak Latihan Rumahan
+        // Tombol Cetak Sesi SOAP Lengkap, Cetak Latihan Rumahan, & Cetak Asesmen
         actionHtml += '<a href="' + urlsoapprint + '" target="_blank" class="btn btn-xs btn-primary shadow-sm font-w600 mr-1" style="background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%) !important; border: none !important; color: #ffffff !important; border-radius: 6px; padding: 6px 13px; font-size: 11.5px;" title="Cetak Lembar SOAP Lengkap Sesi Ini"><i class="fa-solid fa-print mr-1"></i> Cetak SOAP Lengkap</a>';
         actionHtml += '<a href="' + urlhomeprint + '" target="_blank" class="btn btn-xs btn-success shadow-sm font-w600 mr-1" style="background: #10b981 !important; border: none !important; color: #ffffff !important; border-radius: 6px; padding: 6px 13px; font-size: 11.5px;" title="Cetak Lembar Panduan Latihan Rumahan untuk Keluarga"><i class="fa-solid fa-house-user mr-1"></i> Cetak Latihan Rumahan</a>';
+        actionHtml += '<a href="' + urlassessmentprint + '" target="_blank" class="btn btn-xs btn-info shadow-sm font-w600 mr-1 text-white" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important; border: none !important; border-radius: 6px; padding: 6px 13px; font-size: 11.5px;" title="Cetak Lembar Hasil Asesmen"><i class="fa-solid fa-print mr-1"></i> Cetak Asesmen</a>';
 
         $("#modalSoapActionButtons").html(actionHtml);
 

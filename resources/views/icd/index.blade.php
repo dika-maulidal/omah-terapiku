@@ -21,7 +21,7 @@
             </div>
             <div>
                 <button type="button" class="btn btn-sm btn-primary font-w700 shadow-sm" data-toggle="modal" data-target="#addOrderModal" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 18px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
-                    <i class="fa-solid fa-circle-plus mr-1"></i> + Tambah Kode ICD-10
+                    <i class="fa-solid fa-circle-plus mr-1"></i> Tambah Kode ICD-10
                 </button>
             </div>
         </div>
@@ -32,15 +32,15 @@
 <div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-            <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); padding: 16px 20px;">
+            <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important; background-color: #1e40af !important; padding: 16px 20px; border-bottom: none !important;">
                 <div>
-                    <h5 class="modal-title font-w700 text-white mb-0" style="font-size: 16px;">
-                        <i class="fa-solid fa-heart-pulse mr-2"></i> Tambah Kode ICD-10 Baru
+                    <h5 class="modal-title font-w700 text-white mb-0" style="font-size: 16px; color: #ffffff !important;">
+                        <i class="fa-solid fa-heart-pulse mr-2 text-white"></i> Tambah Kode ICD-10 Baru
                     </h5>
-                    <small class="text-white-50">Daftarkan kode diagnosis standar internasional ICD-10</small>
+                    <small class="text-white" style="opacity: 0.85; color: #ffffff !important;">Daftarkan kode diagnosis standar internasional ICD-10</small>
                 </div>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; color: #ffffff !important;">
+                    <span aria-hidden="true" style="color: #ffffff !important;">&times;</span>
                 </button>
             </div>
             <div class="modal-body p-4 text-left" style="background: #ffffff;">
@@ -179,60 +179,6 @@
                                                     <i class="fa-solid fa-trash"></i>
                                                 </a>
                                             </div>
-
-                                            <!-- Modal Edit ICD -->
-                                            <div class="modal fade" id="editPoli{{$row->code}}" tabindex="-1" role="dialog" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-                                                        <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); padding: 16px 20px;">
-                                                            <div>
-                                                                <h5 class="modal-title font-w700 text-white mb-0" style="font-size: 16px;">
-                                                                    <i class="fa-solid fa-pen-to-square mr-2"></i> Edit Data ICD-10
-                                                                </h5>
-                                                                <small class="text-white-50">Perbarui rincian kode dan deskripsi diagnosis</small>
-                                                            </div>
-                                                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body p-4 text-left" style="background: #ffffff;">
-                                                            <form action="{{Route('icd.update',$row->code)}}" method="POST">
-                                                                {{ csrf_field() }}
-                                                                
-                                                                <div class="form-group mb-3">
-                                                                    <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                                                                        Kode ICD-10 <span class="text-danger">*</span>
-                                                                    </label>
-                                                                    <input type="text" name="code" value="{{$row->code}}" required class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
-                                                                </div>
-
-                                                                <div class="form-group mb-3">
-                                                                    <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                                                                        Nama Diagnosis (Bahasa Indonesia) <span class="text-danger">*</span>
-                                                                    </label>
-                                                                    <input type="text" name="name_id" value="{{$row->name_id}}" required class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
-                                                                </div>
-
-                                                                <div class="form-group mb-4">
-                                                                    <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                                                                        Nama Diagnosis (Bahasa Inggris / Medis) <span class="text-danger">*</span>
-                                                                    </label>
-                                                                    <input type="text" name="name_en" value="{{$row->name_en}}" required class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
-                                                                </div>
-                                                                
-                                                                <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top">
-                                                                    <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
-                                                                        Batal
-                                                                    </button>
-                                                                    <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 22px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
-                                                                        <i class="fa-solid fa-floppy-disk mr-1"></i> Update Data
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -267,6 +213,68 @@
         </div>
     </div>
 </div>
+
+<!-- ============================================================= -->
+<!-- MODAL PER ICD-10 (OUTSIDE TABLE FOR MODAL BACKDROP) -->
+<!-- ============================================================= -->
+@if(isset($datas) && count($datas) > 0)
+    @foreach ($datas as $row)
+        <!-- Modal Edit ICD -->
+        <div class="modal fade" id="editPoli{{$row->code}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                    <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important; background-color: #1e40af !important; padding: 16px 20px; border-bottom: none !important;">
+                        <div>
+                            <h5 class="modal-title font-w700 text-white mb-0" style="font-size: 16px; color: #ffffff !important;">
+                                <i class="fa-solid fa-pen-to-square mr-2 text-white"></i> Edit Data ICD-10
+                            </h5>
+                            <small class="text-white" style="opacity: 0.85; color: #ffffff !important;">Perbarui rincian kode dan deskripsi diagnosis</small>
+                        </div>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; color: #ffffff !important;">
+                            <span aria-hidden="true" style="color: #ffffff !important;">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-4 text-left" style="background: #ffffff;">
+                        <form action="{{Route('icd.update',$row->code)}}" method="POST">
+                            {{ csrf_field() }}
+                            
+                            <div class="form-group mb-3">
+                                <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
+                                    Kode ICD-10 <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" name="code" value="{{$row->code}}" required class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
+                                    Nama Diagnosis (Bahasa Indonesia) <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" name="name_id" value="{{$row->name_id}}" required class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
+                                    Nama Diagnosis (Bahasa Inggris / Medis) <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" name="name_en" value="{{$row->name_en}}" required class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                            </div>
+                            
+                            <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top">
+                                <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
+                                    Batal
+                                </button>
+                                <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 22px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                                    <i class="fa-solid fa-floppy-disk mr-1"></i> Update Data
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+@endif
+
 @endsection
 
 @section('script')

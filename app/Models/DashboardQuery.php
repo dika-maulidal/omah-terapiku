@@ -6,14 +6,33 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardQuery 
 {
+    public function getActiveUptList()
+    {
+        return Poli::where('status', 1)->orderBy('nama', 'asc')->get();
+    }
+
+    public function getSelectedUpt()
+    {
+        return session('selected_upt', 'all');
+    }
+
     protected function scopeUpt($query)
     {
-        if (session()->has('selected_upt') && session('selected_upt') != '') {
+        if (session()->has('selected_upt') && session('selected_upt') != '' && session('selected_upt') != 'all') {
             $upt = session('selected_upt');
             $query->where(function($q) use ($upt) {
                 $q->where('rekam.poli', 'LIKE', "%{$upt}%")
                   ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");
             });
+        }
+        return $query;
+    }
+
+    protected function scopeUptPasien($query)
+    {
+        if (session()->has('selected_upt') && session('selected_upt') != '' && session('selected_upt') != 'all') {
+            $upt = session('selected_upt');
+            $query->where('pasien.upt_lokasi', 'LIKE', "%{$upt}%");
         }
         return $query;
     }
@@ -90,12 +109,19 @@ class DashboardQuery
 
     public function totalPasien()
     {
-        return Pasien::whereNull('deleted_at')->count();
+        $query = Pasien::whereNull('deleted_at');
+        $this->scopeUptPasien($query);
+        return $query->count();
     }
 
     public function totalDoktor()
     {
-        return Dokter::where('status', 1)->count();
+        $query = Dokter::where('status', 1);
+        if (session()->has('selected_upt') && session('selected_upt') != '' && session('selected_upt') != 'all') {
+            $upt = session('selected_upt');
+            $query->where('poli', 'LIKE', "%{$upt}%");
+        }
+        return $query->count();
     }
 
     public function diagnosaBulanan(){
@@ -163,7 +189,7 @@ class DashboardQuery
                 $q->where('rekam.dokter_id', $dokterId);
             });
 
-        if (session()->has('selected_upt') && session('selected_upt') != '') {
+        if (session()->has('selected_upt') && session('selected_upt') != '' && session('selected_upt') != 'all') {
             $upt = session('selected_upt');
             $query->where(function($q) use ($upt) {
                 $q->where('rekam.poli', 'LIKE', "%{$upt}%")
@@ -231,37 +257,37 @@ class DashboardQuery
         $user = auth()->user();
         $role = $user->role_display();
 
-        return Rekam::latest()
+        $query = Rekam::latest()
                 ->whereDate('tgl_rekam', date('Y-m-d'))
                 ->when($role == "Dokter", function ($query) use ($user){
                     $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
                     if ($dokter) {
                         $query->where('dokter_id', '=', $dokter->id);
                     }
-                })
-                ->get();
+                });
+        return $this->scopeUpt($query)->get();
     }
 
     function rekam_day2(){
         $user = auth()->user();
         $role = $user->role_display();
 
-        return Rekam::orderBy('id', 'asc')
+        $query = Rekam::orderBy('id', 'asc')
                 ->whereDate('tgl_rekam', date('Y-m-d'))
                 ->when($role == "Dokter", function ($query) use ($user){
                     $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
                     if ($dokter) {
                         $query->where('dokter_id', '=', $dokter->id);
                     }
-                })
-                ->get();
+                });
+        return $this->scopeUpt($query)->get();
     }
 
     function rekam_antrian(){
         $user = auth()->user();
         $role = $user->role_display();
 
-        return Rekam::orderBy('id', 'desc')
+        $query = Rekam::orderBy('id', 'desc')
                 ->whereDate('tgl_rekam', date('Y-m-d'))
                 ->where('status', 2)
                 ->when($role == "Dokter", function ($query) use ($user){
@@ -269,8 +295,8 @@ class DashboardQuery
                     if ($dokter) {
                         $query->where('dokter_id', '=', $dokter->id);
                     }
-                })
-                ->get();
+                });
+        return $this->scopeUpt($query)->get();
     }
 
     public function getAvailableYears()
@@ -290,11 +316,11 @@ class DashboardQuery
         foreach ($years as $year) {
             $monthly = [];
             for ($m = 1; $m <= 12; $m++) {
-                $count = Pasien::whereNull('deleted_at')
+                $query = Pasien::whereNull('deleted_at')
                     ->whereYear('created_at', $year)
-                    ->whereMonth('created_at', $m)
-                    ->count();
-                $monthly[] = $count;
+                    ->whereMonth('created_at', $m);
+                $this->scopeUptPasien($query);
+                $monthly[] = $query->count();
             }
             $dataByYear[$year] = $monthly;
         }
@@ -313,6 +339,7 @@ class DashboardQuery
                 $query->where('dokter_id', $dokter->id);
             }
         }
+        $this->scopeUpt($query);
 
         $antrian = (clone $query)->where('status', 1)->count();
         $pemeriksaan = (clone $query)->where('status', 2)->count();
@@ -372,18 +399,18 @@ class DashboardQuery
             $dates[] = $ymd;
 
             // Hitung pelayanan rekam medis pada tanggal tersebut
-            $rekamCount = Rekam::whereDate('tgl_rekam', $ymd)
+            $rekamQuery = Rekam::whereDate('tgl_rekam', $ymd)
                 ->when($dokterId, function ($query) use ($dokterId) {
                     $query->where('dokter_id', $dokterId);
-                })
-                ->count();
-            $periksaCounts[] = $rekamCount;
+                });
+            $this->scopeUpt($rekamQuery);
+            $periksaCounts[] = $rekamQuery->count();
 
             // Hitung pendaftaran pasien baru pada tanggal tersebut
-            $pasienCount = Pasien::whereNull('deleted_at')
-                ->whereDate('created_at', $ymd)
-                ->count();
-            $pasienBaruCounts[] = $pasienCount;
+            $pasienQuery = Pasien::whereNull('deleted_at')
+                ->whereDate('created_at', $ymd);
+            $this->scopeUptPasien($pasienQuery);
+            $pasienBaruCounts[] = $pasienQuery->count();
         }
 
         $totalPeriksa = array_sum($periksaCounts);
@@ -522,6 +549,7 @@ class DashboardQuery
     public function getDemografiPenerimaManfaat()
     {
         $pasienQuery = Pasien::whereNull('deleted_at');
+        $this->scopeUptPasien($pasienQuery);
         $totalPasien = (clone $pasienQuery)->count();
 
         // 1. Demografi Berdasarkan Kelompok Usia
@@ -542,12 +570,13 @@ class DashboardQuery
         $jkLainnya = max(0, $totalPasien - ($jkLaki + $jkPerempuan));
 
         // 3. Demografi Berdasarkan Jenis Disabilitas
-        $disabilitasData = DB::table('pasien')
+        $disabilitasQuery = DB::table('pasien')
             ->select('jenis_disabilitas', DB::raw('count(*) as total'))
             ->whereNull('deleted_at')
             ->whereNotNull('jenis_disabilitas')
-            ->where('jenis_disabilitas', '!=', '')
-            ->groupBy('jenis_disabilitas')
+            ->where('jenis_disabilitas', '!=', '');
+        $this->scopeUptPasien($disabilitasQuery);
+        $disabilitasData = $disabilitasQuery->groupBy('jenis_disabilitas')
             ->orderBy('total', 'desc')
             ->limit(5)
             ->get();
@@ -679,7 +708,7 @@ class DashboardQuery
             ->where('tindakan', '!=', '')
             ->where('tindakan', 'NOT LIKE', '%Belum ada catatan%');
 
-        if (session()->has('selected_upt') && session('selected_upt') != '') {
+        if (session()->has('selected_upt') && session('selected_upt') != '' && session('selected_upt') != 'all') {
             $upt = session('selected_upt');
             $query->where(function($q) use ($upt) {
                 $q->where('rekam.poli', 'LIKE', "%{$upt}%")

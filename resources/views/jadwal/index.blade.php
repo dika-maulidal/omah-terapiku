@@ -245,18 +245,20 @@
             <!-- Quick Date Presets (Rabu Rutin & Hari Ini) -->
             <div class="d-flex align-items-center flex-wrap pt-3 mt-3" style="border-top: 1px dashed #e2e8f0; gap: 8px;">
                 <span class="text-muted font-w600 mr-2" style="font-size: 12px;">
-                    <i class="fa-solid fa-bolt text-warning mr-1"></i> Akses Cepat Tanggal:
+                    <i class="fa-solid fa-calendar-days text-primary mr-1"></i> Akses Cepat Tanggal:
                 </span>
                 
                 <a href="{{ Route('jadwal.index', array_merge(request()->except('tanggal'), ['tanggal' => date('Y-m-d')])) }}" 
-                   class="btn btn-xs {{ $tanggal == date('Y-m-d') ? 'btn-primary font-w700 text-white' : 'btn-light font-w600' }}" style="border-radius: 20px; padding: 5px 14px; font-size: 11.5px; border: 1px solid {{ $tanggal == date('Y-m-d') ? '#2563eb' : '#cbd5e1' }};">
-                    Hari Ini ({{ date('d M') }})
+                   class="btn btn-xs {{ $tanggal == date('Y-m-d') ? 'btn-primary font-w700 text-white' : 'btn-light font-w600' }}" 
+                   style="border-radius: 20px; padding: 5px 14px; font-size: 11.5px; border: 1px solid {{ $tanggal == date('Y-m-d') ? '#2563eb' : '#cbd5e1' }};">
+                    <i class="fa-solid fa-calendar-day mr-1" style="{{ $tanggal == date('Y-m-d') ? 'color:#fff;' : 'color:#2563eb;' }}"></i> Hari Ini ({{ date('d M') }})
                 </a>
 
                 @foreach($rabuDates as $index => $rDate)
                     @php $rStr = $rDate->format('Y-m-d'); @endphp
                     <a href="{{ Route('jadwal.index', array_merge(request()->except('tanggal'), ['tanggal' => $rStr])) }}" 
-                       class="btn btn-xs {{ $tanggal == $rStr ? 'btn-primary font-w700 text-white' : 'btn-light font-w600' }}" style="border-radius: 20px; padding: 5px 14px; font-size: 11.5px; border: 1px solid {{ $tanggal == $rStr ? '#2563eb' : '#cbd5e1' }};">
+                       class="btn btn-xs {{ $tanggal == $rStr ? 'btn-primary font-w700 text-white' : 'btn-light font-w600' }}" 
+                       style="border-radius: 20px; padding: 5px 14px; font-size: 11.5px; border: 1px solid {{ $tanggal == $rStr ? '#2563eb' : '#cbd5e1' }};">
                         <i class="fa-solid fa-calendar-check mr-1" style="{{ $tanggal == $rStr ? 'color:#fff;' : 'color:#2563eb;' }}"></i> 
                         {{ $index == 0 ? 'Rabu Terdekat' : 'Rabu (+'.($index).' Mgg)' }} ({{ $rDate->format('d M') }})
                     </a>
@@ -485,13 +487,13 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
             
-            <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); padding: 16px 20px;">
+            <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important; background-color: #1e40af !important; padding: 16px 20px; border-bottom: none !important;">
                 <div>
-                    <h5 class="modal-title font-w700 text-white mb-0" id="mJadwalNama" style="font-size: 16px;">Detail Sesi Terapi</h5>
-                    <small class="text-white-50" id="mJadwalNoRm">No. RM: -</small>
+                    <h5 class="modal-title font-w700 text-white mb-0" id="mJadwalNama" style="font-size: 16px; color: #ffffff !important;">Detail Sesi Terapi</h5>
+                    <small class="text-white" id="mJadwalNoRm" style="opacity: 0.85; color: #ffffff !important;">No. RM: -</small>
                 </div>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; color: #ffffff !important;">
+                    <span aria-hidden="true" style="color: #ffffff !important;">&times;</span>
                 </button>
             </div>
 

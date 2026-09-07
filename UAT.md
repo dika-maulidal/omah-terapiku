@@ -20,7 +20,7 @@ Siapkan 3 akun uji dengan peran berbeda untuk melakukan simulasi:
 ### B. Lingkungan Pengujian
 - **URL Aplikasi:** `http://omah-terapiku.test` (atau `http://localhost:8000`)
 - **Browser yang Didukung:** Google Chrome / Microsoft Edge / Mozilla Firefox terbaru
-- **Standar Format Data:** Hari operasional khusus **Rabu (08.00 - 13.00 WIB)**, Durasi sesi **30-45 menit**, Kriteria **Desil 1-5 DTKS**.
+- **Standar Format Data:** Hari operasional khusus **Rabu (08.00 - 13.00 WIB)**, Durasi sesi **30-45 menit**, Kriteria **Desil 1-4 DTKS**.
 
 ---
 
@@ -67,7 +67,7 @@ Pengujian wajib dilakukan berurutan sesuai alur pelayanan riil di lapangan:
 | ID Test | Skenario Pengujian | Aktor | Langkah-langkah Pengujian (*Step-by-Step*) | Hasil yang Diharapkan (*Expected Result*) | Status (P/F) | Catatan |
 |---|---|---|---|---|:---:|---|
 | **UAT-06** | Pendaftaran Penerima Manfaat Baru | Petugas Pendaftaran / Admin | 1. Buka menu **Penerima Manfaat** (`/penerima-manfaat`).<br>2. Klik tombol **"Tambah Penerima Manfaat"**.<br>3. Isi Data Pribadi (Nama, NIK 16 digit, Tempat/Tgl Lahir, Jenis Kelamin, Alamat).<br>4. Pilih UPT Lokasi. | Form input terbuka dengan validasi lengkap tanpa kendala. | [ ] | |
-| **UAT-07** | Validasi Desil DTKS 1 s.d. 5 | Petugas Pendaftaran | 1. Pada dropdown **Desil DTSEN / DTKS**, pilih *"Desil 1"*, *"Desil 2"*, s.d. *"Desil 5"*.<br>2. Amati badge status eligibilitas bantuan sosial. | Sistem menerima pilihan Desil 1–5 sebagai syarat sah penerima manfaat gratis Dinas Sosial. | [ ] | |
+| **UAT-07** | Validasi Desil DTKS 1 s.d. 4 | Petugas Pendaftaran | 1. Pada dropdown **Desil DTSEN / DTKS**, pilih *"Desil 1"*, *"Desil 2"*, s.d. *"Desil 4"*.<br>2. Amati badge status eligibilitas bantuan sosial. | Sistem menerima pilihan Desil 1–4 sebagai syarat sah penerima manfaat gratis Dinas Sosial. | [ ] | |
 | **UAT-08** | Input Multiselect Disabilitas & Alat Bantu | Petugas Pendaftaran | 1. Pada field **Jenis Disabilitas**, pilih lebih dari satu (contoh: *Fisik + Sensorik Netra*).<br>2. Pada field **Alat Bantu**, pilih *Kursi Roda* dan *Tongkat*. | Input multiselect berfungsi lancar, tag pilihan muncul rapi, dan tersimpan dalam format array/string gabungan. | [ ] | |
 | **UAT-09** | Auto-Generate Nomor Rekam Medis (No. RM) | Petugas Pendaftaran | 1. Kosongkan field No. RM (atau biarkan default).<br>2. Submit form registrasi.<br>3. Cek No. RM yang terbentuk di tabel pasien. | Sistem secara otomatis menerbitkan No. RM unik dengan format `OTK-26-XXXXX` (contoh: `OTK-26-00001`) berurutan. | [ ] | |
 | **UAT-10** | Upload Berkas KK & File Resume Medis | Petugas Pendaftaran | 1. Unggah file Kartu Keluarga (JPG/PNG/PDF).<br>2. Unggah file Resume Medis Asal.<br>3. Klik Simpan.<br>4. Buka detail pasien dan klik tombol lihat berkas. | File terunggah ke direktori storage dengan aman dan dapat dibuka/diunduh kembali oleh petugas. | [ ] | |

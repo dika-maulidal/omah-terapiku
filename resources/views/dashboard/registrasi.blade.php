@@ -8,6 +8,8 @@
         $tanggalFormatted = $hari . ', ' . date('j') . ' ' . $bulan . ' ' . date('Y');
 
         $availableYears = $query->getAvailableYears();
+        $activeUpts = $query->getActiveUptList();
+        $selectedUpt = session('selected_upt', 'all');
         $allYearsPasienData = $query->getAllYearsPasienData();
         $statusAntrian = $query->getStatusAntrianData();
         $trenPelayananAll = $query->getTrenPelayananAll();
@@ -22,18 +24,44 @@
         $recentActivities = $query->getRecentTherapistActivities(10);
     @endphp
 
-    <!-- Dashboard Header Banner (Unified White Card) -->
+    <!-- Dashboard Header Banner (Unified White Card with UPT Filter - DESIGN.md Section 1 & 3) -->
     <div class="card mb-4 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
         <div class="card-body p-3 p-md-4">
             <div class="d-flex flex-wrap align-items-center justify-content-between">
                 <div class="mr-auto">
-                    <h3 class="font-w700 mb-1" style="color: var(--ot-navy) !important; font-weight: 700; font-size: 22px;">Dashboard Pendaftaran</h3>
-                    <p class="fs-13 text-muted mb-0">Selamat Datang, <strong class="font-w700" style="color: #2563eb;">{{ auth()->user()->name }}</strong> &bull; Loket Pendaftaran Omah Terapiku</p>
+                    <h3 class="font-w700 mb-0" style="color: var(--ot-navy, #1e40af) !important; font-weight: 700; font-size: 22px;">Dashboard Pendaftaran</h3>
+                    <p class="fs-13 text-muted mb-0 mt-1">Selamat Datang, <strong class="font-w700" style="color: #2563eb;">{{ auth()->user()->name }}</strong> &bull; Loket Pendaftaran Omah Terapiku</p>
                 </div>
                 <div class="mt-2 mt-sm-0">
                     <div class="d-flex align-items-center px-3 py-2 rounded" style="background: #f8fafc; border: 1px solid #e2e8f0; font-size: 13px; font-weight: 600; color: #334155; border-radius: 8px;">
                         <i class="fa fa-calendar mr-2" style="color: #2563eb; font-size: 14px;"></i> {{ $tanggalFormatted }}
                     </div>
+                </div>
+            </div>
+
+            <!-- Filter Lokasi UPT (Placed directly below greeting) -->
+            <div class="pt-3 mt-3 border-top d-flex flex-wrap align-items-center" style="border-color: #f1f5f9 !important; gap: 10px;">
+                <div class="d-flex align-items-center mr-2" style="gap: 8px; padding-right: 4px;">
+                    <i class="fa-solid fa-hospital-user" style="font-size: 15px; color: #2563eb;"></i>
+                    <span class="fs-13 font-w600 text-dark" style="color: #1e293b !important; white-space: nowrap;">Filter Lokasi UPT:</span>
+                </div>
+                <div class="d-flex flex-wrap align-items-center" style="gap: 8px;">
+                    <a href="{{ route('set.global.upt') }}?upt=all" 
+                       class="btn btn-sm d-inline-flex align-items-center" 
+                       style="{{ (!session('selected_upt') || session('selected_upt') == 'all') 
+                            ? 'background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; color: #ffffff !important; border: 1px solid #1d4ed8 !important; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28); font-weight: 700;' 
+                            : 'background: #f8fafc !important; color: #475569 !important; border: 1px solid #e2e8f0 !important; font-weight: 600;' }} border-radius: 20px; padding: 6px 15px; font-size: 12.5px; transition: all 0.2s;">
+                        <i class="fa-solid fa-layer-group" style="font-size: 12px; margin-right: 7px;"></i> Semua UPT
+                    </a>
+                    @foreach($activeUpts as $u)
+                        <a href="{{ route('set.global.upt') }}?upt={{ urlencode($u->nama) }}" 
+                           class="btn btn-sm d-inline-flex align-items-center" 
+                           style="{{ (session('selected_upt') == $u->nama) 
+                                ? 'background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; color: #ffffff !important; border: 1px solid #1d4ed8 !important; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28); font-weight: 700;' 
+                                : 'background: #f8fafc !important; color: #475569 !important; border: 1px solid #e2e8f0 !important; font-weight: 600;' }} border-radius: 20px; padding: 6px 15px; font-size: 12.5px; transition: all 0.2s;">
+                            <i class="fa-solid fa-building-user" style="font-size: 12px; margin-right: 7px;"></i> {{ $u->nama }}
+                        </a>
+                    @endforeach
                 </div>
             </div>
         </div>

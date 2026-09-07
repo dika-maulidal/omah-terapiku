@@ -62,7 +62,7 @@ rectangle "Sistem Informasi Omah Terapi-KU" {
     ' --- Paket Penerima Manfaat ---
     package "Pengelolaan Penerima Manfaat" {
         usecase "UC-05: Pendaftaran Penerima Manfaat Baru" as UC_RegPM
-        usecase "UC-06: Verifikasi Desil DTKS 1-5 & Dokumen" as UC_VerifDTKS
+        usecase "UC-06: Verifikasi Desil DTKS 1-4 & Dokumen" as UC_VerifDTKS
         usecase "UC-07: Generate No. Rekam Medis Otomatis" as UC_GenRM
         usecase "UC-08: Pencarian & Kelola Data Pasien" as UC_CariPM
         usecase "UC-09: Unggah Berkas KK & Resume Medis" as UC_UploadBerkas
@@ -248,7 +248,7 @@ UC_Asesmen_Detail .> UC_Rencana : <<include>>
 
 | No | Nama Aktor | Deskripsi Peran & Tanggung Jawab |
 |---|---|---|
-| 1 | **Petugas Pendaftaran** *(Role 2)* | Menerima berkas calon penerima manfaat, memverifikasi kriteria Desil DTKS 1–5, mendaftarkan identitas pasien baru, menjadwalkan sesi terapi (slot hari Rabu), memanggil antrian pasien, serta memantau status antrian pelayanan. |
+| 1 | **Petugas Pendaftaran** *(Role 2)* | Menerima berkas calon penerima manfaat, memverifikasi kriteria Desil DTKS 1–4, mendaftarkan identitas pasien baru, menjadwalkan sesi terapi (slot hari Rabu), memanggil antrian pasien, serta memantau status antrian pelayanan. |
 | 2 | **Dokter / Terapis** *(Role 3)* | Mengakses rekam medis pasien di ruang terapi, melakukan asesmen baseline/re-evaluasi (15 bagian klinis), mencatat log harian SOAP (*Subjective, Objective, Assessment, Plan*), memilih diagnosa ICD-10, merancang program latihan mandiri (*Home Program*), dan mencetak hasil asesmen. |
 | 3 | **Administrator** *(Role 1)* | Mengawasi seluruh jalannya operasional lintas UPT, mengelola hak akses akun pengguna (petugas & dokter), mengelola master data (tindakan, poli/UPT, ICD-10), memantau visualisasi grafik analitik, dan mengekspor laporan rekam medis ke CSV. |
 
@@ -294,7 +294,7 @@ UC_Asesmen_Detail .> UC_Rencana : <<include>>
 ## 5. Ringkasan Hubungan Use Case (Include & Extend)
 
 1. **`UC-05 (Pendaftaran Penerima Manfaat Baru)`**:
-   - Mengharuskan `<<include>>` **UC-06 (Verifikasi Desil DTKS 1-5)** sebagai syarat kelayakan penerima manfaat gratis.
+   - Mengharuskan `<<include>>` **UC-06 (Verifikasi Desil DTKS 1-4)** sebagai syarat kelayakan penerima manfaat gratis.
    - Mengharuskan `<<include>>` **UC-07 (Generate No. RM Otomatis)** dengan format `OTK-26-XXXXX`.
    - Mengembangkan `<<extend>>` **UC-09 (Unggah Berkas KK & Resume Medis)** jika penerima manfaat membawa berkas fisik.
 

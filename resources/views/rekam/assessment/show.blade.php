@@ -10,12 +10,7 @@
                     <i class="fa-solid fa-file-waveform"></i>
                 </div>
                 <div>
-                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                        <h3 class="font-w700 mb-0" style="color: #1e40af; font-size: 20px;">Hasil Assessment Penerima Manfaat</h3>
-                        <span class="badge font-w700" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                            <i class="fa-solid fa-id-card mr-1"></i> {{ $pasien->no_rm }}
-                        </span>
-                    </div>
+                    <h3 class="font-w700 mb-0" style="color: #1e40af; font-size: 20px;">Hasil Assessment Penerima Manfaat</h3>
                     <ol class="breadcrumb mb-0" style="background: transparent; padding: 0; font-size: 12px; margin-top: 4px;">
                         <li class="breadcrumb-item"><a href="{{Route('dashboard')}}" style="color: #2563eb;">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="{{Route('rekam')}}" style="color: #2563eb;">Rekam Medis</a></li>

@@ -118,11 +118,6 @@
                     </ol>
                 </div>
             </div>
-            <div>
-                <span class="badge font-w700" style="font-size: 12px; padding: 6px 14px; border-radius: 20px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                    <i class="fa-solid fa-shield-halved mr-1"></i> {{ $user->role_display() }}
-                </span>
-            </div>
         </div>
     </div>
 </div>
@@ -159,42 +154,12 @@
                     <!-- ========================================================= -->
                     <div class="tab-pane fade {{ $isMyProfileTab ? 'show active' : '' }}" id="tab-my-profile" role="tabpanel" aria-labelledby="my-profile-tab">
                         
-                        <!-- Profile Hero Banner -->
-                        <div class="p-4 mb-4" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); border-radius: 12px; color: #ffffff;">
-                            <div class="d-flex flex-wrap align-items-center justify-content-between" style="gap: 16px;">
-                                <div class="d-flex align-items-center">
-                                    <div class="mr-3" style="width: 72px; height: 72px; border-radius: 50%; background: #ffffff; padding: 3px; box-shadow: 0 4px 14px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                        <div style="width: 100%; height: 100%; border-radius: 50%; background: #eff6ff; color: #1e40af; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700;">
-                                            {{ strtoupper(substr($user->name, 0, 1)) }}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-white font-w700 mb-1" style="font-size: 18px;">{{ $user->name }}</h4>
-                                        <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                                            <span class="badge font-w700" style="font-size: 11px; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,0.2); color: #ffffff; border: 1px solid rgba(255,255,255,0.3);">
-                                                <i class="fa-solid fa-shield-halved mr-1"></i> {{ $user->role_display() }}
-                                            </span>
-                                            <span class="badge font-w600" style="font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
-                                                <i class="fa-solid fa-circle mr-1" style="font-size: 7px; color: #10b981;"></i> {{ $user->status_display() }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                                    <button type="button" class="btn btn-sm btn-light font-w700 btn-switch-to-tab" data-target="#tab-update-profile" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; border: none; color: #1e40af;">
-                                        <i class="fa-solid fa-pencil mr-1"></i> Edit Profil
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-light font-w700 btn-switch-to-tab" data-target="#tab-password" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; border-color: rgba(255,255,255,0.4); color: #ffffff;">
-                                        <i class="fa-solid fa-key mr-1"></i> Ganti Password
-                                    </button>
-                                </div>
-                            </div>
+                        <!-- Profile Detail Information Grid Header -->
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <i class="fa-solid fa-id-card mr-1"></i> Informasi Rincian Akun
+                            </h6>
                         </div>
-
-                        <!-- Profile Detail Information Grid -->
-                        <h6 class="font-w700 mb-3" style="color: #1e40af; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
-                            <i class="fa-solid fa-id-card mr-1"></i> Informasi Rincian Akun
-                        </h6>
                         
                         <div class="row" style="row-gap: 14px;">
                             <div class="col-md-6 col-lg-4">
@@ -238,6 +203,16 @@
                                     <strong class="text-dark d-block" style="font-size: 14px;">{{ $user->created_at ? $user->created_at->format('d F Y') : '-' }}</strong>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Tombol Aksi di Bagian Bawah -->
+                        <div class="d-flex align-items-center flex-wrap mt-4 pt-3 border-top" style="border-color: #f1f5f9 !important; gap: 10px;">
+                            <button type="button" class="btn btn-sm btn-primary font-w600 btn-switch-to-tab" data-target="#tab-update-profile" style="padding: 8px 18px; font-size: 13px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);">
+                                <i class="fa-solid fa-pencil mr-1"></i> Edit Profil
+                            </button>
+                            <button type="button" class="btn btn-sm btn-light font-w600 btn-switch-to-tab" data-target="#tab-password" style="padding: 8px 18px; font-size: 13px; border-radius: 8px; border: 1px solid #cbd5e1; color: #475569;">
+                                <i class="fa-solid fa-key mr-1"></i> Ganti Password
+                            </button>
                         </div>
 
                     </div>

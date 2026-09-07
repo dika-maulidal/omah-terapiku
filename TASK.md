@@ -25,8 +25,8 @@
     - Tambahkan opsi pemulihan multi-pilihan (_multiselect_) atau field opsional **"Terapis Pendamping"** pada Form Tambah Rekam Medis Baru untuk kasus penanganan gabungan.
 - [x] **Field Multiselect Disabilitas & Alat Bantu**
     - Ubah kontrol input pada **Jenis Disabilitas** dan **Alat Bantu Mobilitas** menjadi _Multiselect Dropdown_ (bisa memilih lebih dari satu kondisi/alat bantu).
-- [x] **Pemberlakuan Kriteria Desil (1–5 DTSEN)**
-    - Berikan _visual badge_ atau indikator _eligibility_ otomatis saat memilih Desil 1–5 sesuai syarat layanan Dinsos.
+- [x] **Pemberlakuan Kriteria Desil (1–4 DTSEN)**
+    - Berikan _visual badge_ atau indikator _eligibility_ otomatis saat memilih Desil 1–4 sesuai syarat layanan Dinsos.
 ### 4. Sinkronisasi Business Flow & Multi-Lokasi UPT
 - [x] **Global UPT / Location Filter Header**
     - Sediakan _dropdown selector_ UPT/Lokasi di bagian _topbar_ (UPT PPSAB Sidoarjo, Balai RS PMKS Sidoarjo, UPT RSBN Malang) untuk memfilter data pasien dan jadwal per lokasi.
