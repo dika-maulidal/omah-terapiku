@@ -85,12 +85,31 @@
                     <!-- Textarea Catatan Tindakan / Plan -->
                     <div class="form-group mb-3">
                         <label class="font-w700 text-dark mb-1" style="font-size: 13px;">
-                            Rincian Intervensi / Rencana Tindakan Terapi <span class="text-danger">*</span>
+                            <i class="fa-solid fa-hand-holding-medical text-primary mr-1"></i> Rincian Intervensi / Rencana Tindakan Terapi <span class="text-danger">*</span>
                         </label>
                         <textarea name="tindakan" id="modalTindakanTextarea" required class="form-control" rows="4" 
-                                  placeholder="Klik opsi tindakan di atas atau tuliskan detail intervensi, durasi, repetisi, dan home program untuk penerima manfaat..." 
+                                  placeholder="Klik opsi tindakan di atas atau tuliskan detail intervensi, modalitas, manipulasi, latihan fungsional..." 
                                   style="font-size: 13px; line-height: 1.6; border-radius: 8px; border: 1.5px solid #cbd5e1;"></textarea>
                         @error('tindakan')
+                            <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Textarea Program Latihan Rumahan & Edukasi Keluarga (Home Program) -->
+                    <div class="form-group mb-3">
+                        <label class="font-w700 text-dark mb-1 d-flex justify-content-between align-items-center" style="font-size: 13px;">
+                            <span>
+                                <i class="fa-solid fa-house-user text-success mr-1"></i> Program Latihan Rumahan & Edukasi Keluarga (Home Program)
+                            </span>
+                            <span class="badge badge-light font-w500" style="font-size: 11px; background: #ecfdf5; color: #166534; border: 1px solid #bbf7d0;">Latihan Mandiri / Keluarga</span>
+                        </label>
+                        <textarea name="latihan_rumahan" id="modalLatihanRumahanTextarea" class="form-control" rows="3" 
+                                  placeholder="Tuliskan instruksi latihan mandiri di rumah untuk keluarga/wali, seperti: posisi berbaring/duduk yang benar, latihan peregangan 2x sehari (10 repetisi), stimulasi bicara interaktif, aktivitas motorik harian..." 
+                                  style="font-size: 13px; line-height: 1.6; border-radius: 8px; border: 1.5px solid #bbf7d0; background: #fafffc;"></textarea>
+                        <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                            <i class="fa-solid fa-circle-info text-info mr-1"></i> Panduan tugas dan latihan yang dapat dipraktikkan orang tua / wali penerima manfaat di rumah untuk percepatan hasil terapi.
+                        </small>
+                        @error('latihan_rumahan')
                             <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                         @enderror
                     </div>

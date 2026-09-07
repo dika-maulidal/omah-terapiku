@@ -693,7 +693,7 @@
                             <h4 class="fs-16 font-w700 mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
                                 Aktivitas Terkini Terapis
                             </h4>
-                            <p class="fs-12 text-muted mb-0">Log klinis realtime: pengisian asesmen 15 modul, pemeriksaan fisik, intervensi, dan sesi selesai</p>
+                            <p class="fs-12 text-muted mb-0">Log klinis realtime: pengisian asesmen modul klinis, pemeriksaan terapi, dan sesi selesai</p>
                         </div>
                     </div>
                     
@@ -702,7 +702,7 @@
                         <div class="btn-group btn-group-sm" role="group" id="filterTherapistActivity" style="background: #f8fafc; padding: 3px; border-radius: 8px; border: 1px solid #e2e8f0;">
                             <button type="button" class="btn btn-xs btn-activity-filter active font-w600" data-filter="all" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: #2563eb; color: #ffffff; border: none; cursor: pointer;">Semua</button>
                             <button type="button" class="btn btn-xs btn-activity-filter font-w600" data-filter="assessment" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: transparent; color: #64748b; border: none; cursor: pointer;">Asesmen</button>
-                            <button type="button" class="btn btn-xs btn-activity-filter font-w600" data-filter="tindakan" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: transparent; color: #64748b; border: none; cursor: pointer;">Tindakan</button>
+                            <button type="button" class="btn btn-xs btn-activity-filter font-w600" data-filter="pemeriksaan" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: transparent; color: #64748b; border: none; cursor: pointer;">Pemeriksaan</button>
                             <button type="button" class="btn btn-xs btn-activity-filter font-w600" data-filter="selesai" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: transparent; color: #64748b; border: none; cursor: pointer;">Selesai</button>
                         </div>
                         <span class="badge badge-primary light font-w700" style="font-size: 11.5px; padding: 7px 12px; border-radius: 8px; border: 1px solid #dbeafe;">

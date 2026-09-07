@@ -174,10 +174,7 @@
                 </div>
             </div>
             <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                <button type="button" class="btn btn-sm btn-light font-w600" onclick="window.print()" style="padding: 8px 14px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
-                    <i class="fa-solid fa-print mr-1"></i> Cetak Jadwal
-                </button>
-                <a href="{{ Route('rekam.add') }}" class="btn btn-sm btn-primary font-w700 shadow-sm" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 18px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                <a href="{{ Route('rekam.add', array_filter(['tanggal' => $tanggal, 'upt' => $uptFilter != 'all' ? $uptFilter : null, 'layanan' => $layananFilter != 'all' ? $layananFilter : null, 'dokter_id' => $dokterFilter != 'all' ? $dokterFilter : null])) }}" class="btn btn-sm btn-primary font-w700 shadow-sm" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 18px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
                     <i class="fa-solid fa-circle-plus mr-1"></i> + Input Sesi Baru
                 </a>
             </div>
@@ -269,69 +266,6 @@
     </div>
 </div>
 
-<!-- Stats Row for Selected Date (4 Clean Metric Cards) -->
-<div class="row mb-4">
-    <div class="col-xl-3 col-sm-6 col-12 mb-3 mb-xl-0">
-        <div class="card mb-0 shadow-sm h-100" style="border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; background: #ffffff;">
-            <div class="card-body p-3 d-flex align-items-center justify-content-between">
-                <div>
-                    <small class="text-muted font-w700 d-block" style="font-size: 11px; letter-spacing: 0.3px;">TOTAL SESI TERJADWAL</small>
-                    <h3 class="font-w800 mb-0" style="color: #1e40af; font-size: 22px;">{{ $stats['total'] }}</h3>
-                    <small class="text-muted" style="font-size: 11px;">{{ \Carbon\Carbon::parse($tanggal)->translatedFormat('d F Y') }}</small>
-                </div>
-                <div style="width: 44px; height: 44px; border-radius: 10px; background: #eff6ff; color: #1e40af; display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-sm-6 col-12 mb-3 mb-xl-0">
-        <div class="card mb-0 shadow-sm h-100" style="border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; background: #ffffff;">
-            <div class="card-body p-3 d-flex align-items-center justify-content-between">
-                <div>
-                    <small class="text-muted font-w700 d-block" style="font-size: 11px; letter-spacing: 0.3px;">MENUNGGU / ANTREAN</small>
-                    <h3 class="font-w800 mb-0" style="color: #f59e0b; font-size: 22px;">{{ $stats['antrian'] }}</h3>
-                    <small class="text-muted" style="font-size: 11px;">Belum dipanggil ke ruangan</small>
-                </div>
-                <div style="width: 44px; height: 44px; border-radius: 10px; background: #fffbeb; color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                    <i class="fa-solid fa-clock"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-sm-6 col-12 mb-3 mb-xl-0">
-        <div class="card mb-0 shadow-sm h-100" style="border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #0284c7; background: #ffffff;">
-            <div class="card-body p-3 d-flex align-items-center justify-content-between">
-                <div>
-                    <small class="text-muted font-w700 d-block" style="font-size: 11px; letter-spacing: 0.3px;">SEDANG TERAPI</small>
-                    <h3 class="font-w800 mb-0" style="color: #0284c7; font-size: 22px;">{{ $stats['pemeriksaan'] }}</h3>
-                    <small class="text-muted" style="font-size: 11px;">Dalam proses penanganan</small>
-                </div>
-                <div style="width: 44px; height: 44px; border-radius: 10px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                    <i class="fa-solid fa-stethoscope"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-sm-6 col-12 mb-3 mb-xl-0">
-        <div class="card mb-0 shadow-sm h-100" style="border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #10b981; background: #ffffff;">
-            <div class="card-body p-3 d-flex align-items-center justify-content-between">
-                <div>
-                    <small class="text-muted font-w700 d-block" style="font-size: 11px; letter-spacing: 0.3px;">SELESAI DITANGANI</small>
-                    <h3 class="font-w800 mb-0" style="color: #10b981; font-size: 22px;">{{ $stats['selesai'] }}</h3>
-                    <small class="text-muted" style="font-size: 11px;">Sesi terapi tuntas</small>
-                </div>
-                <div style="width: 44px; height: 44px; border-radius: 10px; background: #ecfdf5; color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 18px;">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Main Dual-View Card (Tab 1: Timeline Sesi Jam & Tab 2: Kalender Interaktif) -->
 <div class="row">
     <div class="col-12">
@@ -371,12 +305,12 @@
                     <!-- ============================================================= -->
                     <div class="tab-pane fade show active" id="tab-timeline" role="tabpanel" aria-labelledby="tab-timeline-link">
                         
-                        <!-- Alert Informasi Ringkas -->
-                        <div class="p-3 mb-4 d-flex justify-content-between align-items-center flex-wrap" style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px; gap: 8px;">
+                        <!-- Mini Alert Info Waktu Terapi -->
+                        <div class="alert alert-light d-flex align-items-center justify-content-between flex-wrap mb-4 py-2.5 px-3" style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 8px; font-size: 12px; gap: 8px;">
                             <div class="d-flex align-items-center">
-                                <i class="fa-solid fa-circle-info text-primary mr-2" style="font-size: 16px;"></i>
-                                <span style="font-size: 12.5px; color: #1e3a8a;">
-                                    Pemetaan penerima manfaat per slot waktu sesi terapi pada <strong>{{ \Carbon\Carbon::parse($tanggal)->translatedFormat('l, d F Y') }}</strong> (Durasi 30 - 45 menit/sesi).
+                                <i class="fa-solid fa-circle-info text-primary mr-2" style="font-size: 14px;"></i>
+                                <span class="text-dark font-w500">
+                                    Jadwal pelayanan terapi beroperasi setiap hari <strong>Rabu</strong> dalam 7 slot sesi waktu (30–45 menit per sesi).
                                 </span>
                             </div>
                             <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 10px; border-radius: 6px; background: #ffffff; color: #1e40af; border: 1px solid #bfdbfe;">
@@ -503,8 +437,8 @@
                                             <div class="text-center py-4 text-muted" style="border: 1px dashed #cbd5e1; border-radius: 8px; background: #ffffff;">
                                                 <i class="fa-solid fa-calendar-xmark text-muted mb-1" style="font-size: 20px; opacity: 0.4;"></i>
                                                 <p class="mb-0 text-muted" style="font-size: 12px;">Slot waktu kosong &bull; Belum ada penerima manfaat</p>
-                                                <a href="{{ Route('rekam.add') }}" class="btn btn-xs btn-link text-primary font-w700 mt-1" style="font-size: 11.5px; text-decoration: none;">
-                                                    <i class="fa-solid fa-plus mr-1"></i> Jadwalkan di Slot Ini
+                                                <a href="{{ Route('rekam.add', array_filter(['tanggal' => $tanggal, 'sesi' => $slotName, 'upt' => $uptFilter != 'all' ? $uptFilter : null, 'layanan' => $layananFilter != 'all' ? $layananFilter : null, 'dokter_id' => $dokterFilter != 'all' ? $dokterFilter : null])) }}" class="btn btn-xs btn-primary font-w600 mt-2" style="font-size: 11.5px; border-radius: 6px; padding: 4px 12px; text-decoration: none;">
+                                                    <i class="fa-solid fa-plus mr-1"></i> + Jadwalkan di Slot Ini
                                                 </a>
                                             </div>
                                         @endif

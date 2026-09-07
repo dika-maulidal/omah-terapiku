@@ -436,5 +436,19 @@ class RekamController extends Controller
     {
         Rekam::find($id)->delete();
         return redirect()->route('rekam')->with('sukses', 'Data berhasil dihapus');
-    } 
+    }
+
+    public function printSoap($id)
+    {
+        $rekam = Rekam::with(['pasien', 'dokter', 'terapisPendamping', 'assessment'])->findOrFail($id);
+        $pasien = $rekam->pasien;
+        return view('rekam.print-soap', compact('rekam', 'pasien'));
+    }
+
+    public function printHomeProgram($id)
+    {
+        $rekam = Rekam::with(['pasien', 'dokter', 'terapisPendamping', 'assessment'])->findOrFail($id);
+        $pasien = $rekam->pasien;
+        return view('rekam.print-home-program', compact('rekam', 'pasien'));
+    }
 }

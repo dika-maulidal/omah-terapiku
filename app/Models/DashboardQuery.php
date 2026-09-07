@@ -795,7 +795,7 @@ class DashboardQuery
                 $badgeBg = '#ecfdf5';
                 $icon = 'fa-circle-check';
                 if (!empty($rekam->tindakan) && $rekam->tindakan !== 'Belum ada catatan rencana/tindakan') {
-                    $snippet = 'Tindakan: ' . trim(html_entity_decode(strip_tags($rekam->tindakan)));
+                    $snippet = 'Catatan Sesi: ' . trim(html_entity_decode(strip_tags($rekam->tindakan)));
                 } else {
                     $snippet = 'Pelayanan terapi telah diselesaikan dan diverifikasi.';
                 }
@@ -808,26 +808,25 @@ class DashboardQuery
                 $kelengkapan = $rekam->assessment->kelengkapan ?? 0;
                 $diag = $rekam->assessment->diagnosa_medis ? ' (' . $rekam->assessment->diagnosa_medis . ')' : '';
                 $snippet = 'Form Asesmen Klinis terisi ' . $kelengkapan . '%' . $diag;
-            } elseif (!empty($rekam->tindakan) && $rekam->tindakan !== 'Belum ada catatan rencana/tindakan') {
-                $activityType = 'tindakan';
-                $actionTitle = 'Tindakan / Intervensi';
+            } elseif ($rekam->status == 2 || (!empty($rekam->pemeriksaan) && $rekam->pemeriksaan !== 'Belum ada data pemeriksaan fisik') || (!empty($rekam->tindakan) && $rekam->tindakan !== 'Belum ada catatan rencana/tindakan')) {
+                $activityType = 'pemeriksaan';
+                $actionTitle = 'Pemeriksaan / Terapi';
                 $badgeColor = '#0284c7';
                 $badgeBg = '#e0f2fe';
-                $icon = 'fa-hand-holding-medical';
-                $snippet = trim(html_entity_decode(strip_tags($rekam->tindakan)));
-            } elseif (!empty($rekam->pemeriksaan) && $rekam->pemeriksaan !== 'Belum ada data pemeriksaan fisik') {
-                $activityType = 'pemeriksaan';
-                $actionTitle = 'Pemeriksaan Fisik';
-                $badgeColor = '#3b82f6';
-                $badgeBg = '#eff6ff';
                 $icon = 'fa-stethoscope';
-                $snippet = trim(html_entity_decode(strip_tags($rekam->pemeriksaan)));
+                if (!empty($rekam->pemeriksaan) && $rekam->pemeriksaan !== 'Belum ada data pemeriksaan fisik') {
+                    $snippet = 'Pemeriksaan: ' . trim(html_entity_decode(strip_tags($rekam->pemeriksaan)));
+                } elseif (!empty($rekam->tindakan) && $rekam->tindakan !== 'Belum ada catatan rencana/tindakan') {
+                    $snippet = 'Proses Terapi: ' . trim(html_entity_decode(strip_tags($rekam->tindakan)));
+                } else {
+                    $snippet = 'Penerima manfaat sedang dalam proses pemeriksaan dan penanganan terapis.';
+                }
             } else {
-                $activityType = 'registrasi';
-                $actionTitle = 'Pendaftaran Sesi';
+                $activityType = 'antrian';
+                $actionTitle = 'Antrian / Pendaftaran';
                 $badgeColor = '#f59e0b';
                 $badgeBg = '#fef3c7';
-                $icon = 'fa-notes-medical';
+                $icon = 'fa-clock';
                 $snippet = !empty($rekam->keluhan) ? 'Keluhan: ' . trim(html_entity_decode(strip_tags($rekam->keluhan))) : 'Sesi pelayanan telah dibuat dan dalam antrian.';
             }
 

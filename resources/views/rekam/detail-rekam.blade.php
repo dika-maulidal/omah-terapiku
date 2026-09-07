@@ -71,12 +71,6 @@
 
 @section('content')
 
-@include('rekam.partial.modal-pemeriksaan')
-{{-- MODAL TINDAKAN --}}
-@include('rekam.partial.modal-tindakan')
-{{-- MODAL Diagnosa --}}
-@include('rekam.partial.modal-diagnosa')
-
 <!-- Page Header Banner (Unified White Card Sesuai DESIGN.md) -->
 <div class="card mb-4 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
     <div class="card-body p-3 p-md-4">
@@ -778,12 +772,15 @@
                                                             data-pemeriksaan="{{ htmlspecialchars($row->pemeriksaan ?? '', ENT_QUOTES) }}"
                                                             data-diagnosa="{{ htmlspecialchars($row->diagnosa ?? '', ENT_QUOTES) }}"
                                                             data-tindakan="{{ htmlspecialchars($row->tindakan ?? '', ENT_QUOTES) }}"
+                                                            data-latihanrumahan="{{ htmlspecialchars($row->latihan_rumahan ?? '', ENT_QUOTES) }}"
                                                             data-filepemeriksaan="{{ $row->getFilePemeriksaan() }}"
                                                             data-filetindakan="{{ $row->getFileTindakan() }}"
                                                             data-hasassessment="{{ $row->assessment ? '1' : '0' }}"
                                                             data-urlassessment="{{ Route('rekam.assessment', $row->id) }}"
                                                             data-urlassessmentshow="{{ Route('rekam.assessment.show', $row->id) }}"
                                                             data-urlassessmentprint="{{ Route('rekam.assessment.print', $row->id) }}"
+                                                            data-urlsoapprint="{{ Route('rekam.soap.print', $row->id) }}"
+                                                            data-urlhomeprint="{{ Route('rekam.home-program.print', $row->id) }}"
                                                             style="padding: 5px 10px; border-radius: 6px; font-size: 11.5px; white-space: nowrap;">
                                                         <i class="fa fa-folder-open-o mr-1"></i> Detail Sesi
                                                     </button>
@@ -921,15 +918,39 @@
 
                 <!-- Section P: Plan & Intervensi Terapi -->
                 <div class="card mb-0 border-0" style="border-radius: 10px; border: 1px solid #bbf7d0 !important; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.02); overflow: hidden;">
-                    <div class="card-header py-2.5 px-3 border-bottom d-flex justify-content-between align-items-center" style="background: #f0fdf4; border-color: #bbf7d0 !important;">
+                    <div class="card-header py-2.5 px-3 border-bottom d-flex justify-content-between align-items-center flex-wrap" style="background: #f0fdf4; border-color: #bbf7d0 !important; gap: 8px;">
                         <div class="d-flex align-items-center">
                             <span class="badge mr-2 font-w700" style="background: #dcfce7; color: #166534; font-size: 11px; border-radius: 6px; padding: 4px 8px;">P</span>
-                            <strong style="color: #166534; font-size: 13px;">Plan (Rencana Tindakan & Intervensi Terapi)</strong>
+                            <strong style="color: #166534; font-size: 13px;">Plan (Rencana Tindakan & Edukasi Terapi)</strong>
                         </div>
-                        <div id="modalSoapFileTindakanContainer"></div>
+                        <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
+                            <div id="modalSoapFileTindakanContainer"></div>
+                            <a id="modalSoapSectionPrintHomeBtn" href="#" target="_blank" class="btn btn-xs btn-outline-success font-w600" style="border-radius: 6px; font-size: 11px; padding: 3px 8px;" title="Cetak Lembar Latihan Rumahan untuk Keluarga">
+                                <i class="fa-solid fa-house-user mr-1"></i> Cetak Latihan Rumahan
+                            </a>
+                        </div>
                     </div>
                     <div class="card-body p-3">
-                        <div id="modalSoapTindakan" style="font-size: 13px; line-height: 1.6; color: #1e293b;">-</div>
+                        <!-- Rincian Intervensi Klinis -->
+                        <div class="mb-3">
+                            <small class="text-muted font-w700 text-uppercase d-block mb-1" style="font-size: 11px; letter-spacing: 0.3px;">
+                                <i class="fa-solid fa-hand-holding-medical text-primary mr-1"></i> Rincian Intervensi / Tindakan Terapi:
+                            </small>
+                            <div id="modalSoapTindakan" style="font-size: 13px; line-height: 1.6; color: #1e293b;">-</div>
+                        </div>
+
+                        <!-- Sub-Block: Program Latihan Rumahan / Edukasi Keluarga (Home Program) -->
+                        <div id="modalSoapLatihanRumahanWrapper" class="p-3 rounded" style="background: #f0fdf4; border: 1px dashed #86efac; border-radius: 8px;">
+                            <div class="d-flex align-items-center justify-content-between mb-1.5">
+                                <div class="font-w700" style="color: #166534; font-size: 12.5px;">
+                                    <i class="fa-solid fa-house-user mr-1 text-success"></i> Program Latihan Rumahan & Edukasi Keluarga (Home Program)
+                                </div>
+                                <span class="badge badge-success light font-w600" style="font-size: 10.5px; padding: 2px 7px;">Home Program</span>
+                            </div>
+                            <div id="modalSoapLatihanRumahan" style="font-size: 12.5px; line-height: 1.6; color: #14532d;">
+                                <span class="text-muted font-italic">Belum ada instruksi latihan rumahan khusus untuk sesi ini.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1110,6 +1131,7 @@
     $(document).on("click", ".addTindakan", function () {
         var rekamId = $(this).data('id');
         var tindakan = $(this).data('tindakan') || '';
+        var latihanrumahan = $(this).data('latihanrumahan') || '';
         var layanan = ($(this).data('layanan') || '').toLowerCase();
         
         $("#modalTindakanRekamId").val(rekamId);
@@ -1121,6 +1143,11 @@
             cleanText = '';
         }
         $("#modalTindakanTextarea").val(cleanText || tindakan);
+
+        var tempDiv2 = document.createElement("div");
+        tempDiv2.innerHTML = latihanrumahan;
+        var cleanLatihan = tempDiv2.textContent || tempDiv2.innerText || "";
+        $("#modalLatihanRumahanTextarea").val(cleanLatihan || latihanrumahan);
 
         // Auto filter discipline if available
         if (layanan.indexOf('fisio') !== -1) {
@@ -1178,12 +1205,15 @@
         var pemeriksaan = btn.data('pemeriksaan') || '<span class="text-muted font-italic">Belum ada catatan pemeriksaan objektif.</span>';
         var diagnosa = btn.data('diagnosa') || '';
         var tindakan = btn.data('tindakan') || '<span class="text-muted font-italic">Belum ada catatan tindakan / rencana intervensi.</span>';
+        var latihanrumahan = btn.data('latihanrumahan') || '';
         var filepemeriksaan = btn.data('filepemeriksaan');
         var filetindakan = btn.data('filetindakan');
         var hasassessment = btn.data('hasassessment') === 1 || btn.data('hasassessment') === '1';
         var urlassessment = btn.data('urlassessment');
         var urlassessmentshow = btn.data('urlassessmentshow');
         var urlassessmentprint = btn.data('urlassessmentprint');
+        var urlsoapprint = btn.data('urlsoapprint');
+        var urlhomeprint = btn.data('urlhomeprint');
 
         // Populate Modal Fields
         $("#modalSoapSubTitle").text(norekam + " — " + layanan);
@@ -1192,6 +1222,7 @@
         $("#modalSoapLayanan").text(layanan);
         $("#modalSoapUpt").html('<i class="fa-solid fa-hospital-user text-primary mr-1"></i> ' + upt);
         $("#modalSoapTerapis").text(terapis);
+        $("#modalSoapSectionPrintHomeBtn").attr('href', urlhomeprint);
 
         // S: Subjektif
         $("#modalSoapKeluhan").html($('<div>').html(keluhan).text().replace(/\n/g, '<br>') || '-');
@@ -1214,7 +1245,7 @@
             $("#modalSoapAssessmentBtnContainer").html(
                 '<div class="d-flex align-items-center" style="gap: 8px;">' +
                     '<a href="' + urlassessmentshow + '" class="btn btn-xs btn-primary font-w600" style="border-radius: 6px; font-size: 11.5px; padding: 5px 12px;"><i class="fa-solid fa-eye mr-1"></i> Lembar Asesmen</a>' +
-                    '<a href="' + urlassessmentprint + '" target="_blank" class="btn btn-xs btn-outline-info font-w600" style="border-radius: 6px; font-size: 11.5px; padding: 5px 12px;"><i class="fa-solid fa-print mr-1"></i> Cetak</a>' +
+                    '<a href="' + urlassessmentprint + '" target="_blank" class="btn btn-xs btn-outline-info font-w600" style="border-radius: 6px; font-size: 11.5px; padding: 5px 12px;"><i class="fa-solid fa-print mr-1"></i> Cetak Asesmen</a>' +
                 '</div>'
             );
         } else {
@@ -1229,8 +1260,14 @@
         }
         $("#modalSoapAssessmentText").html(assessmentContent);
 
-        // P: Plan
+        // P: Plan (Tindakan & Latihan Rumahan)
         $("#modalSoapTindakan").html($('<div>').html(tindakan).text().replace(/\n/g, '<br>') || tindakan);
+        if (latihanrumahan && latihanrumahan.trim().length > 0) {
+            $("#modalSoapLatihanRumahan").html($('<div>').html(latihanrumahan).text().replace(/\n/g, '<br>'));
+        } else {
+            $("#modalSoapLatihanRumahan").html('<span class="text-muted font-italic">Belum ada instruksi latihan rumahan khusus untuk sesi ini.</span>');
+        }
+
         if (filetindakan) {
             $("#modalSoapFileTindakanContainer").html('<button type="button" class="btn btn-xs btn-outline-success font-w600 btn-open-preview-berkas" data-type="tindakan" data-title="Dokumen / Foto Tindakan Terapi (' + norekam + ')" data-url="' + filetindakan + '" data-filename="Tindakan-' + norekam + '" style="border-radius: 6px; font-size: 11.5px;"><i class="fa-solid fa-image mr-1"></i> Foto Tindakan</button>');
         } else {
@@ -1241,11 +1278,17 @@
         var actionHtml = '';
         @if (auth()->user()->role_display() == "Dokter" || auth()->user()->role_display() == "Admin")
             if (status <= 2) {
+                var safeTindakan = $('<div>').text(btn.data('tindakan') || '').html();
+                var safeLatihan = $('<div>').text(btn.data('latihanrumahan') || '').html();
                 actionHtml += '<a href="javascript:void(0)" data-toggle="modal" data-target="#addPemeriksaan" data-id="' + id + '" data-tanggal="' + tanggal + '" data-pemeriksaan="' + (btn.data('pemeriksaan') || '') + '" class="btn btn-xs btn-info addPemeriksaan font-w600 mr-1" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px;" data-dismiss="modal"><i class="fa-solid fa-stethoscope mr-1"></i> Edit (O) Fisik</a>';
                 actionHtml += '<a href="javascript:void(0)" data-toggle="modal" data-target="#addDiagnosa" data-id="' + id + '" data-tanggal="' + tanggal + '" data-diagnosa="' + (btn.data('diagnosa') || '') + '" class="btn btn-xs btn-danger addDiagnosa font-w600 mr-1" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px;" data-dismiss="modal"><i class="fa-solid fa-clipboard-check mr-1"></i> Edit (A) Assessment</a>';
-                actionHtml += '<a href="javascript:void(0)" data-toggle="modal" data-target="#addTindakan" data-id="' + id + '" data-tanggal="' + tanggal + '" data-layanan="' + layanan + '" data-tindakan="' + (btn.data('tindakan') || '') + '" class="btn btn-xs btn-success addTindakan font-w600 mr-1" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px;" data-dismiss="modal"><i class="fa-solid fa-hand-holding-medical mr-1"></i> Edit (P) Tindakan</a>';
+                actionHtml += '<a href="javascript:void(0)" data-toggle="modal" data-target="#addTindakan" data-id="' + id + '" data-tanggal="' + tanggal + '" data-layanan="' + layanan + '" data-tindakan="' + safeTindakan + '" data-latihanrumahan="' + safeLatihan + '" class="btn btn-xs btn-success addTindakan font-w600 mr-1" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px;" data-dismiss="modal"><i class="fa-solid fa-hand-holding-medical mr-1"></i> Edit (P) Tindakan & Latihan</a>';
             }
         @endif
+
+        // Tombol Cetak Sesi SOAP Lengkap & Cetak Latihan Rumahan
+        actionHtml += '<a href="' + urlsoapprint + '" target="_blank" class="btn btn-xs btn-primary shadow-sm font-w600 mr-1" style="background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%) !important; border: none !important; color: #ffffff !important; border-radius: 6px; padding: 6px 13px; font-size: 11.5px;" title="Cetak Lembar SOAP Lengkap Sesi Ini"><i class="fa-solid fa-print mr-1"></i> Cetak SOAP Lengkap</a>';
+        actionHtml += '<a href="' + urlhomeprint + '" target="_blank" class="btn btn-xs btn-success shadow-sm font-w600 mr-1" style="background: #10b981 !important; border: none !important; color: #ffffff !important; border-radius: 6px; padding: 6px 13px; font-size: 11.5px;" title="Cetak Lembar Panduan Latihan Rumahan untuk Keluarga"><i class="fa-solid fa-house-user mr-1"></i> Cetak Latihan Rumahan</a>';
 
         $("#modalSoapActionButtons").html(actionHtml);
 

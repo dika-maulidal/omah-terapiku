@@ -186,24 +186,26 @@
             </div>
 
             <!-- Progress Meter & Status Header -->
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-2" style="gap: 8px;">
+            <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 8px; margin-bottom: 10px;">
                 <div class="d-flex align-items-center">
-                    <span class="font-w700 text-dark mr-2" style="font-size: 13px;">
+                    <span class="font-w700 text-dark mr-2" style="font-size: 12.5px;">
                         <i class="fa-solid fa-list-check text-primary mr-1"></i> Progress Pengisian Asesmen:
                     </span>
-                    <strong class="text-primary font-w700" id="progressPercentText" style="font-size: 13.5px;">0%</strong>
-                    <small class="text-muted ml-1 font-w600" id="progressModulesText">(0/6 Modul Terisi)</small>
+                    <span class="text-muted font-w600" id="progressModulesText" style="font-size: 11.5px;">(0/6 Modul Terisi)</span>
                 </div>
                 <div class="d-flex align-items-center" style="gap: 8px;">
-                    <span id="draftStatusBadge" class="badge badge-light border text-muted font-w600" style="font-size: 11px; padding: 5px 10px; border-radius: 6px; background: #f8fafc;">
+                    <span id="draftStatusBadge" class="badge badge-light border text-muted font-w600" style="font-size: 11px; padding: 3px 8px; border-radius: 6px; background: #f8fafc;">
                         <i class="fa-solid fa-circle-check text-success mr-1"></i> Auto-Save Aktif
                     </span>
                 </div>
             </div>
             
-            <!-- Progress Bar Line -->
-            <div class="progress" style="height: 7px; border-radius: 4px; background: #e2e8f0;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" id="formOverallProgressBar" role="progressbar" style="width: 0%; background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <!-- Compact Modern Progress Bar (13px, Sleek & Proportional with breathing space) -->
+            <div class="progress position-relative mt-2" style="height: 13px; border-radius: 7px; background: #f1f5f9; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); margin-top: 8px;">
+                <div class="progress-bar" id="formOverallProgressBar" role="progressbar" style="width: 0%; min-width: 0%; background: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%); transition: width 0.35s ease-in-out; display: flex; align-items: center; justify-content: center;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <span id="progressBarInsideText" class="font-w700 text-white" style="font-size: 9.5px; letter-spacing: 0.1px; line-height: 13px; display: none;">0%</span>
+                </div>
+                <span id="progressBarTrackText" class="font-w700 position-absolute w-100 text-center" style="font-size: 9.5px; color: #64748b; line-height: 13px; pointer-events: none; top: 0; left: 0;">0%</span>
             </div>
         </div>
 
@@ -3781,6 +3783,14 @@ function updateFormOverallProgress() {
     $('.sticky-progress-percent').text(pct + '%');
     $('#progressModulesText').text('(' + filledModulesCount + '/' + totalModules + ' Modul Terisi)');
     $('#formOverallProgressBar').css('width', pct + '%').attr('aria-valuenow', pct);
+
+    if (pct >= 8) {
+        $('#progressBarInsideText').text(pct + '%').show();
+        $('#progressBarTrackText').hide();
+    } else {
+        $('#progressBarInsideText').hide();
+        $('#progressBarTrackText').text(pct + '%').show();
+    }
 }
 // ----------------------------------------------------
 // LOCALSTORAGE AUTO-SAVE DRAFT & RESTORE

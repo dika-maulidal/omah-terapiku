@@ -287,7 +287,7 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Tanggal Periksa <span class="text-danger">*</span></label>
-                                <input type="date" name="tgl_rekam" class="form-control" value="{{old('tgl_rekam', date('Y-m-d'))}}" style="height: 44px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;" required>
+                                <input type="date" name="tgl_rekam" class="form-control" value="{{ old('tgl_rekam', request('tanggal', request('tgl_rekam', date('Y-m-d')))) }}" style="height: 44px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;" required>
                                 @error('tgl_rekam')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
@@ -367,14 +367,13 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Omah Terapi / Lokasi UPT <span class="text-danger">*</span></label>
+                                @php
+                                    $selectedPoli = old('poli', request('upt', request('poli', session('selected_upt'))));
+                                @endphp
                                 <select name="poli" id="poli" class="form-control" required style="height: 44px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">
                                     <option value="">--Pilih Omah Terapiku--</option>
                                     @foreach ($poli as $item)
-                                        @if (old('poli') == $item->nama || (empty(old('poli')) && session('selected_upt') == $item->nama))
-                                            <option value="{{$item->nama}}" selected>{{$item->nama}}</option>
-                                        @else 
-                                            <option value="{{$item->nama}}">{{$item->nama}}</option>
-                                        @endif
+                                        <option value="{{$item->nama}}" {{ $selectedPoli == $item->nama ? 'selected' : '' }}>{{$item->nama}}</option>
                                     @endforeach
                                 </select>
                                 @error('poli')
@@ -384,12 +383,15 @@
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Jenis Layanan Terapi <span class="text-danger">*</span></label>
+                                @php
+                                    $selectedLayanan = old('layanan_terapi', request('layanan', request('layanan_terapi', '')));
+                                @endphp
                                 <select name="layanan_terapi" id="layanan_terapi" class="form-control" required style="height: 44px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">
                                     <option value="">--Pilih Jenis Layanan Terapi--</option>
-                                    <option value="Fisioterapi" {{ old('layanan_terapi') == 'Fisioterapi' ? 'selected' : '' }}>Fisioterapi</option>
-                                    <option value="Terapi Okupasi / Sensorik Integrasi" {{ old('layanan_terapi') == 'Terapi Okupasi / Sensorik Integrasi' ? 'selected' : '' }}>Terapi Okupasi / Sensorik Integrasi</option>
-                                    <option value="Terapi Wicara" {{ old('layanan_terapi') == 'Terapi Wicara' ? 'selected' : '' }}>Terapi Wicara</option>
-                                    <option value="Terapi Netra (Orientasi & Mobilitas)" {{ old('layanan_terapi') == 'Terapi Netra (Orientasi & Mobilitas)' ? 'selected' : '' }}>Terapi Netra (Orientasi & Mobilitas)</option>
+                                    <option value="Fisioterapi" {{ $selectedLayanan == 'Fisioterapi' ? 'selected' : '' }}>Fisioterapi</option>
+                                    <option value="Terapi Okupasi / Sensorik Integrasi" {{ $selectedLayanan == 'Terapi Okupasi / Sensorik Integrasi' ? 'selected' : '' }}>Terapi Okupasi / Sensorik Integrasi</option>
+                                    <option value="Terapi Wicara" {{ $selectedLayanan == 'Terapi Wicara' ? 'selected' : '' }}>Terapi Wicara</option>
+                                    <option value="Terapi Netra (Orientasi & Mobilitas)" {{ $selectedLayanan == 'Terapi Netra (Orientasi & Mobilitas)' ? 'selected' : '' }}>Terapi Netra (Orientasi & Mobilitas)</option>
                                 </select>
                                 @error('layanan_terapi')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
@@ -410,7 +412,9 @@
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">
                                     Jadwal Sesi Terapi <small class="text-muted font-w400">(Rabu, 30-45 mnt)</small>
                                 </label>
-                                @php $currentSesi = old('sesi_waktu'); @endphp
+                                @php 
+                                    $currentSesi = old('sesi_waktu', request('sesi', request('sesi_waktu', ''))); 
+                                @endphp
                                 <select name="sesi_waktu" class="form-control" style="height: 44px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">
                                     <option value="">--Pilih Slot Sesi Waktu--</option>
                                     <option value="Sesi 1 (08.00 - 08.45 WIB)" {{ $currentSesi == 'Sesi 1 (08.00 - 08.45 WIB)' ? 'selected' : '' }}>Sesi 1 (08.00 - 08.45 WIB)</option>
@@ -521,7 +525,7 @@
         });
 
         if ($("#poli").val() !== '') {
-            loadTerapisList("{{ old('dokter_id') }}");
+            loadTerapisList("{{ old('dokter_id', request('dokter_id', '')) }}");
         }
     });
 

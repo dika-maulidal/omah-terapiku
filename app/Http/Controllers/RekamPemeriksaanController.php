@@ -92,7 +92,8 @@ class RekamPemeriksaanController extends Controller
 
         $rekam = Rekam::find($request->rekam_id);
         $rekam->update([
-            'tindakan' => $request->tindakan
+            'tindakan' => $request->tindakan,
+            'latihan_rumahan' => $request->latihan_rumahan
         ]);
 
         if ($request->hasFile('file')) {

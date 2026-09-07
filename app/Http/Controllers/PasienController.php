@@ -201,9 +201,9 @@ class PasienController extends Controller
                 })
                 ->when($request->disabilitas, function ($query) use ($request) {
                     $query->where('jenis_disabilitas', 'LIKE', "%{$request->disabilitas}%");
-                })
-                ->orderBy('id', 'asc')
-                ->get();
+                });
+
+        $datas = $datas->get();
 
         $filename = 'data-penerima-manfaat-' . date('Y-m-d_His') . '.csv';
 

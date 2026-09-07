@@ -10,7 +10,7 @@ class Rekam extends Model
     protected $fillable = [
         "tgl_rekam", "pasien_id", "keluhan", "poli", "upt_lokasi", "layanan_terapi",
         "sesi_waktu", "dokter_id", "terapis_pendamping_id", "pemeriksaan", "diagnosa",
-        "no_rekam", "tindakan", "status", "petugas_id", "biaya_pemeriksaan", "biaya_tindakan",
+        "no_rekam", "tindakan", "latihan_rumahan", "status", "petugas_id", "biaya_pemeriksaan", "biaya_tindakan",
         "biaya_obat", "total_biaya", "cara_bayar", "resep_obat", "pemeriksaan_file", "tindakan_file"
     ];
 

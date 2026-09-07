@@ -131,16 +131,16 @@
                     <table class="table table-hover mb-0" style="font-size: 13px; min-width: 1100px; width: 100%;">
                         <thead>
                             <tr style="background: #f8fafc; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #475569; border-bottom: 2px solid #e2e8f0;">
-                                <th style="padding: 12px 14px; width: 45px; text-align: center;">#</th>
-                                <th style="padding: 12px 14px; width: 115px;">No. RM</th>
-                                <th style="padding: 12px 14px; min-width: 210px;">Nama Penerima Manfaat</th>
-                                <th style="padding: 12px 14px; min-width: 140px;">TTL</th>
-                                <th style="padding: 12px 14px; min-width: 180px;">Alamat</th>
-                                <th style="padding: 12px 14px; width: 60px; text-align: center;">JK</th>
-                                <th style="padding: 12px 14px; width: 110px; text-align: center;">Desil</th>
-                                <th style="padding: 12px 14px; min-width: 115px;">No. HP</th>
-                                <th style="padding: 12px 14px; width: 135px; text-align: center;">Status</th>
-                                <th style="padding: 12px 14px; width: 120px; text-align: center; position: sticky; right: 0; background: #f8fafc; z-index: 2; box-shadow: -3px 0 8px rgba(0,0,0,0.04);">Aksi</th>
+                                <th style="padding: 12px 14px; width: 65px; text-align: center; vertical-align: middle;">#</th>
+                                <th style="padding: 12px 14px; width: 115px; vertical-align: middle;">No. RM</th>
+                                <th style="padding: 12px 14px; min-width: 210px; vertical-align: middle;">Nama Penerima Manfaat</th>
+                                <th style="padding: 12px 14px; min-width: 140px; vertical-align: middle;">TTL</th>
+                                <th style="padding: 12px 14px; min-width: 180px; vertical-align: middle;">Alamat</th>
+                                <th style="padding: 12px 14px; width: 60px; text-align: center; vertical-align: middle;">JK</th>
+                                <th style="padding: 12px 14px; width: 110px; text-align: center; vertical-align: middle;">Desil</th>
+                                <th style="padding: 12px 14px; min-width: 115px; vertical-align: middle;">No. HP</th>
+                                <th style="padding: 12px 14px; width: 135px; text-align: center; vertical-align: middle;">Status</th>
+                                <th style="padding: 12px 14px; width: 120px; text-align: center; vertical-align: middle; position: sticky; right: 0; background: #f8fafc; z-index: 2; box-shadow: -3px 0 8px rgba(0,0,0,0.04);">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

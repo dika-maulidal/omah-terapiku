@@ -15,6 +15,8 @@ use App\Http\Controllers\RekamController;
 use App\Http\Controllers\RekamPemeriksaanController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TindakanController;
+use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\AiAssistantController;
 
 Route::get('/', [AuthController::class, 'page_login'])->name('login');
 Route::post('/login', [AuthController::class, 'auth'])->name('login.auth');
@@ -123,10 +125,17 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/rekam/{id}/assessment/show', [RekamAssessmentController::class, 'show'])->name('rekam.assessment.show');
     Route::get('/rekam/{id}/assessment/print', [RekamAssessmentController::class, 'print'])->name('rekam.assessment.print');
 
+    // Cetak Lembar Sesi SOAP & Latihan Rumahan (Home Program)
+    Route::get('/rekam/{id}/soap/print', [RekamController::class, 'printSoap'])->name('rekam.soap.print');
+    Route::get('/rekam/{id}/home-program/print', [RekamController::class, 'printHomeProgram'])->name('rekam.home-program.print');
+
     // Pengaturan Akun & Ganti Password
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::post('/setting/password', [SettingController::class, 'updatePassword'])->name('setting.password');
     Route::post('/setting/profile', [SettingController::class, 'updateProfile'])->name('setting.profile');
+
+    // AI Asisten Klinis & Terapi (Gemini)
+    Route::post('/ai-assistant/chat', [AiAssistantController::class, 'chat'])->name('ai.chat');
 
 });
 

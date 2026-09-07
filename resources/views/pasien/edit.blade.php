@@ -197,42 +197,72 @@
                                 @enderror
                             </div>
 
-                            <div class="col-12 mb-3">
-                                <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Alamat Lengkap</label>
-                                <textarea name="alamat_lengkap" class="form-control" rows="3" placeholder="Alamat jalan, RT/RW, Dusun, dll." style="font-size: 13px; border-radius: 8px;">{{old('alamat_lengkap') ? old('alamat_lengkap') : $data->alamat_lengkap}}</textarea>
-                                @error('alamat_lengkap')
-                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
+                            <!-- DROPDOWN WILAYAH BERJENJANG (SELECT2 SEARCHABLE & KE BAWAH) -->
+                            <div class="col-12" id="wrapper_wilayah_api">
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-6 mb-3 col-wilayah">
+                                        <label class="form-label font-w600 text-dark d-flex align-items-center justify-content-between" style="font-size: 13px; margin-bottom: 6px;">
+                                            <span>Provinsi</span>
+                                            <span id="loading_provinsi" class="text-primary fs-11 d-none"><i class="fa-solid fa-spinner fa-spin mr-1"></i>Memuat...</span>
+                                        </label>
+                                        <select id="select_provinsi" class="form-control select2-wilayah" style="width: 100%;">
+                                            <option value="">-- Memuat Provinsi... --</option>
+                                        </select>
+                                    </div>
 
-                            <div class="col-md-3 col-sm-6 mb-3">
-                                <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Kelurahan / Desa</label>
-                                <input type="text" class="form-control" name="kelurahan" placeholder="Nama kelurahan/desa" value="{{old('kelurahan') ? old('kelurahan') : $data->kelurahan}}" style="height: 42px; font-size: 13px; border-radius: 8px;">
-                                @error('kelurahan')
-                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
+                                    <div class="col-md-3 col-sm-6 mb-3 col-wilayah">
+                                        <label class="form-label font-w600 text-dark d-flex align-items-center justify-content-between" style="font-size: 13px; margin-bottom: 6px;">
+                                            <span>Kabupaten / Kota</span>
+                                            <span id="loading_kabupaten" class="text-primary fs-11 d-none"><i class="fa-solid fa-spinner fa-spin mr-1"></i>Memuat...</span>
+                                        </label>
+                                        <select id="select_kabupaten" name="kabupaten" class="form-control select2-wilayah" style="width: 100%;" disabled>
+                                            <option value="">-- Pilih Kabupaten / Kota --</option>
+                                        </select>
+                                        @error('kabupaten')
+                                            <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                        @enderror
+                                    </div>
 
-                            <div class="col-md-3 col-sm-6 mb-3">
-                                <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Kecamatan</label>
-                                <input type="text" class="form-control" name="kecamatan" placeholder="Nama kecamatan" value="{{old('kecamatan') ? old('kecamatan') : $data->kecamatan}}" style="height: 42px; font-size: 13px; border-radius: 8px;">
-                                @error('kecamatan')
-                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
-                                @enderror
-                            </div>
+                                    <div class="col-md-3 col-sm-6 mb-3 col-wilayah">
+                                        <label class="form-label font-w600 text-dark d-flex align-items-center justify-content-between" style="font-size: 13px; margin-bottom: 6px;">
+                                            <span>Kecamatan</span>
+                                            <span id="loading_kecamatan" class="text-primary fs-11 d-none"><i class="fa-solid fa-spinner fa-spin mr-1"></i>Memuat...</span>
+                                        </label>
+                                        <select id="select_kecamatan" name="kecamatan" class="form-control select2-wilayah" style="width: 100%;" disabled>
+                                            <option value="">-- Pilih Kab/Kota Dahulu --</option>
+                                        </select>
+                                        @error('kecamatan')
+                                            <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                        @enderror
+                                    </div>
 
-                            <div class="col-md-3 col-sm-6 mb-3">
-                                <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Kabupaten / Kota</label>
-                                <input type="text" class="form-control" name="kabupaten" placeholder="Nama kabupaten/kota" value="{{old('kabupaten') ? old('kabupaten') : $data->kabupaten}}" style="height: 42px; font-size: 13px; border-radius: 8px;">
-                                @error('kabupaten')
-                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
-                                @enderror
+                                    <div class="col-md-3 col-sm-6 mb-3 col-wilayah">
+                                        <label class="form-label font-w600 text-dark d-flex align-items-center justify-content-between" style="font-size: 13px; margin-bottom: 6px;">
+                                            <span>Kelurahan / Desa</span>
+                                            <span id="loading_kelurahan" class="text-primary fs-11 d-none"><i class="fa-solid fa-spinner fa-spin mr-1"></i>Memuat...</span>
+                                        </label>
+                                        <select id="select_kelurahan" name="kelurahan" class="form-control select2-wilayah" style="width: 100%;" disabled>
+                                            <option value="">-- Pilih Kecamatan Dahulu --</option>
+                                        </select>
+                                        @error('kelurahan')
+                                            <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-md-3 col-sm-6 mb-3">
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Kode Pos</label>
-                                <input type="number" maxlength="5" class="form-control" name="kodepos" placeholder="Contoh: 60231" value="{{old('kodepos') ? old('kodepos') : $data->kodepos}}" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                                <input type="number" maxlength="5" class="form-control" name="kodepos" placeholder="Contoh: 61219" value="{{old('kodepos') ? old('kodepos') : $data->kodepos}}" style="height: 42px; font-size: 13px; border-radius: 8px;">
                                 @error('kodepos')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-9 col-sm-12 mb-3">
+                                <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Alamat Lengkap</label>
+                                <textarea name="alamat_lengkap" class="form-control" rows="2" placeholder="Alamat jalan, RT/RW, Dusun, Blok, dll." style="font-size: 13px; border-radius: 8px;">{{old('alamat_lengkap') ? old('alamat_lengkap') : $data->alamat_lengkap}}</textarea>
+                                @error('alamat_lengkap')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
@@ -599,6 +629,265 @@
         }
     }
 
+    // =========================================================================
+    // INTEGRASI API WILAYAH.ID BERJENJANG DENGAN SELECT2 SEARCHABLE (MUNCUL KE BAWAH)
+    // =========================================================================
+    const WilayahManager = {
+        proxyUrl: "{{ url('/api/wilayah') }}",
+        directUrl: 'https://wilayah.id/api',
+        savedKab: "{{ old('kabupaten', $data->kabupaten ?? '') }}",
+        savedKec: "{{ old('kecamatan', $data->kecamatan ?? '') }}",
+        savedKel: "{{ old('kelurahan', $data->kelurahan ?? '') }}",
+
+        async init() {
+            this.initSelect2();
+            this.bindEvents();
+            await this.loadProvinces();
+        },
+
+        initSelect2() {
+            $('.select2-wilayah').each(function() {
+                const $this = $(this);
+                $this.select2({
+                    dropdownParent: $this.closest('.col-wilayah'),
+                    width: '100%',
+                    language: {
+                        noResults: function() { return 'Tidak ada data ditemukan'; },
+                        searching: function() { return 'Mencari...'; }
+                    }
+                });
+            });
+        },
+
+        bindEvents() {
+            const self = this;
+
+            // Ganti Provinsi -> Muat Kabupaten
+            $('#select_provinsi').on('change', function() {
+                const provCode = $(this).find(':selected').data('code');
+                if (provCode) {
+                    self.loadRegencies(provCode);
+                } else {
+                    self.resetSelect('#select_kabupaten', '-- Pilih Kabupaten / Kota --', true);
+                    self.resetSelect('#select_kecamatan', '-- Pilih Kab/Kota Dahulu --', true);
+                    self.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
+                }
+            });
+
+            // Ganti Kabupaten -> Muat Kecamatan
+            $('#select_kabupaten').on('change', function() {
+                const regCode = $(this).find(':selected').data('code');
+                if (regCode) {
+                    self.loadDistricts(regCode);
+                } else {
+                    self.resetSelect('#select_kecamatan', '-- Pilih Kab/Kota Dahulu --', true);
+                    self.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
+                }
+            });
+
+            // Ganti Kecamatan -> Muat Kelurahan
+            $('#select_kecamatan').on('change', function() {
+                const distCode = $(this).find(':selected').data('code');
+                if (distCode) {
+                    self.loadVillages(distCode);
+                } else {
+                    self.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
+                }
+            });
+        },
+
+        resetSelect(selector, placeholder, disable = true) {
+            const $el = $(selector);
+            $el.html(`<option value="" data-code="">${placeholder}</option>`);
+            $el.prop('disabled', disable).trigger('change.select2');
+        },
+
+        showLoading(level, isShow) {
+            const $loader = $(`#loading_${level}`);
+            if (isShow) {
+                $loader.removeClass('d-none');
+            } else {
+                $loader.addClass('d-none');
+            }
+        },
+
+        normalizeName(str) {
+            if (!str) return '';
+            return str.toLowerCase()
+                .replace(/^(kabupaten|kab\.|kota|kecamatan|kec\.|kelurahan|kel\.|desa|ds\.)\s+/i, '')
+                .trim();
+        },
+
+        async fetchJson(endpoint, directEndpoint) {
+            try {
+                const res = await fetch(`${this.proxyUrl}/${endpoint}`);
+                if (res.ok) {
+                    const json = await res.json();
+                    if (json.data && json.data.length > 0) {
+                        return json.data;
+                    }
+                }
+            } catch (e) {
+                console.warn(`Proxy fetch failed for ${endpoint}, trying direct...`, e);
+            }
+
+            // Fallback direct
+            try {
+                const resDirect = await fetch(`${this.directUrl}/${directEndpoint}`);
+                if (resDirect.ok) {
+                    const jsonDirect = await resDirect.json();
+                    return jsonDirect.data || [];
+                }
+            } catch (err) {
+                console.error(`Direct fetch failed for ${directEndpoint}:`, err);
+            }
+            return [];
+        },
+
+        async loadProvinces() {
+            this.showLoading('provinsi', true);
+            try {
+                const provinces = await this.fetchJson('provinces', 'provinces.json');
+
+                let html = '<option value="" data-code="">-- Pilih Provinsi --</option>';
+                let defaultProvCode = '35'; // Default Jawa Timur
+
+                provinces.forEach(p => {
+                    html += `<option value="${p.name}" data-code="${p.code}">${p.name}</option>`;
+                });
+                $('#select_provinsi').html(html).prop('disabled', false);
+
+                // Auto-select Provinsi (Default: Jawa Timur)
+                let targetProvCode = defaultProvCode;
+                $('#select_provinsi option').each(function() {
+                    if ($(this).data('code') == targetProvCode) {
+                        $(this).prop('selected', true);
+                    }
+                });
+                $('#select_provinsi').trigger('change.select2');
+
+                // Load Regencies for selected province
+                await this.loadRegencies(targetProvCode, this.savedKab);
+
+            } catch (err) {
+                console.error('Gagal memuat provinsi dari Wilayah.id:', err);
+                $('#select_provinsi').html('<option value="">Gagal memuat data API</option>').trigger('change.select2');
+            } finally {
+                this.showLoading('provinsi', false);
+            }
+        },
+
+        async loadRegencies(provCode, preselectedKab = '') {
+            this.showLoading('kabupaten', true);
+            this.resetSelect('#select_kabupaten', 'Memuat Kabupaten/Kota...', true);
+            this.resetSelect('#select_kecamatan', '-- Pilih Kab/Kota Dahulu --', true);
+            this.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
+
+            try {
+                const regencies = await this.fetchJson(`regencies/${provCode}`, `regencies/${provCode}.json`);
+
+                let html = '<option value="" data-code="">-- Pilih Kabupaten / Kota --</option>';
+                let matchedCode = '';
+                const normalizedSavedKab = this.normalizeName(preselectedKab);
+
+                regencies.forEach(r => {
+                    const isSelected = normalizedSavedKab && (this.normalizeName(r.name) === normalizedSavedKab || r.name.toLowerCase() === preselectedKab.toLowerCase());
+                    if (isSelected) {
+                        matchedCode = r.code;
+                    }
+                    html += `<option value="${r.name}" data-code="${r.code}" ${isSelected ? 'selected' : ''}>${r.name}</option>`;
+                });
+
+                if (preselectedKab && !matchedCode) {
+                    html += `<option value="${preselectedKab}" data-code="" selected>${preselectedKab} (Tersimpan)</option>`;
+                }
+
+                $('#select_kabupaten').html(html).prop('disabled', false).trigger('change.select2');
+
+                if (matchedCode) {
+                    await this.loadDistricts(matchedCode, this.savedKec);
+                }
+
+            } catch (err) {
+                console.error('Gagal memuat regencies:', err);
+                this.resetSelect('#select_kabupaten', 'Gagal memuat Kab/Kota', false);
+            } finally {
+                this.showLoading('kabupaten', false);
+            }
+        },
+
+        async loadDistricts(regCode, preselectedKec = '') {
+            this.showLoading('kecamatan', true);
+            this.resetSelect('#select_kecamatan', 'Memuat Kecamatan...', true);
+            this.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
+
+            try {
+                const districts = await this.fetchJson(`districts/${regCode}`, `districts/${regCode}.json`);
+
+                let html = '<option value="" data-code="">-- Pilih Kecamatan --</option>';
+                let matchedCode = '';
+                const normalizedSavedKec = this.normalizeName(preselectedKec);
+
+                districts.forEach(d => {
+                    const isSelected = normalizedSavedKec && (this.normalizeName(d.name) === normalizedSavedKec || d.name.toLowerCase() === preselectedKec.toLowerCase());
+                    if (isSelected) {
+                        matchedCode = d.code;
+                    }
+                    html += `<option value="${d.name}" data-code="${d.code}" ${isSelected ? 'selected' : ''}>${d.name}</option>`;
+                });
+
+                if (preselectedKec && !matchedCode) {
+                    html += `<option value="${preselectedKec}" data-code="" selected>${preselectedKec} (Tersimpan)</option>`;
+                }
+
+                $('#select_kecamatan').html(html).prop('disabled', false).trigger('change.select2');
+
+                if (matchedCode) {
+                    await this.loadVillages(matchedCode, this.savedKel);
+                }
+
+            } catch (err) {
+                console.error('Gagal memuat districts:', err);
+                this.resetSelect('#select_kecamatan', 'Gagal memuat Kecamatan', false);
+            } finally {
+                this.showLoading('kecamatan', false);
+            }
+        },
+
+        async loadVillages(distCode, preselectedKel = '') {
+            this.showLoading('kelurahan', true);
+            this.resetSelect('#select_kelurahan', 'Memuat Kelurahan/Desa...', true);
+
+            try {
+                const villages = await this.fetchJson(`villages/${distCode}`, `villages/${distCode}.json`);
+
+                let html = '<option value="" data-code="">-- Pilih Kelurahan / Desa --</option>';
+                let matchedCode = '';
+                const normalizedSavedKel = this.normalizeName(preselectedKel);
+
+                villages.forEach(v => {
+                    const isSelected = normalizedSavedKel && (this.normalizeName(v.name) === normalizedSavedKel || v.name.toLowerCase() === preselectedKel.toLowerCase());
+                    if (isSelected) {
+                        matchedCode = v.code;
+                    }
+                    html += `<option value="${v.name}" data-code="${v.code}" ${isSelected ? 'selected' : ''}>${v.name}</option>`;
+                });
+
+                if (preselectedKel && !matchedCode) {
+                    html += `<option value="${preselectedKel}" data-code="" selected>${preselectedKel} (Tersimpan)</option>`;
+                }
+
+                $('#select_kelurahan').html(html).prop('disabled', false).trigger('change.select2');
+
+            } catch (err) {
+                console.error('Gagal memuat villages:', err);
+                this.resetSelect('#select_kelurahan', 'Gagal memuat Kelurahan', false);
+            } finally {
+                this.showLoading('kelurahan', false);
+            }
+        }
+    };
+
     $(document).ready(function() {
         $('#desil').on('change', updateDesilBadge);
         updateDesilBadge();
@@ -613,6 +902,9 @@
             }
             toggleLainnyaInputs();
         });
+
+        // Initialize Wilayah API Dependent Dropdown
+        WilayahManager.init();
     });
 </script>
 @endsection

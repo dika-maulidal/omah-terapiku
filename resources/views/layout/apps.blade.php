@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Omah Terapiku</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/logo.png')}}">
@@ -12,11 +13,14 @@
 	<!-- Datatable -->
     <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
+    <link href="{{asset('vendor/select2/css/select2.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="{{asset('css/brand-theme.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('vendor/toastr/css/toastr.min.css')}}">
     <link href="{{asset('vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
+    <!-- Marked.js Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
     p {
         margin: 0;
@@ -90,9 +94,13 @@
      
 
     </div>
+    
+    <!-- AI Asisten Klinis & Terapi Slide-Over Drawer -->
+    @include('layout.partial.ai-assistant-modal')
  
     <script src="{{asset('vendor/global/global.min.js')}}"></script>
 	<script src="{{asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
+    <script src="{{asset('vendor/select2/js/select2.full.min.js')}}"></script>
 	<script src="{{asset('vendor/chart.js/Chart.bundle.min.js')}}"></script>
     <script src="{{asset('js/custom.min.js')}}"></script>
 	<script src="{{asset('js/deznav-init.js')}}"></script>
