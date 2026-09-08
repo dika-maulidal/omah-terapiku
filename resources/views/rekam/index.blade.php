@@ -202,9 +202,11 @@
                                                 <a href="{{Route('rekam.detail', $row->pasien_id)}}" class="btn btn-xs btn-primary shadow-sm" style="border-radius: 6px; padding: 4px 8px; background: #2563eb; border: none;" title="Lihat Rekam Medis">
                                                     <i class="fa-solid fa-eye"></i>
                                                 </a>
-                                                <a href="{{Route('rekam.assessment', $row->id)}}" class="btn btn-xs shadow-sm text-white" style="border-radius: 6px; padding: 4px 8px; background: #f59e0b; border: none;" title="Form Assessment Terapis">
-                                                    <i class="fa-solid fa-clipboard-list"></i>
-                                                </a>
+                                                @if (in_array(auth()->user()->role_display(), ['Admin', 'Dokter']))
+                                                    <a href="{{Route('rekam.assessment', $row->id)}}" class="btn btn-xs shadow-sm text-white" style="border-radius: 6px; padding: 4px 8px; background: #f59e0b; border: none;" title="Form Assessment Terapis">
+                                                        <i class="fa-solid fa-clipboard-list"></i>
+                                                    </a>
+                                                @endif
                                                 @if (auth()->user()->role_display() == "Admin" && $row->status == 2)
                                                     <a href="{{Route('rekam.edit', $row->id)}}" class="btn btn-xs shadow-sm text-white" style="border-radius: 6px; padding: 4px 8px; background: #0284c7; border: none;" title="Edit Data Rekam Medis">
                                                         <i class="fa-solid fa-pencil"></i>

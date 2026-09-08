@@ -105,19 +105,16 @@
         <div class="row align-items-center">
             <div class="col-lg-7 col-md-12 mb-2 mb-lg-0">
                 <div>
-                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                        <h4 class="font-w700 mb-0" style="font-size: 16.5px; color: #1e293b;">
-                            {{ $pasien->nama }}
-                        </h4>
-                        <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                            {{ $pasien->no_rm }}
-                        </span>
-                        @if($pasien->status_display)
-                            {!! $pasien->status_display !!}
-                        @endif
+                    <h4 class="font-w700 mb-1" style="font-size: 17px; color: #1e293b;">
+                        {{ $pasien->nama }}
+                    </h4>
+                    <div class="text-muted font-w500" style="font-size: 12.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <span style="color: #1e40af; font-weight: 600;">No. RM: {{ $pasien->no_rm }}</span>
+                        <span class="text-muted">&bull;</span>
+                        <span style="color: #64748b;">NIK: {{ $pasien->nik ?: '-' }}</span>
                     </div>
-                    <!-- Metadata Info Pasien dengan Jarak Renggang & Rapi Sesuai Permintaan -->
-                    <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 12px;">
+                    <!-- Metadata Info Pasien -->
+                    <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 10px;">
                         <span class="badge badge-light border" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #334155; background: #f8fafc;">
                             <i class="fa-solid fa-venus-mars mr-1.5 text-primary"></i> {{ $pasien->jk ?: '-' }}
                         </span>
@@ -127,10 +124,8 @@
                         <span class="badge font-w700" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
                             <i class="fa-solid fa-wheelchair mr-1.5 text-primary"></i> {{ $pasien->jenis_disabilitas && $pasien->jenis_disabilitas != 'Tidak Ada' ? $pasien->jenis_disabilitas : 'Non-Disabilitas' }}
                         </span>
-                        @if($pasien->nik)
-                            <span class="badge badge-light border" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; background: #f8fafc;">
-                                <i class="fa-solid fa-id-card mr-1.5 text-primary"></i> NIK: {{ $pasien->nik }}
-                            </span>
+                        @if($pasien->status_display)
+                            {!! $pasien->status_display !!}
                         @endif
                     </div>
                 </div>

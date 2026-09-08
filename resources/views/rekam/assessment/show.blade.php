@@ -23,9 +23,11 @@
                 <a href="{{Route('rekam.detail', $pasien->id)}}" class="btn btn-sm btn-light font-w600" style="padding: 8px 16px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
                     <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Rekam Medis
                 </a>
-                <a href="{{Route('rekam.assessment', $rekam->id)}}" class="btn btn-sm btn-info text-white font-w600" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important; border: none !important; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);">
-                    <i class="fa-solid fa-pencil mr-1"></i> Edit Assessment
-                </a>
+                @if(in_array(auth()->user()->role_display(), ['Admin', 'Dokter']))
+                    <a href="{{Route('rekam.assessment', $rekam->id)}}" class="btn btn-sm btn-info text-white font-w600" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important; border: none !important; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);">
+                        <i class="fa-solid fa-pencil mr-1"></i> Edit Assessment
+                    </a>
+                @endif
                 <a href="{{Route('rekam.assessment.print', $rekam->id)}}" target="_blank" class="btn btn-sm btn-primary font-w700" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
                     <i class="fa-solid fa-print mr-1"></i> Cetak Asesmen
                 </a>
@@ -43,19 +45,16 @@
         <div class="row align-items-center">
             <div class="col-lg-7 col-md-12 mb-2 mb-lg-0">
                 <div>
-                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                        <h4 class="font-w700 mb-0" style="font-size: 16.5px; color: #1e293b;">
-                            {{ $pasien->nama }}
-                        </h4>
-                        <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                            {{ $pasien->no_rm }}
-                        </span>
-                        @if($pasien->status_display)
-                            {!! $pasien->status_display !!}
-                        @endif
+                    <h4 class="font-w700 mb-1" style="font-size: 17px; color: #1e293b;">
+                        {{ $pasien->nama }}
+                    </h4>
+                    <div class="text-muted font-w500" style="font-size: 12.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <span style="color: #1e40af; font-weight: 600;">No. RM: {{ $pasien->no_rm }}</span>
+                        <span class="text-muted">&bull;</span>
+                        <span style="color: #64748b;">NIK: {{ $pasien->nik ?: '-' }}</span>
                     </div>
                     <!-- Metadata Info Pasien -->
-                    <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 12px;">
+                    <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 10px;">
                         <span class="badge badge-light border" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #334155; background: #f8fafc;">
                             <i class="fa-solid fa-venus-mars mr-1.5 text-primary"></i> {{ $pasien->jk ?: '-' }}
                         </span>
@@ -65,10 +64,8 @@
                         <span class="badge font-w700" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
                             <i class="fa-solid fa-wheelchair mr-1.5 text-primary"></i> {{ $pasien->jenis_disabilitas && $pasien->jenis_disabilitas != 'Tidak Ada' ? $pasien->jenis_disabilitas : 'Non-Disabilitas' }}
                         </span>
-                        @if($pasien->nik)
-                            <span class="badge badge-light border" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; background: #f8fafc;">
-                                <i class="fa-solid fa-id-card mr-1.5 text-primary"></i> NIK: {{ $pasien->nik }}
-                            </span>
+                        @if($pasien->status_display)
+                            {!! $pasien->status_display !!}
                         @endif
                     </div>
                 </div>
@@ -1026,7 +1023,20 @@
                             <i class="fa-solid fa-list-check text-primary mr-1.5"></i> Subtest 5.1: Gross Motor Function Measure (GMFM-88)
                         </h6>
                         @php
-                            $has_gmfm = !is_null($assessment->gmfm_dimensi_a_total) || !is_null($assessment->gmfm_dimensi_b_total) || !is_null($assessment->gmfm_dimensi_c_total) || !is_null($assessment->gmfm_dimensi_d_total) || !is_null($assessment->gmfm_dimensi_e_total);
+                            $has_gmfm_scores = (!empty($assessment->gmfm_dimensi_a_scores) && is_array($assessment->gmfm_dimensi_a_scores) && count(array_filter($assessment->gmfm_dimensi_a_scores, fn($v) => $v !== null && $v !== '' && $v !== '-' && $v !== 'NT')) > 0) ||
+                                               (!empty($assessment->gmfm_dimensi_b_scores) && is_array($assessment->gmfm_dimensi_b_scores) && count(array_filter($assessment->gmfm_dimensi_b_scores, fn($v) => $v !== null && $v !== '' && $v !== '-' && $v !== 'NT')) > 0) ||
+                                               (!empty($assessment->gmfm_dimensi_c_scores) && is_array($assessment->gmfm_dimensi_c_scores) && count(array_filter($assessment->gmfm_dimensi_c_scores, fn($v) => $v !== null && $v !== '' && $v !== '-' && $v !== 'NT')) > 0) ||
+                                               (!empty($assessment->gmfm_dimensi_d_scores) && is_array($assessment->gmfm_dimensi_d_scores) && count(array_filter($assessment->gmfm_dimensi_d_scores, fn($v) => $v !== null && $v !== '' && $v !== '-' && $v !== 'NT')) > 0) ||
+                                               (!empty($assessment->gmfm_dimensi_e_scores) && is_array($assessment->gmfm_dimensi_e_scores) && count(array_filter($assessment->gmfm_dimensi_e_scores, fn($v) => $v !== null && $v !== '' && $v !== '-' && $v !== 'NT')) > 0);
+                            $has_gmfm_notes = !empty($assessment->gmfm_dimensi_a_catatan) || !empty($assessment->gmfm_dimensi_b_catatan) || !empty($assessment->gmfm_dimensi_c_catatan) || !empty($assessment->gmfm_dimensi_d_catatan) || !empty($assessment->gmfm_dimensi_e_catatan);
+                            $has_gmfm_totals = (!empty($assessment->gmfm_total_score) && $assessment->gmfm_total_score > 0) || 
+                                               (!empty($assessment->gmfm_total_persen) && $assessment->gmfm_total_persen > 0) ||
+                                               (!empty($assessment->gmfm_dimensi_a_total) && $assessment->gmfm_dimensi_a_total > 0) ||
+                                               (!empty($assessment->gmfm_dimensi_b_total) && $assessment->gmfm_dimensi_b_total > 0) ||
+                                               (!empty($assessment->gmfm_dimensi_c_total) && $assessment->gmfm_dimensi_c_total > 0) ||
+                                               (!empty($assessment->gmfm_dimensi_d_total) && $assessment->gmfm_dimensi_d_total > 0) ||
+                                               (!empty($assessment->gmfm_dimensi_e_total) && $assessment->gmfm_dimensi_e_total > 0);
+                            $has_gmfm = $has_gmfm_scores || $has_gmfm_notes || $has_gmfm_totals;
                         @endphp
                         @if($has_gmfm)
                             <span class="badge badge-primary font-w700" style="font-size: 12px; padding: 4px 10px; border-radius: 6px;">
@@ -1422,7 +1432,14 @@
                             <i class="fa-solid fa-graduation-cap text-primary mr-1.5"></i> Subtest 5.2: Skala Perkembangan Denver II (DDST II)
                         </h6>
                         @php
-                            $has_denver = !is_null($assessment->denver_pass_count) || !is_null($assessment->denver_fail_count) || !empty($assessment->denver_data);
+                            $has_denver_counts = (($assessment->denver_pass_count !== null && $assessment->denver_pass_count > 0) ||
+                                                  ($assessment->denver_fail_count !== null && $assessment->denver_fail_count > 0) ||
+                                                  ($assessment->denver_refusal_count !== null && $assessment->denver_refusal_count > 0) ||
+                                                  ($assessment->denver_no_count !== null && $assessment->denver_no_count > 0));
+                            $has_denver = $has_denver_counts || 
+                                          (!empty($assessment->denver_data) && is_array($assessment->denver_data) && count(array_filter($assessment->denver_data, fn($v) => !empty($v['score']) && $v['score'] !== '-')) > 0) || 
+                                          !empty($assessment->denver_kesimpulan) || 
+                                          !empty($assessment->denver_catatan);
                         @endphp
                         @if($has_denver)
                             <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">

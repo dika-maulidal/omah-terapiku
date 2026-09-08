@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Poli extends Model
 {
     protected $table = "omahterapiku";
-    protected $fillable = ["nama", "alamat", "fokus_layanan", "status"];
+    protected $fillable = ["nama", "alamat", "no_telp", "fokus_layanan", "status"];
 
     public function terapis()
     {

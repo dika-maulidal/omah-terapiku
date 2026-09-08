@@ -313,17 +313,24 @@
               !empty($assessment->motorik_catatan);
 
     // 2. GMFM-88
-    $has_m2 = !is_null($assessment->gmfm_dimensi_a_total) || 
-              !is_null($assessment->gmfm_dimensi_b_total) || 
-              !is_null($assessment->gmfm_dimensi_c_total) || 
-              !is_null($assessment->gmfm_dimensi_d_total) || 
-              !is_null($assessment->gmfm_dimensi_e_total) || 
-              !is_null($assessment->gmfm_total_score) || 
-              $hasArrayContent($assessment->gmfm_dimensi_a_scores) ||
-              $hasArrayContent($assessment->gmfm_dimensi_b_scores) ||
-              $hasArrayContent($assessment->gmfm_dimensi_c_scores) ||
-              $hasArrayContent($assessment->gmfm_dimensi_d_scores) ||
-              $hasArrayContent($assessment->gmfm_dimensi_e_scores);
+    $has_gmfm_scores = $hasArrayContent($assessment->gmfm_dimensi_a_scores) ||
+                       $hasArrayContent($assessment->gmfm_dimensi_b_scores) ||
+                       $hasArrayContent($assessment->gmfm_dimensi_c_scores) ||
+                       $hasArrayContent($assessment->gmfm_dimensi_d_scores) ||
+                       $hasArrayContent($assessment->gmfm_dimensi_e_scores);
+    $has_gmfm_notes = !empty($assessment->gmfm_dimensi_a_catatan) ||
+                      !empty($assessment->gmfm_dimensi_b_catatan) ||
+                      !empty($assessment->gmfm_dimensi_c_catatan) ||
+                      !empty($assessment->gmfm_dimensi_d_catatan) ||
+                      !empty($assessment->gmfm_dimensi_e_catatan);
+    $has_gmfm_totals = (!empty($assessment->gmfm_total_score) && $assessment->gmfm_total_score > 0) || 
+                       (!empty($assessment->gmfm_total_persen) && $assessment->gmfm_total_persen > 0) ||
+                       (!empty($assessment->gmfm_dimensi_a_total) && $assessment->gmfm_dimensi_a_total > 0) ||
+                       (!empty($assessment->gmfm_dimensi_b_total) && $assessment->gmfm_dimensi_b_total > 0) ||
+                       (!empty($assessment->gmfm_dimensi_c_total) && $assessment->gmfm_dimensi_c_total > 0) ||
+                       (!empty($assessment->gmfm_dimensi_d_total) && $assessment->gmfm_dimensi_d_total > 0) ||
+                       (!empty($assessment->gmfm_dimensi_e_total) && $assessment->gmfm_dimensi_e_total > 0);
+    $has_m2 = $has_gmfm_scores || $has_gmfm_notes || $has_gmfm_totals;
 
     // 3. ADL
     $has_m3 = !empty($assessment->adl_kontak_mata) || 
@@ -362,9 +369,9 @@
               !empty($assessment->penglihatan_catatan);
 
     // 6. Nyeri & Body Chart
-    $has_m6 = $assessment->nyeri_skor_total !== null || 
-              $assessment->nyeri_saat_istirahat !== null || 
-              $assessment->nyeri_saat_aktivitas !== null || 
+    $has_m6 = ($assessment->nyeri_skor_total !== null && $assessment->nyeri_skor_total > 0) || 
+              ($assessment->nyeri_saat_istirahat !== null && $assessment->nyeri_saat_istirahat > 0) || 
+              ($assessment->nyeri_saat_aktivitas !== null && $assessment->nyeri_saat_aktivitas > 0) || 
               (!empty($assessment->nyeri_sifat) && count($assessment->nyeri_sifat) > 0) || 
               !empty($assessment->nyeri_lokasi_keluhan) || 
               !empty($assessment->nyeri_body_chart) || 
@@ -391,13 +398,13 @@
     // 9. Postur & Keseimbangan
     $has_m9 = (!empty($assessment->postur_temuan) && count($assessment->postur_temuan) > 0) || 
               !empty($assessment->postur_tangan_tongkat) || 
-              $assessment->keseimbangan_bbs_skor !== null || 
+              ($assessment->keseimbangan_bbs_skor !== null && $assessment->keseimbangan_bbs_skor > 0) || 
               !empty($assessment->keseimbangan_tug_detik) || 
               !empty($assessment->keseimbangan_romberg) || 
               !empty($assessment->keseimbangan_ols_kanan) || 
               !empty($assessment->keseimbangan_ols_kiri) || 
               !empty($assessment->keseimbangan_dual_task_tug) || 
-              $assessment->keseimbangan_fesi_skor !== null || 
+              ($assessment->keseimbangan_fesi_skor !== null && $assessment->keseimbangan_fesi_skor > 0) || 
               !empty($assessment->postur_keseimbangan_catatan);
 
     // 10. Gaya Berjalan (Gait)
@@ -446,8 +453,11 @@
     $has_m14 = !empty($assessment->kesimpulan) || !empty($assessment->rencana_terapi);
 
     // 15. Skala Denver II
-    $has_m15 = $assessment->denver_pass_count !== null || 
-               $assessment->denver_fail_count !== null || 
+    $has_denver_counts = (($assessment->denver_pass_count !== null && $assessment->denver_pass_count > 0) ||
+                          ($assessment->denver_fail_count !== null && $assessment->denver_fail_count > 0) ||
+                          ($assessment->denver_refusal_count !== null && $assessment->denver_refusal_count > 0) ||
+                          ($assessment->denver_no_count !== null && $assessment->denver_no_count > 0));
+    $has_m15 = $has_denver_counts || 
                $hasArrayContent($assessment->denver_data) || 
                !empty($assessment->denver_kesimpulan) || 
                !empty($assessment->denver_catatan);

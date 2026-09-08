@@ -304,7 +304,7 @@
                 <div class="kop-unit">OMAH TERAPI-KU JAWA TIMUR</div>
                 <div class="kop-sub">
                     Pusat Layanan Terapi Terpadu Disabilitas &bull; Layanan Terapi Fisik, Okupasi, Wicara, & Sensori Integrasi<br>
-                    Lokasi UPT: {{ $rekam->upt_lokasi ?: ($rekam->poli ?: 'Jawa Timur') }} &bull; Website: omahterapiku.dinsos.jatimprov.go.id
+                    Lokasi UPT: {{ $rekam->upt_lokasi ?: ($rekam->poli ?: 'Jawa Timur') }}@if(isset($upt) && $upt && $upt->no_telp) &bull; Telp: {{ $upt->no_telp }}@endif &bull; Website: omahterapiku.dinsos.jatimprov.go.id
                 </div>
             </td>
             <td style="width: 85px; text-align: right; vertical-align: middle;">

@@ -22,6 +22,7 @@ class PoliController extends Controller
                     $query->where(function($q) use ($keyword) {
                         $q->where('nama', 'LIKE', "%{$keyword}%")
                           ->orWhere('alamat', 'LIKE', "%{$keyword}%")
+                          ->orWhere('no_telp', 'LIKE', "%{$keyword}%")
                           ->orWhere('fokus_layanan', 'LIKE', "%{$keyword}%");
                     });
                 })
@@ -37,6 +38,7 @@ class PoliController extends Controller
         $this->validate($request, [
             'nama' => 'required|unique:omahterapiku,nama',
             'alamat' => 'nullable|string',
+            'no_telp' => 'nullable|string|max:50',
             'fokus_layanan' => 'nullable|string',
             'status' => 'nullable|integer',
         ]);
@@ -44,6 +46,7 @@ class PoliController extends Controller
         $poli = Poli::create([
             'nama' => $request->nama,
             'alamat' => $request->alamat,
+            'no_telp' => $request->no_telp,
             'fokus_layanan' => $request->fokus_layanan,
             'status' => $request->status ?? 1,
         ]);
@@ -60,6 +63,7 @@ class PoliController extends Controller
         $this->validate($request, [
             'nama' => 'required|unique:omahterapiku,nama,' . $id,
             'alamat' => 'nullable|string',
+            'no_telp' => 'nullable|string|max:50',
             'fokus_layanan' => 'nullable|string',
             'status' => 'nullable|integer',
         ]);
@@ -71,6 +75,7 @@ class PoliController extends Controller
         $poli->update([
             'nama' => $newNama,
             'alamat' => $request->alamat,
+            'no_telp' => $request->no_telp,
             'fokus_layanan' => $request->fokus_layanan,
             'status' => $request->status ?? 1,
         ]);

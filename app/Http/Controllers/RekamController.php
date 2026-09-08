@@ -287,8 +287,14 @@ class RekamController extends Controller
                     ->with(['dokter', 'terapisPendamping', 'assessment'])
                     ->paginate(10);
                     
-        if ($rekamLatest) {
-            auth()->user()->notifications->where('data.no_rekam', $rekamLatest->no_rekam)->markAsRead();
+        if (auth()->check()) {
+            foreach (auth()->user()->unreadNotifications as $notif) {
+                if (isset($notif->data['id_pasien']) && $notif->data['id_pasien'] == $pasien_id) {
+                    $notif->markAsRead();
+                } elseif (isset($notif->data['no_rekam']) && $rekamLatest && $notif->data['no_rekam'] == $rekamLatest->no_rekam) {
+                    $notif->markAsRead();
+                }
+            }
         }
         $poli = Poli::where('status', 1)->get();
 
@@ -303,6 +309,49 @@ class RekamController extends Controller
         $masterTindakan = Tindakan::orderBy('kode', 'asc')->get();
 
         return view('rekam.detail-rekam', compact('pasien', 'rekams', 'rekamLatest', 'poli', 'riwayatAssessment', 'latestAssessment', 'masterTindakan'));
+    }
+
+    private function notifyTerapisPasien($rekam, $message, $tipe = 'penugasan')
+    {
+        try {
+            $waktu = Carbon::parse($rekam->created_at ?? now())->format('d/m/Y H:i:s');
+            $link = route('rekam.detail', $rekam->pasien_id);
+
+            // 1. Terapis Utama
+            if ($rekam->dokter_id) {
+                $dokter = Dokter::find($rekam->dokter_id);
+                if ($dokter && $dokter->user_id) {
+                    $user = User::find($dokter->user_id);
+                    if ($user) {
+                        Notification::send($user, new RekamUpdateNotification($rekam, $message, $tipe));
+                        try {
+                            event(new StatusRekamUpdate($user->id, $rekam->no_rekam, $message, $link, $waktu));
+                        } catch (\Throwable $e) {
+                            // ignore broadcast error
+                        }
+                    }
+                }
+            }
+
+            // 2. Terapis Pendamping (jika ada)
+            if ($rekam->terapis_pendamping_id && $rekam->terapis_pendamping_id != $rekam->dokter_id) {
+                $pendamping = Dokter::find($rekam->terapis_pendamping_id);
+                if ($pendamping && $pendamping->user_id) {
+                    $userPendamping = User::find($pendamping->user_id);
+                    if ($userPendamping) {
+                        $msgPendamping = "Anda ditugaskan sebagai Terapis Pendamping untuk pasien " . optional($rekam->pasien)->nama . " (" . ($rekam->layanan_terapi ?? 'Terapi') . ")";
+                        Notification::send($userPendamping, new RekamUpdateNotification($rekam, $msgPendamping, 'pendamping'));
+                        try {
+                            event(new StatusRekamUpdate($userPendamping->id, $rekam->no_rekam, $msgPendamping, $link, $waktu));
+                        } catch (\Throwable $e) {
+                            // ignore broadcast error
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            \Log::error('Notification dispatch error: ' . $th->getMessage());
+        }
     }
 
     function store(Request $request)
@@ -350,10 +399,17 @@ class RekamController extends Controller
             'terapis_pendamping_id' => $request->terapis_pendamping_id ?: null,
         ]);
 
-        Rekam::create($request->all());
+        $rekam = Rekam::create($request->all());
+
+        // Kirim Notifikasi Penugasan Pasien Baru ke Terapis Terpilih
+        $namaPasien = $pasien ? $pasien->nama : 'Penerima Manfaat';
+        $layanan = $request->layanan_terapi ?: 'Layanan Terapi';
+        $sesi = $request->sesi_waktu ? " - " . $request->sesi_waktu : "";
+        $pesanNotif = "Pasien baru " . $namaPasien . " ditugaskan ke Anda untuk " . $layanan . $sesi;
+        $this->notifyTerapisPasien($rekam, $pesanNotif, 'penugasan_baru');
 
         return redirect()->route('rekam.detail', $request->pasien_id)
-                        ->with('sukses', 'Sesi Terapi Berhasil Didaftarkan. Silakan lakukan pemeriksaan dan proses terapi.');
+                        ->with('sukses', 'Sesi Terapi Berhasil Didaftarkan. Notifikasi penugasan telah dikirimkan ke terapis.');
     }
 
     function update(Request $request, $id)
@@ -377,6 +433,9 @@ class RekamController extends Controller
         }
         
         $rekam = Rekam::findOrFail($id);
+        $oldDokterId = $rekam->dokter_id;
+        $oldPendampingId = $rekam->terapis_pendamping_id;
+        
         $upt = $request->upt_lokasi ?: ($request->poli ?: (session('selected_upt') ?: null));
 
         $request->merge([
@@ -390,6 +449,13 @@ class RekamController extends Controller
             'terapis_pendamping_id' => $request->terapis_pendamping_id ?: null,
         ]);
         $rekam->update($request->all());
+
+        // Jika terjadi perubahan terapis atau sesi, kirimkan notifikasi pembaruan
+        if ($oldDokterId != $request->dokter_id || $oldPendampingId != ($request->terapis_pendamping_id ?: null)) {
+            $namaPasien = $pasien ? $pasien->nama : 'Penerima Manfaat';
+            $pesanNotif = "Pembaruan penugasan sesi terapi pasien " . $namaPasien . " (" . ($rekam->layanan_terapi ?? 'Terapi') . ")";
+            $this->notifyTerapisPasien($rekam, $pesanNotif, 'update_penugasan');
+        }
 
         return redirect()->route('rekam.detail', $request->pasien_id)
                         ->with('sukses', 'Data Sesi Terapi Berhasil Diperbaharui.');
@@ -425,22 +491,26 @@ class RekamController extends Controller
             'status' => $status
         ]);
 
-        $waktu = Carbon::parse($rekam->created_at)->format('d/m/Y H:i:s');
+        $waktu = Carbon::parse($rekam->created_at ?? now())->format('d/m/Y H:i:s');
         if ($status == 2) {
-            $dokter = Dokter::find($rekam->dokter_id);
-            $user = User::find($dokter->user_id);
-            $message = "Pasien " . $rekam->pasien->nama . ", silahkan diproses";
-            Notification::send($user, new RekamUpdateNotification($rekam, $message));
-            $link = Route('rekam.detail', $rekam->pasien_id);
-            event(new StatusRekamUpdate($user->id, $rekam->no_rekam, $message, $link, $waktu));
+            $namaPasien = optional($rekam->pasien)->nama ?? 'Pasien';
+            $message = "Pasien " . $namaPasien . ", silahkan diproses untuk pemeriksaan/terapi";
+            $this->notifyTerapisPasien($rekam, $message, 'panggilan_periksa');
 
-        } else if ($status == 4) {
-            $user = User::where('role', 2)->get();
-            $message = "Rekam medis pasien " . $rekam->pasien->nama . " siap diproses";
-            Notification::send($user, new RekamUpdateNotification($rekam, $message));
-            foreach ($user as $key => $item) {
-                $link = Route('rekam.detail', $rekam->pasien_id);
-                event(new StatusRekamUpdate($item->id, $rekam->no_rekam, $message, $link, $waktu));
+        } else if ($status == 4 || $status == 5) {
+            $users = User::whereIn('role', [1, 2])->where('status', 1)->get();
+            $namaPasien = optional($rekam->pasien)->nama ?? 'Pasien';
+            $message = "Sesi rekam medis pasien " . $namaPasien . " telah selesai diproses";
+            if ($users->isNotEmpty()) {
+                Notification::send($users, new RekamUpdateNotification($rekam, $message, 'selesai'));
+                foreach ($users as $item) {
+                    try {
+                        $link = route('rekam.detail', $rekam->pasien_id);
+                        event(new StatusRekamUpdate($item->id, $rekam->no_rekam, $message, $link, $waktu));
+                    } catch (\Throwable $e) {
+                        // ignore broadcast error
+                    }
+                }
             }
         }
 
@@ -450,21 +520,79 @@ class RekamController extends Controller
 
     public function delete(Request $request, $id)
     {
-        Rekam::find($id)->delete();
-        return redirect()->route('rekam')->with('sukses', 'Data berhasil dihapus');
+        if (auth()->user()->role_display() !== 'Admin') {
+            abort(403, 'Akses tidak diizinkan. Hanya Admin yang dapat menghapus data rekam medis.');
+        }
+        Rekam::findOrFail($id)->delete();
+        return redirect()->route('rekam')->with('sukses', 'Data rekam medis berhasil dihapus');
     }
 
     public function printSoap($id)
     {
         $rekam = Rekam::with(['pasien', 'dokter', 'terapisPendamping', 'assessment'])->findOrFail($id);
         $pasien = $rekam->pasien;
-        return view('rekam.print-soap', compact('rekam', 'pasien'));
+        $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
+        return view('rekam.print-soap', compact('rekam', 'pasien', 'upt'));
     }
 
     public function printHomeProgram($id)
     {
         $rekam = Rekam::with(['pasien', 'dokter', 'terapisPendamping', 'assessment'])->findOrFail($id);
         $pasien = $rekam->pasien;
-        return view('rekam.print-home-program', compact('rekam', 'pasien'));
+        $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
+        return view('rekam.print-home-program', compact('rekam', 'pasien', 'upt'));
+    }
+
+    public function readNotification($id)
+    {
+        $notification = auth()->user()->notifications()->where('id', $id)->first();
+        if ($notification) {
+            $notification->markAsRead();
+            $pasienId = $notification->data['id_pasien'] ?? null;
+            if ($pasienId) {
+                return redirect()->route('rekam.detail', $pasienId);
+            }
+        }
+        return redirect()->route('rekam');
+    }
+
+    public function markAllNotificationsRead(Request $request)
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Semua notifikasi ditandai telah dibaca']);
+        }
+        return redirect()->back()->with('sukses', 'Semua notifikasi telah ditandai dibaca');
+    }
+
+    public function getUnreadNotificationsJson()
+    {
+        $user = auth()->user();
+        $unread = $user->unreadNotifications;
+        $items = $unread->take(15)->map(function ($notif) {
+            $createdAt = isset($notif->data['created_at']) 
+                ? (is_string($notif->data['created_at']) ? Carbon::parse($notif->data['created_at'])->format('d/m/Y H:i') : $notif->data['created_at'])
+                : $notif->created_at->format('d/m/Y H:i');
+
+            return [
+                'id' => $notif->id,
+                'no_rekam' => $notif->data['no_rekam'] ?? '-',
+                'nama_pasien' => $notif->data['nama_pasien'] ?? 'Pasien',
+                'no_rm' => $notif->data['no_rm'] ?? '-',
+                'layanan_terapi' => $notif->data['layanan_terapi'] ?? 'Terapi',
+                'sesi_waktu' => $notif->data['sesi_waktu'] ?? '-',
+                'message' => $notif->data['message'] ?? 'Ada penugasan pasien baru.',
+                'tipe' => $notif->data['tipe'] ?? 'info',
+                'created_at' => $createdAt,
+                'read_url' => route('notifications.read', $notif->id),
+                'detail_url' => isset($notif->data['id_pasien']) ? route('rekam.detail', $notif->data['id_pasien']) : route('rekam'),
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'unread_count' => $unread->count(),
+            'notifications' => $items
+        ]);
     }
 }

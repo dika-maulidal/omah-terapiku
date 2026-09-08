@@ -48,6 +48,15 @@
             </li>
             @endif
 
+            <li class="nav-label">Laporan & Evaluasi</li>
+
+            <li>
+                <a href="{{Route('laporan.eksekutif')}}" class="ai-icon {{ request()->routeIs('laporan.*') ? 'mm-active' : '' }}" aria-expanded="false">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span class="nav-text">Laporan Eksekutif</span>
+                </a>
+            </li>
+
             @if (auth()->user()->role_display() == 'Admin')
             <li class="nav-label">Master Data</li>
             

@@ -11,10 +11,75 @@
         font-weight: 600;
         white-space: nowrap;
     }
+    .ot-modal-content {
+        border-radius: 14px !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 14px 40px rgba(30, 64, 175, 0.12) !important;
+        overflow: hidden !important;
+    }
+    .ot-modal-header {
+        background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%) !important;
+        border-bottom: 1.5px solid #bfdbfe !important;
+        padding: 16px 22px !important;
+    }
+    .ot-modal-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2563eb;
+        font-size: 19px;
+        border: 1px solid #bfdbfe;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
+        flex-shrink: 0;
+    }
+    .ot-modal-title {
+        color: #1e40af !important;
+        font-weight: 700 !important;
+        font-size: 16px !important;
+        margin-bottom: 2px;
+    }
+    .ot-modal-subtitle {
+        color: #64748b !important;
+        font-size: 11.5px !important;
+        font-weight: 500 !important;
+    }
+    .ot-input-modern {
+        height: 44px !important;
+        font-size: 13px !important;
+        border-radius: 8px !important;
+        border: 1.5px solid #cbd5e1 !important;
+        color: #1e293b !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+    }
+    .ot-input-modern:focus {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15) !important;
+        outline: none !important;
+    }
+    /* Checkbox & Radio - Royal Blue Theme */
+    .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+        background-color: #2563eb !important;
+        border-color: #2563eb !important;
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25) !important;
+    }
+    .custom-radio .custom-control-input:checked ~ .custom-control-label::before {
+        background-color: #2563eb !important;
+        border-color: #2563eb !important;
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25) !important;
+    }
+    .custom-control-input:focus ~ .custom-control-label::before {
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18) !important;
+        border-color: #2563eb !important;
+    }
     .terapis-check-card {
-        border: 1px solid #e2e8f0;
+        border: 1.5px solid #e2e8f0;
         border-radius: 8px;
-        padding: 8px 12px;
+        padding: 9px 12px;
         background: #ffffff;
         transition: all 0.2s ease;
         cursor: pointer;
@@ -23,8 +88,8 @@
         justify-content: space-between;
     }
     .terapis-check-card:hover {
-        background: #f8fafc;
-        border-color: #cbd5e1;
+        background: #f0f7ff;
+        border-color: #bfdbfe;
     }
     .terapis-check-card input[type="checkbox"]:checked + label {
         color: #1e40af;
@@ -42,19 +107,23 @@
         z-index: 3;
     }
     .quick-tag-btn {
-        font-size: 11px;
-        padding: 3px 9px;
+        font-size: 11.5px;
+        padding: 4px 10px;
         border-radius: 6px;
         font-weight: 600;
         transition: all 0.15s ease;
-        border: 1px solid #cbd5e1;
-        background: #ffffff;
-        color: #475569;
+        border: 1px solid #bfdbfe;
+        background: #eff6ff;
+        color: #1d4ed8;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
     }
     .quick-tag-btn:hover {
-        background: #eff6ff;
-        border-color: #bfdbfe;
-        color: #2563eb;
+        background: #dbeafe;
+        border-color: #93c5fd;
+        color: #1e40af;
     }
 </style>
 @endsection
@@ -204,9 +273,14 @@
                                             </div>
                                         </td>
                                         <td style="vertical-align: middle;">
-                                            <span style="color: #475569; font-size: 12.5px;">
+                                            <div style="color: #475569; font-size: 12.5px;">
                                                 <i class="fa-solid fa-location-dot text-muted mr-1" style="font-size: 11px;"></i> {{ $row->alamat ?: '-' }}
-                                            </span>
+                                            </div>
+                                            @if($row->no_telp)
+                                                <div class="mt-1" style="color: #2563eb; font-size: 11.5px; font-weight: 600;">
+                                                    <i class="fa-solid fa-phone mr-1" style="font-size: 10px;"></i> {{ $row->no_telp }}
+                                                </div>
+                                            @endif
                                         </td>
                                         <td style="vertical-align: middle;">
                                             <span class="focus-badge" style="{{ $badgeStyle }}">
@@ -284,16 +358,19 @@
 <!-- ============================================================= -->
 <div class="modal fade" id="addUptModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-            <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important; background-color: #1e40af !important; padding: 16px 20px; border-bottom: none !important;">
-                <div>
-                    <h5 class="modal-title font-w700 text-white mb-0" style="font-size: 16px; color: #ffffff !important;">
-                        <i class="fa-solid fa-hospital-user mr-2 text-white"></i> Tambah Omah Terapi-KU Baru
-                    </h5>
-                    <small class="text-white" style="opacity: 0.85; color: #ffffff !important;">Daftarkan lokasi UPT / Balai pelayanan terapi baru</small>
+        <div class="modal-content ot-modal-content">
+            <div class="modal-header ot-modal-header d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div class="ot-modal-icon mr-3">
+                        <i class="fa-solid fa-hospital-user"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title ot-modal-title">Tambah Omah Terapi-KU Baru</h5>
+                        <small class="ot-modal-subtitle">Daftarkan lokasi UPT / Balai pelayanan terapi baru</small>
+                    </div>
                 </div>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; color: #ffffff !important;">
-                    <span aria-hidden="true" style="color: #ffffff !important;">&times;</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; color: #64748b; opacity: 0.8; transition: all 0.2s ease;">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body p-4 text-left" style="background: #ffffff;">
@@ -303,17 +380,26 @@
                     <!-- 1. Nama UPT -->
                     <div class="form-group mb-3">
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                            Nama UPT / Lokasi <span class="text-danger">*</span>
+                            Nama UPT / Lokasi Pelayanan <span class="text-danger">*</span>
                         </label>
-                        <input type="text" name="nama" required class="form-control" placeholder="Contoh: UPT PPSAB Sidoarjo" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                        <input type="text" name="nama" required class="form-control ot-input-modern" placeholder="Contoh: UPT PPSAB Sidoarjo">
                     </div>
 
                     <!-- 2. Alamat Lengkap -->
                     <div class="form-group mb-3">
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                            Alamat Lengkap
+                            Alamat Lengkap Kantor / Lokasi
                         </label>
-                        <textarea name="alamat" class="form-control" rows="2" placeholder="Jl. Monginsidi No. 25, Sidoklumpuk, Sidoarjo..." style="font-size: 13px; border-radius: 8px;"></textarea>
+                        <textarea name="alamat" class="form-control" rows="2" placeholder="Jl. Monginsidi No. 25, Sidoklumpuk, Sidoarjo..." style="font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">{{ old('alamat') }}</textarea>
+                    </div>
+
+                    <!-- 2b. No. Telp / Kontak UPT -->
+                    <div class="form-group mb-3">
+                        <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
+                            No. Telp / Hotline UPT
+                        </label>
+                        <input type="text" name="no_telp" class="form-control ot-input-modern" placeholder="Contoh: (031) 8921234 / 081234567890" value="{{ old('no_telp') }}">
+                        <small class="text-muted" style="font-size: 11px;">Nomor kontak ini dapat tercantum pada lembar cetak SOAP dan Latihan Rumahan.</small>
                     </div>
 
                     <!-- 3. Fokus Layanan -->
@@ -321,16 +407,16 @@
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                             Fokus Layanan Utama
                         </label>
-                        <input type="text" name="fokus_layanan" id="fokusAddInput" class="form-control mb-2" placeholder="Contoh: Anak Berkebutuhan Khusus (ABK)" style="height: 42px; font-size: 13px; border-radius: 8px;">
-                        <div class="d-flex flex-wrap" style="gap: 5px;">
+                        <input type="text" name="fokus_layanan" id="fokusAddInput" class="form-control ot-input-modern mb-2" placeholder="Contoh: Anak Berkebutuhan Khusus (ABK)">
+                        <div class="d-flex flex-wrap" style="gap: 6px;">
                             <button type="button" class="quick-tag-btn" onclick="$('#fokusAddInput').val('Anak Berkebutuhan Khusus (ABK)')">
-                                + ABK
+                                <i class="fa-solid fa-plus mr-1" style="font-size: 10px;"></i> ABK
                             </button>
                             <button type="button" class="quick-tag-btn" onclick="$('#fokusAddInput').val('Dewasa, Lansia, ODGJ, Pasca-Stroke')">
-                                + Dewasa / ODGJ / Stroke
+                                <i class="fa-solid fa-plus mr-1" style="font-size: 10px;"></i> Dewasa / ODGJ / Stroke
                             </button>
                             <button type="button" class="quick-tag-btn" onclick="$('#fokusAddInput').val('Disabilitas Netra & Olahraga')">
-                                + Netra & Olahraga
+                                <i class="fa-solid fa-plus mr-1" style="font-size: 10px;"></i> Netra & Olahraga
                             </button>
                         </div>
                     </div>
@@ -340,54 +426,54 @@
                         <label class="form-label font-w600 text-dark mb-1 d-block" style="font-size: 13px;">
                             Pilih Terapis Bertugas di UPT Ini:
                         </label>
-                        <div class="p-2 bg-light rounded border" style="max-height: 160px; overflow-y: auto;">
+                        <div class="p-2.5 rounded" style="max-height: 170px; overflow-y: auto; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px;">
                             @if(isset($allTerapis) && count($allTerapis) > 0)
                                 @foreach($allTerapis as $terapisOpt)
-                                    <div class="terapis-check-card mb-1">
+                                    <div class="terapis-check-card mb-1.5">
                                         <div class="custom-control custom-checkbox w-100">
                                             <input type="checkbox" name="terapis_ids[]" value="{{ $terapisOpt->id }}" class="custom-control-input" id="tAdd_{{ $terapisOpt->id }}">
-                                            <label class="custom-control-label font-w600 text-dark d-flex justify-content-between align-items-center" for="tAdd_{{ $terapisOpt->id }}" style="cursor: pointer; font-size: 12.5px;">
-                                                <span>👨‍⚕️ {{ $terapisOpt->nama }}</span>
+                                            <label class="custom-control-label font-w600 text-dark d-flex justify-content-between align-items-center mb-0" for="tAdd_{{ $terapisOpt->id }}" style="cursor: pointer; font-size: 12.5px;">
+                                                <span class="font-w600 text-dark">{{ $terapisOpt->nama }}</span>
                                                 @if($terapisOpt->poli)
-                                                    <small class="text-muted" style="font-size: 10.5px;">(Di {{ $terapisOpt->poli }})</small>
+                                                    <small class="badge badge-light font-w500 text-muted" style="font-size: 10.5px; border: 1px solid #e2e8f0;">{{ $terapisOpt->poli }}</small>
                                                 @endif
                                             </label>
                                         </div>
                                     </div>
                                 @endforeach
                             @else
-                                <small class="text-muted">Tidak ada data master terapis aktif.</small>
+                                <small class="text-muted d-block text-center py-2">Tidak ada data master terapis aktif.</small>
                             @endif
                         </div>
                     </div>
 
                     <!-- 5. Status (Radio Button) -->
-                    <div class="form-group mb-3">
-                        <label class="form-label font-w600 text-dark mb-1 d-block" style="font-size: 13px;">
+                    <div class="form-group mb-2">
+                        <label class="form-label font-w600 text-dark mb-2 d-block" style="font-size: 13px;">
                             Status Operasional:
                         </label>
-                        <div class="d-flex align-items-center" style="gap: 20px;">
+                        <div class="d-flex align-items-center" style="gap: 24px; padding-left: 2px;">
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="statusAddAktif" name="status" value="1" class="custom-control-input" checked>
-                                <label class="custom-control-label font-w600 text-success" for="statusAddAktif" style="cursor: pointer; font-size: 13px;">
-                                    <i class="fa-solid fa-circle text-success mr-1" style="font-size: 8px;"></i> Aktif
+                                <label class="custom-control-label font-w600 text-dark mb-0" for="statusAddAktif" style="cursor: pointer; font-size: 13px;">
+                                    <i class="fa-solid fa-circle text-success mr-1" style="font-size: 9px; vertical-align: middle;"></i> Aktif
                                 </label>
                             </div>
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="statusAddNon" name="status" value="0" class="custom-control-input">
-                                <label class="custom-control-label font-w600 text-danger" for="statusAddNon" style="cursor: pointer; font-size: 13px;">
-                                    <i class="fa-solid fa-circle text-danger mr-1" style="font-size: 8px;"></i> Non-Aktif
+                                <label class="custom-control-label font-w600 text-dark mb-0" for="statusAddNon" style="cursor: pointer; font-size: 13px;">
+                                    <i class="fa-solid fa-circle text-danger mr-1" style="font-size: 9px; vertical-align: middle;"></i> Non-Aktif
                                 </label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top">
-                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
+                    <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top" style="margin: 0 -24px -24px -24px; padding: 14px 24px !important; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; background: #ffffff;">
                             Batal
                         </button>
-                        <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 22px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
-                            <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Data
+                        <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 24px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);">
+                            <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan UPT Baru
                         </button>
                     </div>
                 </form>
@@ -429,39 +515,51 @@
         <!-- MODAL DETAIL UPT (SHOW) -->
         <div class="modal fade" id="detailModal{{ $row->id }}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-                    
-                    <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important; background-color: #1e40af !important; padding: 16px 20px; border-bottom: none !important;">
-                        <div>
-                            <h5 class="modal-title font-w700 text-white mb-0" style="font-size: 16px; color: #ffffff !important;">
-                                <i class="fa-solid fa-hospital mr-2 text-white"></i> Detail Omah Terapi-KU
-                            </h5>
-                            <small class="text-white" style="opacity: 0.85; color: #ffffff !important;">Informasi Unit Pelaksana Teknis & Tenaga Terapis</small>
+                <div class="modal-content ot-modal-content">
+                    <div class="modal-header ot-modal-header d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="ot-modal-icon mr-3">
+                                <i class="fa-solid fa-hospital"></i>
+                            </div>
+                            <div>
+                                <h5 class="modal-title ot-modal-title">Detail Omah Terapi-KU</h5>
+                                <small class="ot-modal-subtitle">Informasi Unit Pelaksana Teknis & Tenaga Terapis</small>
+                            </div>
                         </div>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; color: #ffffff !important;">
-                            <span aria-hidden="true" style="color: #ffffff !important;">&times;</span>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; color: #64748b; opacity: 0.8; transition: all 0.2s ease;">
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
                     <div class="modal-body p-4 text-left" style="background: #f8fafc;">
                         
                         <!-- 1. Informasi UPT -->
-                        <div class="card border-0 shadow-xs mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <div class="card-header py-2 px-3 bg-white border-bottom">
-                                <strong class="text-dark" style="font-size: 13px;">
-                                    <i class="fa-solid fa-building text-primary mr-1"></i> 1. Informasi UPT
+                        <div class="card border-0 shadow-sm mb-3" style="border-radius: 10px; border: 1px solid #e2e8f0; background: #ffffff;">
+                            <div class="card-header py-2.5 px-3 bg-white border-bottom" style="border-bottom: 1.5px solid #edf2f7 !important;">
+                                <strong class="text-primary font-w700" style="font-size: 13px; color: #1e40af !important;">
+                                    <i class="fa-solid fa-building mr-1" style="color: #2563eb;"></i> Informasi UPT
                                 </strong>
                             </div>
                             <div class="card-body p-3">
-                                <div class="mb-2">
-                                    <small class="text-muted d-block font-w600" style="font-size: 11px;">Nama UPT:</small>
+                                <div class="mb-2.5">
+                                    <small class="text-muted d-block font-w600" style="font-size: 11px;">Nama UPT / Lokasi:</small>
                                     <strong class="text-dark" style="font-size: 14px;">{{ $row->nama }}</strong>
                                 </div>
-                                <div class="mb-2">
+                                <div class="mb-2.5">
                                     <small class="text-muted d-block font-w600" style="font-size: 11px;">Alamat Lengkap:</small>
-                                    <span class="text-dark" style="font-size: 13px;">{{ $row->alamat ?: '-' }}</span>
+                                    <span class="text-dark font-w500" style="font-size: 13px;">{{ $row->alamat ?: '-' }}</span>
                                 </div>
-                                <div class="mb-2">
+                                <div class="mb-2.5">
+                                    <small class="text-muted d-block font-w600" style="font-size: 11px;">No. Telp / Hotline UPT:</small>
+                                    <span class="text-dark font-w500" style="font-size: 13px;">
+                                        @if($row->no_telp)
+                                            <i class="fa-solid fa-phone text-primary mr-1" style="font-size: 11px;"></i> <strong class="text-dark">{{ $row->no_telp }}</strong>
+                                        @else
+                                            -
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="mb-2.5">
                                     <small class="text-muted d-block font-w600" style="font-size: 11px;">Fokus Layanan:</small>
                                     <span class="focus-badge mt-1" style="{{ $badgeStyle }}">
                                         <i class="fa-solid fa-tag mr-1"></i> {{ $fokus }}
@@ -469,45 +567,60 @@
                                 </div>
                                 <div>
                                     <small class="text-muted d-block font-w600" style="font-size: 11px;">Status Operasional:</small>
-                                    <span class="font-w700 {{ $row->status == 1 ? 'text-success' : 'text-danger' }}" style="font-size: 12.5px;">
-                                        ● {{ $row->status_display() }}
-                                    </span>
+                                    @if($row->status == 1)
+                                        <span class="badge badge-success light font-w700 mt-1" style="font-size: 11.5px; padding: 4px 10px;">
+                                            <i class="fa-solid fa-circle-check mr-1"></i> Aktif
+                                        </span>
+                                    @else
+                                        <span class="badge badge-danger light font-w700 mt-1" style="font-size: 11.5px; padding: 4px 10px;">
+                                            <i class="fa-solid fa-circle-xmark mr-1"></i> Non-Aktif
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
                         </div>
 
                         <!-- 2. Daftar Terapis Bertugas -->
-                        <div class="card border-0 shadow-xs mb-0" style="border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <div class="card-header py-2 px-3 bg-white border-bottom d-flex justify-content-between align-items-center">
-                                <strong class="text-dark" style="font-size: 13px;">
-                                    <i class="fa-solid fa-user-doctor text-primary mr-1"></i> 2. Tenaga Terapis di UPT Ini
+                        <div class="card border-0 shadow-sm mb-0" style="border-radius: 10px; border: 1px solid #e2e8f0; background: #ffffff;">
+                            <div class="card-header py-2.5 px-3 bg-white border-bottom d-flex justify-content-between align-items-center" style="border-bottom: 1.5px solid #edf2f7 !important;">
+                                <strong class="text-primary font-w700" style="font-size: 13px; color: #1e40af !important;">
+                                    <i class="fa-solid fa-user-doctor mr-1" style="color: #2563eb;"></i> Tenaga Terapis di UPT Ini
                                 </strong>
-                                <span class="badge badge-primary font-w600" style="font-size: 11px;">
+                                <span class="badge badge-primary font-w700" style="font-size: 11px; background: #2563eb;">
                                     {{ $row->terapis->count() }} Terapis
                                 </span>
                             </div>
                             <div class="card-body p-3">
                                 @if($row->terapis->count() > 0)
-                                    <div class="d-flex flex-column" style="gap: 8px;">
+                                    <div class="d-flex flex-column" style="gap: 10px; max-height: 240px; overflow-y: auto; padding-right: 2px;">
                                         @foreach($row->terapis as $terapis)
-                                            <div class="d-flex align-items-center justify-content-between p-2 rounded bg-white border">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm d-flex align-items-center justify-content-center mr-2" style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; font-weight: 700; font-size: 13px;">
-                                                        {{ strtoupper(substr($terapis->nama, 0, 1)) }}
+                                            <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                                                <div>
+                                                    <div class="font-w700 text-dark mb-1" style="font-size: 13.5px; color: #0f172a;">
+                                                        {{ $terapis->nama }}
                                                     </div>
-                                                    <div>
-                                                        <strong class="text-dark d-block" style="font-size: 13px;">{{ $terapis->nama }}</strong>
-                                                        <small class="text-muted">{{ $terapis->no_hp ? 'Telp: ' . $terapis->no_hp : 'Terapis Klinis' }}</small>
+                                                    <div class="d-flex align-items-center text-muted" style="font-size: 12px;">
+                                                        @if($terapis->no_hp)
+                                                            <i class="fa-solid fa-phone mr-1.5 text-primary" style="font-size: 10.5px;"></i>
+                                                            <span>Telp/WA: <strong class="text-dark font-w600">{{ $terapis->no_hp }}</strong></span>
+                                                        @else
+                                                            <i class="fa-solid fa-user-check mr-1.5 text-muted" style="font-size: 10.5px;"></i>
+                                                            <span>Terapis Klinis</span>
+                                                        @endif
                                                     </div>
                                                 </div>
-                                                <span class="badge badge-success light font-w600" style="font-size: 10.5px;">Aktif</span>
+                                                <div class="text-right pl-2">
+                                                    <span class="badge badge-success light font-w600" style="font-size: 11px; padding: 4px 10px; border: 1px solid #bbf7d0;">
+                                                        <i class="fa-solid fa-circle text-success mr-1" style="font-size: 7px; vertical-align: middle;"></i> Aktif
+                                                    </span>
+                                                </div>
                                             </div>
                                         @endforeach
                                     </div>
                                 @else
                                     <div class="text-center py-3 text-muted">
-                                        <i class="fa-solid fa-user-slash mb-1" style="font-size: 20px; opacity: 0.5;"></i>
-                                        <p class="mb-0" style="font-size: 12px;">Belum ada terapis yang ditugaskan di UPT ini.</p>
+                                        <i class="fa-solid fa-user-slash mb-1 d-block text-muted" style="font-size: 24px; opacity: 0.5;"></i>
+                                        <p class="mb-0 font-w500" style="font-size: 12px;">Belum ada terapis yang ditugaskan di UPT ini.</p>
                                     </div>
                                 @endif
                             </div>
@@ -515,12 +628,12 @@
 
                     </div>
 
-                    <div class="modal-footer py-2 px-3 bg-light d-flex justify-content-between align-items-center">
-                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
+                    <div class="modal-footer py-2.5 px-4 d-flex justify-content-between align-items-center" style="background: #f8fafc; border-top: 1px solid #e2e8f0;">
+                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; background: #ffffff; padding: 7px 16px;">
                             Tutup
                         </button>
-                        <button type="button" class="btn btn-sm btn-warning font-w700 text-white" data-dismiss="modal" data-toggle="modal" data-target="#editModal{{ $row->id }}" style="font-size: 12.5px; border-radius: 8px;">
-                            <i class="fa-solid fa-pencil mr-1"></i> Edit Data UPT
+                        <button type="button" class="btn btn-sm btn-primary font-w700" data-dismiss="modal" data-toggle="modal" data-target="#editModal{{ $row->id }}" style="font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none; color: #ffffff; padding: 8px 18px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> Edit Data UPT
                         </button>
                     </div>
 
@@ -531,17 +644,19 @@
         <!-- MODAL FORM EDIT UPT -->
         <div class="modal fade" id="editModal{{ $row->id }}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-                    
-                    <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important; background-color: #1e40af !important; padding: 16px 20px; border-bottom: none !important;">
-                        <div>
-                            <h5 class="modal-title font-w700 text-white mb-0" style="font-size: 16px; color: #ffffff !important;">
-                                <i class="fa-solid fa-pen-to-square mr-2 text-white"></i> Edit Omah Terapi-KU
-                            </h5>
-                            <small class="text-white" style="opacity: 0.85; color: #ffffff !important;">Kelola informasi lokasi, fokus layanan, dan penugasan terapis</small>
+                <div class="modal-content ot-modal-content">
+                    <div class="modal-header ot-modal-header d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="ot-modal-icon mr-3">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </div>
+                            <div>
+                                <h5 class="modal-title ot-modal-title">Edit Omah Terapi-KU</h5>
+                                <small class="ot-modal-subtitle">Kelola informasi lokasi, fokus layanan, dan penugasan terapis</small>
+                            </div>
                         </div>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; color: #ffffff !important;">
-                            <span aria-hidden="true" style="color: #ffffff !important;">&times;</span>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; color: #64748b; opacity: 0.8; transition: all 0.2s ease;">
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
@@ -552,17 +667,26 @@
                             <!-- 1. Nama UPT -->
                             <div class="form-group mb-3">
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                                    Nama UPT / Lokasi <span class="text-danger">*</span>
+                            Nama UPT / Lokasi Pelayanan <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" name="nama" value="{{ $row->nama }}" required class="form-control" placeholder="Contoh: UPT PPSAB Sidoarjo" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                                <input type="text" name="nama" value="{{ $row->nama }}" required class="form-control ot-input-modern" placeholder="Contoh: UPT PPSAB Sidoarjo">
                             </div>
 
                             <!-- 2. Alamat Lengkap -->
                             <div class="form-group mb-3">
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                                    Alamat Lengkap
+                                    Alamat Lengkap Kantor / Lokasi
                                 </label>
-                                <textarea name="alamat" class="form-control" rows="2" placeholder="Jl. Monginsidi No. 25, Sidoklumpuk, Sidoarjo..." style="font-size: 13px; border-radius: 8px;">{{ $row->alamat }}</textarea>
+                                <textarea name="alamat" class="form-control" rows="2" placeholder="Jl. Monginsidi No. 25, Sidoklumpuk, Sidoarjo..." style="font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">{{ $row->alamat }}</textarea>
+                            </div>
+
+                            <!-- 2b. No. Telp / Kontak UPT -->
+                            <div class="form-group mb-3">
+                                <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
+                                    No. Telp / Hotline UPT
+                                </label>
+                                <input type="text" name="no_telp" value="{{ $row->no_telp }}" class="form-control ot-input-modern" placeholder="Contoh: (031) 8921234 / 081234567890">
+                                <small class="text-muted" style="font-size: 11px;">Nomor kontak ini dapat tercantum pada lembar cetak SOAP dan Latihan Rumahan.</small>
                             </div>
 
                             <!-- 3. Fokus Layanan -->
@@ -570,17 +694,17 @@
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                                     Fokus Layanan Utama
                                 </label>
-                                <input type="text" name="fokus_layanan" id="fokusEditInput{{ $row->id }}" value="{{ $row->fokus_layanan ?: $fokus }}" class="form-control mb-2" placeholder="Contoh: Anak Berkebutuhan Khusus (ABK)" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                                <input type="text" name="fokus_layanan" id="fokusEditInput{{ $row->id }}" value="{{ $row->fokus_layanan ?: $fokus }}" class="form-control ot-input-modern mb-2" placeholder="Contoh: Anak Berkebutuhan Khusus (ABK)">
                                 
-                                <div class="d-flex flex-wrap" style="gap: 5px;">
+                                <div class="d-flex flex-wrap" style="gap: 6px;">
                                     <button type="button" class="quick-tag-btn" onclick="$('#fokusEditInput{{ $row->id }}').val('Anak Berkebutuhan Khusus (ABK)')">
-                                        + ABK
+                                        <i class="fa-solid fa-plus mr-1" style="font-size: 10px;"></i> ABK
                                     </button>
                                     <button type="button" class="quick-tag-btn" onclick="$('#fokusEditInput{{ $row->id }}').val('Dewasa, Lansia, ODGJ, Pasca-Stroke')">
-                                        + Dewasa / ODGJ / Stroke
+                                        <i class="fa-solid fa-plus mr-1" style="font-size: 10px;"></i> Dewasa / ODGJ / Stroke
                                     </button>
                                     <button type="button" class="quick-tag-btn" onclick="$('#fokusEditInput{{ $row->id }}').val('Disabilitas Netra & Olahraga')">
-                                        + Netra & Olahraga
+                                        <i class="fa-solid fa-plus mr-1" style="font-size: 10px;"></i> Netra & Olahraga
                                     </button>
                                 </div>
                             </div>
@@ -590,56 +714,58 @@
                                 <label class="form-label font-w600 text-dark mb-1 d-block" style="font-size: 13px;">
                                     Pilih Terapis Bertugas di UPT Ini:
                                 </label>
-                                <div class="p-2 bg-light rounded border" style="max-height: 160px; overflow-y: auto;">
+                                <div class="p-2.5 rounded" style="max-height: 170px; overflow-y: auto; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px;">
                                     @if(isset($allTerapis) && count($allTerapis) > 0)
                                         @foreach($allTerapis as $terapisOpt)
                                             @php
                                                 $isAssigned = ($terapisOpt->poli === $row->nama);
                                             @endphp
-                                            <div class="terapis-check-card mb-1">
+                                            <div class="terapis-check-card mb-1.5">
                                                 <div class="custom-control custom-checkbox w-100">
                                                     <input type="checkbox" name="terapis_ids[]" value="{{ $terapisOpt->id }}" class="custom-control-input" id="tEdit_{{ $row->id }}_{{ $terapisOpt->id }}" {{ $isAssigned ? 'checked' : '' }}>
-                                                    <label class="custom-control-label font-w600 text-dark d-flex justify-content-between align-items-center" for="tEdit_{{ $row->id }}_{{ $terapisOpt->id }}" style="cursor: pointer; font-size: 12.5px;">
-                                                        <span>👨‍⚕️ {{ $terapisOpt->nama }}</span>
+                                                    <label class="custom-control-label font-w600 text-dark d-flex justify-content-between align-items-center mb-0" for="tEdit_{{ $row->id }}_{{ $terapisOpt->id }}" style="cursor: pointer; font-size: 12.5px;">
+                                                        <span class="font-w600 text-dark">{{ $terapisOpt->nama }}</span>
                                                         @if($terapisOpt->poli && $terapisOpt->poli !== $row->nama)
-                                                            <small class="text-muted" style="font-size: 10.5px;">(Saat ini di {{ $terapisOpt->poli }})</small>
+                                                            <small class="badge badge-light font-w500 text-muted" style="font-size: 10.5px; border: 1px solid #e2e8f0;">Di {{ $terapisOpt->poli }}</small>
+                                                        @elseif($isAssigned)
+                                                            <small class="badge badge-primary light font-w600" style="font-size: 10.5px;">UPT Ini</small>
                                                         @endif
                                                     </label>
                                                 </div>
                                             </div>
                                         @endforeach
                                     @else
-                                        <small class="text-muted">Tidak ada data master terapis aktif.</small>
+                                        <small class="text-muted d-block text-center py-2">Tidak ada data master terapis aktif.</small>
                                     @endif
                                 </div>
                             </div>
 
                             <!-- 5. Status (Radio Button) -->
-                            <div class="form-group mb-3">
-                                <label class="form-label font-w600 text-dark mb-1 d-block" style="font-size: 13px;">
+                            <div class="form-group mb-2">
+                                <label class="form-label font-w600 text-dark mb-2 d-block" style="font-size: 13px;">
                                     Status Operasional:
                                 </label>
-                                <div class="d-flex align-items-center" style="gap: 20px;">
+                                <div class="d-flex align-items-center" style="gap: 24px; padding-left: 2px;">
                                     <div class="custom-control custom-radio">
                                         <input type="radio" id="statusAktif_{{ $row->id }}" name="status" value="1" class="custom-control-input" {{ $row->status == 1 ? 'checked' : '' }}>
-                                        <label class="custom-control-label font-w600 text-success" for="statusAktif_{{ $row->id }}" style="cursor: pointer; font-size: 13px;">
-                                            <i class="fa-solid fa-circle text-success mr-1" style="font-size: 8px;"></i> Aktif
+                                        <label class="custom-control-label font-w600 text-dark mb-0" for="statusAktif_{{ $row->id }}" style="cursor: pointer; font-size: 13px;">
+                                            <i class="fa-solid fa-circle text-success mr-1" style="font-size: 9px; vertical-align: middle;"></i> Aktif
                                         </label>
                                     </div>
                                     <div class="custom-control custom-radio">
                                         <input type="radio" id="statusNon_{{ $row->id }}" name="status" value="0" class="custom-control-input" {{ $row->status == 0 ? 'checked' : '' }}>
-                                        <label class="custom-control-label font-w600 text-danger" for="statusNon_{{ $row->id }}" style="cursor: pointer; font-size: 13px;">
-                                            <i class="fa-solid fa-circle text-danger mr-1" style="font-size: 8px;"></i> Non-Aktif
+                                        <label class="custom-control-label font-w600 text-dark mb-0" for="statusNon_{{ $row->id }}" style="cursor: pointer; font-size: 13px;">
+                                            <i class="fa-solid fa-circle text-danger mr-1" style="font-size: 9px; vertical-align: middle;"></i> Non-Aktif
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top">
-                                <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
+                            <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top" style="margin: 0 -24px -24px -24px; padding: 14px 24px !important; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+                                <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; background: #ffffff;">
                                     Batal
                                 </button>
-                                <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 22px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                                <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 24px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);">
                                     <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Perubahan
                                 </button>
                             </div>

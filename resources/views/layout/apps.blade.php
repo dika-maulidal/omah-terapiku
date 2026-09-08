@@ -133,77 +133,168 @@
             toastr.error("{{Session::get('gagal')}}", "Gagal",{timeOut: 5000})
         @endif
 
-        // pusher
-        var notificationsWrapper   = $('.dropdown-notifications');
-        var notificationsToggle    = notificationsWrapper.find('a[data-toggle]');
-        var notificationsCountElem = notificationsToggle.find('i[data-count]');
-        var notificationsCount     = parseInt(notificationsCountElem.data('count'));
-        var notifications          = notificationsWrapper.find('ul.timeline');
+        // =========================================================================
+        // Sistem Notifikasi Real-time & Poller (Terapis / Dokter / Pendaftaran)
+        // =========================================================================
+        var user_id = "{{ auth()->check() ? auth()->user()->id : '' }}";
+        var role = "{{ auth()->check() ? auth()->user()->role_display() : '' }}";
+        var lastUnreadCount = parseInt("{{ auth()->check() ? auth()->user()->unreadnotifications->count() : 0 }}") || 0;
 
-        // if (notificationsCount <= 0) {
-        //     notificationsWrapper.hide();
-        // }
+        function playNotificationChime() {
+            try {
+                var AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                var ctx = new AudioContext();
+                var now = ctx.currentTime;
 
-        // Enable pusher logging - don't include this in production
-        // Pusher.logToConsole = true;
+                var osc1 = ctx.createOscillator();
+                var gain1 = ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(587.33, now); // D5
+                gain1.gain.setValueAtTime(0.12, now);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.start(now);
+                osc1.stop(now + 0.3);
 
-        var pusher = new Pusher('d0f5c330385c88c7da90', {
-            cluster: 'ap1'
-        });
-
-        var user_id = "{{auth()->user()->id}}";
-        var role = "{{auth()->user()->role_display()}}";
-
-        // Subscribe to the channel we specified in our Laravel Event
-        var channel = pusher.subscribe('status-rekam-updated-'+user_id);
-
-        // Bind a function to a Event (the full Laravel class)
-        channel.bind('App\\Events\\StatusRekamUpdate', function(data) {
-            var existingNotifications = notifications.html();
-            var avatar = Math.floor(Math.random() * (71 - 20 + 1)) + 20;
-            var newNotificationHtml = `
-            <li>
-                <div class="timeline-panel">
-                   
-                    <div class="media-body">
-                        <h6 class="mb-1">`+data.no_rekam+`</h6>
-                        <h6 class="mb-1">`+data.message+`</h6>
-                        <small class="d-block">`+data.created_at+`</small>
-                        <a href="`+data.link+`">Klik Proses</a>
-                    </div>
-                </div>
-            </li>
-            `;
-            notifications.html(newNotificationHtml + existingNotifications);
-
-            notificationsCount += 1;
-            notificationsCountElem.attr('data-count', notificationsCount);
-            notificationsWrapper.find('.notif-count').text(notificationsCount);
-            // $("#data-count").html(notificationsCount);
-            notificationsWrapper.show();
-
-            
-            if(role=="Dokter"){
-                var listPeriksaDokter = `
-                    <div class="d-flex pb-3 border-bottom mb-3 align-items-end">
-                        <div class="mr-auto">
-                            <p class="text-black font-w600 mb-2"><a href="#">`+data.no_rekam+`</a></p>
-                            <ul>
-                                <li><i class="las la-clock"></i>Time : `+data.created_at+`</li>
-                                <li><i class="las la-clock"></i>No Rekam : `+data.no_rekam+`</li>
-                                <li><i class="las la-user"></i>`+data.message+`</li>
-                            </ul>
-                        </div>
-                        <a href="`+data.link+`" 
-                            class="btn-rounded btn-primary btn-xs"><i class="fa fa-user-md"></i> Periksa</a>
-                    </div>`;
-
-                    $("#antrian-list-notif").append(listPeriksaDokter);
+                var osc2 = ctx.createOscillator();
+                var gain2 = ctx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(880, now + 0.12); // A5
+                gain2.gain.setValueAtTime(0.18, now + 0.12);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.start(now + 0.12);
+                osc2.stop(now + 0.55);
+            } catch (e) {
+                // Audio context may be restricted by browser policy before user interaction
             }
-        
+        }
 
-           
-        });
+        function renderNotificationItems(items, unreadCount) {
+            var $countBadge = $('.notif-badge-indicator');
+            var $countText = $('.notif-count');
+            var $list = $('#notificationTimelineList');
+
+            if (unreadCount > 0) {
+                $countBadge.removeClass('d-none');
+                $countText.text(unreadCount);
+            } else {
+                $countBadge.addClass('d-none');
+                $countText.text('0');
+            }
+
+            if (!items || items.length === 0) {
+                $list.html(`
+                    <li class="text-center py-4 text-muted empty-notif-state">
+                        <div class="mb-2" style="width: 44px; height: 44px; border-radius: 50%; background: #f1f5f9; display: inline-flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 18px;">
+                            <i class="fa-regular fa-bell-slash"></i>
+                        </div>
+                        <p class="fs-12 mb-0 font-w600 text-secondary">Tidak ada notifikasi baru</p>
+                        <small class="text-muted" style="font-size: 11px;">Notifikasi penugasan pasien akan muncul di sini</small>
+                    </li>
+                `);
+                return;
+            }
+
+            var html = '';
+            items.forEach(function(notif) {
+                html += `
+                    <li class="p-2 mb-1 notif-item" style="border-radius: 8px; border-bottom: 1px solid #f1f5f9; background: #ffffff; transition: background 0.2s ease;">
+                        <div class="d-flex align-items-start">
+                            <div class="mr-2.5 mt-1" style="width: 32px; height: 32px; border-radius: 8px; background: #eff6ff; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 14px; flex-shrink: 0; border: 1px solid #bfdbfe;">
+                                <i class="fa-solid fa-user-doctor"></i>
+                            </div>
+                            <div class="media-body" style="font-size: 12px;">
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <strong class="text-dark font-w700" style="font-size: 12.5px;">${notif.nama_pasien}</strong>
+                                    <span class="badge badge-primary light font-w600" style="font-size: 10px; padding: 1px 6px;">${notif.layanan_terapi}</span>
+                                </div>
+                                <p class="mb-1 text-secondary" style="font-size: 11.5px; line-height: 1.35; color: #475569 !important;">
+                                    ${notif.message}
+                                </p>
+                                <div class="d-flex align-items-center justify-content-between mt-1">
+                                    <small class="text-muted font-w500" style="font-size: 10.5px;">
+                                        <i class="fa-regular fa-clock mr-1"></i>${notif.created_at}
+                                    </small>
+                                    <a href="${notif.read_url}" class="btn btn-primary btn-xs font-w600" style="padding: 2px 8px; font-size: 11px; border-radius: 5px; background: #2563eb;">
+                                        <i class="fa-solid fa-arrow-right mr-1"></i> Buka
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                `;
+            });
+            $list.html(html);
+        }
+
+        window.markAllNotificationsRead = function(e) {
+            if (e) e.stopPropagation();
+            $.ajax({
+                url: "{{ route('notifications.markAllRead') }}",
+                type: 'POST',
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function() {
+                    lastUnreadCount = 0;
+                    renderNotificationItems([], 0);
+                    if (typeof toastr !== 'undefined') {
+                        toastr.success("Semua notifikasi ditandai telah dibaca", "Notifikasi", { timeOut: 3000 });
+                    }
+                }
+            });
+        };
+
+        function fetchUnreadNotifications() {
+            if (!user_id) return;
+            $.ajax({
+                url: "{{ route('notifications.unreadJson') }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    if (res && res.success) {
+                        if (res.unread_count > lastUnreadCount) {
+                            playNotificationChime();
+                            if (typeof toastr !== 'undefined' && res.notifications && res.notifications.length > 0) {
+                                var latest = res.notifications[0];
+                                toastr.info(
+                                    `<div style="font-size:12.5px;"><strong>${latest.nama_pasien}</strong><br><small>${latest.message}</small></div>`,
+                                    "🔔 Pasien Baru Ditugaskan",
+                                    { timeOut: 7500, closeButton: true, escapeHtml: false }
+                                );
+                            }
+                        }
+                        lastUnreadCount = res.unread_count;
+                        renderNotificationItems(res.notifications, res.unread_count);
+                    }
+                }
+            });
+        }
+
+        // Jalankan polling setiap 25 detik sebagai failover real-time yang andal
+        if (user_id) {
+            setInterval(fetchUnreadNotifications, 25000);
+        }
+
+        // Pusher Real-time Subscriber
+        try {
+            if (typeof Pusher !== 'undefined' && user_id) {
+                var pusher = new Pusher('d0f5c330385c88c7da90', {
+                    cluster: 'ap1'
+                });
+
+                var channel = pusher.subscribe('status-rekam-updated-' + user_id);
+                channel.bind('App\\Events\\StatusRekamUpdate', function(data) {
+                    fetchUnreadNotifications();
+                });
+            }
+        } catch (err) {
+            console.warn('Pusher initialization:', err);
+        }
         // =========================================================================
         // Konfirmasi Logout dengan SweetAlert2 (Popup Ya / Tidak)
         // =========================================================================

@@ -19,6 +19,10 @@
         $distribusiTerapi = $query->getDistribusiJenisTerapi();
         $allTopTindakan = $query->getTopTindakanAll(5);
         $topTindakan = $allTopTindakan['bulan'];
+        $allTopDiagnosa = $query->getTopDiagnosaAll(10);
+        $topDiagnosa = $allTopDiagnosa['bulan'];
+        $allTopKeluhan = $query->getTopKeluhanAll(40);
+        $topKeluhan = $allTopKeluhan['bulan'];
         $recentActivities = $query->getRecentTherapistActivities(10);
     @endphp
 
@@ -407,6 +411,113 @@
                             <div class="text-center py-4 text-muted">
                                 <i class="fa-solid fa-clipboard-list fa-2x mb-2 text-muted" style="opacity: 0.5;"></i>
                                 <p class="fs-12 mb-0">Belum ada data tindakan terapi pada periode ini.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         SECTION: TOP KELUHAN PASIEN & TOP DIAGNOSA KASUS
+         ========================================================================= -->
+    <div class="row mb-4">
+        <!-- Kolom 1: Awan Kata Keluhan Pasien (Word Cloud Interaktif) -->
+        <div class="col-xl-6 col-lg-12 mb-3 mb-xl-0">
+            <div class="card h-100 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
+                    <div>
+                        <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
+                            <i class="fa-solid fa-cloud mr-2" style="color: #2563eb;"></i> Awan Kata Keluhan Pasien (Word Cloud)
+                        </h4>
+                    </div>
+                    <div class="position-relative mt-2 mt-sm-0" style="width: 145px;">
+                        <i class="fa fa-filter" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 12px; pointer-events: none; z-index: 2;"></i>
+                        <select id="filterPeriodeKeluhan" class="form-control form-control-sm font-w700" style="color: #2563eb !important; padding-left: 32px; padding-right: 34px; height: 36px; font-size: 12.5px; border-radius: 8px; border-color: #cbd5e1; cursor: pointer; background-color: #ffffff; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%232563eb' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e&quot;); background-repeat: no-repeat; background-position: right 14px center; background-size: 11px 11px;">
+                            <option value="bulan" selected>Bulan Ini</option>
+                            <option value="tahun">Tahun Ini</option>
+                            <option value="semua">Semua Waktu</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                        <span class="fs-12 text-muted font-w600" id="labelPeriodeKeluhan">Periode: <strong class="text-primary">{{ $bulan }} {{ date('Y') }}</strong></span>
+                        <span class="badge badge-primary light font-w700" id="badgeTotalKeluhan" style="font-size: 11px;">Total: {{ $topKeluhan['total'] }} Keluhan</span>
+                    </div>
+
+                    <!-- Canvas Wrapper with Floating Tooltip -->
+                    <div id="wordcloudCanvasWrapper" style="position: relative; width: 100%; height: 220px; background: #fafcff; border-radius: 10px; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <canvas id="wordcloudCanvas" style="width: 100%; height: 100%;"></canvas>
+
+                        <!-- Floating Tooltip on Hover -->
+                        <div id="wordcloudTooltip" style="position: absolute; display: none; pointer-events: none; background: rgba(15, 23, 42, 0.92); color: #ffffff; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.18); z-index: 10; transform: translate(-50%, -120%); transition: opacity 0.15s ease;">
+                            <span id="tooltipWordText">-</span>: <strong id="tooltipWordCount" style="color: #38bdf8;">0</strong>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="wordcloudEmptyState" class="text-center py-4 text-muted d-none">
+                            <i class="fa-solid fa-cloud-moon fa-2x mb-2 text-muted" style="opacity: 0.5;"></i>
+                            <p class="fs-12 mb-0">Belum ada data keluhan pasien pada periode ini.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kolom 2: Top 5 Diagnosa Kasus (ICD-10) -->
+        <div class="col-xl-6 col-lg-12">
+            <div class="card h-100 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
+                    <div>
+                        <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
+                            <i class="fa fa-stethoscope mr-2" style="color: #2563eb;"></i> Top 5 Diagnosa Kasus (ICD-10)
+                        </h4>
+                    </div>
+                    <div class="position-relative mt-2 mt-sm-0" style="width: 145px;">
+                        <i class="fa fa-filter" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 12px; pointer-events: none; z-index: 2;"></i>
+                        <select id="filterPeriodeDiagnosa" class="form-control form-control-sm font-w700" style="color: #2563eb !important; padding-left: 32px; padding-right: 34px; height: 36px; font-size: 12.5px; border-radius: 8px; border-color: #cbd5e1; cursor: pointer; background-color: #ffffff; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%232563eb' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e&quot;); background-repeat: no-repeat; background-position: right 14px center; background-size: 11px 11px;">
+                            <option value="bulan" selected>Bulan Ini</option>
+                            <option value="tahun">Tahun Ini</option>
+                            <option value="semua">Semua Waktu</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                        <span class="fs-12 text-muted font-w600" id="labelPeriodeDiagnosa">Periode: <strong class="text-primary">{{ $bulan }} {{ date('Y') }}</strong></span>
+                        <span class="badge badge-primary light font-w700" id="badgeTotalDiagnosa" style="font-size: 11px;">Total: {{ $topDiagnosa['total'] }} Kasus</span>
+                    </div>
+                    <div class="dz-scroll" id="containerTopDiagnosa" style="max-height: 220px; overflow-y: auto;">
+                        @forelse($topDiagnosa['items'] as $index => $dg)
+                            <div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <div class="d-flex align-items-center text-truncate" style="max-width: 72%;">
+                                        <span class="badge badge-pill badge-primary mr-2 font-w700" style="width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: {{ $dg['color'] }};">
+                                            #{{ $index + 1 }}
+                                        </span>
+                                        <span class="badge badge-info light font-w700 mr-1" style="font-size: 10.5px; padding: 2px 6px;">
+                                            {{ $dg['code'] }}
+                                        </span>
+                                        <span class="fs-12 text-dark font-w600 text-truncate" title="{{ $dg['nama'] }}">
+                                            {{ $dg['nama'] }}
+                                        </span>
+                                    </div>
+                                    <div class="text-right flex-shrink-0">
+                                        <span class="badge badge-light font-w700 text-primary" style="font-size: 11px; background: #f1f5f9;">
+                                            {{ $dg['total'] }} Kasus
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="progress" style="height: 6px; background: #f1f5f9; border-radius: 4px;">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ $dg['bar_persen'] }}%; background-color: {{ $dg['color'] }}; border-radius: 4px;" aria-valuenow="{{ $dg['bar_persen'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center py-4 text-muted">
+                                <i class="fa fa-stethoscope text-muted fs-24 mb-2 d-block" style="opacity: 0.5;"></i>
+                                <p class="fs-12 mb-0">Belum ada data diagnosa pada periode ini.</p>
                             </div>
                         @endforelse
                     </div>
@@ -848,6 +959,7 @@
 @endsection
 
 @section('script')
+<script src="{{ asset('vendor/wordcloud2/wordcloud2.min.js') }}"></script>
 <script>
 $(document).ready(function() {
     var allYearsData = {!! json_encode($allYearsPasienData) !!};
@@ -1368,6 +1480,192 @@ $(document).ready(function() {
         } else {
             $('#emptyFilterActivityRow').addClass('d-none');
         }
+    });
+
+    // 8. Interactive Filter Top Diagnosa
+    var allTopDiagnosa = {!! json_encode($allTopDiagnosa) !!};
+    var labelBulanIniDiagnosa = "{{ $bulan }} {{ date('Y') }}";
+    var labelTahunIniDiagnosa = "Tahun {{ date('Y') }}";
+
+    function renderTopDiagnosa(periode) {
+        var data = allTopDiagnosa[periode] || { items: [], total: 0 };
+        var container = $('#containerTopDiagnosa');
+        var badgeTotal = $('#badgeTotalDiagnosa');
+        var labelPeriode = $('#labelPeriodeDiagnosa');
+
+        badgeTotal.text('Total: ' + (data.total || 0) + ' Kasus');
+
+        if (periode === 'bulan') {
+            labelPeriode.html('Periode: <strong class="text-primary">' + labelBulanIniDiagnosa + '</strong>');
+        } else if (periode === 'tahun') {
+            labelPeriode.html('Periode: <strong class="text-primary">' + labelTahunIniDiagnosa + '</strong>');
+        } else {
+            labelPeriode.html('Periode: <strong class="text-primary">Semua Waktu</strong>');
+        }
+
+        if (!data.items || data.items.length === 0 || data.total === 0) {
+            container.html(
+                '<div class="text-center py-5 text-muted">' +
+                    '<i class="fa fa-stethoscope text-muted fs-24 mb-2 d-block" style="opacity: 0.5;"></i>' +
+                    '<p class="fs-12 mb-0">Belum ada data diagnosa pada periode ini.</p>' +
+                '</div>'
+            );
+            return;
+        }
+
+        var html = '';
+        data.items.forEach(function(dg, index) {
+            var safeCode = $('<div>').text(dg.code).html();
+            var safeNama = $('<div>').text(dg.nama).html();
+            html += '<div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">' +
+                '<div class="d-flex justify-content-between align-items-center mb-1">' +
+                    '<div class="d-flex align-items-center text-truncate" style="max-width: 72%;">' +
+                        '<span class="badge badge-pill badge-primary mr-2 font-w700" style="width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: ' + dg.color + ';">' +
+                            '#' + (index + 1) +
+                        '</span>' +
+                        '<span class="badge badge-info light font-w700 mr-1" style="font-size: 10.5px; padding: 2px 6px;">' +
+                            safeCode +
+                        '</span>' +
+                        '<span class="fs-12 text-dark font-w600 text-truncate" title="' + safeNama + '">' +
+                            safeNama +
+                        '</span>' +
+                    '</div>' +
+                    '<div class="text-right flex-shrink-0">' +
+                        '<span class="badge badge-light font-w700 text-primary" style="font-size: 11px; background: #f1f5f9;">' +
+                            dg.total + ' Kasus' +
+                        '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="progress" style="height: 6px; background: #f1f5f9; border-radius: 4px;">' +
+                    '<div class="progress-bar" role="progressbar" style="width: ' + dg.bar_persen + '%; background-color: ' + dg.color + '; border-radius: 4px;" aria-valuenow="' + dg.bar_persen + '" aria-valuemin="0" aria-valuemax="100"></div>' +
+                '</div>' +
+            '</div>';
+        });
+
+        container.html(html);
+    }
+
+    $('#filterPeriodeDiagnosa').on('change', function() {
+        var selectedPeriode = $(this).val();
+        renderTopDiagnosa(selectedPeriode);
+    });
+
+    // =========================================================================
+    // 9. Interactive Word Cloud Keluhan Pasien
+    // =========================================================================
+    var allTopKeluhan = {!! json_encode($allTopKeluhan) !!};
+    var labelBulanIniKeluhan = "{{ $bulan }} {{ date('Y') }}";
+    var labelTahunIniKeluhan = "Tahun {{ date('Y') }}";
+    var activeKeluhanPeriode = 'bulan';
+
+    function initWordCloud(periode) {
+        activeKeluhanPeriode = periode || 'bulan';
+        var data = allTopKeluhan[activeKeluhanPeriode] || {
+            items: [],
+            wordcloud_list: [],
+            total: 0,
+            total_records: 0,
+            unique_count: 0
+        };
+
+        var labelPeriode = $('#labelPeriodeKeluhan');
+        var badgeTotal = $('#badgeTotalKeluhan');
+        var labelCountInfo = $('#labelWordCountInfo');
+        var canvas = document.getElementById('wordcloudCanvas');
+        var tooltip = $('#wordcloudTooltip');
+        var emptyState = $('#wordcloudEmptyState');
+
+        badgeTotal.text('Total: ' + (data.total || 0) + ' Keluhan');
+        labelCountInfo.html('<strong>' + (data.wordcloud_list ? data.wordcloud_list.length : 0) + '</strong> kata kunci');
+
+        if (activeKeluhanPeriode === 'bulan') {
+            labelPeriode.html('Periode: <strong class="text-primary">' + labelBulanIniKeluhan + '</strong>');
+        } else if (activeKeluhanPeriode === 'tahun') {
+            labelPeriode.html('Periode: <strong class="text-primary">' + labelTahunIniKeluhan + '</strong>');
+        } else {
+            labelPeriode.html('Periode: <strong class="text-primary">Semua Waktu</strong>');
+        }
+
+        if (!data.wordcloud_list || data.wordcloud_list.length === 0 || data.total === 0) {
+            $(canvas).hide();
+            emptyState.removeClass('d-none');
+            return;
+        }
+
+        $(canvas).show();
+        emptyState.addClass('d-none');
+
+        if (typeof WordCloud !== 'undefined' && canvas) {
+            var wrapper = $('#wordcloudCanvasWrapper');
+            var width = wrapper.width() || 500;
+            var height = 215;
+            var dpr = window.devicePixelRatio || 1;
+
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+
+            var cloudPalette = [
+                '#1e40af', '#2563eb', '#0284c7', '#0ea5e9', 
+                '#059669', '#10b981', '#7c3aed', '#6366f1', 
+                '#3b82f6', '#38bdf8', '#0d9488', '#475569'
+            ];
+
+            WordCloud(canvas, {
+                list: data.wordcloud_list,
+                gridSize: 6,
+                weightFactor: function(size) {
+                    return Math.max(size * 1.05, 11);
+                },
+                fontFamily: "'Inter', 'Segoe UI', Roboto, sans-serif",
+                color: function(word, weight, idx) {
+                    return cloudPalette[idx % cloudPalette.length];
+                },
+                rotateRatio: 0.15,
+                rotationSteps: 2,
+                backgroundColor: 'transparent',
+                shrinkToFit: true,
+                drawOutOfBound: false,
+                hover: function(item, dimension, event) {
+                    if (item && dimension && event) {
+                        var text = item[0];
+                        var count = item[1];
+                        var cRect = canvas.getBoundingClientRect();
+                        var posX = event.clientX - cRect.left;
+                        var posY = event.clientY - cRect.top;
+
+                        $('#tooltipWordText').text(text);
+                        $('#tooltipWordCount').text(count + ' Pasien');
+                        tooltip.css({
+                            left: posX + 'px',
+                            top: posY + 'px',
+                            display: 'block'
+                        });
+                    } else {
+                        tooltip.hide();
+                    }
+                }
+            });
+        }
+    }
+
+    // Initialize Word Cloud
+    initWordCloud('bulan');
+
+    // Filter Periode Keluhan
+    $('#filterPeriodeKeluhan').on('change', function() {
+        var selected = $(this).val();
+        initWordCloud(selected);
+    });
+
+    // Responsive resize handler
+    var resizeTimerKeluhan;
+    $(window).on('resize', function() {
+        clearTimeout(resizeTimerKeluhan);
+        resizeTimerKeluhan = setTimeout(function() {
+            initWordCloud(activeKeluhanPeriode);
+        }, 250);
     });
 });
 </script>

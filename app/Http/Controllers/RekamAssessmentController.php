@@ -11,8 +11,8 @@ class RekamAssessmentController extends Controller
 {
     private function ensureClinicalRole()
     {
-        if (!in_array(auth()->user()->role_display(), ['Admin', 'Dokter', 'Pendaftaran'])) {
-            abort(403, 'Akses tidak diizinkan.');
+        if (!in_array(auth()->user()->role_display(), ['Admin', 'Dokter'])) {
+            abort(403, 'Akses tidak diizinkan. Pengisian dan penyimpanan asesmen hanya dapat dilakukan oleh Terapis / Dokter atau Admin.');
         }
     }
 
@@ -57,6 +57,28 @@ class RekamAssessmentController extends Controller
             }
         }
 
+        // 2. GMFM check
+        $hasGmfmInput = !empty($request->gmfm_dimensi_a_scores) ||
+                        !empty($request->gmfm_dimensi_b_scores) ||
+                        !empty($request->gmfm_dimensi_c_scores) ||
+                        !empty($request->gmfm_dimensi_d_scores) ||
+                        !empty($request->gmfm_dimensi_e_scores) ||
+                        $request->filled('gmfm_dimensi_a_catatan') ||
+                        $request->filled('gmfm_dimensi_b_catatan') ||
+                        $request->filled('gmfm_dimensi_c_catatan') ||
+                        $request->filled('gmfm_dimensi_d_catatan') ||
+                        $request->filled('gmfm_dimensi_e_catatan') ||
+                        ($request->filled('gmfm_total_score') && (int)$request->gmfm_total_score > 0);
+
+        // 14. Denver check
+        $hasDenverInput = !empty($request->denver_data) ||
+                          $request->filled('denver_kesimpulan') ||
+                          $request->filled('denver_catatan') ||
+                          ($request->filled('denver_pass_count') && (int)$request->denver_pass_count > 0) ||
+                          ($request->filled('denver_fail_count') && (int)$request->denver_fail_count > 0) ||
+                          ($request->filled('denver_refusal_count') && (int)$request->denver_refusal_count > 0) ||
+                          ($request->filled('denver_no_count') && (int)$request->denver_no_count > 0);
+
         $data = [
             'pasien_id' => $pasien->id,
             'dokter_id' => $dokterId,
@@ -98,8 +120,8 @@ class RekamAssessmentController extends Controller
             'gmfm_dimensi_e_persen' => $request->filled('gmfm_dimensi_e_persen') ? (float)$request->gmfm_dimensi_e_persen : null,
             'gmfm_dimensi_e_catatan' => $request->gmfm_dimensi_e_catatan,
 
-            'gmfm_total_score' => $request->filled('gmfm_total_score') ? (int)$request->gmfm_total_score : null,
-            'gmfm_total_persen' => $request->filled('gmfm_total_persen') ? (float)$request->gmfm_total_persen : null,
+            'gmfm_total_score' => $hasGmfmInput && $request->filled('gmfm_total_score') ? (int)$request->gmfm_total_score : null,
+            'gmfm_total_persen' => $hasGmfmInput && $request->filled('gmfm_total_persen') ? (float)$request->gmfm_total_persen : null,
 
             // 3. ADL
             'adl_kontak_mata' => $request->adl_kontak_mata,
@@ -226,10 +248,10 @@ class RekamAssessmentController extends Controller
 
             // 14. Skala Denver (DDST II)
             'denver_data' => $request->denver_data ?: [],
-            'denver_pass_count' => $request->filled('denver_pass_count') ? (int)$request->denver_pass_count : null,
-            'denver_fail_count' => $request->filled('denver_fail_count') ? (int)$request->denver_fail_count : null,
-            'denver_refusal_count' => $request->filled('denver_refusal_count') ? (int)$request->denver_refusal_count : null,
-            'denver_no_count' => $request->filled('denver_no_count') ? (int)$request->denver_no_count : null,
+            'denver_pass_count' => $hasDenverInput && $request->filled('denver_pass_count') ? (int)$request->denver_pass_count : null,
+            'denver_fail_count' => $hasDenverInput && $request->filled('denver_fail_count') ? (int)$request->denver_fail_count : null,
+            'denver_refusal_count' => $hasDenverInput && $request->filled('denver_refusal_count') ? (int)$request->denver_refusal_count : null,
+            'denver_no_count' => $hasDenverInput && $request->filled('denver_no_count') ? (int)$request->denver_no_count : null,
             'denver_kesimpulan' => $request->denver_kesimpulan,
             'denver_catatan' => $request->denver_catatan,
 

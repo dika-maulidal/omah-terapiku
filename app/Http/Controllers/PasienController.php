@@ -445,14 +445,16 @@ class PasienController extends Controller
         return redirect()->route('penerima-manfaat')->with('sukses','Data Penerima Manfaat berhasil diperbaharui');
     }
 
-    function delete(Request $request,$id)
+    function delete(Request $request, $id)
     {
-        // Pasien::find($id)->update(['deleted_at'=>Carbon::now()]);
-       $suk = Pasien::find($id)->delete();
-       if($suk){
-            Rekam::where('pasien_id',$id)->delete();
-       }
-        return redirect()->route('penerima-manfaat')->with('sukses','Data berhasil dihapus');
+        if (auth()->user()->role_display() !== 'Admin') {
+            abort(403, 'Akses tidak diizinkan. Hanya Admin yang dapat menghapus data penerima manfaat.');
+        }
+        $suk = Pasien::findOrFail($id)->delete();
+        if ($suk) {
+            Rekam::where('pasien_id', $id)->delete();
+        }
+        return redirect()->route('penerima-manfaat')->with('sukses', 'Data penerima manfaat berhasil dihapus');
     } 
 
     function getLastRM(Request $request)

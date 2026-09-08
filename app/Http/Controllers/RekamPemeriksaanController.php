@@ -48,12 +48,15 @@ class RekamPemeriksaanController extends Controller
                 ->with('sukses', 'Pemeriksaan (O) Berhasil diperbaharui');
     }
 
-    function diagnosa_delete(Request $reques,$id){
-        $rekam = RekamDiagnosa::find($id);
+    function diagnosa_delete(Request $request, $id)
+    {
+        $this->ensureClinicalRole();
+        $rekam = RekamDiagnosa::findOrFail($id);
+        $pasienId = $rekam->pasien_id;
         $rekam->delete();
 
-        return redirect()->route('rekam.detail',$rekam->pasien_id)
-                ->with('sukses','Diagnosa Berhasil dihapus');
+        return redirect()->route('rekam.detail', $pasienId)
+                ->with('sukses', 'Diagnosa Berhasil dihapus');
     }
 
     public function diagnosa(Request $request)

@@ -114,26 +114,12 @@
     <div class="col-xl-5 col-lg-5 col-md-12 mb-4">
         <div class="card" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
             <div class="card-body p-4">
-                <div class="d-flex align-items-center justify-content-between flex-wrap mb-3" style="gap: 10px;">
-                    <div class="d-flex align-items-center">
-                        <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-radius: 12px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 21px; flex-shrink: 0; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-w700 mb-1" style="font-size: 17px; color: #1e293b;">{{$pasien->nama}}</h4>
-                            <div class="text-muted font-w500" style="font-size: 12.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                <span style="color: #1e40af; font-weight: 600;">No. RM: {{ $pasien->no_rm }}</span>
-                                <span class="text-muted">&bull;</span>
-                                <span style="color: #64748b;">NIK: {{ $pasien->nik ?: '-' }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        @if ($rekamLatest)
-                            {!! $rekamLatest->status_display() !!}
-                        @else
-                            {!! $pasien->statusPasien() !!}
-                        @endif
+                <div class="mb-3">
+                    <h4 class="font-w700 mb-1" style="font-size: 17px; color: #1e293b;">{{$pasien->nama}}</h4>
+                    <div class="text-muted font-w500" style="font-size: 12.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <span style="color: #1e40af; font-weight: 600;">No. RM: {{ $pasien->no_rm }}</span>
+                        <span class="text-muted">&bull;</span>
+                        <span style="color: #64748b;">NIK: {{ $pasien->nik ?: '-' }}</span>
                     </div>
                 </div>
 
@@ -143,6 +129,17 @@
                         $now = \Carbon\Carbon::now();
                         $usia = $b_day ? $b_day->diffInYears($now) . ' Tahun' : '-';
                     @endphp
+
+                    <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                        <span class="text-muted"><i class="fa-solid fa-circle-dot mr-2 text-primary"></i>Status</span>
+                        <div>
+                            @if ($rekamLatest)
+                                {!! $rekamLatest->status_display() !!}
+                            @else
+                                {!! $pasien->statusPasien() !!}
+                            @endif
+                        </div>
+                    </div>
 
                     <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
                         <span class="text-muted"><i class="fa-solid fa-id-card mr-2 text-primary"></i>No. Rekam Medis (RM)</span>
@@ -360,9 +357,6 @@
                             <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
                                 {{ \Carbon\Carbon::parse($activeRekam->tgl_rekam)->translatedFormat('l, d F Y') }}
                             </span>
-                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
-                                No. Registrasi: <span class="text-primary font-w600">{{ $activeRekam->no_rekam }}</span>
-                            </small>
                         </div>
                     </div>
 
@@ -487,14 +481,16 @@
                                         Monitoring perkembangan instrumen standar (GMFM-88, Skala Denver II, VAS Nyeri, ADL) dari asesmen baseline hingga re-evaluasi berkala.
                                     </p>
                                 </div>
-                                @if($rekamLatest && !$rekamLatest->assessment)
-                                    <a href="{{ Route('rekam.assessment', $rekamLatest->id) }}" class="btn btn-sm btn-primary shadow-sm font-w600" style="font-size: 12px; padding: 6px 14px; border-radius: 6px;">
-                                        <i class="fa-solid fa-clipboard-check mr-1"></i> Isi Asesmen Sesi Aktif Ini
-                                    </a>
-                                @elseif($rekamLatest && $rekamLatest->assessment)
-                                    <a href="{{ Route('rekam.assessment', $rekamLatest->id) }}" class="btn btn-sm btn-outline-primary font-w600" style="font-size: 12px; padding: 6px 14px; border-radius: 6px;">
-                                        <i class="fa-solid fa-pencil mr-1"></i> Edit Asesmen Sesi Ini
-                                    </a>
+                                @if(in_array(auth()->user()->role_display(), ['Admin', 'Dokter']))
+                                    @if($rekamLatest && !$rekamLatest->assessment)
+                                        <a href="{{ Route('rekam.assessment', $rekamLatest->id) }}" class="btn btn-sm btn-primary shadow-sm font-w600" style="font-size: 12px; padding: 6px 14px; border-radius: 6px;">
+                                            <i class="fa-solid fa-clipboard-check mr-1"></i> Isi Asesmen Sesi Aktif Ini
+                                        </a>
+                                    @elseif($rekamLatest && $rekamLatest->assessment)
+                                        <a href="{{ Route('rekam.assessment', $rekamLatest->id) }}" class="btn btn-sm btn-outline-primary font-w600" style="font-size: 12px; padding: 6px 14px; border-radius: 6px;">
+                                            <i class="fa-solid fa-pencil mr-1"></i> Edit Asesmen Sesi Ini
+                                        </a>
+                                    @endif
                                 @endif
                             </div>
 
@@ -598,7 +594,6 @@
                                                 <td class="text-center font-w600" style="vertical-align: middle;">{{ $aIdx + 1 }}</td>
                                                 <td style="vertical-align: top;">
                                                     <strong class="text-primary">{{ $aRow->tgl_assessment ? \Carbon\Carbon::parse($aRow->tgl_assessment)->format('d/m/Y') : '-' }}</strong>
-                                                    <br><small class="text-muted">REG# {{ $aRow->rekam ? $aRow->rekam->no_rekam : '-' }}</small>
                                                 </td>
                                                 <td style="vertical-align: top;">
                                                     <strong style="color: #1e293b;">{{ $aRow->dokter->nama ?? '-' }}</strong>
@@ -1148,23 +1143,40 @@
         var cleanLatihan = tempDiv2.textContent || tempDiv2.innerText || "";
         $("#modalLatihanRumahanTextarea").val(cleanLatihan || latihanrumahan);
 
-        // Auto filter discipline if available
-        if (layanan.indexOf('fisio') !== -1) {
-            $('.btn-filter-tindakan[data-target-discipline="fisioterapi"]').trigger('click');
-        } else if (layanan.indexOf('okupasi') !== -1) {
-            $('.btn-filter-tindakan[data-target-discipline="okupasi"]').trigger('click');
-        } else if (layanan.indexOf('wicara') !== -1) {
-            $('.btn-filter-tindakan[data-target-discipline="wicara"]').trigger('click');
-        } else if (layanan.indexOf('netra') !== -1) {
-            $('.btn-filter-tindakan[data-target-discipline="netra"]').trigger('click');
-        } else {
-            $('.btn-filter-tindakan[data-target-discipline="all"]').trigger('click');
-        }
+        // Selalu default aktifkan filter "Semua" tindakan saat modal dibuka
+        $(".btn-filter-tindakan").removeClass("active").css({
+            "background": "#ffffff",
+            "color": "#1e40af",
+            "border-color": "#bfdbfe"
+        });
+        $('.btn-filter-tindakan[data-target-discipline="all"]').addClass("active").css({
+            "background": "#2563eb",
+            "color": "#ffffff",
+            "border-color": "#2563eb"
+        });
+        $("#searchTindakanModal").val("");
+        $(".tdk-chip-item").show();
     });
 
     // Handler Filter Kategori Tindakan
     $(document).on("click", ".btn-filter-tindakan", function () {
         var disc = $(this).data('target-discipline');
+        
+        // Update styling tombol aktif secara dinamis
+        $(".btn-filter-tindakan").removeClass("active").css({
+            "background": "#ffffff",
+            "color": "#1e40af",
+            "border-color": "#bfdbfe"
+        });
+        $(this).addClass("active").css({
+            "background": "#2563eb",
+            "color": "#ffffff",
+            "border-color": "#2563eb"
+        });
+
+        // Reset search input jika ada
+        $("#searchTindakanModal").val("");
+
         if (disc === 'all') {
             $(".tdk-chip-item").show();
         } else {

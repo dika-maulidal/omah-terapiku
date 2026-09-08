@@ -253,6 +253,213 @@ class DashboardQuery
         ];
     }
 
+    public function getTopKeluhanTerbanyak($limit = 5, $periode = 'bulan')
+    {
+        $user = auth()->user();
+        $role = $user ? $user->role_display() : '';
+        $dokterId = null;
+        if ($role == "Dokter") {
+            $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
+            $dokterId = $dokter ? $dokter->id : null;
+        }
+
+        $query = Rekam::whereNotNull('keluhan')
+            ->where('keluhan', '!=', '')
+            ->when($dokterId, function ($q) use ($dokterId) {
+                $q->where('rekam.dokter_id', $dokterId);
+            });
+
+        $this->scopeUpt($query);
+
+        if ($periode === 'bulan') {
+            $query->whereYear('rekam.tgl_rekam', date('Y'))
+                  ->whereMonth('rekam.tgl_rekam', date('m'));
+        } elseif ($periode === 'tahun') {
+            $query->whereYear('rekam.tgl_rekam', date('Y'));
+        }
+
+        $rawTexts = $query->pluck('keluhan');
+
+        $stopWords = [
+            'dan', 'yang', 'di', 'ke', 'dari', 'pada', 'untuk', 'dengan', 'ini', 'itu', 
+            'ada', 'karena', 'oleh', 'saat', 'atau', 'agar', 'supaya', 'akan', 'telah', 
+            'sedang', 'bisa', 'dapat', 'sudah', 'belum', 'anak', 'pasien', 'an', 'an.', 
+            'tn', 'ny', 'ananda', 'orang', 'tua', 'ibu', 'ayah', 'keluhan', 'mengalami', 
+            'sering', 'merasa', 'kondisi', 'fisik', 'anamnesa', 'awal', 'penerima', 
+            'manfaat', 'terapi', 'kali', 'hari', 'bulan', 'tahun', 'usia', 'umur', 
+            'sejak', 'lama', 'kurang', 'sangat', 'agak', 'masih', 'tidak', 'mau', 
+            'suka', 'hanya', 'juga', 'lain', 'lainnya', 'dll', 'dsb', 'dsb.', 'spt', 
+            'seperti', 'yaitu', 'yakni', 'dg', 'dgn', 'yg', 'tdk', 'blm', 'sdh', 'trs', 
+            'terus', 'bila', 'ketika', 'kalau', 'jika', 'kemudian', 'lalu', 'selalu', 
+            'tampak', 'terlihat', 'mulai', 'datang', 'rujukan', 'hasil', 'pemeriksaan', 
+            'adanya', 'secara', 'bagian', 'kedua', 'kiri', 'kanan', 'atas', 'bawah',
+            'oleh', 'atas', 'bawah', 'setiap', 'bahkan', 'namun', 'tetapi', 'walau'
+        ];
+
+        $keyPhrases = [
+            'speech delay' => 'Speech Delay',
+            'belum bicara' => 'Belum Bisa Bicara',
+            'terlambat bicara' => 'Terlambat Bicara',
+            'telat bicara' => 'Terlambat Bicara',
+            'belum bisa bicara' => 'Belum Bisa Bicara',
+            'belum jalan' => 'Belum Bisa Jalan',
+            'belum bisa jalan' => 'Belum Bisa Jalan',
+            'kaki jinjit' => 'Kaki Jinjit (Toe Walking)',
+            'jalan jinjit' => 'Kaki Jinjit (Toe Walking)',
+            'kaku otot' => 'Kaku Otot (Spastisitas)',
+            'otot kaku' => 'Kaku Otot',
+            'kontak mata' => 'Kontak Mata Kurang',
+            'kurang kontak mata' => 'Kontak Mata Kurang',
+            'sulit fokus' => 'Sulit Fokus / Konsentrasi',
+            'kurang fokus' => 'Kurang Fokus',
+            'motorik kasar' => 'Gangguan Motorik Kasar',
+            'motorik halus' => 'Gangguan Motorik Halus',
+            'nyeri sendi' => 'Nyeri Sendi',
+            'nyeri lutut' => 'Nyeri Lutut',
+            'down syndrome' => 'Down Syndrome',
+            'cerebral palsy' => 'Cerebral Palsy',
+            'sensori integrasi' => 'Sensori Integrasi',
+            'sulit makan' => 'Sulit Makan / Menelan',
+            'susah makan' => 'Sulit Makan',
+            'belum merangkak' => 'Belum Merangkak',
+            'belum bisa merangkak' => 'Belum Merangkak',
+            'belum duduk' => 'Belum Bisa Duduk',
+            'belum bisa duduk' => 'Belum Bisa Duduk',
+            'belum tengkurap' => 'Belum Tengkurap',
+            'gangguan postur' => 'Gangguan Postur Tubuh',
+            'gangguan keseimbangan' => 'Gangguan Keseimbangan',
+            'susah konsentrasi' => 'Kurang Fokus',
+            'terapi wicara' => 'Kebutuhan Terapi Wicara',
+            'terapi fisik' => 'Kebutuhan Fisioterapi',
+            'okupasi terapi' => 'Kebutuhan Okupasi Terapi'
+        ];
+
+        $canonicalWords = [
+            'wicara' => 'Gangguan Wicara',
+            'bicara' => 'Keterlambatan Bicara',
+            'jalan' => 'Belum / Gangguan Berjalan',
+            'berjalan' => 'Belum / Gangguan Berjalan',
+            'motorik' => 'Gangguan Motorik',
+            'duduk' => 'Belum Bisa Duduk',
+            'merangkak' => 'Belum Bisa Merangkak',
+            'berdiri' => 'Belum Bisa Berdiri',
+            'tengkurap' => 'Belum Bisa Tengkurap',
+            'kaku' => 'Kaku Otot (Spastik)',
+            'kejang' => 'Riwayat Kejang',
+            'tantrum' => 'Tantrum / Emosi',
+            'hiperaktif' => 'Hiperaktif',
+            'fokus' => 'Kurang Fokus / Konsentrasi',
+            'sensoris' => 'Gangguan Sensoris',
+            'sensori' => 'Gangguan Sensoris',
+            'lutut' => 'Nyeri / Masalah Lutut',
+            'sendi' => 'Nyeri Sendi',
+            'tangan' => 'Kelemahan Gerak Tangan',
+            'kaki' => 'Kelemahan Gerak Kaki',
+            'postur' => 'Gangguan Postur Tubuh',
+            'keseimbangan' => 'Gangguan Keseimbangan',
+            'menelan' => 'Sulit Menelan (Disfagia)',
+            'mengunyah' => 'Sulit Mengunyah',
+            'drooling' => 'Drooling (Ngeces)',
+            'ngeces' => 'Drooling (Ngeces)',
+            'lemas' => 'Hipotoni / Otot Lemas',
+            'hipotonus' => 'Hipotoni / Otot Lemas',
+            'hipotoni' => 'Hipotoni / Otot Lemas',
+            'spastik' => 'Spastisitas Otot',
+            'spastisitas' => 'Spastisitas Otot',
+            'nyeri' => 'Keluhan Nyeri',
+            'ataksia' => 'Ataksia',
+            'tremor' => 'Tremor',
+            'adl' => 'Ketergantungan ADL',
+            'perilaku' => 'Gangguan Perilaku',
+            'komunikasi' => 'Hambatan Komunikasi',
+            'gait' => 'Pola Berjalan Abnormal',
+            'otot' => 'Kelemahan Otot',
+            'leher' => 'Kontrol Leher Lemah',
+            'kepala' => 'Kontrol Kepala Belum Tegak',
+            'genggam' => 'Genggaman Lemah',
+            'koordinasi' => 'Gangguan Koordinasi'
+        ];
+
+        $counts = [];
+
+        foreach ($rawTexts as $text) {
+            $lower = mb_strtolower(trim($text), 'UTF-8');
+            if (empty($lower)) continue;
+
+            // 1. Deteksi frasa klinis kunci lebih dulu
+            foreach ($keyPhrases as $needle => $label) {
+                if (strpos($lower, $needle) !== false) {
+                    $counts[$label] = ($counts[$label] ?? 0) + 1;
+                    $lower = str_replace($needle, ' ', $lower);
+                }
+            }
+
+            // 2. Tokenisasi kata-kata tunggal
+            $words = preg_split('/[\s,.;:!?\/()"\'+*\-_=]+/', $lower);
+            foreach ($words as $w) {
+                $w = trim($w);
+                if (mb_strlen($w, 'UTF-8') < 3 || is_numeric($w)) continue;
+                if (in_array($w, $stopWords)) continue;
+
+                if (isset($canonicalWords[$w])) {
+                    $normWord = $canonicalWords[$w];
+                } else {
+                    $normWord = ucfirst($w);
+                }
+
+                $counts[$normWord] = ($counts[$normWord] ?? 0) + 1;
+            }
+        }
+
+        arsort($counts);
+
+        $palette = ['#1e40af', '#2563eb', '#3b82f6', '#60a5fa', '#38bdf8', '#0284c7', '#059669', '#10b981', '#7c3aed', '#6366f1'];
+        $items = [];
+        $wordcloudList = [];
+        $totalKeluhan = 0;
+        $idx = 0;
+
+        foreach ($counts as $nama => $count) {
+            if ($idx >= $limit) break;
+            $totalKeluhan += $count;
+
+            $items[] = [
+                'nama' => $nama,
+                'total' => $count,
+                'color' => $palette[$idx % count($palette)]
+            ];
+
+            $wordcloudList[] = [$nama, $count];
+            $idx++;
+        }
+
+        $maxCount = !empty($items) ? max(array_column($items, 'total')) : 0;
+        foreach ($items as &$it) {
+            $it['persentase'] = $totalKeluhan > 0 ? round(($it['total'] / $totalKeluhan) * 100, 1) : 0;
+            $it['bar_persen'] = $maxCount > 0 ? round(($it['total'] / $maxCount) * 100, 1) : ($it['total'] > 0 ? 100 : 5);
+        }
+
+        return [
+            'items' => $items,
+            'wordcloud_list' => $wordcloudList,
+            'total' => $totalKeluhan,
+            'total_records' => $rawTexts->count(),
+            'unique_count' => count($counts),
+            'labels' => array_column($items, 'nama'),
+            'counts' => array_column($items, 'total'),
+            'colors' => array_column($items, 'color')
+        ];
+    }
+
+    public function getTopKeluhanAll($limit = 40)
+    {
+        return [
+            'bulan' => $this->getTopKeluhanTerbanyak($limit, 'bulan'),
+            'tahun' => $this->getTopKeluhanTerbanyak($limit, 'tahun'),
+            'semua' => $this->getTopKeluhanTerbanyak($limit, 'semua')
+        ];
+    }
+
     function rekam_day(){
         $user = auth()->user();
         $role = $user->role_display();

@@ -1,5 +1,79 @@
 @extends('layout.apps')
 
+@section('style')
+<style>
+    .ot-modal-content {
+        border-radius: 14px !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 14px 40px rgba(30, 64, 175, 0.12) !important;
+        overflow: hidden !important;
+    }
+    .ot-modal-header {
+        background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%) !important;
+        border-bottom: 1.5px solid #bfdbfe !important;
+        padding: 16px 22px !important;
+    }
+    .ot-modal-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2563eb;
+        font-size: 19px;
+        border: 1px solid #bfdbfe;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
+        flex-shrink: 0;
+    }
+    .ot-modal-title {
+        color: #1e40af !important;
+        font-weight: 700 !important;
+        font-size: 16px !important;
+        margin-bottom: 2px;
+    }
+    .ot-modal-subtitle {
+        color: #64748b !important;
+        font-size: 11.5px !important;
+        font-weight: 500 !important;
+    }
+    .ot-input-modern {
+        height: 44px !important;
+        font-size: 13px !important;
+        border-radius: 8px !important;
+        border: 1.5px solid #cbd5e1 !important;
+        color: #1e293b !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+    }
+    .ot-input-modern:focus {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15) !important;
+        outline: none !important;
+    }
+    .quick-tag-btn {
+        font-size: 11.5px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.15s ease;
+        border: 1px solid #bfdbfe;
+        background: #eff6ff;
+        color: #1d4ed8;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .quick-tag-btn:hover {
+        background: #dbeafe;
+        border-color: #93c5fd;
+        color: #1e40af;
+    }
+</style>
+@endsection
+
 @section('content')
 
 <!-- Header Section (Unified White Card) -->
@@ -31,16 +105,19 @@
 <!-- Modal Tambah Terapis Baru -->
 <div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-            <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important; background-color: #1e40af !important; padding: 16px 20px; border-bottom: none !important;">
-                <div>
-                    <h5 class="modal-title font-w700 text-white mb-0" style="font-size: 16px; color: #ffffff !important;">
-                        <i class="fa-solid fa-user-doctor mr-2 text-white"></i> Tambah Data Terapis Baru
-                    </h5>
-                    <small class="text-white" style="opacity: 0.85; color: #ffffff !important;">Daftarkan terapis dan akun login penanganan pasien</small>
+        <div class="modal-content ot-modal-content">
+            <div class="modal-header ot-modal-header d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div class="ot-modal-icon mr-3">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title ot-modal-title">Tambah Data Terapis Baru</h5>
+                        <small class="ot-modal-subtitle">Daftarkan terapis dan akun login penanganan pasien</small>
+                    </div>
                 </div>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; color: #ffffff !important;">
-                    <span aria-hidden="true" style="color: #ffffff !important;">&times;</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; color: #64748b; opacity: 0.8; transition: all 0.2s ease;">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body p-4 text-left" style="background: #ffffff;">
@@ -51,7 +128,7 @@
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                             Nama Lengkap Terapis <span class="text-danger">*</span>
                         </label>
-                        <input type="text" name="nama" required class="form-control" value="{{ old('nama') }}" placeholder="Contoh: dr. Ahmad Fauzi, Sp.KFR / Sdr. Budi Santoso, S.Tr.Kes" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                        <input type="text" name="nama" required class="form-control ot-input-modern" value="{{ old('nama') }}" placeholder="Contoh: dr. Ahmad Fauzi, Sp.KFR / Sdr. Budi Santoso, S.Tr.Kes">
                         @error('nama')
                             <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                         @enderror
@@ -61,7 +138,7 @@
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                             NIP / Nomor Registrasi Terapis
                         </label>
-                        <input type="text" name="nip" class="form-control" value="{{ old('nip') }}" placeholder="Contoh: 198902152014021001" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                        <input type="text" name="nip" class="form-control ot-input-modern" value="{{ old('nip') }}" placeholder="Contoh: 198902152014021001">
                         @error('nip')
                             <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                         @enderror
@@ -71,7 +148,7 @@
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                             Penempatan Omah Terapiku <span class="text-danger">*</span>
                         </label>
-                        <select name="poli" class="form-control" required style="height: 42px; font-size: 13px; border-radius: 8px;">
+                        <select name="poli" class="form-control ot-input-modern" required>
                             <option value="">-- Pilih Lokasi Omah Terapiku --</option>
                             @foreach ($poli as $item)
                                 <option value="{{$item->nama}}" {{ old('poli') == $item->nama ? 'selected' : '' }}>{{$item->nama}}</option>
@@ -86,7 +163,7 @@
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                             No. HP / WhatsApp (Login) <span class="text-danger">*</span>
                         </label>
-                        <input type="text" name="no_hp" required class="form-control" value="{{ old('no_hp') }}" placeholder="Contoh: 081234567890" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                        <input type="text" name="no_hp" required class="form-control ot-input-modern" value="{{ old('no_hp') }}" placeholder="Contoh: 081234567890">
                         <small class="text-muted" style="font-size: 11px;">Nomor ini digunakan juga sebagai identitas login terapis ke sistem.</small>
                         @error('no_hp')
                             <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
@@ -97,7 +174,7 @@
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                             Password Login <span class="text-danger">*</span>
                         </label>
-                        <input type="password" name="password" required class="form-control" placeholder="Minimal 4 karakter" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                        <input type="password" name="password" required class="form-control ot-input-modern" placeholder="Minimal 4 karakter">
                         @error('password')
                             <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                         @enderror
@@ -107,17 +184,17 @@
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                             Alamat Domisili / Keterangan Spesialisasi
                         </label>
-                        <textarea name="alamat" class="form-control" rows="3" placeholder="Alamat tinggal atau keterangan spesialisasi terapis..." style="font-size: 13px; border-radius: 8px;">{{ old('alamat') }}</textarea>
+                        <textarea name="alamat" class="form-control" rows="3" placeholder="Alamat tinggal atau keterangan spesialisasi terapis..." style="font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">{{ old('alamat') }}</textarea>
                         @error('alamat')
                             <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                         @enderror
                     </div>
                     
-                    <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top">
-                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
+                    <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top" style="margin: 0 -24px -24px -24px; padding: 14px 24px !important; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+                        <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; background: #ffffff;">
                             Batal
                         </button>
-                        <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 22px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                        <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 24px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);">
                             <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Terapis
                         </button>
                     </div>
@@ -207,20 +284,15 @@
                                             {{ $datas->firstItem() + $key }}
                                         </td>
                                         <td style="vertical-align: middle;">
-                                            <div class="d-flex align-items-center">
-                                                <div class="mr-2" style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; border: 1px solid #bfdbfe;">
-                                                    <i class="fa-solid fa-user-doctor"></i>
-                                                </div>
-                                                <div>
-                                                    <strong class="text-dark d-block" style="font-size: 13.5px; font-weight: 700;">
-                                                        {{$row->nama}}
-                                                    </strong>
-                                                    @if($row->alamat)
-                                                        <small class="text-muted d-block" style="font-size: 11.5px;">
-                                                            <i class="fa-solid fa-location-dot mr-1" style="font-size: 10px;"></i>{{$row->alamat}}
-                                                        </small>
-                                                    @endif
-                                                </div>
+                                            <div>
+                                                <strong class="text-dark d-block font-w700" style="font-size: 13.5px;">
+                                                    {{$row->nama}}
+                                                </strong>
+                                                @if($row->alamat)
+                                                    <small class="text-muted d-block" style="font-size: 11.5px;">
+                                                        <i class="fa-solid fa-location-dot mr-1" style="font-size: 10px;"></i>{{$row->alamat}}
+                                                    </small>
+                                                @endif
                                             </div>
                                         </td>
                                         <td style="vertical-align: middle;">
@@ -310,16 +382,19 @@
         <!-- Modal Ganti Password Login Terapis -->
         <div class="modal fade" id="key{{$row->user_id}}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-                    <div class="modal-header text-white" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important; background-color: #d97706 !important; padding: 16px 20px; border-bottom: none !important;">
-                        <div>
-                            <h5 class="modal-title font-w700 text-white mb-0" style="font-size: 16px; color: #ffffff !important;">
-                                <i class="fa-solid fa-key mr-2 text-white"></i> Ganti Password Akun Terapis
-                            </h5>
-                            <small class="text-white" style="opacity: 0.85; color: #ffffff !important;">Perbarui kata sandi untuk: {{$row->nama}}</small>
+                <div class="modal-content ot-modal-content">
+                    <div class="modal-header ot-modal-header d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="ot-modal-icon mr-3" style="color: #d97706; border-color: #fde68a; background: #fffbeb;">
+                                <i class="fa-solid fa-key"></i>
+                            </div>
+                            <div>
+                                <h5 class="modal-title ot-modal-title">Ganti Password Akun Terapis</h5>
+                                <small class="ot-modal-subtitle">Perbarui kata sandi untuk: {{$row->nama}}</small>
+                            </div>
                         </div>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; color: #ffffff !important;">
-                            <span aria-hidden="true" style="color: #ffffff !important;">&times;</span>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; color: #64748b; opacity: 0.8; transition: all 0.2s ease;">
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body p-4 text-left" style="background: #ffffff;">
@@ -330,7 +405,7 @@
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                                     Password Baru <span class="text-danger">*</span>
                                 </label>
-                                <input type="password" name="password" required class="form-control" placeholder="Minimal 6 karakter" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                                <input type="password" name="password" required class="form-control ot-input-modern" placeholder="Minimal 6 karakter">
                                 @error('password')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
@@ -340,17 +415,17 @@
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                                     Konfirmasi Password Baru <span class="text-danger">*</span>
                                 </label>
-                                <input type="password" name="password_konfirm" required class="form-control" placeholder="Ulangi password baru" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                                <input type="password" name="password_konfirm" required class="form-control ot-input-modern" placeholder="Ulangi password baru">
                                 @error('password_konfirm')
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                             </div>
                             
-                            <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top">
-                                <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
+                            <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top" style="margin: 0 -24px -24px -24px; padding: 14px 24px !important; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+                                <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; background: #ffffff;">
                                     Batal
                                 </button>
-                                <button type="submit" class="btn btn-sm btn-warning font-w700 text-white" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important; border: none !important; padding: 9px 22px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);">
+                                <button type="submit" class="btn btn-sm btn-warning font-w700 text-white" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important; border: none !important; padding: 9px 24px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);">
                                     <i class="fa-solid fa-key mr-1"></i> Update Password
                                 </button>
                             </div>
@@ -363,16 +438,19 @@
         <!-- Modal Edit Terapis -->
         <div class="modal fade" id="edit{{$row->id}}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-                    <div class="modal-header text-white" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important; background-color: #1e40af !important; padding: 16px 20px; border-bottom: none !important;">
-                        <div>
-                            <h5 class="modal-title font-w700 text-white mb-0" style="font-size: 16px; color: #ffffff !important;">
-                                <i class="fa-solid fa-pen-to-square mr-2 text-white"></i> Edit Data Terapis
-                            </h5>
-                            <small class="text-white" style="opacity: 0.85; color: #ffffff !important;">Perbarui rincian identitas dan penempatan terapis</small>
+                <div class="modal-content ot-modal-content">
+                    <div class="modal-header ot-modal-header d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="ot-modal-icon mr-3">
+                                <i class="fa-solid fa-user-pen"></i>
+                            </div>
+                            <div>
+                                <h5 class="modal-title ot-modal-title">Edit Data Terapis</h5>
+                                <small class="ot-modal-subtitle">Perbarui rincian identitas dan penempatan terapis</small>
+                            </div>
                         </div>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; color: #ffffff !important;">
-                            <span aria-hidden="true" style="color: #ffffff !important;">&times;</span>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; color: #64748b; opacity: 0.8; transition: all 0.2s ease;">
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body p-4 text-left" style="background: #ffffff;">
@@ -383,21 +461,21 @@
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                                     Nama Lengkap Terapis <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" name="nama" value="{{$row->nama}}" required class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                                <input type="text" name="nama" value="{{$row->nama}}" required class="form-control ot-input-modern">
                             </div>
 
                             <div class="form-group mb-3">
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                                     NIP / Nomor Registrasi
                                 </label>
-                                <input type="text" name="nip" value="{{$row->user->nip ?? ''}}" class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                                <input type="text" name="nip" value="{{$row->user->nip ?? ''}}" class="form-control ot-input-modern">
                             </div>
 
                             <div class="form-group mb-3">
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                                     Penempatan Omah Terapiku <span class="text-danger">*</span>
                                 </label>
-                                <select name="poli" class="form-control" required style="height: 42px; font-size: 13px; border-radius: 8px;">
+                                <select name="poli" class="form-control ot-input-modern" required>
                                     @foreach ($poli as $item)
                                         <option value="{{$item->nama}}" {{ $item->nama == $row->poli ? 'selected' : '' }}>{{$item->nama}}</option>
                                     @endforeach
@@ -408,14 +486,14 @@
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                                     No. HP / WhatsApp (Login) <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" name="no_hp" required class="form-control" value="{{$row->no_hp}}" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                                <input type="text" name="no_hp" required class="form-control ot-input-modern" value="{{$row->no_hp}}">
                             </div>
 
                             <div class="form-group mb-3">
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                                     Password Baru (Opsional)
                                 </label>
-                                <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ingin mengubah password" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                                <input type="password" name="password" class="form-control ot-input-modern" placeholder="Kosongkan jika tidak ingin mengubah password">
                                 <small class="text-muted" style="font-size: 11px;">Isi hanya jika ingin memperbarui kata sandi akun terapis ini.</small>
                             </div>
                            
@@ -423,14 +501,14 @@
                                 <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
                                     Alamat Domisili / Keterangan Spesialisasi
                                 </label>
-                                <textarea name="alamat" class="form-control" rows="3" style="font-size: 13px; border-radius: 8px;">{{$row->alamat}}</textarea>
+                                <textarea name="alamat" class="form-control" rows="3" style="font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">{{$row->alamat}}</textarea>
                             </div>
                             
-                            <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top">
-                                <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
+                            <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top" style="margin: 0 -24px -24px -24px; padding: 14px 24px !important; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+                                <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; background: #ffffff;">
                                     Batal
                                 </button>
-                                <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 22px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                                <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 24px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);">
                                     <i class="fa-solid fa-floppy-disk mr-1"></i> Update Data
                                 </button>
                             </div>
