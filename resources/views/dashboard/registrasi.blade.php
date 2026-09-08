@@ -1,6 +1,23 @@
 @inject('query', 'App\Models\DashboardQuery')
 
 @extends('layout.apps')
+
+@section('style')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<style>
+    .leaflet-popup-content-wrapper {
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        border: 1px solid #e2e8f0;
+    }
+    .leaflet-popup-content {
+        margin: 12px 14px;
+        line-height: 1.4;
+    }
+</style>
+@endsection
+
 @section('content')
     @php
         $hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][date('w')];
@@ -16,6 +33,7 @@
         $tren7Hari = $trenPelayananAll['7'];
         $pasienOmah = $query->getPasienPerOmahTerapiku();
         $demografi = $query->getDemografiPenerimaManfaat();
+        $sebaranWilayah = $query->getSebaranWilayahPenerimaManfaat();
         $distribusiTerapi = $query->getDistribusiJenisTerapi();
         $allTopTindakan = $query->getTopTindakanAll(5);
         $topTindakan = $allTopTindakan['bulan'];
@@ -628,6 +646,51 @@
         </div>
     </div>
 
+    <!-- =========================================================================
+         SECTION: SEBARAN GEOGRAFIS PENERIMA MANFAAT (PETA JAWA TIMUR)
+         ========================================================================= -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05); overflow: hidden;">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center py-3 px-4 bg-white" style="border-bottom: 1px solid #edf2f7; gap: 10px;">
+                    <div class="d-flex align-items-center">
+                        <div class="d-inline-flex align-items-center justify-content-center mr-3" style="width: 40px; height: 40px; border-radius: 10px; background: #eff6ff; color: #2563eb; font-size: 17px; border: 1px solid #dbeafe; flex-shrink: 0;">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </div>
+                        <div>
+                            <h4 class="fs-16 font-w700 mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
+                                Sebaran Geografis Penerima Manfaat
+                            </h4>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center" style="gap: 8px;">
+                        <span class="badge badge-primary light font-w700" style="font-size: 11.5px; padding: 7px 12px; border-radius: 8px; border: 1px solid #dbeafe;">
+                            <i class="fa-solid fa-location-dot mr-1 text-primary"></i> {{ count($sebaranWilayah['breakdown']) }} Kab/Kota Terdata
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-body p-3 p-md-4">
+                    <div style="position: relative;">
+                        <div id="dashboardMapJatim" style="height: 380px; width: 100%; border-radius: 10px; border: 1.5px solid #cbd5e1; box-shadow: inset 0 1px 3px rgba(0,0,0,0.06); z-index: 1;"></div>
+                        
+                        <!-- Map Legend -->
+                        <div class="d-flex flex-wrap align-items-center justify-content-between pt-2.5 mt-2 border-top" style="border-color: #f1f5f9; font-size: 11.5px;">
+                            <div class="d-flex align-items-center mb-1">
+                                <span style="width: 10px; height: 10px; border-radius: 50%; background: #2563eb; display: inline-block; margin-right: 6px;"></span>
+                                <span class="text-muted font-w600">Klaster Penerima Manfaat ({{ count($sebaranWilayah['breakdown']) }} Kab/Kota)</span>
+                            </div>
+                            <div class="text-muted font-w500">
+                                Total Penerima: <strong class="text-dark">{{ $sebaranWilayah['total'] }}</strong> Pasien
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content Row (2 Columns: Status Antrian & Pendaftaran Hari Ini) -->
     <div class="row mb-4">
         <!-- Kolom 1: Status Antrian Pasien -->
@@ -903,9 +966,62 @@
 @endsection
 
 @section('script')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="{{ asset('vendor/wordcloud2/wordcloud2.min.js') }}"></script>
 <script>
 $(document).ready(function() {
+    // 0. Inisialisasi Peta Sebaran Penerima Manfaat Jawa Timur (Khusus Penerima Manfaat, Tanpa Balai/UPT)
+    var dashPatientPoints = {!! json_encode($sebaranWilayah['map_points']) !!};
+    var dashMapJatim = null;
+
+    function initDashboardMapJatim() {
+        if ($('#dashboardMapJatim').length === 0) return;
+
+        dashMapJatim = L.map('dashboardMapJatim', {
+            center: [-7.70, 112.65],
+            zoom: 8,
+            scrollWheelZoom: false,
+            attributionControl: false
+        });
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 18,
+            subdomains: 'abcd',
+        }).addTo(dashMapJatim);
+
+        dashPatientPoints.forEach(function(p) {
+            var radius = Math.max(12, Math.min(32, p.total * 5));
+            var circle = L.circleMarker([p.lat, p.lng], {
+                radius: radius,
+                fillColor: '#2563eb',
+                fillOpacity: 0.65,
+                color: '#1d4ed8',
+                weight: 2
+            }).addTo(dashMapJatim);
+
+            circle.bindTooltip('<strong>' + p.nama + '</strong>: ' + p.total + ' Pasien (' + p.percentage + '%)', {
+                direction: 'top',
+                offset: [0, -8]
+            });
+
+            circle.bindPopup(`
+                <div style="font-size: 12px; min-width: 170px;">
+                    <span class="badge badge-primary text-white mb-1" style="font-size: 10px; padding: 3px 6px; background: #2563eb;">Domisili Penerima Manfaat</span>
+                    <strong style="color: #0f172a; display: block; font-size: 13px; font-weight: 700;">` + p.nama + `</strong>
+                    <div style="margin-top: 4px; font-size: 12px;">
+                        Total Penerima: <strong style="color: #2563eb; font-size: 13px;">` + p.total + ` Pasien</strong>
+                    </div>
+                    <div style="color: #64748b; font-size: 11px;">Proporsi: <strong>` + p.percentage + `%</strong> dari seluruh pasien</div>
+                </div>
+            `);
+        });
+
+        setTimeout(function() {
+            if (dashMapJatim) dashMapJatim.invalidateSize();
+        }, 300);
+    }
+
+    initDashboardMapJatim();
     var allYearsData = {!! json_encode($allYearsPasienData) !!};
     var bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
     var namaBulanLengkap = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];

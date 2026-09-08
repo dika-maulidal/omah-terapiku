@@ -2765,11 +2765,11 @@
                     <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
                         @php
                         $saved_denver_data = is_array($assessment->denver_data) ? $assessment->denver_data : [];
-                        $saved_denver_pass = old('denver_pass_count', $assessment->denver_pass_count ?? 0);
-                        $saved_denver_fail = old('denver_fail_count', $assessment->denver_fail_count ?? 0);
-                        $saved_denver_refusal = old('denver_refusal_count', $assessment->denver_refusal_count ?? 0);
-                        $saved_denver_no = old('denver_no_count', $assessment->denver_no_count ?? 0);
-                        $saved_denver_kesimpulan = old('denver_kesimpulan', $assessment->denver_kesimpulan ?? 'Belum Dinilai');
+                        $saved_denver_pass = old('denver_pass_count', $assessment->denver_pass_count ?? '');
+                        $saved_denver_fail = old('denver_fail_count', $assessment->denver_fail_count ?? '');
+                        $saved_denver_refusal = old('denver_refusal_count', $assessment->denver_refusal_count ?? '');
+                        $saved_denver_no = old('denver_no_count', $assessment->denver_no_count ?? '');
+                        $saved_denver_kesimpulan = old('denver_kesimpulan', $assessment->denver_kesimpulan ?? '');
 
                         $denver_sectors = config('denver.sectors', []);
                     @endphp
@@ -2784,16 +2784,16 @@
                                     </small>
                                     <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 8px;">
                                         <span class="badge px-3 py-2 font-w700" style="background: #10b981; color: white; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(16, 185, 129, 0.2);">
-                                            <i class="fa fa-check mr-1"></i> Pass (P): <strong id="denver-live-p">{{ $saved_denver_pass }}</strong>
+                                            <i class="fa fa-check mr-1"></i> Pass (P): <strong id="denver-live-p">{{ $saved_denver_pass ?: 0 }}</strong>
                                         </span>
                                         <span class="badge px-3 py-2 font-w700" style="background: #ef4444; color: white; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(239, 68, 68, 0.2);">
-                                            <i class="fa fa-times mr-1"></i> Fail (F): <strong id="denver-live-f">{{ $saved_denver_fail }}</strong>
+                                            <i class="fa fa-times mr-1"></i> Fail (F): <strong id="denver-live-f">{{ $saved_denver_fail ?: 0 }}</strong>
                                         </span>
                                         <span class="badge px-3 py-2 font-w700" style="background: #f59e0b; color: white; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(245, 158, 11, 0.2);">
-                                            <i class="fa fa-ban mr-1"></i> Refusal (R): <strong id="denver-live-r">{{ $saved_denver_refusal }}</strong>
+                                            <i class="fa fa-ban mr-1"></i> Refusal (R): <strong id="denver-live-r">{{ $saved_denver_refusal ?: 0 }}</strong>
                                         </span>
                                         <span class="badge px-3 py-2 font-w700" style="background: #64748b; color: white; font-size: 12px; border-radius: 6px;">
-                                            <i class="fa fa-minus-circle mr-1"></i> No Opp (NO): <strong id="denver-live-no">{{ $saved_denver_no }}</strong>
+                                            <i class="fa fa-minus-circle mr-1"></i> No Opp (NO): <strong id="denver-live-no">{{ $saved_denver_no ?: 0 }}</strong>
                                         </span>
                                     </div>
                                     <input type="hidden" name="denver_pass_count" id="input-denver-pass" value="{{ $saved_denver_pass }}">
@@ -4389,13 +4389,8 @@ function updateDenverLiveScore() {
     $('#denver-live-r').text(rCount);
     $('#denver-live-no').text(noCount);
 
-    $('#input-denver-pass').val(pCount);
-    $('#input-denver-fail').val(fCount);
-    $('#input-denver-refusal').val(rCount);
-    $('#input-denver-no').val(noCount);
-
     var totalTested = pCount + fCount + rCount + noCount;
-    var kesimpulan = 'Belum Dinilai';
+    var kesimpulan = '';
     var desc = 'Pilih status task (P/F/R/NO) di bawah untuk memicu kalkulasi.';
     var badgeStyle = 'background: #e2e8f0; color: #1e293b;';
 
@@ -4417,11 +4412,22 @@ function updateDenverLiveScore() {
             desc = 'Semua task perkembangan tercapai dengan baik sesuai kelompok usia anak.';
             badgeStyle = 'background: #10b981; color: white;';
         }
+
+        $('#input-denver-pass').val(pCount);
+        $('#input-denver-fail').val(fCount);
+        $('#input-denver-refusal').val(rCount);
+        $('#input-denver-no').val(noCount);
+        $('#input-denver-kesimpulan').val(kesimpulan);
+    } else {
+        $('#input-denver-pass').val('');
+        $('#input-denver-fail').val('');
+        $('#input-denver-refusal').val('');
+        $('#input-denver-no').val('');
+        $('#input-denver-kesimpulan').val('');
     }
 
-    $('#denver-live-badge-kesimpulan').text(kesimpulan).attr('style', 'font-size: 13px; border-radius: 6px; ' + badgeStyle);
+    $('#denver-live-badge-kesimpulan').text(kesimpulan || 'Belum Dinilai').attr('style', 'font-size: 13px; border-radius: 6px; ' + badgeStyle);
     $('#denver-live-desc-kesimpulan').text(desc);
-    $('#input-denver-kesimpulan').val(kesimpulan);
 }
 
 function togglePerencanaanLainnya() {

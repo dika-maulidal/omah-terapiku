@@ -5,20 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Eksekutif & Rekapitulasi Statistik Omah Terapi-KU - {{ $meta['periode_text'] }}</title>
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        /* Format Dokumen Pemerintahan Resmi (Standar Dinas Sosial Prov. Jatim) */
+        /* Format Dokumen Rekam Medis Standar Kedinasan (Monokrom / Hitam Putih Standar Reference PDF) */
         @page {
             size: A4 portrait;
-            margin: 12mm 15mm 15mm 15mm;
+            margin: 8mm 10mm 10mm 10mm;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body, table, input, select, textarea, button, .print-container, .print-toolbar {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Enforce Font Awesome icons font-family */
+        .fa, .fas, .far, .fab, .fa-solid, .fa-regular, .fa-brands, [class^="fa-"], [class*=" fa-"] {
+            font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands', 'FontAwesome' !important;
         }
 
         body {
             background-color: #e2e8f0;
             color: #000000;
-            font-family: 'Times New Roman', Times, serif, 'Segoe UI', Arial, sans-serif;
-            font-size: 10pt;
-            line-height: 1.35;
+            font-size: 8.5pt;
+            line-height: 1.3;
+            margin: 0;
+            padding: 0;
         }
 
         .print-toolbar {
@@ -28,16 +43,16 @@
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(8px);
             border-bottom: 1px solid #cbd5e1;
-            padding: 10px 20px;
+            padding: 8px 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif !important;
         }
 
         .print-container {
-            max-width: 850px;
-            margin: 20px auto 40px auto;
+            max-width: 820px;
+            margin: 15px auto 35px auto;
             background: #ffffff;
-            padding: 28px 36px;
+            padding: 22px 28px;
             border-radius: 4px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.12);
             color: #000000;
@@ -48,7 +63,7 @@
             width: 100%;
             border-collapse: collapse;
             border: none;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .kop-table td {
             border: none !important;
@@ -56,177 +71,189 @@
             vertical-align: middle;
         }
         .kop-logo {
-            max-width: 78px;
-            max-height: 78px;
+            max-width: 68px;
+            max-height: 68px;
             object-fit: contain;
         }
         .kop-instansi {
-            font-size: 13pt;
+            font-size: 10.5pt;
             font-weight: bold;
             text-transform: uppercase;
             color: #000000;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             line-height: 1.2;
         }
         .kop-dinas {
-            font-size: 14pt;
-            font-weight: bold;
+            font-size: 13pt;
+            font-weight: 800;
             text-transform: uppercase;
             color: #000000;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             line-height: 1.2;
         }
         .kop-unit {
-            font-size: 12pt;
+            font-size: 10.5pt;
             font-weight: bold;
+            text-transform: uppercase;
             color: #000000;
-            margin-top: 1px;
+            line-height: 1.2;
         }
         .kop-sub {
-            font-size: 8.5pt;
+            font-size: 8pt;
             color: #000000;
-            margin-top: 2px;
             line-height: 1.25;
+            margin-top: 1px;
         }
         .kop-line {
-            border-bottom: 3px double #000000;
-            margin-top: 5px;
-            margin-bottom: 14px;
-        }
-
-        /* Judul Dokumen */
-        .doc-title {
-            text-align: center;
-            font-size: 12.5pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
-            color: #000000;
-        }
-        .doc-subtitle {
-            text-align: center;
-            font-size: 10pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #000000;
-            margin-bottom: 3px;
-        }
-        .doc-meta {
-            text-align: center;
-            font-size: 9.5pt;
-            color: #000000;
-            margin-bottom: 14px;
+            border-top: 2px solid #000000;
             border-bottom: 1px solid #000000;
-            padding-bottom: 6px;
-        }
-
-        /* Section Styling */
-        .section-header {
-            font-size: 10pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            background-color: #f1f5f9;
-            border-top: 1px solid #000000;
-            border-bottom: 1px solid #000000;
-            padding: 4px 8px;
-            margin-top: 14px;
+            height: 3px;
+            margin-top: 4px;
             margin-bottom: 8px;
-            color: #000000;
         }
 
-        /* Tabel Standar Dinas */
+        /* Header Box Table (Matching Reference PDF) */
+        .header-box-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
+        .header-box-table td {
+            border: 1.5px solid #000000 !important;
+        }
+
+        /* Section Title (Hitam Putih / Formal) */
+        .section-title {
+            background-color: #efefef !important;
+            color: #000000;
+            font-weight: bold;
+            font-size: 8.5pt;
+            padding: 3px 6px;
+            margin-top: 8px;
+            margin-bottom: 4px;
+            border: 1px solid #000000;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        /* Tabel Data Standar Kedinasan */
         .table-data {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
-            font-size: 9pt;
-        }
-        .table-data th {
-            border: 1px solid #000000;
-            padding: 5px 6px;
-            font-weight: bold;
-            text-align: center;
-            background-color: #f8fafc;
-            color: #000000;
-            text-transform: uppercase;
+            margin-bottom: 6px;
             font-size: 8.5pt;
         }
+        .table-data th, 
         .table-data td {
-            border: 1px solid #000000;
-            padding: 4px 6px;
-            vertical-align: middle;
+            border: 1px solid #000000 !important;
+            padding: 3px 5px;
             color: #000000;
+            vertical-align: middle;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        .table-data th {
+            background-color: #e8e8e8 !important;
+            font-weight: bold;
+            text-align: left;
+            color: #000000;
+            text-transform: uppercase;
+            font-size: 8pt;
+        }
+        .table-data tr {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        thead {
+            display: table-header-group !important;
+        }
+        tfoot {
+            display: table-footer-group !important;
         }
 
-        /* Ringkasan Angka Matriks */
+        /* KPI Matrix Cards */
         .kpi-matrix {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
         .kpi-matrix td {
             border: 1px solid #000000;
-            padding: 6px 8px;
+            padding: 5px 6px;
             text-align: center;
             vertical-align: middle;
+            background: #ffffff;
         }
         .kpi-matrix-val {
-            font-size: 14pt;
-            font-weight: bold;
+            font-size: 13pt;
+            font-weight: 800;
             color: #000000;
             display: block;
+            line-height: 1.2;
         }
         .kpi-matrix-lbl {
             font-size: 8pt;
             text-transform: uppercase;
             font-weight: bold;
-            color: #334155;
+            color: #1e293b;
             display: block;
+            margin-top: 1px;
         }
 
         /* Tanda Tangan */
         .ttd-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 24px;
-            page-break-inside: avoid;
+            margin-top: 14px;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            font-size: 8.5pt;
         }
         .ttd-table td {
             border: none !important;
-            padding: 2px 10px;
+            padding: 2px 8px;
             text-align: center;
             vertical-align: top;
-            font-size: 9.5pt;
         }
 
-        .no-break {
-            page-break-inside: avoid;
+        /* Anti-potong / Anti-crop Classes untuk Print & PDF */
+        .no-break, .print-block, .ttd-table, .kop-table, .header-box-table, .kpi-matrix {
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
         }
 
         @media print {
             body {
                 background: #ffffff !important;
                 color: #000000 !important;
-                font-size: 9.5pt !important;
+                font-size: 8.5pt !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .print-container {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
             }
             .print-toolbar {
                 display: none !important;
             }
-            .print-container {
-                margin: 0 !important;
-                padding: 0 !important;
-                max-width: 100% !important;
-                box-shadow: none !important;
-                border: none !important;
+            .no-print {
+                display: none !important;
             }
-            .section-header {
-                background-color: #f1f5f9 !important;
+            .table-data th {
+                background-color: #e8e8e8 !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            .table-data th {
-                background-color: #f1f5f9 !important;
+            .section-title {
+                background-color: #efefef !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -235,18 +262,42 @@
 </head>
 <body>
 
+@php
+    $pathLogoOmah = public_path('images/logo.png');
+    if (!file_exists($pathLogoOmah)) {
+        $pathLogoOmah = public_path('images/logo-blue.png');
+    }
+    $logoOmahBase64 = file_exists($pathLogoOmah) 
+        ? 'data:image/png;base64,' . base64_encode(file_get_contents($pathLogoOmah)) 
+        : asset('images/logo.png');
+
+    $pathLogoDinsos = public_path('images/logo-dinsos.png');
+    if (!file_exists($pathLogoDinsos)) {
+        $pathLogoDinsos = public_path('images/dinsos.png');
+    }
+    $logoDinsosBase64 = file_exists($pathLogoDinsos) 
+        ? 'data:image/png;base64,' . base64_encode(file_get_contents($pathLogoDinsos)) 
+        : asset('images/logo-dinsos.png');
+@endphp
+
 <!-- TOOLBAR ATAS (HANYA MUNCUL DI LAYAR BROWSER) -->
 <div class="print-toolbar no-print">
-    <div class="d-flex align-items-center justify-content-between max-w-7xl mx-auto" style="max-width: 850px;">
-        <div class="d-flex align-items-center">
-            <span class="badge badge-primary mr-2" style="font-size: 11px; padding: 4px 8px; background: #2563eb;">PDF Preview</span>
-            <strong class="text-dark" style="font-size: 13px;">Laporan Eksekutif & Statistik Dinas Sosial Provinsi Jawa Timur</strong>
+    <div class="container-fluid d-flex flex-wrap align-items-center justify-content-between" style="max-width: 820px; gap: 8px; padding: 0;">
+        <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
+            <span class="badge badge-dark" style="font-size: 11px; padding: 4px 8px; background: #0f172a; color: #fff; font-weight: bold;">
+                <i class="fa-solid fa-chart-pie mr-1"></i> LAPORAN EKSEKUTIF
+            </span>
+            <strong style="color: #0f172a; font-size: 12.5px;">Dinas Sosial Provinsi Jawa Timur</strong>
+            <span class="text-muted" style="font-size: 11.5px;">&bull; Periode: {{ $meta['periode_text'] }}</span>
         </div>
-        <div class="d-flex align-items-center" style="gap: 8px;">
-            <button type="button" class="btn btn-sm btn-primary font-w700" onclick="window.print()" style="background: #2563eb; border-color: #2563eb;">
-                <i class="fa-solid fa-print mr-1"></i> Cetak Dokumen / Simpan PDF
+        <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
+            <button type="button" class="btn btn-sm btn-dark font-w700" onclick="triggerPrintDialog()" style="padding: 5px 12px; font-size: 11.5px; border-radius: 4px; background: #0f172a; border: none; color: #fff;">
+                <i class="fa-solid fa-print mr-1"></i> Cetak / Simpan PDF
             </button>
-            <a href="{{ route('laporan.eksekutif', request()->all()) }}" class="btn btn-sm btn-light font-w600" style="border: 1px solid #cbd5e1;">
+            <button type="button" id="btnDownloadPdf" onclick="downloadPDF()" class="btn btn-sm btn-primary font-w700 text-white" style="padding: 5px 12px; font-size: 11.5px; border-radius: 4px; background: #2563eb; border: none;">
+                <i class="fa-solid fa-download mr-1"></i> Unduh PDF
+            </button>
+            <a href="{{ route('laporan.eksekutif', request()->all()) }}" class="btn btn-sm btn-light border font-w600" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; color: #334155;">
                 <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Dashboard
             </a>
         </div>
@@ -255,59 +306,87 @@
 
 <div class="print-container" id="print-area">
     
-    <!-- KOP SURAT RESMI PEMERINTAH PROVINSI JAWA TIMUR -->
+    <!-- =========================================================================
+         KOP SURAT RESMI PEMERINTAH PROVINSI JAWA TIMUR (LOGO GANDA BASE64)
+         ========================================================================= -->
     <table class="kop-table">
         <tr>
-            <td style="width: 80px; text-align: left; vertical-align: middle;">
+            <!-- Kiri: Logo Omah Terapi -->
+            <td style="width: 85px; text-align: left; vertical-align: middle;">
                 <img src="{{ $logoOmahBase64 }}" alt="Logo Omah Terapi" class="kop-logo">
             </td>
-            <td style="text-align: center; vertical-align: middle; padding: 0 6px;">
+            
+            <!-- Tengah: Teks Kop Surat Dinas Resmi -->
+            <td style="text-align: center; vertical-align: middle; padding: 0 8px;">
                 <div class="kop-instansi">PEMERINTAH PROVINSI JAWA TIMUR</div>
                 <div class="kop-dinas">DINAS SOSIAL</div>
                 <div class="kop-unit">OMAH TERAPI-KU JAWA TIMUR</div>
                 <div class="kop-sub">
-                    Pusat Pelayanan Terapi Inklusif Terpadu Disabilitas, ABK, Lansia, & ODGJ Jawa Timur<br>
-                    Cakupan Operasional: {{ $meta['upt_text'] }} &bull; Hari Pelayanan: Setiap Hari Rabu (08.00 - 13.00 WIB)<br>
-                    Website: omahterapiku.dinsos.jatimprov.go.id &bull; Hotline Layanan Gratis Pemprov Jatim
+                    Pusat Pelayanan Terapi Inklusif Terpadu Disabilitas, ABK, Lansia, &amp; ODGJ Jawa Timur
+                </div>
+                <div class="kop-sub" style="font-size: 8pt; color: #222;">
+                    Cakupan: {{ $meta['upt_text'] }} &bull; Hari Pelayanan: Setiap Hari Rabu (08.00 - 13.00 WIB) &bull; Hotline Layanan Gratis Dinsos Jatim
                 </div>
             </td>
-            <td style="width: 80px; text-align: right; vertical-align: middle;">
+            
+            <!-- Kanan: Logo Dinsos Jawa Timur -->
+            <td style="width: 85px; text-align: right; vertical-align: middle;">
                 <img src="{{ $logoDinsosBase64 }}" alt="Logo Dinsos Jawa Timur" class="kop-logo">
             </td>
         </tr>
     </table>
+
+    <!-- Garis Ganda Pembatas Kop Surat Resmi -->
     <div class="kop-line"></div>
 
-    <!-- JUDUL DOKUMEN LAPORAN RESMI -->
-    <div class="doc-title">LAPORAN EKSEKUTIF & REKAPITULASI STATISTIK PELAYANAN TERAPI</div>
-    <div class="doc-subtitle">PROGRAM OMAH TERAPI-KU DINAS SOSIAL PROVINSI JAWA TIMUR</div>
-    <div class="doc-meta">
-        <strong>Periode Laporan:</strong> {{ $meta['periode_text'] }} &bull; 
-        <strong>Cakupan:</strong> {{ $meta['upt_text'] }} &bull; 
-        <strong>Layanan:</strong> {{ $meta['layanan_text'] }}
-    </div>
+    <!-- Header Box Judul & Metadata Laporan (Format Sesuai Reference PDF) -->
+    <table class="table-data header-box-table" style="width: 100%; border-collapse: collapse; margin-bottom: 6px;">
+        <tr>
+            <td style="width: 58%; text-align: center; vertical-align: middle; border: 1.5px solid #000000 !important; padding: 6px 8px; background: #ffffff;">
+                <div style="font-size: 11.5pt; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">LAPORAN EKSEKUTIF &amp; REKAPITULASI STATISTIK</div>
+                <div style="font-size: 10pt; font-weight: bold; text-transform: uppercase; margin-top: 1px;">PELAYANAN REHABILITASI MEDIS &amp; TERAPI TERPADU</div>
+                <div style="font-size: 8pt; color: #333333; margin-top: 2px;">OMAH TERAPI-KU DINAS SOSIAL PROVINSI JAWA TIMUR</div>
+            </td>
+            <td style="width: 42%; border: 1.5px solid #000000 !important; padding: 0; vertical-align: top; background: #ffffff;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt;">
+                    <tr>
+                        <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px; font-weight: bold; width: 40%;">PERIODE</td>
+                        <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px; font-weight: 800; font-size: 9pt;">: {{ $meta['periode_text'] }}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px; font-weight: bold;">Cakupan UPT</td>
+                        <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px;">: {{ $meta['upt_text'] }}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: none !important; padding: 3px 6px; font-weight: bold;">Tgl. Cetak</td>
+                        <td style="border: none !important; padding: 3px 6px;">: {{ $tglCetakFormatted }}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 
     <!-- ========================================================================= -->
     <!-- 1. RINGKASAN EKSEKUTIF / CAPAIAN INDIKATOR UTAMA -->
     <!-- ========================================================================= -->
-    <div class="section-header">1. RINGKASAN EKSEKUTIF & CAPAIAN INDIKATOR UTAMA (IKU)</div>
+    <div class="section-title">1. RINGKASAN EKSEKUTIF &amp; CAPAIAN INDIKATOR UTAMA (IKU)</div>
     
     <table class="kpi-matrix no-break">
         <tr>
             <td style="width: 25%;">
                 <span class="kpi-matrix-val">{{ number_format($data['total_sesi'], 0, ',', '.') }}</span>
                 <span class="kpi-matrix-lbl">Total Sesi Terapi</span>
-                <small style="font-size: 7.5pt; color: #475569;">({{ $data['total_sesi_selesai'] }} Selesai &bull; {{ $data['total_sesi_proses'] }} On-going)</small>
+                <small style="font-size: 7.5pt; color: #475569;">({{ $data['total_sesi_selesai'] }} Selesai &bull; {{ $data['total_sesi_proses'] }} Proses)</small>
             </td>
             <td style="width: 25%;">
                 <span class="kpi-matrix-val">{{ number_format($data['total_pasien_terlayani'], 0, ',', '.') }}</span>
                 <span class="kpi-matrix-lbl">Penerima Manfaat</span>
-                <small style="font-size: 7.5pt; color: #475569;">({{ $data['total_pasien_baru'] }} Pasien Terdaftar Baru)</small>
+                <small style="font-size: 7.5pt; color: #475569;">({{ $data['total_pasien_baru'] }} Pasien Baru)</small>
             </td>
             <td style="width: 25%;">
                 <span class="kpi-matrix-val">{{ $data['avg_sesi_per_rabu'] }}</span>
                 <span class="kpi-matrix-lbl">Rata-Rata Sesi / Rabu</span>
-                <small style="font-size: 7.5pt; color: #475569;">(Total {{ $data['rabu_count'] }} Hari Pelayanan)</small>
+                <small style="font-size: 7.5pt; color: #475569;">({{ $data['rabu_count'] }} Hari Pelayanan)</small>
             </td>
             @php
                 $totalDesilPasien = array_sum($data['desil_breakdown']);
@@ -316,7 +395,7 @@
             @endphp
             <td style="width: 25%;">
                 <span class="kpi-matrix-val">{{ $desil12Pct }}%</span>
-                <span class="kpi-matrix-lbl">Prioritas Desil 1 & 2</span>
+                <span class="kpi-matrix-lbl">Prioritas Desil 1 &amp; 2</span>
                 <small style="font-size: 7.5pt; color: #475569;">({{ $desil12Count }} Pasien DTKS Terverifikasi)</small>
             </td>
         </tr>
@@ -325,16 +404,16 @@
     <!-- ========================================================================= -->
     <!-- 2. ANALISIS KETEPATAN SASARAN PENERIMA MANFAAT (DISTRIBUSI DESIL DTKS) -->
     <!-- ========================================================================= -->
-    <div class="section-header">2. ANALISIS KETEPATAN SASARAN PENERIMA MANFAAT (DISTRIBUSI DESIL DTKS / DTSEN)</div>
+    <div class="section-title">2. ANALISIS KETEPATAN SASARAN PENERIMA MANFAAT (DISTRIBUSI DESIL DTKS / DTSEN)</div>
     
     <table class="table-data no-break">
         <thead>
             <tr>
-                <th style="width: 40px;">No</th>
-                <th style="width: 140px; text-align: left;">Kategori Desil DTKS</th>
-                <th style="text-align: left;">Klasifikasi Status Sosial Ekonomi</th>
-                <th style="width: 100px;">Jumlah Pasien</th>
-                <th style="width: 90px;">Persentase</th>
+                <th style="width: 35px; text-align: center;">No</th>
+                <th style="width: 140px;">Kategori Desil DTKS</th>
+                <th>Klasifikasi Status Sosial Ekonomi</th>
+                <th style="width: 100px; text-align: center;">Jumlah Pasien</th>
+                <th style="width: 85px; text-align: center;">Persentase</th>
             </tr>
         </thead>
         <tbody>
@@ -361,7 +440,7 @@
                     <td style="text-align: center;"><strong>{{ $pct }}%</strong></td>
                 </tr>
             @endforeach
-            <tr style="background: #f8fafc; font-weight: bold;">
+            <tr style="background: #e8e8e8; font-weight: bold;">
                 <td colspan="3" style="text-align: right; text-transform: uppercase;">Total Penerima Manfaat Terverifikasi:</td>
                 <td style="text-align: center;">{{ $totalDesilPasien }} Orang</td>
                 <td style="text-align: center;">100.0%</td>
@@ -372,7 +451,7 @@
     <!-- ========================================================================= -->
     <!-- 3. RAGAM LAYANAN TERAPI & DEMOGRAFI PENERIMA MANFAAT -->
     <!-- ========================================================================= -->
-    <div class="section-header">3. DISTRIBUSI LAYANAN TERAPI & DEMOGRAFI PENERIMA MANFAAT</div>
+    <div class="section-title">3. DISTRIBUSI LAYANAN TERAPI &amp; DEMOGRAFI PENERIMA MANFAAT</div>
     
     <div class="row no-break">
         <!-- Kolom Kiri: Layanan Terapi -->
@@ -380,9 +459,9 @@
             <table class="table-data mb-0">
                 <thead>
                     <tr>
-                        <th style="text-align: left;">Ragam Layanan Terapi</th>
-                        <th style="width: 70px;">Total Sesi</th>
-                        <th style="width: 60px;">Proporsi</th>
+                        <th>Ragam Layanan Terapi</th>
+                        <th style="width: 75px; text-align: center;">Total Sesi</th>
+                        <th style="width: 65px; text-align: center;">Proporsi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -397,7 +476,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" style="text-align: center;">Tidak ada data.</td>
+                            <td colspan="3" style="text-align: center;">Tidak ada data layanan.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -409,9 +488,9 @@
             <table class="table-data mb-0">
                 <thead>
                     <tr>
-                        <th style="text-align: left;">Kelompok Usia & Gender</th>
-                        <th style="width: 70px;">Jumlah</th>
-                        <th style="width: 60px;">Keterangan</th>
+                        <th>Kelompok Usia &amp; Gender</th>
+                        <th style="width: 70px; text-align: center;">Jumlah</th>
+                        <th style="width: 75px; text-align: center;">Kategori</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -442,20 +521,77 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- 4. REKAPITULASI KONSOLIDASI PER UNIT PELAKSANA TEKNIS (UPT) -->
+    <!-- 4. SEBARAN GEOGRAFIS ASAL PENERIMA MANFAAT (KABUPATEN / KOTA) -->
     <!-- ========================================================================= -->
-    <div class="section-header">4. REKAPITULASI PELAYANAN PER UNIT PELAKSANA TEKNIS (UPT)</div>
+    <div class="section-title">4. SEBARAN GEOGRAFIS ASAL PENERIMA MANFAAT (KABUPATEN / KOTA)</div>
     
     <table class="table-data no-break">
         <thead>
             <tr>
-                <th style="width: 30px;">No</th>
-                <th style="text-align: left; width: 170px;">Nama UPT / Balai</th>
-                <th style="text-align: left;">Fokus Layanan & Hotline</th>
-                <th style="width: 70px;">Terapis</th>
-                <th style="width: 75px;">Pasien</th>
-                <th style="width: 75px;">Total Sesi</th>
-                <th style="width: 75px;">Selesai</th>
+                <th style="width: 35px; text-align: center;">No</th>
+                <th>Kabupaten / Kota Asal Domisili</th>
+                <th style="width: 120px; text-align: center;">Jumlah Pasien</th>
+                <th style="width: 85px; text-align: center;">Proporsi</th>
+                <th style="width: 230px;">Klasifikasi Jangkauan Wilayah</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php 
+                $noKab = 1;
+                $totalPasienWilayah = array_sum($data['wilayah_breakdown']);
+            @endphp
+            @forelse($data['wilayah_breakdown'] as $kabName => $kabTotal)
+                @php
+                    $pctKab = $totalPasienWilayah > 0 ? round(($kabTotal / $totalPasienWilayah) * 100, 1) : 0;
+                @endphp
+                <tr>
+                    <td style="text-align: center;">{{ $noKab++ }}</td>
+                    <td><strong>{{ $kabName }}</strong></td>
+                    <td style="text-align: center;"><strong>{{ $kabTotal }}</strong> Orang</td>
+                    <td style="text-align: center;"><strong>{{ $pctKab }}%</strong></td>
+                    <td>
+                        @if(stripos($kabName, 'Sidoarjo') !== false)
+                            Wilayah Inti Pelayanan (PPSAB &amp; RS PMKS Sidoarjo)
+                        @elseif(stripos($kabName, 'Malang') !== false)
+                            Wilayah Inti Pelayanan (UPT RSBN Malang)
+                        @elseif(stripos($kabName, 'Surabaya') !== false || stripos($kabName, 'Gresik') !== false || stripos($kabName, 'Pasuruan') !== false || stripos($kabName, 'Mojokerto') !== false)
+                            Kawasan Penyangga Aglomerasi Terdekat
+                        @else
+                            Rujukan Lintas Daerah Jawa Timur
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" style="text-align: center;">Tidak ada data domisili tercatat pada periode ini.</td>
+                </tr>
+            @endforelse
+            @if($totalPasienWilayah > 0)
+                <tr style="background: #e8e8e8; font-weight: bold;">
+                    <td colspan="2" style="text-align: right; text-transform: uppercase;">Total Penerima Manfaat Terdata:</td>
+                    <td style="text-align: center;">{{ $totalPasienWilayah }} Orang</td>
+                    <td style="text-align: center;">100.0%</td>
+                    <td>Tersebar di {{ count($data['wilayah_breakdown']) }} Kab/Kota Jawa Timur</td>
+                </tr>
+            @endif
+        </tbody>
+    </table>
+
+    <!-- ========================================================================= -->
+    <!-- 5. REKAPITULASI KONSOLIDASI PER UNIT PELAKSANA TEKNIS (UPT) -->
+    <!-- ========================================================================= -->
+    <div class="section-title">5. REKAPITULASI PELAYANAN PER UNIT PELAKSANA TEKNIS (UPT)</div>
+    
+    <table class="table-data no-break">
+        <thead>
+            <tr>
+                <th style="width: 30px; text-align: center;">No</th>
+                <th style="width: 170px;">Nama UPT / Balai</th>
+                <th>Fokus Layanan &amp; Hotline</th>
+                <th style="width: 65px; text-align: center;">Terapis</th>
+                <th style="width: 70px; text-align: center;">Pasien</th>
+                <th style="width: 70px; text-align: center;">Total Sesi</th>
+                <th style="width: 70px; text-align: center;">Selesai</th>
             </tr>
         </thead>
         <tbody>
@@ -476,7 +612,7 @@
                     <td style="text-align: center;"><strong>{{ $u['selesai_sesi'] }}</strong></td>
                 </tr>
             @endforeach
-            <tr style="background: #f8fafc; font-weight: bold;">
+            <tr style="background: #e8e8e8; font-weight: bold;">
                 <td colspan="3" style="text-align: right; text-transform: uppercase;">Total Konsolidasi Jawa Timur:</td>
                 <td style="text-align: center;">{{ array_sum(array_column($data['upt_rekap'], 'total_terapis')) }} Org</td>
                 <td style="text-align: center;">{{ $data['total_pasien_terlayani'] }} Org</td>
@@ -487,19 +623,19 @@
     </table>
 
     <!-- ========================================================================= -->
-    <!-- 5. UTILISASI & KINERJA TENAGA TERAPIS / MEDIS -->
+    <!-- 6. UTILISASI & KINERJA TENAGA TERAPIS / MEDIS -->
     <!-- ========================================================================= -->
-    <div class="section-header">5. REKAPITULASI KINERJA TENAGA TERAPIS & TENAGA MEDIS</div>
+    <div class="section-title">6. REKAPITULASI KINERJA TENAGA TERAPIS &amp; TENAGA MEDIS</div>
     
     <table class="table-data no-break">
         <thead>
             <tr>
-                <th style="width: 30px;">No</th>
-                <th style="text-align: left;">Nama Tenaga Terapis / Medis</th>
-                <th style="width: 140px; text-align: left;">NIP / No. Registrasi</th>
-                <th style="text-align: left; width: 160px;">Penempatan UPT</th>
-                <th style="width: 80px;">Sesi Dilayani</th>
-                <th style="width: 80px;">Sesi Selesai</th>
+                <th style="width: 30px; text-align: center;">No</th>
+                <th>Nama Tenaga Terapis / Medis</th>
+                <th style="width: 140px;">NIP / No. Registrasi</th>
+                <th style="width: 160px;">Penempatan UPT</th>
+                <th style="width: 80px; text-align: center;">Sesi Dilayani</th>
+                <th style="width: 80px; text-align: center;">Sesi Selesai</th>
             </tr>
         </thead>
         <tbody>
@@ -522,7 +658,7 @@
     </table>
 
     <!-- ========================================================================= -->
-    <!-- 6. LEMBAR PENGESAHAN RESMI DOKUMEN PEMERINTAH -->
+    <!-- 7. LEMBAR PENGESAHAN RESMI DOKUMEN PEMERINTAH -->
     <!-- ========================================================================= -->
     <table class="ttd-table no-break">
         <tr>
@@ -530,23 +666,88 @@
                 Mengetahui / Memeriksa,<br>
                 <strong>Penanggung Jawab Program Omah Terapi-KU</strong><br>
                 Dinas Sosial Provinsi Jawa Timur<br>
-                <div style="height: 65px;"></div>
-                <strong><u>dr. Hj. SITI AISYAH, Sp.KFR</u></strong><br>
-                NIP. 19780512 200604 2 008
+                <div style="height: 55px;"></div>
+                <strong style="text-decoration: underline;">dr. Hj. SITI AISYAH, Sp.KFR</strong><br>
+                <small style="font-size: 8pt; color: #333;">NIP. 19780512 200604 2 008</small>
             </td>
             <td style="width: 50%;">
                 Surabaya, {{ $tglCetakFormatted }}<br>
                 <strong>Kepala Dinas Sosial Provinsi Jawa Timur</strong><br>
                 <br>
-                <div style="height: 65px;"></div>
-                <strong><u>Dra. RESTU NOVI WIDIANI, M.M.</u></strong><br>
-                Pembina Utama Madya (Gol. IV/d)<br>
-                NIP. 19681109 199303 2 006
+                <div style="height: 55px;"></div>
+                <strong style="text-decoration: underline;">Dra. RESTU NOVI WIDIANI, M.M.</strong><br>
+                <small style="font-size: 8pt; color: #333;">Pembina Utama Madya (Gol. IV/d)<br>NIP. 19681109 199303 2 006</small>
             </td>
         </tr>
     </table>
 
 </div>
+
+<script>
+function triggerPrintDialog() {
+    window.print();
+}
+
+function downloadPDF() {
+    var element = document.getElementById('print-area');
+    var btnDownload = document.getElementById('btnDownloadPdf');
+    var originalText = btnDownload ? btnDownload.innerHTML : '';
+    
+    if (btnDownload) {
+        btnDownload.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Mengunduh PDF...';
+        btnDownload.disabled = true;
+    }
+
+    var cleanPeriode = "{{ preg_replace('/[^a-zA-Z0-9_-]/', '_', $meta['periode_text']) }}";
+    var opt = {
+        margin:       [8, 10, 10, 10],
+        filename:     'Laporan_Eksekutif_OmahTerapiKU_' + cleanPeriode + '.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { 
+            scale: 2, 
+            useCORS: true, 
+            logging: false,
+            letterRendering: true,
+            scrollY: 0
+        },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { 
+            mode: ['avoid-all', 'css', 'legacy'],
+            avoid: ['tr', 'tbody tr', '.section-title', '.table-data', '.kpi-matrix', '.ttd-table', '.no-break', '.print-block', '.header-box-table']
+        }
+    };
+
+    html2pdf().set(opt).from(element).save().then(function() {
+        if (btnDownload) {
+            btnDownload.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> Terunduh!';
+            btnDownload.disabled = false;
+            setTimeout(function() {
+                btnDownload.innerHTML = originalText;
+            }, 3000);
+        }
+    }).catch(function(err) {
+        console.error('PDF generation error:', err);
+        if (btnDownload) {
+            btnDownload.innerHTML = originalText;
+            btnDownload.disabled = false;
+        }
+        window.print();
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('download') === 'pdf') {
+        setTimeout(function() {
+            downloadPDF();
+        }, 600);
+    } else if (urlParams.get('auto_print') === '1') {
+        setTimeout(function() {
+            triggerPrintDialog();
+        }, 500);
+    }
+});
+</script>
 
 </body>
 </html>

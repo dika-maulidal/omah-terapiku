@@ -265,6 +265,115 @@ class LaporanController extends Controller
             arsort($disabilitasBreakdown);
         }
 
+        // 5b. Rekap Sebaran Geografis Asal Pasien (Kabupaten / Kota)
+        $wilayahBreakdown = [];
+        if (count($rekamPasienIds) > 0) {
+            $pasienWilayah = Pasien::whereIn('id', $rekamPasienIds)
+                ->select('kabupaten', DB::raw('count(*) as total'))
+                ->groupBy('kabupaten')
+                ->orderBy('total', 'desc')
+                ->get();
+
+            foreach ($pasienWilayah as $pw) {
+                $rawKab = trim((string)$pw->kabupaten);
+                if (empty($rawKab) || $rawKab === '-' || strtolower($rawKab) === 'null') {
+                    $kabLabel = 'Belum Terdata / Luar Wilayah';
+                } else {
+                    $kabLabel = $rawKab;
+                }
+                if (!isset($wilayahBreakdown[$kabLabel])) {
+                    $wilayahBreakdown[$kabLabel] = 0;
+                }
+                $wilayahBreakdown[$kabLabel] += $pw->total;
+            }
+            arsort($wilayahBreakdown);
+        }
+
+        // 5c. Koordinat Wilayah Jawa Timur & Titik Balai untuk Peta Interaktif
+        $coordsJatim = [
+            'sidoarjo' => ['lat' => -7.4478, 'lng' => 112.7183],
+            'surabaya' => ['lat' => -7.2575, 'lng' => 112.7521],
+            'malang' => ['lat' => -7.9666, 'lng' => 112.6326],
+            'pasuruan' => ['lat' => -7.6453, 'lng' => 112.9075],
+            'mojokerto' => ['lat' => -7.4722, 'lng' => 112.4384],
+            'gresik' => ['lat' => -7.1566, 'lng' => 112.6555],
+            'jombang' => ['lat' => -7.5468, 'lng' => 112.2331],
+            'lamongan' => ['lat' => -7.1206, 'lng' => 112.4158],
+            'probolinggo' => ['lat' => -7.7543, 'lng' => 113.2159],
+            'lumajang' => ['lat' => -8.1331, 'lng' => 113.2248],
+            'jember' => ['lat' => -8.1724, 'lng' => 113.7007],
+            'banyuwangi' => ['lat' => -8.2192, 'lng' => 114.3692],
+            'bondowoso' => ['lat' => -7.9135, 'lng' => 113.8214],
+            'situbondo' => ['lat' => -7.7061, 'lng' => 114.0097],
+            'kediri' => ['lat' => -7.8480, 'lng' => 112.0178],
+            'blitar' => ['lat' => -8.0983, 'lng' => 112.1681],
+            'tulungagung' => ['lat' => -8.0667, 'lng' => 111.9000],
+            'trenggalek' => ['lat' => -8.0500, 'lng' => 111.7167],
+            'nganjuk' => ['lat' => -7.6049, 'lng' => 111.9042],
+            'madiun' => ['lat' => -7.6298, 'lng' => 111.5239],
+            'ponorogo' => ['lat' => -7.8692, 'lng' => 111.4623],
+            'magetan' => ['lat' => -7.6536, 'lng' => 111.3283],
+            'ngawi' => ['lat' => -7.4039, 'lng' => 111.4455],
+            'bojonegoro' => ['lat' => -7.1502, 'lng' => 111.8817],
+            'tuban' => ['lat' => -6.8976, 'lng' => 112.0649],
+            'bangkalan' => ['lat' => -7.0455, 'lng' => 112.7388],
+            'sampang' => ['lat' => -7.1873, 'lng' => 113.2394],
+            'pamekasan' => ['lat' => -7.1605, 'lng' => 113.4746],
+            'sumenep' => ['lat' => -7.0167, 'lng' => 113.8667],
+            'pacitan' => ['lat' => -8.2064, 'lng' => 111.0939],
+            'batu' => ['lat' => -7.8712, 'lng' => 112.5270],
+        ];
+
+        $mapBalaiPoints = [
+            [
+                'nama' => 'UPT PPSAB Sidoarjo',
+                'lat' => -7.4526,
+                'lng' => 112.7135,
+                'alamat' => 'Jl. Monginsidi No. 25, Sidoklumpuk, Sidoarjo',
+                'fokus' => 'Anak Berkebutuhan Khusus (ABK)',
+                'badge' => 'Balai Pelayanan ABK'
+            ],
+            [
+                'nama' => 'Balai PRS PMKS Sidoarjo',
+                'lat' => -7.4530,
+                'lng' => 112.7160,
+                'alamat' => 'Jl. Pahlawan No. 5, Sidokumpul, Sidoarjo',
+                'fokus' => 'Dewasa, Lansia, ODGJ, Pasca-Stroke',
+                'badge' => 'Balai Pelayanan PMKS'
+            ],
+            [
+                'nama' => 'UPT RSBN Malang',
+                'lat' => -8.0080,
+                'lng' => 112.6320,
+                'alamat' => 'Jl. Beringin No. 13, Bandungrejosari, Sukun, Malang',
+                'fokus' => 'Disabilitas Netra & Fisioterapi Olahraga',
+                'badge' => 'Balai Disabilitas Netra'
+            ]
+        ];
+
+        $mapPatientPoints = [];
+        $totalPasienWilayah = array_sum($wilayahBreakdown);
+        foreach ($wilayahBreakdown as $kabName => $total) {
+            $key = strtolower(trim($kabName));
+            $foundCoords = null;
+            foreach ($coordsJatim as $k => $c) {
+                if (str_contains($key, $k)) {
+                    $foundCoords = $c;
+                    break;
+                }
+            }
+            if ($foundCoords) {
+                $pct = $totalPasienWilayah > 0 ? round(($total / $totalPasienWilayah) * 100, 1) : 0;
+                $mapPatientPoints[] = [
+                    'nama' => $kabName,
+                    'lat' => $foundCoords['lat'],
+                    'lng' => $foundCoords['lng'],
+                    'total' => $total,
+                    'percentage' => $pct,
+                ];
+            }
+        }
+
         // 6. Rekapitulasi per Lokasi UPT Omah Terapi-KU
         $allUpts = Poli::orderBy('nama', 'asc')->get();
         $uptRekap = [];
@@ -349,6 +458,9 @@ class LaporanController extends Controller
             'upt_rekap' => $uptRekap,
             'terapis_rekap' => $terapisRekap,
             'top_tindakan' => $topTindakan,
+            'wilayah_breakdown' => $wilayahBreakdown,
+            'map_patient_points' => $mapPatientPoints,
+            'map_balai_points' => $mapBalaiPoints,
             'daftar_sesi' => $daftarSesi,
         ];
     }
@@ -376,17 +488,22 @@ class LaporanController extends Controller
         
         // Logo Base64
         $logoOmahPath = public_path('images/logo.png');
-        $logoDinsosPath = public_path('images/dinsos.png');
-
+        if (!file_exists($logoOmahPath)) {
+            $logoOmahPath = public_path('images/logo-blue.png');
+        }
         $logoOmahBase64 = file_exists($logoOmahPath) 
             ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoOmahPath))
             : asset('images/logo.png');
 
+        $logoDinsosPath = public_path('images/logo-dinsos.png');
+        if (!file_exists($logoDinsosPath)) {
+            $logoDinsosPath = public_path('images/dinsos.png');
+        }
         $logoDinsosBase64 = file_exists($logoDinsosPath) 
             ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoDinsosPath))
-            : asset('images/dinsos.png');
+            : asset('images/logo-dinsos.png');
 
-        $tglCetakFormatted = Carbon::now()->isoFormat('D MMMM Y');
+        $tglCetakFormatted = Carbon::now()->translatedFormat('d F Y');
 
         return view('laporan.print-pdf', compact('meta', 'data', 'logoOmahBase64', 'logoDinsosBase64', 'tglCetakFormatted'));
     }

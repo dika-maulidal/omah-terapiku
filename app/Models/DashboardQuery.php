@@ -1099,4 +1099,96 @@ class DashboardQuery
 
         return $activities;
     }
+
+    public function getSebaranWilayahPenerimaManfaat()
+    {
+        $pasienQuery = Pasien::whereNull('deleted_at');
+        $this->scopeUptPasien($pasienQuery);
+        $totalPasien = (clone $pasienQuery)->count();
+
+        $pasienWilayah = (clone $pasienQuery)
+            ->select('kabupaten', DB::raw('count(*) as total'))
+            ->groupBy('kabupaten')
+            ->orderBy('total', 'desc')
+            ->get();
+
+        $wilayahBreakdown = [];
+        foreach ($pasienWilayah as $pw) {
+            $rawKab = trim((string)$pw->kabupaten);
+            if (empty($rawKab) || $rawKab === '-' || strtolower($rawKab) === 'null') {
+                $kabLabel = 'Belum Terdata / Luar Wilayah';
+            } else {
+                $kabLabel = $rawKab;
+            }
+            if (!isset($wilayahBreakdown[$kabLabel])) {
+                $wilayahBreakdown[$kabLabel] = 0;
+            }
+            $wilayahBreakdown[$kabLabel] += $pw->total;
+        }
+        arsort($wilayahBreakdown);
+
+        $coordsJatim = [
+            'sidoarjo' => ['lat' => -7.4478, 'lng' => 112.7183],
+            'surabaya' => ['lat' => -7.2575, 'lng' => 112.7521],
+            'malang' => ['lat' => -7.9666, 'lng' => 112.6326],
+            'pasuruan' => ['lat' => -7.6453, 'lng' => 112.9075],
+            'mojokerto' => ['lat' => -7.4722, 'lng' => 112.4384],
+            'gresik' => ['lat' => -7.1566, 'lng' => 112.6555],
+            'jombang' => ['lat' => -7.5468, 'lng' => 112.2331],
+            'lamongan' => ['lat' => -7.1206, 'lng' => 112.4158],
+            'probolinggo' => ['lat' => -7.7543, 'lng' => 113.2159],
+            'lumajang' => ['lat' => -8.1331, 'lng' => 113.2248],
+            'jember' => ['lat' => -8.1724, 'lng' => 113.7007],
+            'banyuwangi' => ['lat' => -8.2192, 'lng' => 114.3692],
+            'bondowoso' => ['lat' => -7.9135, 'lng' => 113.8214],
+            'situbondo' => ['lat' => -7.7061, 'lng' => 114.0097],
+            'kediri' => ['lat' => -7.8480, 'lng' => 112.0178],
+            'blitar' => ['lat' => -8.0983, 'lng' => 112.1681],
+            'tulungagung' => ['lat' => -8.0667, 'lng' => 111.9000],
+            'trenggalek' => ['lat' => -8.0500, 'lng' => 111.7167],
+            'nganjuk' => ['lat' => -7.6049, 'lng' => 111.9042],
+            'madiun' => ['lat' => -7.6298, 'lng' => 111.5239],
+            'ponorogo' => ['lat' => -7.8692, 'lng' => 111.4623],
+            'magetan' => ['lat' => -7.6536, 'lng' => 111.3283],
+            'ngawi' => ['lat' => -7.4039, 'lng' => 111.4455],
+            'bojonegoro' => ['lat' => -7.1502, 'lng' => 111.8817],
+            'tuban' => ['lat' => -6.8976, 'lng' => 112.0649],
+            'bangkalan' => ['lat' => -7.0455, 'lng' => 112.7388],
+            'sampang' => ['lat' => -7.1873, 'lng' => 113.2394],
+            'pamekasan' => ['lat' => -7.1605, 'lng' => 113.4746],
+            'sumenep' => ['lat' => -7.0167, 'lng' => 113.8667],
+            'pacitan' => ['lat' => -8.2064, 'lng' => 111.0939],
+            'batu' => ['lat' => -7.8712, 'lng' => 112.5270],
+        ];
+
+        $mapPoints = [];
+        $totalWilayah = array_sum($wilayahBreakdown);
+        foreach ($wilayahBreakdown as $kabName => $total) {
+            $key = strtolower(trim($kabName));
+            $foundCoords = null;
+            foreach ($coordsJatim as $k => $c) {
+                if (str_contains($key, $k)) {
+                    $foundCoords = $c;
+                    break;
+                }
+            }
+            if ($foundCoords) {
+                $pct = $totalWilayah > 0 ? round(($total / $totalWilayah) * 100, 1) : 0;
+                $mapPoints[] = [
+                    'nama' => $kabName,
+                    'lat' => $foundCoords['lat'],
+                    'lng' => $foundCoords['lng'],
+                    'total' => $total,
+                    'percentage' => $pct,
+                ];
+            }
+        }
+
+        return [
+            'total' => $totalPasien,
+            'total_wilayah' => $totalWilayah,
+            'breakdown' => $wilayahBreakdown,
+            'map_points' => $mapPoints,
+        ];
+    }
 }

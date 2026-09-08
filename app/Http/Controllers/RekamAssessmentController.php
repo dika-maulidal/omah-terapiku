@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dokter;
+use App\Models\Poli;
 use App\Models\Rekam;
 use App\Models\RekamAssessment;
 use Illuminate\Http\Request;
@@ -71,13 +72,36 @@ class RekamAssessmentController extends Controller
                         ($request->filled('gmfm_total_score') && (int)$request->gmfm_total_score > 0);
 
         // 14. Denver check
-        $hasDenverInput = !empty($request->denver_data) ||
-                          $request->filled('denver_kesimpulan') ||
-                          $request->filled('denver_catatan') ||
-                          ($request->filled('denver_pass_count') && (int)$request->denver_pass_count > 0) ||
-                          ($request->filled('denver_fail_count') && (int)$request->denver_fail_count > 0) ||
-                          ($request->filled('denver_refusal_count') && (int)$request->denver_refusal_count > 0) ||
-                          ($request->filled('denver_no_count') && (int)$request->denver_no_count > 0);
+        $filteredDenverData = [];
+        $hasDenverScores = false;
+        if (is_array($request->denver_data)) {
+            foreach ($request->denver_data as $tKey => $tVal) {
+                if (is_array($tVal)) {
+                    $score = $tVal['score'] ?? null;
+                    $catatan = trim($tVal['catatan'] ?? '');
+                    if (!empty($score) && in_array(strtoupper($score), ['P', 'F', 'R', 'NO'])) {
+                        $hasDenverScores = true;
+                        $filteredDenverData[$tKey] = ['score' => strtoupper($score), 'catatan' => $catatan];
+                    } elseif (!empty($catatan) && $catatan !== '-') {
+                        $hasDenverScores = true;
+                        $filteredDenverData[$tKey] = ['score' => $score ?: '-', 'catatan' => $catatan];
+                    }
+                }
+            }
+        }
+
+        $denverKesimpulan = $request->denver_kesimpulan;
+        if (in_array($denverKesimpulan, ['Belum Dinilai', 'Belum Diisi', '-', '', null])) {
+            $denverKesimpulan = null;
+        }
+
+        $denverCatatan = trim($request->denver_catatan ?? '');
+        $hasDenverCounts = ($request->filled('denver_pass_count') && (int)$request->denver_pass_count > 0) ||
+                           ($request->filled('denver_fail_count') && (int)$request->denver_fail_count > 0) ||
+                           ($request->filled('denver_refusal_count') && (int)$request->denver_refusal_count > 0) ||
+                           ($request->filled('denver_no_count') && (int)$request->denver_no_count > 0);
+
+        $hasDenverInput = $hasDenverScores || !empty($denverKesimpulan) || !empty($denverCatatan) || $hasDenverCounts;
 
         $data = [
             'pasien_id' => $pasien->id,
@@ -247,13 +271,13 @@ class RekamAssessmentController extends Controller
             'rencana_terapi' => $request->rencana_terapi,
 
             // 14. Skala Denver (DDST II)
-            'denver_data' => $request->denver_data ?: [],
-            'denver_pass_count' => $hasDenverInput && $request->filled('denver_pass_count') ? (int)$request->denver_pass_count : null,
-            'denver_fail_count' => $hasDenverInput && $request->filled('denver_fail_count') ? (int)$request->denver_fail_count : null,
-            'denver_refusal_count' => $hasDenverInput && $request->filled('denver_refusal_count') ? (int)$request->denver_refusal_count : null,
-            'denver_no_count' => $hasDenverInput && $request->filled('denver_no_count') ? (int)$request->denver_no_count : null,
-            'denver_kesimpulan' => $request->denver_kesimpulan,
-            'denver_catatan' => $request->denver_catatan,
+            'denver_data' => $hasDenverInput ? $filteredDenverData : [],
+            'denver_pass_count' => $hasDenverInput && $request->filled('denver_pass_count') && (int)$request->denver_pass_count > 0 ? (int)$request->denver_pass_count : null,
+            'denver_fail_count' => $hasDenverInput && $request->filled('denver_fail_count') && (int)$request->denver_fail_count > 0 ? (int)$request->denver_fail_count : null,
+            'denver_refusal_count' => $hasDenverInput && $request->filled('denver_refusal_count') && (int)$request->denver_refusal_count > 0 ? (int)$request->denver_refusal_count : null,
+            'denver_no_count' => $hasDenverInput && $request->filled('denver_no_count') && (int)$request->denver_no_count > 0 ? (int)$request->denver_no_count : null,
+            'denver_kesimpulan' => $hasDenverInput ? $denverKesimpulan : null,
+            'denver_catatan' => $hasDenverInput ? ($denverCatatan ?: null) : null,
 
             // 15. Custom / Additional dynamic data (step-by-step)
             'custom_data' => $request->custom_data ? (is_array($request->custom_data) ? $request->custom_data : json_decode($request->custom_data, true)) : null,
@@ -297,6 +321,8 @@ class RekamAssessmentController extends Controller
                 ->with('warning', 'Form assessment belum diisi.');
         }
 
-        return view('rekam.assessment.print', compact('rekam', 'pasien', 'assessment'));
+        $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
+
+        return view('rekam.assessment.print', compact('rekam', 'pasien', 'assessment', 'upt'));
     }
 }

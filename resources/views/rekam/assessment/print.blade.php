@@ -5,21 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lembar Asesmen Klinis - {{ $pasien->nama }} (RM# {{ $pasien->no_rm }})</title>
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        /* Format Dokumen Pemerintahan Resmi (Monokrom / Hitam Putih Standar Dinas) */
+        /* Format Dokumen Rekam Medis Standar Kedinasan (Monokrom / Hitam Putih Standar Reference PDF) */
         @page {
             size: A4 portrait;
-            margin: 12mm 15mm 15mm 15mm;
+            margin: 8mm 10mm 10mm 10mm;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body, table, input, select, textarea, button, .print-container, .print-toolbar {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Enforce Font Awesome icons font-family */
+        .fa, .fas, .far, .fab, .fa-solid, .fa-regular, .fa-brands, [class^="fa-"], [class*=" fa-"] {
+            font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands', 'FontAwesome' !important;
         }
 
         body {
             background-color: #e2e8f0;
             color: #000000;
-            font-family: 'Times New Roman', Times, serif, 'Segoe UI', Arial, sans-serif;
-            font-size: 11pt;
-            line-height: 1.35;
+            font-size: 8.5pt;
+            line-height: 1.28;
+            margin: 0;
+            padding: 0;
         }
 
         .print-toolbar {
@@ -29,16 +43,16 @@
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(8px);
             border-bottom: 1px solid #cbd5e1;
-            padding: 10px 20px;
+            padding: 8px 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif !important;
         }
 
         .print-container {
-            max-width: 850px;
-            margin: 20px auto 40px auto;
+            max-width: 820px;
+            margin: 15px auto 35px auto;
             background: #ffffff;
-            padding: 30px 40px;
+            padding: 22px 28px;
             border-radius: 4px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.12);
             color: #000000;
@@ -49,7 +63,7 @@
             width: 100%;
             border-collapse: collapse;
             border: none;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .kop-table td {
             border: none !important;
@@ -57,81 +71,69 @@
             vertical-align: middle;
         }
         .kop-logo {
-            max-width: 78px;
-            max-height: 78px;
+            max-width: 68px;
+            max-height: 68px;
             object-fit: contain;
         }
         .kop-instansi {
-            font-size: 13pt;
+            font-size: 10.5pt;
             font-weight: bold;
             text-transform: uppercase;
             color: #000000;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             line-height: 1.2;
         }
         .kop-dinas {
-            font-size: 15pt;
+            font-size: 13pt;
             font-weight: 800;
             text-transform: uppercase;
             color: #000000;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             line-height: 1.2;
         }
         .kop-unit {
-            font-size: 12.5pt;
+            font-size: 10.5pt;
             font-weight: bold;
             text-transform: uppercase;
             color: #000000;
             line-height: 1.2;
         }
         .kop-sub {
-            font-size: 9pt;
+            font-size: 8pt;
             color: #000000;
             line-height: 1.25;
-            margin-top: 2px;
+            margin-top: 1px;
         }
         .kop-line {
-            border-top: 2.5px solid #000000;
+            border-top: 2px solid #000000;
             border-bottom: 1px solid #000000;
-            height: 3.5px;
-            margin-top: 6px;
-            margin-bottom: 16px;
+            height: 3px;
+            margin-top: 4px;
+            margin-bottom: 8px;
         }
 
-        /* Judul Dokumen */
-        .doc-title {
-            text-align: center;
-            font-size: 13pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            text-decoration: underline;
-            letter-spacing: 0.4px;
-            color: #000000;
-            margin-bottom: 3px;
-            page-break-after: avoid !important;
-            break-after: avoid !important;
+        /* Header RM Box Table (Matching Reference PDF) */
+        .header-box-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
         }
-        .doc-subtitle {
-            text-align: center;
-            font-size: 10pt;
-            color: #000000;
-            margin-bottom: 16px;
-            page-break-after: avoid !important;
-            break-after: avoid !important;
+        .header-box-table td {
+            border: 1.5px solid #000000 !important;
         }
 
         /* Section Title (Hitam Putih / Formal) */
         .section-title {
-            background-color: #f2f2f2;
+            background-color: #efefef !important;
             color: #000000;
             font-weight: bold;
-            font-size: 10pt;
-            padding: 5px 8px;
-            margin-top: 14px;
-            margin-bottom: 6px;
+            font-size: 8.5pt;
+            padding: 3px 6px;
+            margin-top: 8px;
+            margin-bottom: 4px;
             border: 1px solid #000000;
-            border-left: 5px solid #000000;
             text-transform: uppercase;
+            letter-spacing: 0.3px;
             page-break-after: avoid !important;
             break-after: avoid !important;
             page-break-inside: avoid !important;
@@ -142,20 +144,20 @@
         .table-assessment {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 8px;
-            font-size: 9.5pt;
+            margin-bottom: 6px;
+            font-size: 8.5pt;
         }
         .table-assessment th, 
         .table-assessment td {
             border: 1px solid #000000 !important;
-            padding: 4px 7px;
+            padding: 3px 5px;
             color: #000000;
             vertical-align: middle;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
         }
         .table-assessment th {
-            background-color: #e5e5e5 !important;
+            background-color: #e8e8e8 !important;
             font-weight: bold;
             text-align: left;
             color: #000000;
@@ -180,11 +182,11 @@
         /* Rekapitulasi & Box Grayscale */
         .box-rekap {
             background-color: #f8f8f8;
-            border: 1.5px solid #000000;
+            border: 1px solid #000000;
             border-radius: 0;
-            padding: 5px 10px;
-            margin-bottom: 6px;
-            font-size: 9.5pt;
+            padding: 4px 8px;
+            margin-bottom: 4px;
+            font-size: 8.5pt;
             color: #000000;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
@@ -192,9 +194,9 @@
         .box-subdimensi {
             background-color: #f2f2f2;
             border: 1px solid #000000;
-            padding: 4px 8px;
-            margin-bottom: 4px;
-            font-size: 9pt;
+            padding: 3px 6px;
+            margin-bottom: 3px;
+            font-size: 8.5pt;
             font-weight: bold;
             color: #000000;
             page-break-inside: avoid !important;
@@ -212,7 +214,8 @@
         .no-break,
         .print-block,
         .sign-area,
-        .kop-table {
+        .kop-table,
+        .header-box-table {
             page-break-inside: avoid !important;
             break-inside: avoid !important;
             break-inside: avoid-page !important;
@@ -229,7 +232,7 @@
             body {
                 background: #ffffff !important;
                 color: #000000 !important;
-                font-size: 10pt;
+                font-size: 8.5pt;
             }
             .print-container {
                 max-width: 100% !important;
@@ -243,12 +246,12 @@
                 display: none !important;
             }
             .table-assessment th {
-                background-color: #e5e5e5 !important;
+                background-color: #e8e8e8 !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
             .section-title {
-                background-color: #f2f2f2 !important;
+                background-color: #efefef !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 page-break-after: avoid !important;
@@ -263,7 +266,7 @@
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
             }
-            .no-break, .print-block, .sign-area, .kop-table {
+            .no-break, .print-block, .sign-area, .kop-table, .header-box-table {
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
             }
@@ -453,14 +456,31 @@
     $has_m14 = !empty($assessment->kesimpulan) || !empty($assessment->rencana_terapi);
 
     // 15. Skala Denver II
-    $has_denver_counts = (($assessment->denver_pass_count !== null && $assessment->denver_pass_count > 0) ||
-                          ($assessment->denver_fail_count !== null && $assessment->denver_fail_count > 0) ||
-                          ($assessment->denver_refusal_count !== null && $assessment->denver_refusal_count > 0) ||
-                          ($assessment->denver_no_count !== null && $assessment->denver_no_count > 0));
-    $has_m15 = $has_denver_counts || 
-               $hasArrayContent($assessment->denver_data) || 
-               !empty($assessment->denver_kesimpulan) || 
-               !empty($assessment->denver_catatan);
+    $has_denver_scores = false;
+    if (!empty($assessment->denver_data) && is_array($assessment->denver_data)) {
+        foreach ($assessment->denver_data as $dItem) {
+            if (is_array($dItem)) {
+                $score = $dItem['score'] ?? null;
+                $note = trim($dItem['catatan'] ?? '');
+                if (!empty($score) && in_array(strtoupper($score), ['P', 'F', 'R', 'NO'])) {
+                    $has_denver_scores = true;
+                    break;
+                }
+                if (!empty($note) && $note !== '-') {
+                    $has_denver_scores = true;
+                    break;
+                }
+            }
+        }
+    }
+    $has_denver_counts = (($assessment->denver_pass_count !== null && (int)$assessment->denver_pass_count > 0) ||
+                          ($assessment->denver_fail_count !== null && (int)$assessment->denver_fail_count > 0) ||
+                          ($assessment->denver_refusal_count !== null && (int)$assessment->denver_refusal_count > 0) ||
+                          ($assessment->denver_no_count !== null && (int)$assessment->denver_no_count > 0));
+    $valid_denver_kesimpulan = !empty($assessment->denver_kesimpulan) && !in_array($assessment->denver_kesimpulan, ['Belum Dinilai', 'Belum Diisi', '-', 'null']);
+    $valid_denver_catatan = !empty(trim($assessment->denver_catatan ?? ''));
+
+    $has_m15 = $has_denver_scores || $has_denver_counts || $valid_denver_kesimpulan || $valid_denver_catatan;
 
     $moduleList = [
         1  => ['id' => 1,  'name' => '1. Kemampuan Motorik', 'has' => $has_m1, 'title' => 'KEMAMPUAN MOTORIK KASAR & HALUS'],
@@ -542,8 +562,18 @@
                 <div class="kop-sub">
                     Pusat Pelayanan Terapi & Rehabilitasi Disabilitas &bull; Unit Pelayanan: {{ $rekam->poli ?: ($rekam->upt_lokasi ?: 'Jawa Timur') }}
                 </div>
+                @php
+                    $uptContact = isset($upt) && $upt && $upt->no_telp ? $upt->no_telp : null;
+                    if (!$uptContact) {
+                        $pLoc = $rekam->upt_lokasi ?: ($rekam->poli ?: '');
+                        if ($pLoc) {
+                            $foundPoli = \App\Models\Poli::where('nama', $pLoc)->orWhere('nama', 'LIKE', "%{$pLoc}%")->first();
+                            $uptContact = $foundPoli->no_telp ?? null;
+                        }
+                    }
+                @endphp
                 <div class="kop-sub" style="font-size: 8pt; color: #222;">
-                    Layanan: {{ $rekam->layanan_terapi ?: 'Fisioterapi & Terapi Terpadu' }} &bull; Website: dinsos.jatimprov.go.id
+                    Layanan: {{ $rekam->layanan_terapi ?: 'Fisioterapi & Terapi Terpadu' }}@if($uptContact) &bull; No. Handphone / Telp UPT: {{ $uptContact }}@endif
                 </div>
             </td>
             
@@ -557,48 +587,72 @@
     <!-- Garis Ganda Pembatas Kop Surat Resmi -->
     <div class="kop-line"></div>
 
-    <!-- Judul Dokumen Kedinasan -->
-    <div class="doc-title">LEMBAR ASESMEN KLINIS TERPADU PENERIMA MANFAAT</div>
-    <div class="doc-subtitle">
-        Nomor Rekam Medis: <strong>{{ $pasien->no_rm }}</strong> &nbsp;|&nbsp; 
-        Tanggal Asesmen: <strong>{{ $assessment->tgl_assessment ? $assessment->tgl_assessment->translatedFormat('d F Y') : date('d F Y') }}</strong>
-    </div>
+    <!-- Header Box Judul & Nomor Rekam Medis (Format Sesuai Reference PDF) -->
+    <table class="table-assessment header-box-table" style="width: 100%; border-collapse: collapse; margin-bottom: 6px;">
+        <tr>
+            <td style="width: 58%; text-align: center; vertical-align: middle; border: 1.5px solid #000000 !important; padding: 6px 8px; background: #ffffff;">
+                <div style="font-size: 11.5pt; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">PENGKAJIAN AWAL KLINIS</div>
+                <div style="font-size: 10pt; font-weight: bold; text-transform: uppercase; margin-top: 1px;">REHABILITASI MEDIS &amp; TERAPI TERPADU</div>
+                <div style="font-size: 8pt; color: #333333; margin-top: 2px;">OMAH TERAPI-KU DINAS SOSIAL PROVINSI JAWA TIMUR</div>
+            </td>
+            <td style="width: 42%; border: 1.5px solid #000000 !important; padding: 0; vertical-align: top; background: #ffffff;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt;">
+                    <tr>
+                        <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px; font-weight: bold; width: 44%;">NOMOR RM</td>
+                        <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px; font-weight: 800; font-size: 9.5pt; letter-spacing: 0.5px;">: {{ $pasien->no_rm }}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px; font-weight: bold;">Tgl. Asesmen</td>
+                        <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px;">: {{ $assessment->tgl_assessment ? \Carbon\Carbon::parse($assessment->tgl_assessment)->translatedFormat('d F Y') : date('d F Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: none !important; padding: 3px 6px; font-weight: bold;">Terapis / Petugas</td>
+                        <td style="border: none !important; padding: 3px 6px;">: {{ $assessment->dokter->nama ?? ($rekam->dokter->nama ?? '-') }}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 
     <!-- =========================================================================
          IDENTITAS PENERIMA MANFAAT (FORMAT TABEL FORMAL DINAS)
          ========================================================================= -->
-    <table class="table-assessment" style="margin-bottom: 12px;">
+    <table class="table-assessment" style="margin-bottom: 8px; font-size: 8.5pt;">
         <thead>
             <tr>
-                <th colspan="4" style="background-color: #e5e5e5; font-size: 10pt; text-transform: uppercase;">
-                    A. IDENTITAS PENERIMA MANFAAT
+                <th colspan="4" style="background-color: #e8e8e8; font-size: 9pt; font-weight: bold; text-transform: uppercase; border: 1px solid #000000 !important; padding: 3px 6px;">
+                    IDENTITAS PENERIMA MANFAAT (PASIEN)
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td style="width: 20%; font-weight: bold;">Nama Lengkap</td>
-                <td style="width: 30%;">{{ $pasien->nama }}</td>
-                <td style="width: 20%; font-weight: bold;">Wali / Orang Tua</td>
-                <td style="width: 30%;">{{ $pasien->nama_wali ? $pasien->nama_wali . ' (' . ($pasien->hubungan_wali ?: 'Wali') . ')' : '-' }}</td>
+                <td style="width: 18%; font-weight: bold; border: 1px solid #000000 !important;">Nama Lengkap</td>
+                <td style="width: 32%; border: 1px solid #000000 !important;">: {{ $pasien->nama }}</td>
+                <td style="width: 18%; font-weight: bold; border: 1px solid #000000 !important;">Orang Tua / Wali</td>
+                <td style="width: 32%; border: 1px solid #000000 !important;">: {{ $pasien->nama_wali ? $pasien->nama_wali . ' (' . ($pasien->hubungan_wali ?: 'Wali') . ')' : ($pasien->nama_ortu ?: '-') }}</td>
             </tr>
             <tr>
-                <td style="font-weight: bold;">NIK</td>
-                <td>{{ $pasien->nik ?: '-' }}</td>
-                <td style="font-weight: bold;">Ragam Disabilitas</td>
-                <td>{{ $pasien->jenis_disabilitas && $pasien->jenis_disabilitas != 'Tidak Ada' ? $pasien->jenis_disabilitas : 'Non-Disabilitas' }}</td>
+                <td style="font-weight: bold; border: 1px solid #000000 !important;">Nomor NIK / KIS</td>
+                <td style="border: 1px solid #000000 !important;">: {{ $pasien->nik ?: '-' }}</td>
+                <td style="font-weight: bold; border: 1px solid #000000 !important;">Ragam Disabilitas</td>
+                <td style="border: 1px solid #000000 !important;">: {{ $pasien->jenis_disabilitas && $pasien->jenis_disabilitas != 'Tidak Ada' ? $pasien->jenis_disabilitas : 'Non-Disabilitas' }}</td>
             </tr>
             <tr>
-                <td style="font-weight: bold;">TTL / Usia</td>
-                <td>{{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $pasien->tgl_lahir ?: '-' }} ({{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->age . ' Tahun' : '-' }})</td>
-                <td style="font-weight: bold;">Nomor Kontak / HP</td>
-                <td>{{ $pasien->no_hp ?: '-' }}</td>
+                <td style="font-weight: bold; border: 1px solid #000000 !important;">TTL / Usia</td>
+                <td style="border: 1px solid #000000 !important;">: {{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->translatedFormat('d F Y') : '-' }} ({{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->age . ' Tahun' : '-' }})</td>
+                <td style="font-weight: bold; border: 1px solid #000000 !important;">No. Kontak / HP</td>
+                <td style="border: 1px solid #000000 !important;">: {{ $pasien->no_hp ?: '-' }}</td>
             </tr>
             <tr>
-                <td style="font-weight: bold;">Jenis Kelamin</td>
-                <td>{{ $pasien->jk ?: '-' }}</td>
-                <td style="font-weight: bold;">Terapis Pemeriksa</td>
-                <td><strong>{{ $assessment->dokter->nama ?? ($rekam->dokter->nama ?? '-') }}</strong></td>
+                <td style="font-weight: bold; border: 1px solid #000000 !important;">Jenis Kelamin</td>
+                <td style="border: 1px solid #000000 !important;">: {{ $pasien->jk == 'L' ? 'Laki-laki' : ($pasien->jk == 'P' ? 'Perempuan' : ($pasien->jk ?: '-')) }}</td>
+                <td style="font-weight: bold; border: 1px solid #000000 !important;">Diagnosa Klinis</td>
+                <td style="border: 1px solid #000000 !important;">: <strong>{{ $rekam->diagnosa ?: '-' }}</strong></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; border: 1px solid #000000 !important;">Alamat Domisili</td>
+                <td colspan="3" style="border: 1px solid #000000 !important;">: {{ $pasien->alamat ?: '-' }} {{ $pasien->kabupaten_kota ? '— ' . $pasien->kabupaten_kota : '' }}</td>
             </tr>
         </tbody>
     </table>
@@ -1645,10 +1699,7 @@
          ========================================================================= -->
     <div class="assessment-section-block" id="sec-block-15" data-section-id="15" data-has-data="{{ $has_m15 ? '1' : '0' }}" data-title="SKALA PERKEMBANGAN DENVER II (DDST II)" style="{{ $has_m15 ? '' : 'display: none;' }}">
         <div class="section-title"><span class="sec-number">{{ $has_m15 ? $serverSeqNum++ : '15' }}</span>. SKALA PERKEMBANGAN DENVER II (DDST II)</div>
-        @php
-            $has_denver_print = !is_null($assessment->denver_pass_count) || !is_null($assessment->denver_fail_count) || !empty($assessment->denver_data);
-        @endphp
-        @if($has_denver_print)
+        @if($has_m15)
             <!-- Denver Summary Box (Grayscale) -->
             <div class="box-rekap d-flex justify-content-between align-items-center">
                 <span><strong>STATUS SKRINING DDST II:</strong> {{ $assessment->denver_kesimpulan ?: 'Tercatat' }}</span>
@@ -1713,23 +1764,41 @@
     </div>
 
     <!-- =========================================================================
-         TANDA TANGAN RESMI KEDINASAN
+         TANDA TANGAN RESMI KEDINASAN & PROGRAM DOSIS TERAPI
          ========================================================================= -->
-    <div class="sign-area no-break" style="margin-top: 25px;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 10pt;">
+    <div class="sign-area no-break" style="margin-top: 14px; border: 1px solid #000000;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt;">
             <tr>
-                <td style="width: 55%; border: none !important;"></td>
-                <td style="width: 45%; border: none !important; text-align: center;">
-                    <div>
-                        {{ $rekam->poli ?: 'Malang' }}, {{ $assessment->tgl_assessment ? $assessment->tgl_assessment->translatedFormat('d F Y') : date('d F Y') }}
+                <td style="width: 55%; border: none !important; border-right: 1px solid #000000 !important; padding: 6px 8px; vertical-align: top;">
+                    <div style="font-weight: bold; text-transform: uppercase; font-size: 8.5pt; margin-bottom: 4px; border-bottom: 1px solid #000000; padding-bottom: 2px;">
+                        RENCANA DOSIS &amp; PROGRAM TERAPI
                     </div>
-                    <div style="font-weight: bold; margin-top: 4px;">Terapis Pemeriksa,</div>
-                    <div style="height: 60px;"></div>
+                    <table style="width: 100%; border: none !important; font-size: 8pt;">
+                        <tr>
+                            <td style="border: none !important; width: 44%; padding: 1.5px 0;">Frekuensi &amp; Durasi</td>
+                            <td style="border: none !important; padding: 1.5px 0;">: <strong>{{ $assessment->rencana_dosis_frekuensi ? $assessment->rencana_dosis_frekuensi . 'x / minggu' : '-' }} ({{ $assessment->rencana_dosis_durasi ? $assessment->rencana_dosis_durasi . ' Menit' : '-' }})</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="border: none !important; padding: 1.5px 0;">Target Total Sesi</td>
+                            <td style="border: none !important; padding: 1.5px 0;">: <strong>{{ $assessment->rencana_dosis_total_sesi ? $assessment->rencana_dosis_total_sesi . ' Sesi' : '-' }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="border: none !important; padding: 1.5px 0;">Jadwal Re-assessment</td>
+                            <td style="border: none !important; padding: 1.5px 0;">: <strong>{{ $assessment->rencana_dosis_reassessment ? \Carbon\Carbon::parse($assessment->rencana_dosis_reassessment)->translatedFormat('d F Y') : '-' }}</strong></td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width: 45%; border: none !important; text-align: center; vertical-align: top; padding: 6px 8px;">
+                    <div>
+                        {{ $rekam->poli ?: ($rekam->upt_lokasi ?: 'Malang') }}, {{ $assessment->tgl_assessment ? \Carbon\Carbon::parse($assessment->tgl_assessment)->translatedFormat('d F Y') : date('d F Y') }}
+                    </div>
+                    <div style="font-weight: bold; margin-top: 2px;">Terapis Pemeriksa / Dokter,</div>
+                    <div style="height: 48px;"></div>
                     <div style="font-weight: bold; text-decoration: underline;">
                         ( {{ $assessment->dokter->nama ?? ($rekam->dokter->nama ?? '..........................................') }} )
                     </div>
                     @if(isset($assessment->dokter->nip) || (isset($rekam->dokter) && $rekam->dokter->nip))
-                        <div style="font-size: 9pt; margin-top: 2px;">
+                        <div style="font-size: 8pt; margin-top: 1px;">
                             NIP. {{ $assessment->dokter->nip ?? $rekam->dokter->nip }}
                         </div>
                     @endif
@@ -1810,7 +1879,7 @@ function downloadPDF() {
     }
 
     var opt = {
-        margin:       [10, 12, 12, 12],
+        margin:       [8, 10, 10, 10],
         filename:     'Lembar-Asesmen-{{ Str::slug($pasien->nama) }}-{{ $pasien->no_rm }}.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { 
@@ -1825,7 +1894,7 @@ function downloadPDF() {
             mode: ['avoid-all', 'css', 'legacy'],
             before: '.page-break-before',
             after: '.page-break-after',
-            avoid: ['tr', 'tbody tr', '.section-title', '.table-assessment', '.box-rekap', '.box-subdimensi', '.sign-area', '.no-break', '.print-block']
+            avoid: ['tr', 'tbody tr', '.section-title', '.table-assessment', '.box-rekap', '.box-subdimensi', '.sign-area', '.no-break', '.print-block', '.header-box-table']
         }
     };
 

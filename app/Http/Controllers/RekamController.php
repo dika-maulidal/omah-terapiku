@@ -532,7 +532,8 @@ class RekamController extends Controller
         $rekam = Rekam::with(['pasien', 'dokter', 'terapisPendamping', 'assessment'])->findOrFail($id);
         $pasien = $rekam->pasien;
         $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
-        return view('rekam.print-soap', compact('rekam', 'pasien', 'upt'));
+        $assessment = $rekam->assessment;
+        return view('rekam.print-soap', compact('rekam', 'pasien', 'upt', 'assessment'));
     }
 
     public function printHomeProgram($id)
