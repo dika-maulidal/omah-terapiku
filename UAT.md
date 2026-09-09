@@ -92,7 +92,7 @@ Pengujian wajib dilakukan berurutan sesuai alur pelayanan riil di lapangan:
 |---|---|---|---|---|:---:|---|
 | **UAT-16** | Pemanggilan Pasien ke Ruang Terapi | Petugas Pendaftaran | 1. Pada daftar antrian pasien, klik tombol **"Panggil Pasien"** (Ubah Status ke 2 - Pemeriksaan). | Status sesi pasien berubah dari `Antrian (1)` menjadi `Pemeriksaan (2)`. | [ ] | |
 | **UAT-17** | Penerimaan Notifikasi Real-Time Terapis | Dokter / Terapis | 1. Login sebagai Dokter/Terapis yang ditunjuk.<br>2. Amati lonceng notifikasi di Topbar saat pasien dipanggil oleh pendaftaran. | Terapis menerima notifikasi: *"Pasien [Nama], silahkan diproses"* secara *real-time* (Pusher/Database Notification). | [ ] | |
-| **UAT-18** | Akses Halaman Detail Rekam Medis | Dokter / Terapis | 1. Klik notifikasi atau klik tombol aksi di dashboard/jadwal.<br>2. Masuk ke halaman `/rekam/pasien/{id}`. | Halaman terbuka dengan menampilkan 2 Tab Utama yang terpisah rapi: **Tab 1: Asesmen Baseline & Re-evaluasi** dan **Tab 2: Log Sesi Terapi (SOAP)**. | [ ] | |
+| **UAT-18** | Akses Halaman Detail Rekam Medis | Dokter / Terapis | 1. Klik notifikasi atau klik tombol aksi di dashboard/jadwal.<br>2. Masuk ke halaman `/rekam/penerima-manfaat/{id}`. | Halaman terbuka dengan menampilkan 2 Tab Utama yang terpisah rapi: **Tab 1: Asesmen Baseline & Re-evaluasi** dan **Tab 2: Log Sesi Terapi (SOAP)**. | [ ] | |
 
 ---
 

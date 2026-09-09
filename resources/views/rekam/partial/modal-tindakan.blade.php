@@ -11,7 +11,7 @@
                     </div>
                     <div>
                         <h5 class="modal-title font-w700 mb-0" id="addTindakanLabel" style="color: #1e40af !important; font-size: 17px; letter-spacing: -0.2px;">
-                            Plan (P) — Rencana Tindakan & Intervensi Terapi
+                            Plan (P) - Rencana Tindakan & Intervensi Terapi
                         </h5>
                         <small class="text-muted font-w500" style="font-size: 12px;">Tindakan terapi fisik, okupasi, wicara, latihan fungsional, dan rekomendasi home program</small>
                     </div>
@@ -59,7 +59,7 @@
                     </div>
 
                     <!-- Action Chips Container -->
-                    <div class="p-3 mb-3 rounded border" style="background: #f8fafc; border: 1.5px solid #dbeafe; border-radius: 10px; max-height: 170px; overflow-y: auto;">
+                    <div class="p-3 mb-2 rounded border" style="background: #f8fafc; border: 1.5px solid #dbeafe; border-radius: 10px; max-height: 170px; overflow-y: auto;">
                         <div class="d-flex flex-wrap" id="tindakanChipsContainer" style="gap: 8px;">
                             @if(isset($masterTindakan) && count($masterTindakan) > 0)
                                 @foreach($masterTindakan as $tdk)
@@ -87,6 +87,12 @@
                                 @endforeach
                             @endif
                         </div>
+                    </div>
+
+                    <!-- Note / Disclaimer Info Tambah Tindakan & Input Manual -->
+                    <div class="d-flex align-items-center mb-3 mt-2 rounded" style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; font-size: 12.5px; color: #1e40af; gap: 12px; line-height: 1.5; padding: 14px 18px;">
+                        <i class="fa-solid fa-circle-info text-primary" style="font-size: 16px; flex-shrink: 0;"></i>
+                        <span>Opsi tindakan belum ada? <strong>Hubungi Admin</strong> untuk penambahan data, atau Anda bisa langsung ketik/input manual pada kolom rincian tindakan di bawah.</span>
                     </div>
 
                     <!-- Textarea Catatan Tindakan / Plan -->

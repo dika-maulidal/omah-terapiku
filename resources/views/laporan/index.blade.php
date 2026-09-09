@@ -73,14 +73,14 @@
         </div>
     </div>
 
-    <!-- Toolbar Filter Periode & Layanan Card (Format Semula) -->
+    <!-- Toolbar Filter Periode & Layanan Card -->
     <div class="card mb-4 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
         <div class="card-body p-3 p-md-4">
             <form method="GET" action="{{ route('laporan.eksekutif') }}" id="filterForm">
                 <div class="row align-items-end">
                     <!-- 1. Tipe Periode -->
-                    <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                        <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">
+                    <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 mb-3">
+                        <label class="form-label font-w600 text-dark mb-1 text-truncate d-block" style="font-size: 12.5px;" title="Jenis Periode Laporan">
                             <i class="fa-solid fa-calendar-days mr-1 text-primary"></i> Jenis Periode Laporan:
                         </label>
                         <select name="tipe_periode" id="tipePeriodeSelect" class="form-control form-control-sm" style="height: 40px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 600;" onchange="togglePeriodeInput(this.value)">
@@ -93,7 +93,7 @@
                     </div>
 
                     <!-- 2. Parameter Bulan (Bulanan) -->
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3 filter-input-group" id="inputBulan" style="{{ $meta['tipe'] == 'bulanan' ? '' : 'display: none;' }}">
+                    <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 mb-3 filter-input-group" id="inputBulan" style="{{ $meta['tipe'] == 'bulanan' ? '' : 'display: none;' }}">
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">Bulan:</label>
                         <select name="bulan" class="form-control form-control-sm" style="height: 40px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 500;">
                             @foreach($meta['nama_bulan'] as $num => $nama)
@@ -103,7 +103,7 @@
                     </div>
 
                     <!-- 3. Parameter Triwulan (Triwulan) -->
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3 filter-input-group" id="inputTriwulan" style="{{ $meta['tipe'] == 'triwulan' ? '' : 'display: none;' }}">
+                    <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 mb-3 filter-input-group" id="inputTriwulan" style="{{ $meta['tipe'] == 'triwulan' ? '' : 'display: none;' }}">
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">Triwulan:</label>
                         <select name="triwulan" class="form-control form-control-sm" style="height: 40px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 500;">
                             <option value="1" {{ $meta['triwulan'] == 1 ? 'selected' : '' }}>Triwulan I (Jan-Mar)</option>
@@ -114,7 +114,7 @@
                     </div>
 
                     <!-- 4. Parameter Semester (Semester) -->
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3 filter-input-group" id="inputSemester" style="{{ $meta['tipe'] == 'semester' ? '' : 'display: none;' }}">
+                    <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 mb-3 filter-input-group" id="inputSemester" style="{{ $meta['tipe'] == 'semester' ? '' : 'display: none;' }}">
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">Semester:</label>
                         <select name="semester" class="form-control form-control-sm" style="height: 40px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 500;">
                             <option value="1" {{ $meta['semester'] == 1 ? 'selected' : '' }}>Semester 1 (Jan-Jun)</option>
@@ -123,7 +123,7 @@
                     </div>
 
                     <!-- 5. Parameter Custom Range -->
-                    <div class="col-lg-4 col-md-6 mb-3 filter-input-group" id="inputCustom" style="{{ $meta['tipe'] == 'custom' ? '' : 'display: none;' }}">
+                    <div class="col-xl-3 col-lg-3 col-md-5 mb-3 filter-input-group" id="inputCustom" style="{{ $meta['tipe'] == 'custom' ? '' : 'display: none;' }}">
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">Rentang Tanggal:</label>
                         <div class="d-flex align-items-center" style="gap: 6px;">
                             <input type="date" name="tgl_awal" value="{{ $meta['tgl_awal'] }}" class="form-control form-control-sm" style="height: 40px; font-size: 12px; border-radius: 8px; border: 1.5px solid #cbd5e1;">
@@ -133,9 +133,9 @@
                     </div>
 
                     <!-- 6. Parameter Tahun -->
-                    <div class="col-lg-2 col-md-3 col-sm-6 mb-3 filter-input-group" id="inputTahun" style="{{ $meta['tipe'] != 'custom' ? '' : 'display: none;' }}">
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 mb-3 filter-input-group" id="inputTahun" style="{{ $meta['tipe'] != 'custom' ? '' : 'display: none;' }}">
                         <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">Tahun:</label>
-                        <select name="tahun" class="form-control form-control-sm" style="height: 40px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 500;">
+                        <select name="tahun" class="form-control form-control-sm" style="height: 40px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 500; padding: 0 10px;">
                             @foreach($availableYears as $yr)
                                 <option value="{{ $yr }}" {{ $meta['tahun'] == $yr ? 'selected' : '' }}>{{ $yr }}</option>
                             @endforeach
@@ -143,8 +143,8 @@
                     </div>
 
                     <!-- 7. Filter UPT -->
-                    <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                        <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">
+                    <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 mb-3">
+                        <label class="form-label font-w600 text-dark mb-1 text-truncate d-block" style="font-size: 12.5px;" title="Cakupan Lokasi UPT">
                             <i class="fa-solid fa-hospital-user mr-1 text-primary"></i> Cakupan Lokasi UPT:
                         </label>
                         <select name="upt" class="form-control form-control-sm" style="height: 40px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 500;">
@@ -156,8 +156,8 @@
                     </div>
 
                     <!-- 8. Filter Layanan -->
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
-                        <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 mb-3">
+                        <label class="form-label font-w600 text-dark mb-1 text-truncate d-block" style="font-size: 12.5px;" title="Ragam Layanan">
                             <i class="fa-solid fa-tag mr-1 text-primary"></i> Ragam Layanan:
                         </label>
                         <select name="layanan" class="form-control form-control-sm" style="height: 40px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 500;">
@@ -169,12 +169,12 @@
                         </select>
                     </div>
 
-                    <!-- 9. Tombol Filter & Reset -->
-                    <div class="col-lg-2 col-md-4 col-sm-12 mb-3 d-flex" style="gap: 6px;">
-                        <button type="submit" class="btn btn-primary btn-sm flex-grow-1 font-w700 shadow-sm" style="height: 40px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none; font-size: 12.5px;">
-                            <i class="fa-solid fa-filter mr-1"></i> Filter
+                    <!-- 9. Tombol Filter (Icon Saja) & Reset -->
+                    <div class="col-xl-2 col-lg-2 col-md-auto mb-3 d-flex align-items-end justify-content-end ml-auto" style="gap: 8px;">
+                        <button type="submit" class="btn btn-primary btn-sm font-w700 shadow-sm" style="height: 40px; width: 48px; padding: 0; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);" title="Terapkan Filter">
+                            <i class="fa-solid fa-filter"></i>
                         </button>
-                        <a href="{{ route('laporan.eksekutif') }}" class="btn btn-light btn-sm font-w600" style="height: 40px; border-radius: 8px; border: 1.5px solid #cbd5e1; color: #64748b; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center;" title="Reset Filter">
+                        <a href="{{ route('laporan.eksekutif') }}" class="btn btn-light btn-sm font-w600 shadow-sm" style="height: 40px; width: 48px; border-radius: 8px; border: 1.5px solid #cbd5e1; color: #475569; padding: 0; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; background: #f8fafc;" title="Reset Filter">
                             <i class="fa-solid fa-rotate-right"></i>
                         </a>
                     </div>
@@ -342,122 +342,207 @@
             </div>
         </div>
 
-        <!-- 2B. Breakdown Layanan Terapi & Demografi Usia -->
+        <!-- 2B. Breakdown Layanan Terapi & Demografi Penerima Manfaat -->
         <div class="col-xl-6 col-lg-12 mb-4">
-            <div class="card h-100 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff;">
+            <div class="card h-100 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
                 <div class="card-header py-3 px-4 bg-white border-bottom d-flex align-items-center justify-content-between">
                     <div>
                         <h5 class="font-w700 mb-0" style="color: #1e40af; font-size: 15px;">
-                            <i class="fa-solid fa-chart-pie mr-1.5" style="color: #2563eb;"></i> Ragam Layanan Terapi & Demografi Pasien
+                            <i class="fa-solid fa-chart-pie mr-2" style="color: #2563eb;"></i> Ragam Layanan Terapi & Demografi Penerima Manfaat
                         </h5>
                     </div>
+                    <span class="badge badge-primary light font-w700" style="font-size: 11px;">
+                        <i class="fa-solid fa-bolt mr-1 text-primary"></i> {{ $data['total_sesi'] }} Total Sesi
+                    </span>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
                     
-                    <!-- Layanan Terapi Pills -->
-                    <h6 class="font-w700 text-dark mb-3" style="font-size: 13px;">Distribusi Layanan Terapi:</h6>
-                    <div class="row mb-3">
-                        @forelse($data['layanan_breakdown'] as $layanan)
-                            @php
-                                $pctLayanan = $data['total_sesi'] > 0 ? round(($layanan->total / $data['total_sesi']) * 100, 1) : 0;
-                            @endphp
-                            <div class="col-sm-6 mb-3">
-                                <div class="p-3 rounded d-flex align-items-center justify-content-between h-100" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px;">
-                                    <div class="mr-2">
-                                        <strong class="text-dark d-block font-w700" style="font-size: 12.5px;">{{ $layanan->layanan_terapi }}</strong>
-                                        <small class="text-muted font-w500" style="font-size: 11px;">{{ $pctLayanan }}% dari total sesi</small>
-                                    </div>
-                                    <span class="badge badge-primary font-w700 flex-shrink-0" style="font-size: 12px; padding: 5px 10px; background: #2563eb; border-radius: 6px;">
-                                        {{ $layanan->total }}
-                                    </span>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="col-12 text-center py-3 text-muted" style="font-size: 12px;">Belum ada data sesi terapi pada periode ini.</div>
-                        @endforelse
-                    </div>
-
-                    <!-- Demografi Usia & Gender -->
-                    <h6 class="font-w700 text-dark mb-3" style="font-size: 13.5px;">
-                        <i class="fa-solid fa-users-rectangle mr-1.5 text-primary"></i> Kelompok Usia & Gender Pasien:
-                    </h6>
-                    <div class="row">
-                        <!-- Kelompok Usia -->
-                        <div class="col-lg-7 col-md-12 mb-3 mb-lg-0">
-                            <div class="d-flex flex-column" style="gap: 12px;">
-                                <!-- Anak-Anak / ABK -->
-                                <div class="d-flex align-items-center justify-content-between transition-all" style="padding: 15px 18px; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.05);">
-                                    <div class="d-flex align-items-center">
-                                        <div class="mr-3 d-flex align-items-center justify-content-center text-primary" style="width: 40px; height: 40px; border-radius: 10px; background: #dbeafe; font-size: 17px; flex-shrink: 0;">
-                                            <i class="fa-solid fa-child"></i>
-                                        </div>
-                                        <div>
-                                            <strong class="text-dark d-block font-w700" style="font-size: 13.5px; line-height: 1.3;">Anak-Anak / ABK</strong>
-                                            <small class="text-muted font-w600" style="font-size: 11.5px;">&lt; 18 Tahun</small>
-                                        </div>
-                                    </div>
-                                    <span class="badge badge-primary font-w700 flex-shrink-0" style="font-size: 13px; padding: 7px 14px; background: #2563eb; border-radius: 8px;">
-                                        {{ $data['demografi']['anak'] }} Pasien
-                                    </span>
-                                </div>
-
-                                <!-- Dewasa -->
-                                <div class="d-flex align-items-center justify-content-between transition-all" style="padding: 15px 18px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);">
-                                    <div class="d-flex align-items-center">
-                                        <div class="mr-3 d-flex align-items-center justify-content-center text-secondary" style="width: 40px; height: 40px; border-radius: 10px; background: #e2e8f0; font-size: 17px; flex-shrink: 0;">
-                                            <i class="fa-solid fa-person"></i>
-                                        </div>
-                                        <div>
-                                            <strong class="text-dark d-block font-w700" style="font-size: 13.5px; line-height: 1.3;">Dewasa</strong>
-                                            <small class="text-muted font-w600" style="font-size: 11.5px;">18 - 59 Tahun</small>
-                                        </div>
-                                    </div>
-                                    <span class="badge badge-secondary font-w700 flex-shrink-0" style="font-size: 13px; padding: 7px 14px; background: #475569; border-radius: 8px;">
-                                        {{ $data['demografi']['dewasa'] }} Pasien
-                                    </span>
-                                </div>
-
-                                <!-- Lansia -->
-                                <div class="d-flex align-items-center justify-content-between transition-all" style="padding: 15px 18px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; box-shadow: 0 1px 3px rgba(217, 119, 6, 0.05);">
-                                    <div class="d-flex align-items-center">
-                                        <div class="mr-3 d-flex align-items-center justify-content-center text-warning" style="width: 40px; height: 40px; border-radius: 10px; background: #fef3c7; font-size: 17px; flex-shrink: 0; color: #d97706 !important;">
-                                            <i class="fa-solid fa-person-cane"></i>
-                                        </div>
-                                        <div>
-                                            <strong class="text-dark d-block font-w700" style="font-size: 13.5px; line-height: 1.3;">Lansia (Geriatri)</strong>
-                                            <small class="text-muted font-w600" style="font-size: 11.5px;">&ge; 60 Tahun</small>
-                                        </div>
-                                    </div>
-                                    <span class="badge badge-warning font-w700 flex-shrink-0" style="font-size: 13px; padding: 7px 14px; background: #d97706; color: #ffffff; border-radius: 8px;">
-                                        {{ $data['demografi']['lansia'] }} Pasien
-                                    </span>
-                                </div>
-                            </div>
+                    <!-- 1. Distribusi Layanan Terapi Grid -->
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="font-w700 text-dark" style="font-size: 13px;">
+                                <i class="fa-solid fa-hand-holding-medical text-primary mr-2"></i> Distribusi Ragam Layanan Terapi:
+                            </span>
+                            <small class="text-muted font-w600" style="font-size: 11.5px;">{{ count($data['layanan_breakdown']) }} Disiplin Layanan</small>
                         </div>
 
-                        <!-- Gender Ratio -->
-                        <div class="col-lg-5 col-md-12">
-                            <div class="rounded h-100 d-flex flex-column justify-content-between text-center" style="padding: 20px 18px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; min-height: 195px;">
-                                <div>
-                                    <small class="text-muted font-w700 d-block mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <i class="fa-solid fa-venus-mars mr-1 text-primary"></i> Rasio Gender
-                                    </small>
-                                </div>
-                                <div class="d-flex justify-content-around align-items-center my-auto py-2">
-                                    <div class="px-2">
-                                        <div class="font-w800 text-primary" style="font-size: 26px; line-height: 1.2;">{{ $data['demografi']['laki'] }}</div>
-                                        <small class="text-muted font-w600 d-block mt-1" style="font-size: 12px;"><i class="fa-solid fa-mars mr-1 text-primary"></i> Laki-laki</small>
+                        <div class="row mb-1" style="row-gap: 10px;">
+                            @forelse($data['layanan_breakdown'] as $layanan)
+                                @php
+                                    $pctLayanan = $data['total_sesi'] > 0 ? round(($layanan->total / $data['total_sesi']) * 100, 1) : 0;
+                                    $layName = strtolower($layanan->layanan_terapi ?? '');
+                                    $iconClass = 'fa-stethoscope';
+                                    $themeColor = '#2563eb';
+                                    $themeBg = '#eff6ff';
+                                    $themeBorder = '#bfdbfe';
+                                    
+                                    if (str_contains($layName, 'fisio')) {
+                                        $iconClass = 'fa-person-walking';
+                                        $themeColor = '#2563eb';
+                                        $themeBg = '#eff6ff';
+                                        $themeBorder = '#bfdbfe';
+                                    } elseif (str_contains($layName, 'okupasi')) {
+                                        $iconClass = 'fa-hands-holding-child';
+                                        $themeColor = '#0284c7';
+                                        $themeBg = '#f0f9ff';
+                                        $themeBorder = '#bae6fd';
+                                    } elseif (str_contains($layName, 'wicara')) {
+                                        $iconClass = 'fa-comments';
+                                        $themeColor = '#0d9488';
+                                        $themeBg = '#f0fdfa';
+                                        $themeBorder = '#99f6e4';
+                                    } elseif (str_contains($layName, 'netra') || str_contains($layName, 'sensori')) {
+                                        $iconClass = 'fa-eye';
+                                        $themeColor = '#7c3aed';
+                                        $themeBg = '#f5f3ff';
+                                        $themeBorder = '#ddd6fe';
+                                    }
+                                @endphp
+                                <div class="col-sm-6">
+                                    <div class="rounded d-flex flex-column justify-content-between h-100" style="padding: 10px 13px; background: {{ $themeBg }}; border: 1px solid {{ $themeBorder }}; border-radius: 9px;">
+                                        <div class="d-flex align-items-center justify-content-between mb-1.5">
+                                            <div class="d-flex align-items-center text-truncate mr-2">
+                                                <i class="fa-solid {{ $iconClass }} flex-shrink-0" style="color: {{ $themeColor }}; font-size: 13px; margin-right: 8px;"></i>
+                                                <strong class="text-dark font-w700 text-truncate" style="font-size: 12px;">{{ $layanan->layanan_terapi }}</strong>
+                                            </div>
+                                            <span class="badge font-w700 flex-shrink-0" style="font-size: 10.5px; padding: 2.5px 7px; background: {{ $themeColor }}; color: #ffffff; border-radius: 5px;">
+                                                {{ $layanan->total }} Sesi
+                                            </span>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between mb-1" style="font-size: 11px;">
+                                            <span class="text-muted font-w500">Porsi Pelayanan</span>
+                                            <strong style="color: {{ $themeColor }}; font-size: 11px;">{{ $pctLayanan }}%</strong>
+                                        </div>
+                                        <div class="progress" style="height: 5px; border-radius: 3px; background: rgba(0,0,0,0.06);">
+                                            <div class="progress-bar" role="progressbar" style="width: {{ $pctLayanan }}%; background-color: {{ $themeColor }}; border-radius: 3px;" aria-valuenow="{{ $pctLayanan }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
                                     </div>
-                                    <div style="height: 48px; width: 1.5px; background: #cbd5e1;"></div>
-                                    <div class="px-2">
-                                        <div class="font-w800 text-danger" style="font-size: 26px; line-height: 1.2;">{{ $data['demografi']['perempuan'] }}</div>
-                                        <small class="text-muted font-w600 d-block mt-1" style="font-size: 12px;"><i class="fa-solid fa-venus mr-1 text-danger"></i> Perempuan</small>
+                                </div>
+                            @empty
+                                <div class="col-12 text-center py-3 text-muted" style="font-size: 12px;">Belum ada data sesi terapi pada periode ini.</div>
+                            @endforelse
+                        </div>
+                    </div>
+
+                    <!-- Pemisah Halus Antar Seksi -->
+                    <div class="my-3" style="border-top: 1px dashed #e2e8f0;"></div>
+
+                    <!-- 2. Demografi Usia & Gender -->
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="font-w700 text-dark" style="font-size: 13px;">
+                                <i class="fa-solid fa-users-rectangle mr-2 text-primary"></i> Demografi Penerima Manfaat:
+                            </span>
+                            <small class="text-muted font-w600" style="font-size: 11.5px;">Usia & Rasio Gender</small>
+                        </div>
+
+                        @php
+                            $totalGender = ($data['demografi']['laki'] ?? 0) + ($data['demografi']['perempuan'] ?? 0);
+                            $pctLaki = $totalGender > 0 ? round((($data['demografi']['laki'] ?? 0) / $totalGender) * 100, 1) : 0;
+                            $pctPerempuan = $totalGender > 0 ? round((($data['demografi']['perempuan'] ?? 0) / $totalGender) * 100, 1) : 0;
+                        @endphp
+
+                        <div class="row" style="row-gap: 10px;">
+                            <!-- Kelompok Usia (3 Baris Rapi & Presisi) -->
+                            <div class="col-lg-7 col-md-12">
+                                <div class="d-flex flex-column" style="gap: 8px;">
+                                    <!-- Anak-Anak / ABK -->
+                                    <div class="d-flex align-items-center justify-content-between" style="padding: 8px 12px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 9px;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex align-items-center justify-content-center text-primary" style="width: 32px; height: 32px; border-radius: 7px; background: #dbeafe; font-size: 13.5px; flex-shrink: 0; margin-right: 12px;">
+                                                <i class="fa-solid fa-child"></i>
+                                            </div>
+                                            <div>
+                                                <strong class="text-dark d-block font-w700" style="font-size: 12px; line-height: 1.2;">Anak-Anak / ABK</strong>
+                                                <small class="text-muted font-w500" style="font-size: 10.5px;">&lt; 18 Tahun</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge font-w700 flex-shrink-0" style="font-size: 11px; padding: 4px 9px; background: #2563eb; color: #ffffff; border-radius: 5px;">
+                                            {{ $data['demografi']['anak'] }} Orang
+                                        </span>
+                                    </div>
+
+                                    <!-- Dewasa -->
+                                    <div class="d-flex align-items-center justify-content-between" style="padding: 8px 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 9px;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex align-items-center justify-content-center text-success" style="width: 32px; height: 32px; border-radius: 7px; background: #dcfce7; font-size: 13.5px; flex-shrink: 0; margin-right: 12px;">
+                                                <i class="fa-solid fa-person"></i>
+                                            </div>
+                                            <div>
+                                                <strong class="text-dark d-block font-w700" style="font-size: 12px; line-height: 1.2;">Dewasa</strong>
+                                                <small class="text-muted font-w500" style="font-size: 10.5px;">18 - 59 Tahun</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge font-w700 flex-shrink-0" style="font-size: 11px; padding: 4px 9px; background: #16a34a; color: #ffffff; border-radius: 5px;">
+                                            {{ $data['demografi']['dewasa'] }} Orang
+                                        </span>
+                                    </div>
+
+                                    <!-- Lansia -->
+                                    <div class="d-flex align-items-center justify-content-between" style="padding: 8px 12px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 9px;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border-radius: 7px; background: #fef3c7; font-size: 13.5px; flex-shrink: 0; color: #d97706; margin-right: 12px;">
+                                                <i class="fa-solid fa-person-cane"></i>
+                                            </div>
+                                            <div>
+                                                <strong class="text-dark d-block font-w700" style="font-size: 12px; line-height: 1.2;">Lansia (Geriatri)</strong>
+                                                <small class="text-muted font-w500" style="font-size: 10.5px;">&ge; 60 Tahun</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge font-w700 flex-shrink-0" style="font-size: 11px; padding: 4px 9px; background: #d97706; color: #ffffff; border-radius: 5px;">
+                                            {{ $data['demografi']['lansia'] }} Orang
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="pt-2 border-top" style="border-color: #e2e8f0 !important;">
-                                    <small class="text-muted font-w500" style="font-size: 11.5px;">
-                                        Total: <strong class="text-dark">{{ $data['demografi']['laki'] + $data['demografi']['perempuan'] }}</strong> Pasien
-                                    </small>
+                            </div>
+
+                            <!-- Gender Ratio Card -->
+                            <div class="col-lg-5 col-md-12">
+                                <div class="rounded h-100 d-flex flex-column justify-content-between" style="padding: 10px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 9px;">
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <small class="text-muted font-w700 text-uppercase" style="font-size: 10.5px; letter-spacing: 0.3px;">
+                                                <i class="fa-solid fa-venus-mars mr-1.5 text-primary" style="margin-right: 6px;"></i> Rasio Gender
+                                            </small>
+                                            <span class="badge font-w700" style="font-size: 10px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 2px 6px; border-radius: 4px;">{{ $totalGender }} Jiwa</span>
+                                        </div>
+
+                                        <!-- Laki-laki -->
+                                        <div class="mb-2">
+                                            <div class="d-flex align-items-center justify-content-between mb-1" style="font-size: 11.5px;">
+                                                <span class="font-w600 text-dark">
+                                                    <i class="fa-solid fa-mars" style="color: #2563eb; margin-right: 6px;"></i> Laki-laki
+                                                </span>
+                                                <span class="font-w700" style="color: #2563eb;">
+                                                    {{ $data['demografi']['laki'] }} <small class="text-muted font-w500">({{ $pctLaki }}%)</small>
+                                                </span>
+                                            </div>
+                                            <div class="progress" style="height: 5px; border-radius: 3px; background: #e2e8f0;">
+                                                <div class="progress-bar" role="progressbar" style="width: {{ $pctLaki }}%; background-color: #2563eb; border-radius: 3px;" aria-valuenow="{{ $pctLaki }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Perempuan -->
+                                        <div>
+                                            <div class="d-flex align-items-center justify-content-between mb-1" style="font-size: 11.5px;">
+                                                <span class="font-w600 text-dark">
+                                                    <i class="fa-solid fa-venus" style="color: #ec4899; margin-right: 6px;"></i> Perempuan
+                                                </span>
+                                                <span class="font-w700" style="color: #ec4899;">
+                                                    {{ $data['demografi']['perempuan'] }} <small class="text-muted font-w500">({{ $pctPerempuan }}%)</small>
+                                                </span>
+                                            </div>
+                                            <div class="progress" style="height: 5px; border-radius: 3px; background: #e2e8f0;">
+                                                <div class="progress-bar" role="progressbar" style="width: {{ $pctPerempuan }}%; background-color: #ec4899; border-radius: 3px;" aria-valuenow="{{ $pctPerempuan }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="pt-1.5 mt-1.5 border-top text-center" style="border-color: #e2e8f0 !important;">
+                                        <small class="text-muted font-w500" style="font-size: 10.5px;">
+                                            Total: <strong class="text-dark font-w700">{{ $totalGender }}</strong> Penerima Manfaat
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -11,7 +11,7 @@
                     </div>
                     <div>
                         <h5 class="modal-title font-w700 mb-0" id="addPemeriksaanLabel" style="color: #1e40af !important; font-size: 17px; letter-spacing: -0.2px;">
-                            Objektif (O) — Pemeriksaan Fisik & Vital Sign
+                            Objektif (O) - Pemeriksaan Fisik & Vital Sign
                         </h5>
                         <small class="text-muted font-w500" style="font-size: 12px;">Catatan pemeriksaan fisik langsung, tanda-tanda vital, inspeksi, dan palpasi klinis</small>
                     </div>

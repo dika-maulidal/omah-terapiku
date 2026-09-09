@@ -1060,7 +1060,7 @@
                                 <i class="fa-solid fa-heart-pulse mr-1 text-primary"></i> Intensitas Nyeri & Anatomi Body Chart
                             </h5>
                         </div>
-                        <small class="text-muted font-w600">Penilaian skala nyeri (VAS/Wong-Baker Faces) & penandaan area keluhan anatomis</small>
+                        <small class="text-muted font-w600">Penilaian skala nyeri (VAS) & penandaan area keluhan anatomis</small>
                     </div>
                     <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
                         <!-- Skala Nyeri 0 - 10 Visual Rating Card -->
@@ -1074,8 +1074,10 @@
 
                         <!-- 1. Skor Total Nyeri (VAS) -->
                         <div class="p-3 bg-white rounded mb-3" style="border: 1px solid #e2e8f0;">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="font-w700 text-dark" style="font-size: 13px;">Skor Total Nyeri (VAS) :</span>
+                            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap" style="gap: 8px;">
+                                <div>
+                                    <span class="font-w700 text-dark" style="font-size: 13px;">Skor Total Nyeri (VAS) :</span>
+                                </div>
                                 <div>
                                     <span id="label-score-total" class="badge font-w700" style="font-size: 12.5px; padding: 4px 10px; background: #e2e8f0; color: #334155;">
                                         {{ old('nyeri_skor_total', $assessment->nyeri_skor_total) !== null ? old('nyeri_skor_total', $assessment->nyeri_skor_total) . ' / 10' : 'Belum Dipilih' }}
@@ -1083,6 +1085,7 @@
                                 </div>
                             </div>
                             <input type="hidden" name="nyeri_skor_total" id="input-score-total" value="{{ old('nyeri_skor_total', $assessment->nyeri_skor_total) }}">
+                            
                             <div class="pain-scale-group d-flex justify-content-between" style="gap: 4px; overflow-x: auto; padding-bottom: 4px;">
                                 @php $score_tot = old('nyeri_skor_total', $assessment->nyeri_skor_total); @endphp
                                 @for($i = 0; $i <= 10; $i++)
@@ -4639,11 +4642,12 @@ $(document).ready(function() {
         $(this).addClass('active');
         
         $(targetInput).val(val);
-        var bg = val == 0 ? '#10b981' : (val <= 3 ? '#3b82f6' : (val <= 6 ? '#f59e0b' : '#ef4444'));
+        var bg = val == 0 ? '#10b981' : (val <= 3 ? '#84cc16' : (val <= 6 ? '#f59e0b' : '#ef4444'));
         $(targetLabel).text(val + ' / 10').css({
             'background': bg,
             'color': '#ffffff'
         });
+
         updateFormOverallProgress();
         triggerAutoSave();
     });

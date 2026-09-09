@@ -69,10 +69,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/notifications/mark-all-read', [RekamController::class, 'markAllNotificationsRead'])->name('notifications.markAllRead');
     Route::get('/notifications/unread-json', [RekamController::class, 'getUnreadNotificationsJson'])->name('notifications.unreadJson');
 
-    // Rekam Medis & Pasien (View / Read-Only Detail & Cetak for all authorized roles)
+    // Rekam Medis & Penerima Manfaat (View / Read-Only Detail & Cetak for all authorized roles)
     Route::get('/rekam', [RekamController::class, 'index'])->name('rekam');
     Route::get('/rekam/export-csv', [RekamController::class, 'exportCsv'])->name('rekam.export-csv');
-    Route::get('/rekam/pasien/{id}', [RekamController::class, 'detail'])->name('rekam.detail');
+    Route::get('/rekam/penerima-manfaat/{id}', [RekamController::class, 'detail'])->name('rekam.detail');
     Route::get('/rekam/file/{id}/{type}', [RekamPemeriksaanController::class, 'file'])->name('pem.file');
     Route::get('/rekam/{id}/assessment/show', [RekamAssessmentController::class, 'show'])->name('rekam.assessment.show');
     Route::get('/rekam/{id}/assessment/print', [RekamAssessmentController::class, 'print'])->name('rekam.assessment.print');
@@ -93,9 +93,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/penerima-manfaat/{id}/update', [PasienController::class, 'update'])->name('penerima-manfaat.update');
 
         Route::get('/rekam/add', [RekamController::class, 'add'])->name('rekam.add');
-        Route::post('/rekam/pasie/store', [RekamController::class, 'store'])->name('rekam.store');
+        Route::post('/rekam/store', [RekamController::class, 'store'])->name('rekam.store');
         Route::get('/rekam/{id}/edit', [RekamController::class, 'edit'])->name('rekam.edit');
-        Route::post('/rekam/pasien/{id}/update', [RekamController::class, 'update'])->name('rekam.update');
+        Route::post('/rekam/penerima-manfaat/{id}/update', [RekamController::class, 'update'])->name('rekam.update');
     });
 
     // --- Role: Admin & Dokter (Clinical Operations - Assessment, SOAP, Tindakan, Diagnosa) ---

@@ -834,7 +834,6 @@
                             <h4 class="fs-16 font-w700 mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
                                 Aktivitas Terkini Terapis
                             </h4>
-                            <p class="fs-12 text-muted mb-0">Log klinis realtime: pengisian asesmen modul klinis, pemeriksaan terapi, dan sesi selesai</p>
                         </div>
                     </div>
                     
@@ -1044,28 +1043,166 @@ $(document).ready(function() {
         $('#statTertinggi').text(bulanMax);
     }
 
+    // Custom Rounded Corner Bar untuk Chart.js 2.x
+    if (typeof Chart !== 'undefined' && Chart.elements && Chart.elements.Rectangle) {
+        Chart.elements.Rectangle.prototype.draw = function() {
+            var ctx = this._chart.ctx;
+            var vm = this._view;
+            if (!vm || vm.width === undefined) return;
+
+            if (vm.horizontal) {
+                var left = vm.base;
+                var right = vm.x;
+                var top = vm.y - vm.height / 2;
+                var bottom = vm.y + vm.height / 2;
+                var width = right - left;
+                var height = vm.height;
+                if (width <= 0) return;
+                var radius = Math.min(6, width / 2, height / 2);
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.fillStyle = vm.backgroundColor;
+                ctx.strokeStyle = vm.borderColor || 'transparent';
+                ctx.lineWidth = vm.borderWidth || 0;
+                ctx.moveTo(left, top);
+                ctx.lineTo(right - radius, top);
+                ctx.quadraticCurveTo(right, top, right, top + radius);
+                ctx.lineTo(right, bottom - radius);
+                ctx.quadraticCurveTo(right, bottom, right - radius, bottom);
+                ctx.lineTo(left, bottom);
+                ctx.closePath();
+                ctx.fill();
+                if (vm.borderWidth > 0 && vm.borderColor) ctx.stroke();
+                ctx.restore();
+                return;
+            }
+
+            var left = vm.x - vm.width / 2;
+            var right = vm.x + vm.width / 2;
+            var top = vm.y;
+            var bottom = vm.base;
+            var height = bottom - top;
+            var width = vm.width;
+
+            if (height <= 0 || isNaN(top) || isNaN(bottom)) return;
+
+            var radius = Math.min(8, width / 2, height / 2);
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = vm.backgroundColor;
+            ctx.strokeStyle = vm.borderColor || 'transparent';
+            ctx.lineWidth = vm.borderWidth || 0;
+
+            // Rounded top corners
+            ctx.moveTo(left, bottom);
+            ctx.lineTo(left, top + radius);
+            ctx.quadraticCurveTo(left, top, left + radius, top);
+            ctx.lineTo(right - radius, top);
+            ctx.quadraticCurveTo(right, top, right, top + radius);
+            ctx.lineTo(right, bottom);
+            ctx.closePath();
+            ctx.fill();
+
+            if (vm.borderWidth > 0 && vm.borderColor) {
+                ctx.stroke();
+            }
+            ctx.restore();
+        };
+    }
+
     // 1. Chart Bar Penerima Manfaat
     var ctxBar = document.getElementById('chartPenerimaManfaat').getContext('2d');
     
-    var gradientFill = ctxBar.createLinearGradient(0, 0, 0, 240);
-    gradientFill.addColorStop(0, 'rgba(37, 99, 235, 0.9)');
-    gradientFill.addColorStop(1, 'rgba(37, 99, 235, 0.15)');
+    // Gradient Background Vivid Blue to Deep Royal Blue
+    var gradientFill = ctxBar.createLinearGradient(0, 0, 0, 210);
+    gradientFill.addColorStop(0, '#3b82f6');
+    gradientFill.addColorStop(0.5, '#2563eb');
+    gradientFill.addColorStop(1, '#1d4ed8');
 
     var initialData = getYearDataset(currentYear);
     updateSummaryStats(currentYear, initialData);
 
     var barChart = new Chart(ctxBar, {
         type: 'bar',
+        plugins: [{
+            beforeDatasetsDraw: function(chart) {
+                var ctx = chart.ctx;
+                var meta = chart.getDatasetMeta(0);
+                if (!meta || !meta.data || meta.data.length === 0) return;
+
+                var yScale = chart.scales['y-axis-0'] || Object.values(chart.scales).find(function(s) { return s.type === 'linear'; });
+                if (!yScale) return;
+
+                var top = yScale.top + 4;
+                var bottom = yScale.bottom;
+                var height = bottom - top;
+
+                ctx.save();
+                ctx.fillStyle = '#f1f5f9'; // Full grey track background
+
+                meta.data.forEach(function(bar) {
+                    var vm = bar._view;
+                    if (!vm) return;
+                    var w = vm.width;
+                    var l = vm.x - w / 2;
+                    var r = vm.x + w / 2;
+                    var rad = Math.min(8, w / 2, height / 2);
+
+                    ctx.beginPath();
+                    ctx.moveTo(l + rad, top);
+                    ctx.lineTo(r - rad, top);
+                    ctx.quadraticCurveTo(r, top, r, top + rad);
+                    ctx.lineTo(r, bottom - rad);
+                    ctx.quadraticCurveTo(r, bottom, r - rad, bottom);
+                    ctx.lineTo(l + rad, bottom);
+                    ctx.quadraticCurveTo(l, bottom, l, bottom - rad);
+                    ctx.lineTo(l, top + rad);
+                    ctx.quadraticCurveTo(l, top, l + rad, top);
+                    ctx.closePath();
+                    ctx.fill();
+                });
+
+                ctx.restore();
+            },
+            afterDatasetDraw: function(chart) {
+                var ctx = chart.ctx;
+                var meta = chart.getDatasetMeta(0);
+                if (!meta || !meta.data) return;
+
+                ctx.save();
+                meta.data.forEach(function(bar, idx) {
+                    var vm = bar._view;
+                    if (!vm) return;
+                    var val = chart.data.datasets[0].data[idx];
+                    if (val > 0) {
+                        var w = vm.width;
+                        var x = vm.x;
+                        var y = vm.y;
+
+                        // Indicator pointer / accent dot di puncak bar
+                        ctx.beginPath();
+                        ctx.arc(x, y + 4, Math.min(3.5, w / 4), 0, 2 * Math.PI);
+                        ctx.fillStyle = '#ffffff';
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                        ctx.shadowBlur = 4;
+                        ctx.fill();
+                    }
+                });
+                ctx.restore();
+            }
+        }],
         data: {
             labels: bulanLabels,
             datasets: [{
                 label: 'Jumlah Penerima Manfaat',
                 data: initialData,
                 backgroundColor: gradientFill,
-                borderColor: '#2563eb',
-                borderWidth: 1.5,
-                borderRadius: 6,
-                barPercentage: 0.6,
+                hoverBackgroundColor: '#1d4ed8',
+                borderColor: '#1d4ed8',
+                borderWidth: 1,
+                barPercentage: 0.55,
                 categoryPercentage: 0.7
             }]
         },
@@ -1079,8 +1216,9 @@ $(document).ready(function() {
                 backgroundColor: '#1e293b',
                 titleFontSize: 13,
                 bodyFontSize: 12,
-                xPadding: 10,
+                xPadding: 12,
                 yPadding: 10,
+                cornerRadius: 8,
                 displayColors: false,
                 callbacks: {
                     title: function(tooltipItem) {
@@ -1105,7 +1243,7 @@ $(document).ready(function() {
                 }],
                 yAxes: [{
                     gridLines: {
-                        color: '#f1f5f9',
+                        color: '#f8fafc',
                         drawBorder: false
                     },
                     ticks: {
@@ -1390,13 +1528,81 @@ $(document).ready(function() {
 
     var chartUsia = new Chart(ctxUsia, {
         type: 'bar',
+        plugins: [{
+            beforeDatasetsDraw: function(chart) {
+                var ctx = chart.ctx;
+                var meta = chart.getDatasetMeta(0);
+                if (!meta || !meta.data || meta.data.length === 0) return;
+
+                var yScale = chart.scales['y-axis-0'] || Object.values(chart.scales).find(function(s) { return s.type === 'linear'; });
+                if (!yScale) return;
+
+                var top = yScale.top + 4;
+                var bottom = yScale.bottom;
+                var height = bottom - top;
+
+                ctx.save();
+                ctx.fillStyle = '#f1f5f9'; // Full grey track background
+
+                meta.data.forEach(function(bar) {
+                    var vm = bar._view;
+                    if (!vm) return;
+                    var w = vm.width;
+                    var l = vm.x - w / 2;
+                    var r = vm.x + w / 2;
+                    var rad = Math.min(8, w / 2, height / 2);
+
+                    ctx.beginPath();
+                    ctx.moveTo(l + rad, top);
+                    ctx.lineTo(r - rad, top);
+                    ctx.quadraticCurveTo(r, top, r, top + rad);
+                    ctx.lineTo(r, bottom - rad);
+                    ctx.quadraticCurveTo(r, bottom, r - rad, bottom);
+                    ctx.lineTo(l + rad, bottom);
+                    ctx.quadraticCurveTo(l, bottom, l, bottom - rad);
+                    ctx.lineTo(l, top + rad);
+                    ctx.quadraticCurveTo(l, top, l + rad, top);
+                    ctx.closePath();
+                    ctx.fill();
+                });
+
+                ctx.restore();
+            },
+            afterDatasetDraw: function(chart) {
+                var ctx = chart.ctx;
+                var meta = chart.getDatasetMeta(0);
+                if (!meta || !meta.data) return;
+
+                ctx.save();
+                meta.data.forEach(function(bar, idx) {
+                    var vm = bar._view;
+                    if (!vm) return;
+                    var val = chart.data.datasets[0].data[idx];
+                    if (val > 0) {
+                        var w = vm.width;
+                        var x = vm.x;
+                        var y = vm.y;
+
+                        // Indicator pointer / accent dot di puncak bar usia
+                        ctx.beginPath();
+                        ctx.arc(x, y + 4, Math.min(3.5, w / 4), 0, 2 * Math.PI);
+                        ctx.fillStyle = '#ffffff';
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                        ctx.shadowBlur = 4;
+                        ctx.fill();
+                    }
+                });
+                ctx.restore();
+            }
+        }],
         data: {
             labels: usiaData.labels,
             datasets: [{
                 label: 'Jumlah Pasien',
                 data: usiaData.counts,
                 backgroundColor: usiaData.colors,
-                borderRadius: 6,
+                hoverBackgroundColor: ['#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8', '#1e3a8a'],
+                borderWidth: 0,
                 barPercentage: 0.55,
                 categoryPercentage: 0.7
             }]
@@ -1411,12 +1617,19 @@ $(document).ready(function() {
                 backgroundColor: '#1e293b',
                 titleFontSize: 13,
                 bodyFontSize: 12,
-                xPadding: 10,
+                xPadding: 12,
                 yPadding: 10,
+                cornerRadius: 8,
                 displayColors: false,
                 callbacks: {
-                    label: function(tooltipItem) {
-                        return ' ' + tooltipItem.yLabel + ' Orang Pasien';
+                    title: function(tooltipItem) {
+                        return 'Kelompok: ' + tooltipItem[0].xLabel;
+                    },
+                    label: function(tooltipItem, data) {
+                        var val = tooltipItem.yLabel || 0;
+                        var total = data.datasets[0].data.reduce(function(a, b) { return a + b; }, 0);
+                        var pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
+                        return ' Total: ' + val + ' Penerima Manfaat (' + pct + '%)';
                     }
                 }
             },
@@ -1433,7 +1646,7 @@ $(document).ready(function() {
                 }],
                 yAxes: [{
                     gridLines: {
-                        color: '#f1f5f9',
+                        color: '#f8fafc',
                         drawBorder: false
                     },
                     ticks: {

@@ -11,7 +11,7 @@
                     </div>
                     <div>
                         <h5 class="modal-title font-w700 mb-0" id="addDiagnosaLabel" style="color: #1e40af !important; font-size: 17px; letter-spacing: -0.2px;">
-                            Assessment (A) — Catatan Asesmen & Diagnosa ICD-10
+                            Assessment (A) - Catatan Asesmen & Diagnosa ICD-10
                         </h5>
                         <small class="text-muted font-w500" style="font-size: 12px;">Catatan kesimpulan klinis, klasifikasi diagnosa ICD-10, dan evaluasi capaian sesi</small>
                     </div>
@@ -74,6 +74,12 @@
                                         <span style="color: #334155; font-weight: 600;">{{ $icdItem->name_id }}</span>
                                     </button>
                                 @endforeach
+                            </div>
+
+                            <!-- Note / Disclaimer Info Tambah Diagnosa & Input Manual -->
+                            <div class="d-flex align-items-center mt-3 rounded" style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; font-size: 12.5px; color: #1e40af; gap: 12px; line-height: 1.5; padding: 14px 18px;">
+                                <i class="fa-solid fa-circle-info text-primary" style="font-size: 16px; flex-shrink: 0;"></i>
+                                <span>Opsi diagnosa belum ada? <strong>Hubungi Admin</strong> untuk penambahan data, atau Anda bisa langsung ketik/input manual pada kolom catatan di bawah.</span>
                             </div>
                         </div>
                     @endif

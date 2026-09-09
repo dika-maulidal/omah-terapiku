@@ -305,6 +305,25 @@
         return false;
     };
 
+    // Safe Date Helper (Anti-Crash Carbon Parse)
+    $safeFormatDate = function($date, $default = '-') {
+        if (empty($date)) return $default;
+        try {
+            return \Carbon\Carbon::parse($date)->translatedFormat('d F Y');
+        } catch (\Throwable $e) {
+            return (string)$date;
+        }
+    };
+
+    $safeAge = function($date) {
+        if (empty($date)) return '-';
+        try {
+            return \Carbon\Carbon::parse($date)->age . ' Tahun';
+        } catch (\Throwable $e) {
+            return '-';
+        }
+    };
+
     // Evaluasi Pengisian Setiap Modul (1 sd 15)
     // 1. Kemampuan Motorik
     $has_m1 = !empty($assessment->motorik_mengangkat_kepala) || 
@@ -603,7 +622,7 @@
                     </tr>
                     <tr>
                         <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px; font-weight: bold;">Tgl. Asesmen</td>
-                        <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px;">: {{ $assessment->tgl_assessment ? \Carbon\Carbon::parse($assessment->tgl_assessment)->translatedFormat('d F Y') : date('d F Y') }}</td>
+                        <td style="border: none !important; border-bottom: 1px solid #000000 !important; padding: 3px 6px;">: {{ $safeFormatDate($assessment->tgl_assessment, date('d F Y')) }}</td>
                     </tr>
                     <tr>
                         <td style="border: none !important; padding: 3px 6px; font-weight: bold;">Terapis / Petugas</td>
@@ -640,7 +659,7 @@
             </tr>
             <tr>
                 <td style="font-weight: bold; border: 1px solid #000000 !important;">TTL / Usia</td>
-                <td style="border: 1px solid #000000 !important;">: {{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->translatedFormat('d F Y') : '-' }} ({{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->age . ' Tahun' : '-' }})</td>
+                <td style="border: 1px solid #000000 !important;">: {{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $safeFormatDate($pasien->tgl_lahir) }} ({{ $safeAge($pasien->tgl_lahir) }})</td>
                 <td style="font-weight: bold; border: 1px solid #000000 !important;">No. Kontak / HP</td>
                 <td style="border: 1px solid #000000 !important;">: {{ $pasien->no_hp ?: '-' }}</td>
             </tr>
@@ -1131,6 +1150,7 @@
          ========================================================================= -->
     <div class="assessment-section-block" id="sec-block-6" data-section-id="6" data-has-data="{{ $has_m6 ? '1' : '0' }}" data-title="INTENSITAS NYERI & BODY CHART" style="{{ $has_m6 ? '' : 'display: none;' }}">
         <div class="section-title"><span class="sec-number">{{ $has_m6 ? $serverSeqNum++ : '6' }}</span>. INTENSITAS NYERI & BODY CHART</div>
+        
         <div class="row mb-2 no-break">
             <div class="col-7">
                 <table class="table-assessment">
@@ -1784,13 +1804,13 @@
                         </tr>
                         <tr>
                             <td style="border: none !important; padding: 1.5px 0;">Jadwal Re-assessment</td>
-                            <td style="border: none !important; padding: 1.5px 0;">: <strong>{{ $assessment->rencana_dosis_reassessment ? \Carbon\Carbon::parse($assessment->rencana_dosis_reassessment)->translatedFormat('d F Y') : '-' }}</strong></td>
+                            <td style="border: none !important; padding: 1.5px 0;">: <strong>{{ $assessment->rencana_dosis_reassessment ?: '-' }}</strong></td>
                         </tr>
                     </table>
                 </td>
                 <td style="width: 45%; border: none !important; text-align: center; vertical-align: top; padding: 6px 8px;">
                     <div>
-                        {{ $rekam->poli ?: ($rekam->upt_lokasi ?: 'Malang') }}, {{ $assessment->tgl_assessment ? \Carbon\Carbon::parse($assessment->tgl_assessment)->translatedFormat('d F Y') : date('d F Y') }}
+                        {{ $rekam->poli ?: ($rekam->upt_lokasi ?: 'Malang') }}, {{ $safeFormatDate($assessment->tgl_assessment, date('d F Y')) }}
                     </div>
                     <div style="font-weight: bold; margin-top: 2px;">Terapis Pemeriksa / Dokter,</div>
                     <div style="height: 48px;"></div>

@@ -521,9 +521,85 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- 4. SEBARAN GEOGRAFIS ASAL PENERIMA MANFAAT (KABUPATEN / KOTA) -->
+    <!-- 4. TINDAKAN TERAPI & PROFIL RAGAM DISABILITAS PENERIMA MANFAAT -->
     <!-- ========================================================================= -->
-    <div class="section-title">4. SEBARAN GEOGRAFIS ASAL PENERIMA MANFAAT (KABUPATEN / KOTA)</div>
+    <div class="section-title">4. TINDAKAN TERAPI &amp; PROFIL RAGAM DISABILITAS PENERIMA MANFAAT</div>
+    
+    <div class="row no-break">
+        <!-- Kolom Kiri: Tindakan Terapi Terbanyak -->
+        <div class="col-6 pr-1">
+            <table class="table-data mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 30px; text-align: center;">No</th>
+                        <th>Tindakan Terapi Sering Diberikan</th>
+                        <th style="width: 75px; text-align: center;">Frekuensi</th>
+                        <th style="width: 65px; text-align: center;">Proporsi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php 
+                        $noTdk = 1; 
+                    @endphp
+                    @forelse($data['top_tindakan'] as $tt)
+                        @php
+                            $pctT = $data['total_sesi'] > 0 ? round(($tt->total / $data['total_sesi']) * 100, 1) : 0;
+                        @endphp
+                        <tr>
+                            <td style="text-align: center;">{{ $noTdk++ }}</td>
+                            <td><strong>{{ $tt->tindakan }}</strong></td>
+                            <td style="text-align: center;">{{ $tt->total }} Sesi</td>
+                            <td style="text-align: center;">{{ $pctT }}%</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" style="text-align: center;">Belum ada tindakan tercatat.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Kolom Kanan: Profil Ragam Disabilitas -->
+        <div class="col-6 pl-1">
+            <table class="table-data mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 30px; text-align: center;">No</th>
+                        <th>Ragam Disabilitas Terlayani</th>
+                        <th style="width: 70px; text-align: center;">Jumlah</th>
+                        <th style="width: 75px; text-align: center;">Proporsi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php 
+                        $noDis = 1; 
+                        $totalDisCount = array_sum($data['disabilitas_breakdown']);
+                    @endphp
+                    @forelse($data['disabilitas_breakdown'] as $disName => $disCount)
+                        @php
+                            $pctDis = $totalDisCount > 0 ? round(($disCount / $totalDisCount) * 100, 1) : 0;
+                        @endphp
+                        <tr>
+                            <td style="text-align: center;">{{ $noDis++ }}</td>
+                            <td><strong>{{ $disName }}</strong></td>
+                            <td style="text-align: center;"><strong>{{ $disCount }}</strong> Orang</td>
+                            <td style="text-align: center;">{{ $pctDis }}%</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" style="text-align: center;">Data disabilitas belum tercatat.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 5. SEBARAN GEOGRAFIS ASAL PENERIMA MANFAAT (KABUPATEN / KOTA) -->
+    <!-- ========================================================================= -->
+    <div class="section-title">5. SEBARAN GEOGRAFIS ASAL PENERIMA MANFAAT (KABUPATEN / KOTA)</div>
     
     <table class="table-data no-break">
         <thead>
@@ -578,9 +654,9 @@
     </table>
 
     <!-- ========================================================================= -->
-    <!-- 5. REKAPITULASI KONSOLIDASI PER UNIT PELAKSANA TEKNIS (UPT) -->
+    <!-- 6. REKAPITULASI KONSOLIDASI PER UNIT PELAKSANA TEKNIS (UPT) -->
     <!-- ========================================================================= -->
-    <div class="section-title">5. REKAPITULASI PELAYANAN PER UNIT PELAKSANA TEKNIS (UPT)</div>
+    <div class="section-title">6. REKAPITULASI PELAYANAN PER UNIT PELAKSANA TEKNIS (UPT)</div>
     
     <table class="table-data no-break">
         <thead>
@@ -623,9 +699,9 @@
     </table>
 
     <!-- ========================================================================= -->
-    <!-- 6. UTILISASI & KINERJA TENAGA TERAPIS / MEDIS -->
+    <!-- 7. UTILISASI & KINERJA TENAGA TERAPIS / MEDIS -->
     <!-- ========================================================================= -->
-    <div class="section-title">6. REKAPITULASI KINERJA TENAGA TERAPIS &amp; TENAGA MEDIS</div>
+    <div class="section-title">7. REKAPITULASI KINERJA TENAGA TERAPIS &amp; TENAGA MEDIS</div>
     
     <table class="table-data no-break">
         <thead>
@@ -658,7 +734,7 @@
     </table>
 
     <!-- ========================================================================= -->
-    <!-- 7. LEMBAR PENGESAHAN RESMI DOKUMEN PEMERINTAH -->
+    <!-- 8. LEMBAR PENGESAHAN RESMI DOKUMEN PEMERINTAH -->
     <!-- ========================================================================= -->
     <table class="ttd-table no-break">
         <tr>
@@ -667,8 +743,8 @@
                 <strong>Penanggung Jawab Program Omah Terapi-KU</strong><br>
                 Dinas Sosial Provinsi Jawa Timur<br>
                 <div style="height: 55px;"></div>
-                <strong style="text-decoration: underline;">dr. Hj. SITI AISYAH, Sp.KFR</strong><br>
-                <small style="font-size: 8pt; color: #333;">NIP. 19780512 200604 2 008</small>
+                <strong>( ___________________________________ )</strong><br>
+                <small style="font-size: 8.5pt; color: #333;">NIP. ___________________________</small>
             </td>
             <td style="width: 50%;">
                 Surabaya, {{ $tglCetakFormatted }}<br>

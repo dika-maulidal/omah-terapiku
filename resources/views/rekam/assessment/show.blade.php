@@ -1,6 +1,101 @@
 @extends('layout.apps')
 @section('content')
 
+@php
+    $hasStr = function($val) {
+        if ($val === null) return false;
+        $val = trim((string)$val);
+        return $val !== '' && $val !== '-' && $val !== 'null' && $val !== 'Tidak Ada' && $val !== 'Belum Diisi' && $val !== 'Belum Dinilai';
+    };
+
+    $hasArrayContent = function($arr) use ($hasStr) {
+        if (!is_array($arr) || empty($arr)) return false;
+        foreach ($arr as $k => $v) {
+            if (is_array($v)) {
+                foreach ($v as $subk => $subv) {
+                    if ($hasStr($subv) && $subv !== 'NT') return true;
+                }
+            } else {
+                if ($hasStr($v) && $v !== 'NT') return true;
+            }
+        }
+        return false;
+    };
+
+    // Subtest 1.1 Netra
+    $has_sub_1_1 = $hasStr($assessment->penglihatan_klasifikasi) || $hasStr($assessment->penglihatan_onset) || $hasStr($assessment->penglihatan_sisi) || $hasStr($assessment->penglihatan_usia_onset) || $hasStr($assessment->penglihatan_durasi) || $hasStr($assessment->penglihatan_etiologi) || $hasStr($assessment->penglihatan_progresif) || $hasStr($assessment->penglihatan_terakhir_periksa) || $hasStr($assessment->penglihatan_visus_od) || $hasStr($assessment->penglihatan_visus_os) || $hasStr($assessment->penglihatan_persepsi_cahaya) || $hasStr($assessment->penglihatan_preferensi_sisi) || $hasStr($assessment->penglihatan_catatan) || (!empty($assessment->penglihatan_alat_bantu) && is_array($assessment->penglihatan_alat_bantu) && count(array_filter($assessment->penglihatan_alat_bantu, $hasStr)) > 0);
+
+    // Subtest 1.2 Psikososial
+    $has_sub_1_2 = $hasStr($assessment->psikososial_pekerjaan_hobi) || $hasStr($assessment->psikososial_faktor_psikologis) || $hasStr($assessment->psikososial_dukungan_sosial) || $hasStr($assessment->psikososial_harapan_pasien) || $hasStr($assessment->psikososial_catatan);
+
+    // Subtest 2.1 Motorik
+    $has_sub_2_1 = $hasStr($assessment->motorik_mengangkat_kepala) || $hasStr($assessment->motorik_posisi_tengkurap) || $hasStr($assessment->motorik_posisi_duduk) || $hasStr($assessment->motorik_merangkak) || $hasStr($assessment->motorik_berlutut) || $hasStr($assessment->motorik_berjalan) || $hasStr($assessment->motorik_catatan);
+
+    // Subtest 2.2 ADL
+    $has_sub_2_2 = $hasStr($assessment->adl_kontak_mata) || $hasStr($assessment->adl_duduk_tenang) || $hasStr($assessment->adl_gerakan_berulang) || $hasStr($assessment->adl_respon_nama) || $hasStr($assessment->adl_makan) || $hasStr($assessment->adl_mandi) || $hasStr($assessment->adl_berpakaian) || $hasStr($assessment->adl_bak) || $hasStr($assessment->adl_bab) || $hasStr($assessment->adl_catatan);
+
+    // Subtest 2.3 Wicara
+    $has_sub_2_3 = $hasStr($assessment->wicara_komunikasi) || $hasStr($assessment->wicara_organ) || $hasStr($assessment->wicara_organ_keterangan) || $hasStr($assessment->wicara_makan_menelan) || $hasStr($assessment->wicara_makan_menelan_keterangan) || $hasStr($assessment->wicara_catatan);
+
+    // Subtest 3.1 Nyeri
+    $has_sub_3_1 = ($assessment->nyeri_skor_total !== null && (int)$assessment->nyeri_skor_total > 0) || ($assessment->nyeri_saat_istirahat !== null && (int)$assessment->nyeri_saat_istirahat > 0) || ($assessment->nyeri_saat_aktivitas !== null && (int)$assessment->nyeri_saat_aktivitas > 0) || (!empty($assessment->nyeri_sifat) && is_array($assessment->nyeri_sifat) && count(array_filter($assessment->nyeri_sifat, $hasStr)) > 0) || $hasStr($assessment->nyeri_lokasi_keluhan) || $hasStr($assessment->nyeri_catatan);
+
+    // Subtest 3.2 ROM & MMT
+    $has_sub_3_2 = $hasArrayContent($assessment->rom_mmt_data) || $hasStr($assessment->rom_catatan);
+
+    // Subtest 4.1 Neurologis
+    $has_sub_4_1 = $hasStr($assessment->neuro_sensasi) || $hasStr($assessment->neuro_sensasi_area) || $hasStr($assessment->neuro_tonus_otot) || $hasStr($assessment->neuro_refleks_bisep_d) || $hasStr($assessment->neuro_refleks_bisep_s) || $hasStr($assessment->neuro_refleks_trisep_d) || $hasStr($assessment->neuro_refleks_trisep_s) || $hasStr($assessment->neuro_refleks_patela_d) || $hasStr($assessment->neuro_refleks_patela_s) || $hasStr($assessment->neuro_refleks_achilles_d) || $hasStr($assessment->neuro_refleks_achilles_s) || (!empty($assessment->neuro_koordinasi) && is_array($assessment->neuro_koordinasi) && count(array_filter($assessment->neuro_koordinasi, $hasStr)) > 0) || $hasStr($assessment->neuro_catatan);
+
+    // Subtest 4.2 Postur & Keseimbangan
+    $has_sub_4_2 = (!empty($assessment->postur_temuan) && is_array($assessment->postur_temuan) && count(array_filter($assessment->postur_temuan, $hasStr)) > 0) || $hasStr($assessment->postur_tangan_tongkat) || ($assessment->keseimbangan_bbs_skor !== null && (int)$assessment->keseimbangan_bbs_skor > 0) || $hasStr($assessment->keseimbangan_tug_detik) || $hasStr($assessment->keseimbangan_romberg) || $hasStr($assessment->keseimbangan_single_leg_kanan) || $hasStr($assessment->keseimbangan_single_leg_kiri) || $hasStr($assessment->keseimbangan_dual_task_tug) || ($assessment->keseimbangan_fesi_skor !== null && (int)$assessment->keseimbangan_fesi_skor > 0) || $hasStr($assessment->keseimbangan_catatan);
+
+    // Subtest 4.3 Gaya Berjalan (Gait)
+    $has_sub_4_3 = (!empty($assessment->gait_deviasi) && is_array($assessment->gait_deviasi) && count(array_filter($assessment->gait_deviasi, $hasStr)) > 0) || (!empty($assessment->gait_karakteristik) && is_array($assessment->gait_karakteristik) && count(array_filter($assessment->gait_karakteristik, $hasStr)) > 0) || $hasStr($assessment->gait_deteksi_lantai) || $hasStr($assessment->gait_fase) || $hasStr($assessment->gait_alat_bantu) || $hasStr($assessment->gait_jarak_mwt) || $hasStr($assessment->gait_10mwt_kecepatan_nyaman) || $hasStr($assessment->gait_10mwt_kecepatan_cepat) || $hasStr($assessment->gait_10mwt_jumlah_langkah) || $hasStr($assessment->gait_catatan);
+
+    // Subtest 4.4 Sensoris & Vestibular
+    $has_sub_4_4 = $hasStr($assessment->sensoris_taktil_raba_halus) || $hasStr($assessment->sensoris_taktil_pinprick) || $hasStr($assessment->sensoris_taktil_suhu) || $hasStr($assessment->sensoris_posisi_sendi) || $hasStr($assessment->sensoris_vibrasi) || $hasStr($assessment->sensoris_kinesthesia_jari) || $hasStr($assessment->sensoris_defisit_lokasi) || $hasStr($assessment->vestibular_hit) || $hasStr($assessment->vestibular_dix_hallpike) || $hasStr($assessment->vestibular_keluhan_pusing) || $hasStr($assessment->sensoris_catatan);
+
+    // Subtest 5.1 GMFM
+    $has_sub_5_1 = $hasArrayContent($assessment->gmfm_dimensi_a_scores) || $hasArrayContent($assessment->gmfm_dimensi_b_scores) || $hasArrayContent($assessment->gmfm_dimensi_c_scores) || $hasArrayContent($assessment->gmfm_dimensi_d_scores) || $hasArrayContent($assessment->gmfm_dimensi_e_scores) || $hasStr($assessment->gmfm_dimensi_a_catatan) || $hasStr($assessment->gmfm_dimensi_b_catatan) || $hasStr($assessment->gmfm_dimensi_c_catatan) || $hasStr($assessment->gmfm_dimensi_d_catatan) || $hasStr($assessment->gmfm_dimensi_e_catatan) || (!empty($assessment->gmfm_total_score) && (float)$assessment->gmfm_total_score > 0) || (!empty($assessment->gmfm_total_persen) && (float)$assessment->gmfm_total_persen > 0);
+
+    // Subtest 5.2 Denver
+    $has_denver_score = false;
+    if (!empty($assessment->denver_data) && is_array($assessment->denver_data)) {
+        foreach ($assessment->denver_data as $dItem) {
+            if (is_array($dItem) && !empty($dItem['score']) && in_array(strtoupper($dItem['score']), ['P', 'F', 'R', 'NO'])) {
+                $has_denver_score = true;
+                break;
+            }
+        }
+    }
+    $has_sub_5_2 = $has_denver_score || ($assessment->denver_pass_count !== null && (int)$assessment->denver_pass_count > 0) || ($assessment->denver_fail_count !== null && (int)$assessment->denver_fail_count > 0) || $hasStr($assessment->denver_kesimpulan) || $hasStr($assessment->denver_catatan);
+
+    // Subtest 6.1 Perencanaan
+    $has_sub_6_1 = (!empty($assessment->rencana_modalitas_fisik) && is_array($assessment->rencana_modalitas_fisik) && count(array_filter($assessment->rencana_modalitas_fisik, $hasStr)) > 0) || (!empty($assessment->rencana_manual_terapi) && is_array($assessment->rencana_manual_terapi) && count(array_filter($assessment->rencana_manual_terapi, $hasStr)) > 0) || (!empty($assessment->rencana_latihan_terapi) && is_array($assessment->rencana_latihan_terapi) && count(array_filter($assessment->rencana_latihan_terapi, $hasStr)) > 0) || (!empty($assessment->rencana_edukasi_konseling) && is_array($assessment->rencana_edukasi_konseling) && count(array_filter($assessment->rencana_edukasi_konseling, $hasStr)) > 0) || $hasStr($assessment->rencana_modalitas_lainnya) || $hasStr($assessment->rencana_manual_lainnya) || $hasStr($assessment->rencana_latihan_lainnya) || $hasStr($assessment->rencana_edukasi_lainnya) || $hasStr($assessment->rencana_dosis_frekuensi) || $hasStr($assessment->rencana_dosis_durasi) || $hasStr($assessment->rencana_dosis_total_sesi) || $hasStr($assessment->rencana_dosis_reassessment) || $hasStr($assessment->rencana_terapi);
+
+    // Subtest 6.2 Kesimpulan & TTD
+    $has_sub_6_2 = $hasStr($assessment->kesimpulan);
+
+    // Modul Rollup 1 sd 6
+    $has_modul1 = $has_sub_1_1 || $has_sub_1_2;
+    $has_modul2 = $has_sub_2_1 || $has_sub_2_2 || $has_sub_2_3;
+    $has_modul3 = $has_sub_3_1 || $has_sub_3_2;
+    $has_modul4 = $has_sub_4_1 || $has_sub_4_2 || $has_sub_4_3 || $has_sub_4_4;
+    $has_modul5 = $has_sub_5_1 || $has_sub_5_2;
+    $has_modul6 = $has_sub_6_1 || $has_sub_6_2;
+
+    $modulesStatus = [
+        1 => $has_modul1,
+        2 => $has_modul2,
+        3 => $has_modul3,
+        4 => $has_modul4,
+        5 => $has_modul5,
+        6 => $has_modul6,
+    ];
+
+    $totalFilledModules = count(array_filter($modulesStatus));
+@endphp
+
 <!-- Page Header Banner (Unified Card Sesuai DESIGN.md) -->
 <div class="card mb-3 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
     <div class="card-body p-3 p-md-4">
@@ -23,7 +118,7 @@
                 <a href="{{Route('rekam.detail', $pasien->id)}}" class="btn btn-sm btn-light font-w600" style="padding: 8px 16px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
                     <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Rekam Medis
                 </a>
-                @if(in_array(auth()->user()->role_display(), ['Admin', 'Dokter']))
+                @if(auth()->user() && in_array(auth()->user()->role_display(), ['Admin', 'Dokter']))
                     <a href="{{Route('rekam.assessment', $rekam->id)}}" class="btn btn-sm btn-info text-white font-w600" style="padding: 8px 16px; font-size: 12.5px; border-radius: 8px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important; border: none !important; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);">
                         <i class="fa-solid fa-pencil mr-1"></i> Edit Assessment
                     </a>
@@ -93,42 +188,40 @@
     <!-- 6 Modules Grid Tab Navigation Header (3x2, Tanpa Perlu Geser) -->
     <div class="card-header p-3 border-bottom" style="background: #ffffff; border-top-left-radius: 12px; border-top-right-radius: 12px;">
         <ul class="nav assessment-modul-grid-tabs" id="assessmentShowTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link module-tab-link active" id="tab-modul1-btn" data-toggle="tab" href="#modul-1" role="tab" aria-controls="modul-1" aria-selected="true" data-module-index="1">
-                    <span class="tab-module-num mr-2">1</span>
-                    <span class="tab-module-title text-truncate">Modul 1: Penglihatan & Psikososial</span>
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link module-tab-link" id="tab-modul2-btn" data-toggle="tab" href="#modul-2" role="tab" aria-controls="modul-2" aria-selected="false" data-module-index="2">
-                    <span class="tab-module-num mr-2">2</span>
-                    <span class="tab-module-title text-truncate">Modul 2: Motorik Dasar & ADL</span>
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link module-tab-link" id="tab-modul3-btn" data-toggle="tab" href="#modul-3" role="tab" aria-controls="modul-3" aria-selected="false" data-module-index="3">
-                    <span class="tab-module-num mr-2">3</span>
-                    <span class="tab-module-title text-truncate">Modul 3: Evaluasi Fisik & Nyeri</span>
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link module-tab-link" id="tab-modul4-btn" data-toggle="tab" href="#modul-4" role="tab" aria-controls="modul-4" aria-selected="false" data-module-index="4">
-                    <span class="tab-module-num mr-2">4</span>
-                    <span class="tab-module-title text-truncate">Modul 4: Neurologis & Gait</span>
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link module-tab-link" id="tab-modul5-btn" data-toggle="tab" href="#modul-5" role="tab" aria-controls="modul-5" aria-selected="false" data-module-index="5">
-                    <span class="tab-module-num mr-2">5</span>
-                    <span class="tab-module-title text-truncate">Modul 5: Instrumen Khusus</span>
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link module-tab-link" id="tab-modul6-btn" data-toggle="tab" href="#modul-6" role="tab" aria-controls="modul-6" aria-selected="false" data-module-index="6">
-                    <span class="tab-module-num mr-2">6</span>
-                    <span class="tab-module-title text-truncate">Modul 6: Rencana Terapi & TTD</span>
-                </a>
-            </li>
+            @php
+                $tabTitles = [
+                    1 => 'Modul 1: Penglihatan & Psikososial',
+                    2 => 'Modul 2: Motorik Dasar & ADL',
+                    3 => 'Modul 3: Evaluasi Fisik & Nyeri',
+                    4 => 'Modul 4: Neurologis & Gait',
+                    5 => 'Modul 5: Instrumen Khusus',
+                    6 => 'Modul 6: Rencana Terapi & TTD',
+                ];
+            @endphp
+            @foreach($tabTitles as $idx => $title)
+                @php
+                    $isFilled = $modulesStatus[$idx];
+                @endphp
+                <li class="nav-item module-tab-item" role="presentation" data-module-index="{{ $idx }}" data-has-data="{{ $isFilled ? '1' : '0' }}">
+                    <a class="nav-link module-tab-link {{ $idx === 1 ? 'active' : '' }}" id="tab-modul{{ $idx }}-btn" data-toggle="tab" href="#modul-{{ $idx }}" role="tab" aria-controls="modul-{{ $idx }}" aria-selected="{{ $idx === 1 ? 'true' : 'false' }}" data-module-index="{{ $idx }}">
+                        <div class="d-flex align-items-center justify-content-between w-100">
+                            <div class="d-flex align-items-center text-truncate" style="min-width: 0;">
+                                <span class="tab-module-num mr-2">{{ $idx }}</span>
+                                <span class="tab-module-title text-truncate">{{ $title }}</span>
+                            </div>
+                            @if($isFilled)
+                                <span class="badge font-w700 ml-2 tab-status-badge flex-shrink-0" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                    <i class="fa-solid fa-check mr-1"></i> Terisi
+                                </span>
+                            @else
+                                <span class="badge font-w500 ml-2 tab-status-badge flex-shrink-0" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                    Kosong
+                                </span>
+                            @endif
+                        </div>
+                    </a>
+                </li>
+            @endforeach
         </ul>
     </div>
 
@@ -147,6 +240,15 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-eye text-primary mr-1.5"></i> Subtest 1.1: Status Penglihatan (Netra)
                         </h6>
+                        @if($has_sub_1_1)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-0">
                         <table class="table mb-0" style="font-size: 13px;">
@@ -162,7 +264,7 @@
                                     <td>
                                         <strong class="text-primary">{{ $assessment->penglihatan_onset ?: '-' }}</strong>
                                         @if($assessment->penglihatan_sisi)
-                                            <span class="badge badge-light border ml-1">({{ $assessment->penglihatan_sisi }})</span>
+                                             <span class="badge badge-light border ml-1">({{ $assessment->penglihatan_sisi }})</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -236,48 +338,45 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-users text-primary mr-1.5"></i> Subtest 1.2: Faktor Psikososial & Kontekstual
                         </h6>
+                        @if($has_sub_1_2)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-3 p-md-4">
                         <div class="row">
-                            <div class="col-lg-3 col-sm-6 col-12 mb-3">
+                            <div class="col-lg-6 col-12 mb-3">
                                 <div class="p-3 rounded border bg-light h-100">
-                                    <small class="text-muted d-block font-w600" style="font-size: 11px;">Dukungan Keluarga</small>
-                                    <strong class="text-primary font-w700" style="font-size: 13.5px;">{{ $assessment->psikososial_dukungan_keluarga ?: '-' }}</strong>
+                                    <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">Dukungan Sosial & Keluarga</small>
+                                    <strong class="text-primary font-w700" style="font-size: 13.5px;">{{ $assessment->psikososial_dukungan_sosial ?: '-' }}</strong>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-6 col-12 mb-3">
+                            <div class="col-lg-6 col-12 mb-3">
                                 <div class="p-3 rounded border bg-light h-100">
-                                    <small class="text-muted d-block font-w600" style="font-size: 11px;">Kondisi Finansial</small>
-                                    <strong class="text-dark font-w700" style="font-size: 13.5px;">{{ $assessment->psikososial_kondisi_finansial ?: '-' }}</strong>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-6 col-12 mb-3">
-                                <div class="p-3 rounded border bg-light h-100">
-                                    <small class="text-muted d-block font-w600" style="font-size: 11px;">Motivasi / Kepatuhan</small>
-                                    <strong class="text-success font-w700" style="font-size: 13.5px;">{{ $assessment->psikososial_motivasi ?: '-' }}</strong>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-6 col-12 mb-3">
-                                <div class="p-3 rounded border bg-light h-100">
-                                    <small class="text-muted d-block font-w600" style="font-size: 11px;">Interaksi Sosial</small>
-                                    <strong class="text-info font-w700" style="font-size: 13.5px;">{{ $assessment->psikososial_interaksi_sosial ?: '-' }}</strong>
+                                    <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">Faktor Emosional & Psikologis</small>
+                                    <strong class="text-dark font-w700" style="font-size: 13.5px;">{{ $assessment->psikososial_faktor_psikologis ?: '-' }}</strong>
                                 </div>
                             </div>
                             <div class="col-12 mb-3">
                                 <div class="p-3 rounded border bg-white">
-                                    <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px;">Hambatan Lingkungan Fisik</small>
-                                    <div class="font-w600 text-dark" style="font-size: 13px;">{{ $assessment->psikososial_hambatan_lingkungan ?: '-' }}</div>
+                                    <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">Pekerjaan / Sekolah / Aktivitas / Hobi</small>
+                                    <div class="font-w600 text-dark" style="font-size: 13px;">{{ $assessment->psikososial_pekerjaan_hobi ?: '-' }}</div>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-12 mb-3">
                                 <div class="p-3 rounded border bg-white">
-                                    <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px;">Harapan Penerima Manfaat / Keluarga</small>
+                                    <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">Harapan Penerima Manfaat / Keluarga</small>
                                     <div class="font-w600 text-dark" style="font-size: 13px;">{{ $assessment->psikososial_harapan_pasien ?: '-' }}</div>
                                 </div>
                             </div>
                         </div>
                         @if($assessment->psikososial_catatan)
-                            <div class="p-3 mt-3 rounded" style="background: #f8fafc; border: 1px dashed #e2e8f0; font-size: 12.5px;">
+                            <div class="p-3 rounded" style="background: #f8fafc; border: 1px dashed #e2e8f0; font-size: 12.5px;">
                                 <span class="text-muted d-block font-w600 mb-1">Catatan Observasi Psikososial:</span>
                                 <p class="mb-0 text-dark">{{ $assessment->psikososial_catatan }}</p>
                             </div>
@@ -304,6 +403,15 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-child text-primary mr-1.5"></i> Subtest 2.1: Kemampuan Motorik Kasar & Halus
                         </h6>
+                        @if($has_sub_2_1)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-0">
                         <table class="table table-hover mb-0" style="font-size: 13px;">
@@ -398,6 +506,15 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-list-check text-primary mr-1.5"></i> Subtest 2.2: Kemampuan Aktivitas Sehari-hari (ADL)
                         </h6>
+                        @if($has_sub_2_2)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-0">
                         <table class="table table-hover mb-0" style="font-size: 13px;">
@@ -469,6 +586,15 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-comments text-primary mr-1.5"></i> Subtest 2.3: Kemampuan Wicara & Komunikasi
                         </h6>
+                        @if($has_sub_2_3)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-0">
                         <table class="table table-hover mb-0" style="font-size: 13px;">
@@ -539,6 +665,15 @@
                                 <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                                     <i class="fa-solid fa-heart-pulse text-primary mr-1.5"></i> Subtest 3.1: Intensitas Nyeri & Anatomi Body Chart
                                 </h6>
+                                @if($has_sub_3_1)
+                                    <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                        <i class="fa-solid fa-check mr-1"></i> Terisi
+                                    </span>
+                                @else
+                                    <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                        Kosong
+                                    </span>
+                                @endif
                             </div>
                             <div class="card-body p-3 p-md-4">
                                 <div class="row align-items-center">
@@ -636,6 +771,15 @@
                                 <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                                     <i class="fa-solid fa-arrows-up-down-left-right text-primary mr-1.5"></i> Subtest 3.2: Lingkup Gerak Sendi (ROM) & Kekuatan Otot (MMT)
                                 </h6>
+                                @if($has_sub_3_2)
+                                    <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                        <i class="fa-solid fa-check mr-1"></i> Terisi
+                                    </span>
+                                @else
+                                    <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                        Kosong
+                                    </span>
+                                @endif
                             </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
@@ -708,6 +852,15 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-brain text-primary mr-1.5"></i> Subtest 4.1: Pemeriksaan Neurologis (Sistem Saraf)
                         </h6>
+                        @if($has_sub_4_1)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-3 p-md-4">
                         <table class="table table-bordered mb-3" style="font-size: 13px;">
@@ -807,6 +960,15 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-person text-primary mr-1.5"></i> Subtest 4.2: Pemeriksaan Postur & Keseimbangan
                         </h6>
+                        @if($has_sub_4_2)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-3 p-md-4">
                         <div class="table-responsive border rounded mb-3">
@@ -881,6 +1043,15 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-person-walking text-primary mr-1.5"></i> Subtest 4.3: Pemeriksaan Gaya Berjalan (Gait)
                         </h6>
+                        @if($has_sub_4_3)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-3 p-md-4">
                         <table class="table table-bordered mb-3" style="font-size: 13px;">
@@ -932,7 +1103,7 @@
                             </tbody>
                         </table>
                         @if($assessment->gait_catatan)
-                            <div class="p-3 rounded" style="background: #f8fafc; border: 1px dashed #e2e8f0; font-size: 12.5px;">
+                            <div class="p-3 rounded" style="background: #f8fafc; border-1px dashed #e2e8f0; font-size: 12.5px;">
                                 <span class="text-muted d-block font-w600 mb-1">Catatan Pola Berjalan:</span>
                                 <p class="mb-0 text-dark">{{ $assessment->gait_catatan }}</p>
                             </div>
@@ -946,6 +1117,15 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-fingerprint text-primary mr-1.5"></i> Subtest 4.4: Sensoris, Propriosepsi & Skrining Vestibular Dasar
                         </h6>
+                        @if($has_sub_4_4)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-3 p-md-4">
                         <div class="row" style="font-size: 12.5px;">
@@ -1019,9 +1199,20 @@
                 <!-- Subtest 5.1: GMFM-88 Terpadu -->
                 <div class="card mb-4 border shadow-none" style="border-radius: 10px; border-color: #e2e8f0;">
                     <div class="card-header py-2 px-3 d-flex align-items-center justify-content-between flex-wrap" style="background: #eff6ff; border-left: 4px solid #2563eb; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom: 1px solid #dbeafe; gap: 8px;">
-                        <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
-                            <i class="fa-solid fa-list-check text-primary mr-1.5"></i> Subtest 5.1: Gross Motor Function Measure (GMFM-88)
-                        </h6>
+                        <div class="d-flex align-items-center">
+                            <h6 class="font-w700 mb-0 mr-2" style="color: #1e40af; font-size: 13.5px;">
+                                <i class="fa-solid fa-list-check text-primary mr-1.5"></i> Subtest 5.1: Gross Motor Function Measure (GMFM-88)
+                            </h6>
+                            @if($has_sub_5_1)
+                                <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                    <i class="fa-solid fa-check mr-1"></i> Terisi
+                                </span>
+                            @else
+                                <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                    Kosong
+                                </span>
+                            @endif
+                        </div>
                         @php
                             $has_gmfm_scores = (!empty($assessment->gmfm_dimensi_a_scores) && is_array($assessment->gmfm_dimensi_a_scores) && count(array_filter($assessment->gmfm_dimensi_a_scores, fn($v) => $v !== null && $v !== '' && $v !== '-' && $v !== 'NT')) > 0) ||
                                                (!empty($assessment->gmfm_dimensi_b_scores) && is_array($assessment->gmfm_dimensi_b_scores) && count(array_filter($assessment->gmfm_dimensi_b_scores, fn($v) => $v !== null && $v !== '' && $v !== '-' && $v !== 'NT')) > 0) ||
@@ -1428,9 +1619,20 @@
                 <!-- Subtest 5.2: Skala Perkembangan Denver II (DDST II) -->
                 <div class="card mb-4 border shadow-none" style="border-radius: 10px; border-color: #e2e8f0;">
                     <div class="card-header py-2 px-3 d-flex align-items-center justify-content-between flex-wrap" style="background: #eff6ff; border-left: 4px solid #2563eb; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom: 1px solid #dbeafe; gap: 8px;">
-                        <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
-                            <i class="fa-solid fa-graduation-cap text-primary mr-1.5"></i> Subtest 5.2: Skala Perkembangan Denver II (DDST II)
-                        </h6>
+                        <div class="d-flex align-items-center">
+                            <h6 class="font-w700 mb-0 mr-2" style="color: #1e40af; font-size: 13.5px;">
+                                <i class="fa-solid fa-graduation-cap text-primary mr-1.5"></i> Subtest 5.2: Skala Perkembangan Denver II (DDST II)
+                            </h6>
+                            @if($has_sub_5_2)
+                                <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                    <i class="fa-solid fa-check mr-1"></i> Terisi
+                                </span>
+                            @else
+                                <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                    Kosong
+                                </span>
+                            @endif
+                        </div>
                         @php
                             $has_denver_counts = (($assessment->denver_pass_count !== null && $assessment->denver_pass_count > 0) ||
                                                   ($assessment->denver_fail_count !== null && $assessment->denver_fail_count > 0) ||
@@ -1569,6 +1771,15 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-calendar-check text-primary mr-1.5"></i> Subtest 6.1: Perencanaan Terapi & Modalitas Intervensi
                         </h6>
+                        @if($has_sub_6_1)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-3 p-md-4">
                         <!-- Intervensi 4 Kategori Grid -->
@@ -1739,6 +1950,15 @@
                         <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 13.5px;">
                             <i class="fa-solid fa-clipboard-check text-primary mr-1.5"></i> Subtest 6.2: Kesimpulan Klinis, Rekomendasi & Konfirmasi Terapis
                         </h6>
+                        @if($has_sub_6_2)
+                            <span class="badge font-w700" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                <i class="fa-solid fa-check mr-1"></i> Terisi
+                            </span>
+                        @else
+                            <span class="badge font-w500" style="font-size: 10px; padding: 3px 7px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                Kosong
+                            </span>
+                        @endif
                     </div>
                     <div class="card-body p-3 p-md-4">
                         <div class="row">
@@ -1971,6 +2191,7 @@
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.05) !important;
     color: #1e293b !important;
 }
+
 </style>
 
 @endsection
