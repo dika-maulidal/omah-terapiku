@@ -2894,3 +2894,137 @@ nav[role="navigation"] svg,
     text-align: center;
 }
 
+/* ==========================================================================
+   SEAMLESS COMPACT INPUT GROUP (NO GAPS, SINGLE UNIFIED CONTAINER)
+   ========================================================================== */
+.input-group-seamless {
+    display: flex !important;
+    align-items: stretch !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+}
+
+.input-group-seamless:focus-within {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+.input-group-seamless .form-control {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    height: 34px !important;
+    padding: 4px 10px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    flex: 1 1 auto !important;
+    width: 1% !important;
+    min-width: 0 !important;
+}
+
+.input-group-seamless .form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.input-group-seamless .input-group-append,
+.input-group-seamless .input-group-prepend {
+    display: flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.input-group-seamless .input-group-append .input-group-text {
+    border: none !important;
+    border-left: 1px solid #e2e8f0 !important;
+    border-radius: 0 !important;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 0 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+}
+
+.input-group-seamless .input-group-prepend .input-group-text {
+    border: none !important;
+    border-right: 1px solid #e2e8f0 !important;
+    border-radius: 0 !important;
+    background: #eff6ff !important;
+    color: #1e40af !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 0 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+}
+
+/* Cutoff Reference List Styling */
+.cutoff-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.cutoff-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    line-height: 1.3;
+}
+.cutoff-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1.5px 6px;
+    border-radius: 4px;
+    min-width: 58px;
+    text-align: center;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+}
+.cutoff-badge-success {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+.cutoff-badge-warning {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+.cutoff-badge-danger {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+.cutoff-badge-neutral {
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+}
+.cutoff-desc {
+    color: #475569;
+    font-weight: 500;
+    font-size: 11px;
+}
+
+
+
+

@@ -1,6 +1,131 @@
 @extends('layout.apps')
 @section('content')
 
+<style>
+/* Input Group Seamless - Satu Kesatuan tanpa gap/lengkung di tengah */
+.input-group-seamless {
+    display: flex !important;
+    align-items: stretch !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+}
+.input-group-seamless:focus-within {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+.input-group-seamless .form-control {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    height: 34px !important;
+    padding: 4px 10px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    flex: 1 1 auto !important;
+    width: 1% !important;
+    min-width: 0 !important;
+}
+.input-group-seamless .form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+.input-group-seamless .input-group-append,
+.input-group-seamless .input-group-prepend {
+    display: flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.input-group-seamless .input-group-append .input-group-text {
+    border: none !important;
+    border-left: 1px solid #e2e8f0 !important;
+    border-radius: 0 !important;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 0 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+}
+.input-group-seamless .input-group-prepend .input-group-text {
+    border: none !important;
+    border-right: 1px solid #e2e8f0 !important;
+    border-radius: 0 !important;
+    background: #eff6ff !important;
+    color: #1e40af !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 0 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+}
+
+/* Cutoff Reference List Styling */
+.cutoff-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.cutoff-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    line-height: 1.3;
+}
+.cutoff-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1.5px 6px;
+    border-radius: 4px;
+    min-width: 58px;
+    text-align: center;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+}
+.cutoff-badge-success {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+.cutoff-badge-warning {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+.cutoff-badge-danger {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+.cutoff-badge-neutral {
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+}
+.cutoff-desc {
+    color: #475569;
+    font-weight: 500;
+    font-size: 11px;
+}
+</style>
+
 <!-- Page Header Banner (Unified Card Sesuai DESIGN.md) -->
 <div class="card mb-3 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
     <div class="card-body p-3 p-md-4">
@@ -1063,29 +1188,29 @@
                         <small class="text-muted font-w600">Penilaian skala nyeri (VAS) & penandaan area keluhan anatomis</small>
                     </div>
                     <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
-                        <!-- Skala Nyeri 0 - 10 Visual Rating Card -->
+                    <!-- Skala Nyeri 0 - 10 Visual Rating Card -->
                     <div class="assessment-box p-3 rounded mb-4" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                        <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap">
+                        <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap" style="gap: 10px;">
                             <label class="font-w700 text-dark mb-0" style="font-size: 13.5px;">
-                                <i class="fa fa-tachometer text-primary mr-1"></i> Skala Intensitas Nyeri (Visual Analog Scale / NRS 0 - 10)
+                                <i class="fa fa-tachometer text-primary mr-2"></i> Skala Intensitas Nyeri (Visual Analog Scale / NRS 0 - 10)
                             </label>
-                            <span class="badge badge-info light font-w600" style="font-size: 11px;">0: Tidak Nyeri &bull; 1-3: Ringan &bull; 4-6: Sedang &bull; 7-9: Berat &bull; 10: Sangat Hebat</span>
+                            <small class="text-muted font-w500 d-inline-flex align-items-center" style="font-size: 11.5px;">
+                                <i class="fa-solid fa-circle-info text-primary mr-2" style="font-size: 13px;"></i>
+                                <span><strong>0:</strong> Tidak Nyeri, <strong>1-3:</strong> Ringan, <strong>4-6:</strong> Sedang, <strong>7-9:</strong> Berat, <strong>10:</strong> Sangat Hebat</span>
+                            </small>
                         </div>
 
                         <!-- 1. Skor Total Nyeri (VAS) -->
                         <div class="p-3 bg-white rounded mb-3" style="border: 1px solid #e2e8f0;">
-                            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap" style="gap: 8px;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="font-w700 text-dark" style="font-size: 13px;">Skor Total Nyeri (VAS) :</span>
                                 <div>
-                                    <span class="font-w700 text-dark" style="font-size: 13px;">Skor Total Nyeri (VAS) :</span>
-                                </div>
-                                <div>
-                                    <span id="label-score-total" class="badge font-w700" style="font-size: 12.5px; padding: 4px 10px; background: #e2e8f0; color: #334155;">
-                                        {{ old('nyeri_skor_total', $assessment->nyeri_skor_total) !== null ? old('nyeri_skor_total', $assessment->nyeri_skor_total) . ' / 10' : 'Belum Dipilih' }}
+                                    <span id="label-score-total" class="badge font-w700" style="font-size: 12.5px; padding: 4px 10px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;">
+                                        {{ old('nyeri_skor_total', $assessment->nyeri_skor_total) !== null && old('nyeri_skor_total', $assessment->nyeri_skor_total) !== '' ? old('nyeri_skor_total', $assessment->nyeri_skor_total) . ' / 10' : 'Belum Dipilih' }}
                                     </span>
                                 </div>
                             </div>
                             <input type="hidden" name="nyeri_skor_total" id="input-score-total" value="{{ old('nyeri_skor_total', $assessment->nyeri_skor_total) }}">
-                            
                             <div class="pain-scale-group d-flex justify-content-between" style="gap: 4px; overflow-x: auto; padding-bottom: 4px;">
                                 @php $score_tot = old('nyeri_skor_total', $assessment->nyeri_skor_total); @endphp
                                 @for($i = 0; $i <= 10; $i++)
@@ -1112,12 +1237,12 @@
                                 <div class="p-3 bg-white rounded h-100" style="border: 1px solid #e2e8f0;">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <span class="font-w700 text-dark" style="font-size: 12.5px;">Nyeri Saat Istirahat :</span>
-                                        <span id="label-score-istirahat" class="badge font-w700" style="font-size: 11.5px; padding: 3px 8px; background: #e2e8f0; color: #334155;">
-                                            {{ old('nyeri_saat_istirahat', $assessment->nyeri_saat_istirahat) !== null ? old('nyeri_saat_istirahat', $assessment->nyeri_saat_istirahat) . ' / 10' : '-' }}
+                                        <span id="label-score-istirahat" class="badge font-w700" style="font-size: 11.5px; padding: 3px 8px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;">
+                                            {{ old('nyeri_saat_istirahat', $assessment->nyeri_saat_istirahat) !== null && old('nyeri_saat_istirahat', $assessment->nyeri_saat_istirahat) !== '' ? old('nyeri_saat_istirahat', $assessment->nyeri_saat_istirahat) . ' / 10' : '-' }}
                                         </span>
                                     </div>
                                     <input type="hidden" name="nyeri_saat_istirahat" id="input-score-istirahat" value="{{ old('nyeri_saat_istirahat', $assessment->nyeri_saat_istirahat) }}">
-                                    <div class="pain-scale-group mini d-flex justify-content-between" style="gap: 3px; overflow-x: auto;">
+                                    <div class="pain-scale-group mini d-flex justify-content-between" style="gap: 3px;">
                                         @php $score_ist = old('nyeri_saat_istirahat', $assessment->nyeri_saat_istirahat); @endphp
                                         @for($i = 0; $i <= 10; $i++)
                                             <button type="button" class="btn pain-scale-btn mini {{ $score_ist !== null && (string)$score_ist === (string)$i ? 'active' : '' }}" data-target="#input-score-istirahat" data-label="#label-score-istirahat" data-val="{{ $i }}">
@@ -1133,12 +1258,12 @@
                                 <div class="p-3 bg-white rounded h-100" style="border: 1px solid #e2e8f0;">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <span class="font-w700 text-dark" style="font-size: 12.5px;">Nyeri Saat Aktivitas :</span>
-                                        <span id="label-score-aktivitas" class="badge font-w700" style="font-size: 11.5px; padding: 3px 8px; background: #e2e8f0; color: #334155;">
-                                            {{ old('nyeri_saat_aktivitas', $assessment->nyeri_saat_aktivitas) !== null ? old('nyeri_saat_aktivitas', $assessment->nyeri_saat_aktivitas) . ' / 10' : '-' }}
+                                        <span id="label-score-aktivitas" class="badge font-w700" style="font-size: 11.5px; padding: 3px 8px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;">
+                                            {{ old('nyeri_saat_aktivitas', $assessment->nyeri_saat_aktivitas) !== null && old('nyeri_saat_aktivitas', $assessment->nyeri_saat_aktivitas) !== '' ? old('nyeri_saat_aktivitas', $assessment->nyeri_saat_aktivitas) . ' / 10' : '-' }}
                                         </span>
                                     </div>
                                     <input type="hidden" name="nyeri_saat_aktivitas" id="input-score-aktivitas" value="{{ old('nyeri_saat_aktivitas', $assessment->nyeri_saat_aktivitas) }}">
-                                    <div class="pain-scale-group mini d-flex justify-content-between" style="gap: 3px; overflow-x: auto;">
+                                    <div class="pain-scale-group mini d-flex justify-content-between" style="gap: 3px;">
                                         @php $score_akt = old('nyeri_saat_aktivitas', $assessment->nyeri_saat_aktivitas); @endphp
                                         @for($i = 0; $i <= 10; $i++)
                                             <button type="button" class="btn pain-scale-btn mini {{ $score_akt !== null && (string)$score_akt === (string)$i ? 'active' : '' }}" data-target="#input-score-aktivitas" data-label="#label-score-aktivitas" data-val="{{ $i }}">
@@ -1585,61 +1710,99 @@
 
                     <!-- 2. Instrumen Keseimbangan (Tabel Standar) -->
                     <div class="assessment-box p-3 rounded mb-3" style="background: #f8fafc; border: 1px solid #edf2f7;">
-                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap" style="gap: 8px;">
+                        <div class="mb-2">
                             <label class="font-w700 text-dark mb-0" style="font-size: 13.5px;">
                                 <i class="fa fa-balance-scale text-primary mr-1"></i> 2. Instrumen Uji Keseimbangan & Risiko Jatuh
                             </label>
-                            <small class="text-muted">Isi skor atau waktu uji klinis keseimbangan pasien</small>
                         </div>
 
                         <div class="table-responsive mb-3" style="border: 1px solid #e2e8f0; border-radius: 8px;">
                             <table class="table table-bordered table-striped mb-0" style="font-size: 12px; background: #ffffff;">
                                 <thead style="background: #f1f5f9; color: var(--ot-navy);">
                                     <tr>
-                                        <th style="width: 32%;">Instrumen</th>
-                                        <th style="width: 30%;">Skor / Hasil Isian</th>
-                                        <th style="width: 20%;">Nilai Normal / Cut-off</th>
-                                        <th style="width: 18%;">Interpretasi</th>
+                                        <th style="width: 26%;">Instrumen</th>
+                                        <th style="width: 24%;">Skor / Hasil Isian</th>
+                                        <th style="width: 26%;">Nilai Normal / Cut-off</th>
+                                        <th style="width: 24%;">Interpretasi Otomatis</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <!-- Berg Balance Scale (BBS) -->
                                     <tr>
-                                        <td class="font-w700 text-dark align-middle">Berg Balance Scale (BBS)</td>
-                                        <td>
-                                            <div class="input-group input-group-sm">
-                                                <input type="number" name="keseimbangan_bbs_skor" class="form-control font-w700" value="{{ old('keseimbangan_bbs_skor', $assessment->keseimbangan_bbs_skor) }}" placeholder="0 - 56" min="0" max="56">
+                                        <td class="font-w700 text-dark align-middle">
+                                            Berg Balance Scale (BBS)
+                                            <small class="text-muted d-block font-w400">Total 14 item (skor 0-56)</small>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group input-group-sm input-group-seamless">
+                                                <input type="number" name="keseimbangan_bbs_skor" id="input_keseimbangan_bbs_skor" class="form-control font-w700" value="{{ old('keseimbangan_bbs_skor', $assessment->keseimbangan_bbs_skor) }}" placeholder="0 - 56" min="0" max="56">
                                                 <div class="input-group-append">
-                                                    <span class="input-group-text font-w600" style="font-size: 11px;">/ 56</span>
+                                                    <span class="input-group-text font-w600">/ 56</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="align-middle">&lt; 45</td>
-                                        <td class="align-middle"><span class="badge badge-warning text-dark font-w600">Risiko jatuh tinggi</span></td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">41 – 56</span>
+                                                    <span class="cutoff-desc">Mandiri (Risiko Rendah)</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-warning">21 – 40</span>
+                                                    <span class="cutoff-desc">Bantuan (Risiko Sedang)</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-danger">0 – 20</span>
+                                                    <span class="cutoff-desc font-w600 text-danger">Risiko Jatuh Tinggi</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle" id="interpretasi_bbs">
+                                            <span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>
+                                        </td>
                                     </tr>
 
                                     <!-- Timed Up and Go (TUG) -->
                                     <tr>
-                                        <td class="font-w700 text-dark align-middle">Timed Up and Go (TUG)</td>
-                                        <td>
-                                            <div class="input-group input-group-sm">
-                                                <input type="text" name="keseimbangan_tug_detik" class="form-control font-w700" value="{{ old('keseimbangan_tug_detik', $assessment->keseimbangan_tug_detik) }}" placeholder="Contoh: 11.5">
+                                        <td class="font-w700 text-dark align-middle">
+                                            Timed Up and Go (TUG)
+                                            <small class="text-muted d-block font-w400">Bangkit, jalan 3m, kembali duduk</small>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group input-group-sm input-group-seamless">
+                                                <input type="text" name="keseimbangan_tug_detik" id="input_keseimbangan_tug_detik" class="form-control font-w700" value="{{ old('keseimbangan_tug_detik', $assessment->keseimbangan_tug_detik) }}" placeholder="Contoh: 11.5">
                                                 <div class="input-group-append">
-                                                    <span class="input-group-text font-w600" style="font-size: 11px;">Detik</span>
+                                                    <span class="input-group-text font-w600">Detik</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="align-middle">&gt; 13,5 detik</td>
-                                        <td class="align-middle"><span class="badge badge-warning text-dark font-w600">Risiko jatuh</span></td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">&le; 13.5 dtk</span>
+                                                    <span class="cutoff-desc">Normal / Mandiri</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-danger">&gt; 13.5 dtk</span>
+                                                    <span class="cutoff-desc font-w600 text-danger">Risiko Jatuh Meningkat</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle" id="interpretasi_tug">
+                                            <span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>
+                                        </td>
                                     </tr>
 
                                     <!-- Romberg Test (mata tertutup) -->
                                     <tr>
-                                        <td class="font-w700 text-dark align-middle">Romberg Test (Mata Tertutup)</td>
-                                        <td>
+                                        <td class="font-w700 text-dark align-middle">
+                                            Romberg Test (Mata Tertutup)
+                                            <small class="text-muted d-block font-w400">Berdiri tegak mata tertutup 30 detik</small>
+                                        </td>
+                                        <td class="align-middle">
                                             <div class="d-flex" style="gap: 6px;">
                                                 @php $romb = old('keseimbangan_romberg', $assessment->keseimbangan_romberg); @endphp
-                                                @foreach(['Positif', 'Negatif'] as $r_opt)
+                                                @foreach(['Negatif', 'Positif'] as $r_opt)
                                                     <label class="radio-pill-card py-1 px-2 mb-0 {{ $romb == $r_opt ? 'active' : '' }}" style="font-size: 11.5px;">
                                                         <input type="radio" name="keseimbangan_romberg" value="{{ $r_opt }}" {{ $romb == $r_opt ? 'checked' : '' }}>
                                                         <span>{{ $r_opt }}</span>
@@ -1647,64 +1810,126 @@
                                                 @endforeach
                                             </div>
                                         </td>
-                                        <td class="align-middle">Positif</td>
-                                        <td class="align-middle"><span class="text-danger font-w600" style="font-size: 11px;">Defisit vestibular / propriosepsi</span></td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">Negatif</span>
+                                                    <span class="cutoff-desc">Normal (Propriosepsi Baik)</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-danger">Positif</span>
+                                                    <span class="cutoff-desc font-w600 text-danger">Defisit Propriosepsi / Sensoris</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle" id="interpretasi_romberg">
+                                            <span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>
+                                        </td>
                                     </tr>
 
                                     <!-- One-Leg Stance (OLS) -->
                                     <tr>
-                                        <td class="font-w700 text-dark align-middle">One-Leg Stance (OLS)</td>
-                                        <td>
-                                            <div class="row no-gutters" style="gap: 4px;">
+                                        <td class="font-w700 text-dark align-middle">
+                                            One-Leg Stance (OLS)
+                                            <small class="text-muted d-block font-w400">Berdiri satu kaki tanpa bantuan</small>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="row no-gutters" style="gap: 6px;">
                                                 <div class="col">
-                                                    <div class="input-group input-group-sm">
-                                                        <div class="input-group-prepend"><span class="input-group-text" style="font-size: 10.5px;">Kanan</span></div>
-                                                        <input type="text" name="keseimbangan_ols_kanan" class="form-control" value="{{ old('keseimbangan_ols_kanan', $assessment->keseimbangan_ols_kanan) }}" placeholder="Detik">
+                                                    <div class="input-group input-group-sm input-group-seamless">
+                                                        <div class="input-group-prepend"><span class="input-group-text font-w700">D</span></div>
+                                                        <input type="text" name="keseimbangan_ols_kanan" id="input_keseimbangan_ols_kanan" class="form-control" value="{{ old('keseimbangan_ols_kanan', $assessment->keseimbangan_ols_kanan) }}" placeholder="Detik">
                                                     </div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="input-group input-group-sm">
-                                                        <div class="input-group-prepend"><span class="input-group-text" style="font-size: 10.5px;">Kiri</span></div>
-                                                        <input type="text" name="keseimbangan_ols_kiri" class="form-control" value="{{ old('keseimbangan_ols_kiri', $assessment->keseimbangan_ols_kiri) }}" placeholder="Detik">
+                                                    <div class="input-group input-group-sm input-group-seamless">
+                                                        <div class="input-group-prepend"><span class="input-group-text font-w700">S</span></div>
+                                                        <input type="text" name="keseimbangan_ols_kiri" id="input_keseimbangan_ols_kiri" class="form-control" value="{{ old('keseimbangan_ols_kiri', $assessment->keseimbangan_ols_kiri) }}" placeholder="Detik">
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="align-middle">&lt; 5 detik</td>
-                                        <td class="align-middle"><span class="badge badge-warning text-dark font-w600">Risiko jatuh</span></td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">&ge; 5 detik</span>
+                                                    <span class="cutoff-desc">Normal (Kanan &amp; Kiri)</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-danger">&lt; 5 detik</span>
+                                                    <span class="cutoff-desc font-w600 text-danger">Risiko Jatuh</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle" id="interpretasi_ols">
+                                            <span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>
+                                        </td>
                                     </tr>
 
                                     <!-- Dual-Task TUG -->
                                     <tr>
                                         <td class="font-w700 text-dark align-middle">
                                             Dual-Task TUG
-                                            <small class="text-muted d-block font-w400">(TUG + menjawab verbal)</small>
+                                            <small class="text-muted d-block font-w400">TUG + berhitung mundur / tugas verbal</small>
                                         </td>
-                                        <td>
-                                            <div class="input-group input-group-sm">
-                                                <input type="text" name="keseimbangan_dual_task_tug" class="form-control" value="{{ old('keseimbangan_dual_task_tug', $assessment->keseimbangan_dual_task_tug) }}" placeholder="Contoh: 16.2">
+                                        <td class="align-middle">
+                                            <div class="input-group input-group-sm input-group-seamless">
+                                                <input type="text" name="keseimbangan_dual_task_tug" id="input_keseimbangan_dual_task_tug" class="form-control font-w700" value="{{ old('keseimbangan_dual_task_tug', $assessment->keseimbangan_dual_task_tug) }}" placeholder="Contoh: 16.2">
                                                 <div class="input-group-append">
-                                                    <span class="input-group-text font-w600" style="font-size: 11px;">Detik</span>
+                                                    <span class="input-group-text font-w600">Detik</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="align-middle">Selisih &gt; 4,5 detik dari TUG</td>
-                                        <td class="align-middle"><span class="badge badge-info light font-w600">Perlu perhatian</span></td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">&le; 4.5 dtk</span>
+                                                    <span class="cutoff-desc">Normal (&Delta; selisih TUG)</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-warning">&gt; 4.5 dtk</span>
+                                                    <span class="cutoff-desc font-w600 text-warning text-dark">Perlu Perhatian</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle" id="interpretasi_dual_task">
+                                            <span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>
+                                        </td>
                                     </tr>
 
                                     <!-- Falls Efficacy Scale – International (FES-I) -->
                                     <tr>
-                                        <td class="font-w700 text-dark align-middle">Falls Efficacy Scale – Int. (FES-I)</td>
-                                        <td>
-                                            <div class="input-group input-group-sm">
-                                                <input type="number" name="keseimbangan_fesi_skor" class="form-control font-w700" value="{{ old('keseimbangan_fesi_skor', $assessment->keseimbangan_fesi_skor) }}" placeholder="16 - 64" min="16" max="64">
+                                        <td class="font-w700 text-dark align-middle">
+                                            Falls Efficacy Scale – Int. (FES-I)
+                                            <small class="text-muted d-block font-w400">Tingkat ketakutan jatuh (skor 16-64)</small>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group input-group-sm input-group-seamless">
+                                                <input type="number" name="keseimbangan_fesi_skor" id="input_keseimbangan_fesi_skor" class="form-control font-w700" value="{{ old('keseimbangan_fesi_skor', $assessment->keseimbangan_fesi_skor) }}" placeholder="16 - 64" min="16" max="64">
                                                 <div class="input-group-append">
-                                                    <span class="input-group-text font-w600" style="font-size: 11px;">/ 64</span>
+                                                    <span class="input-group-text font-w600">/ 64</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="align-middle">&gt; 28</td>
-                                        <td class="align-middle"><span class="badge badge-danger light font-w600">Ketakutan jatuh tinggi</span></td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">16 – 19</span>
+                                                    <span class="cutoff-desc">Ketakutan Rendah</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-warning">20 – 27</span>
+                                                    <span class="cutoff-desc">Ketakutan Sedang</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-danger">28 – 64</span>
+                                                    <span class="cutoff-desc font-w600 text-danger">Ketakutan Jatuh Tinggi</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle" id="interpretasi_fesi">
+                                            <span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2085,82 +2310,44 @@
                         <small class="text-muted font-w600">Pengukuran fungsi motorik kasar 88-Item (Dimensi A, B, C, D, E) & kalkulasi otomatis</small>
                     </div>
                     <div class="p-3 p-md-4 bg-white border" style="border-top: none !important; border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important;">
-                        <!-- Keterangan Skala Penilaian & Konsep Medis -->
-                    <div class="card mb-3 border-0" style="background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
-                        <div class="card-body p-3">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap mb-2">
-                                <span class="font-w700 text-dark" style="font-size: 13px;">
-                                    <i class="fa fa-info-circle text-primary mr-1"></i> Panduan Skala Skor GMFM (0 - 3):
-                                </span>
-                                <small class="text-muted">Skala Penilaian Baku GMFM-88</small>
-                            </div>
-                            <div class="row" style="font-size: 12px;">
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="p-2 rounded bg-white border h-100">
-                                        <strong class="text-danger d-block mb-1"><span class="badge badge-danger mr-1">0</span> Tidak Memulai</strong>
-                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Tidak dapat memulai / melakukan gerakan sama sekali (0%).</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="p-2 rounded bg-white border h-100">
-                                        <strong class="text-warning d-block mb-1"><span class="badge badge-warning text-dark mr-1">1</span> Memulai</strong>
-                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Memulai gerakan tetapi menyelesaikan kurang dari 10% (< 10%).</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="p-2 rounded bg-white border h-100">
-                                        <strong class="text-primary d-block mb-1"><span class="badge badge-primary mr-1">2</span> Selesai Sebagian</strong>
-                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Menyelesaikan sebagian aktivitas gerakan (10% s/d < 100%).</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="p-2 rounded bg-white border h-100">
-                                        <strong class="text-success d-block mb-1"><span class="badge badge-success mr-1">3</span> Selesai Sempurna</strong>
-                                        <span class="text-muted" style="font-size: 11.5px; line-height: 1.3; display: block;">Menyelesaikan seluruh aktivitas mandiri & sempurna (100%).</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Dimensi Navigasi Underline Tabs (A, B, C, D, E) & Total Summary -->
                     <div class="d-flex align-items-center justify-content-between flex-wrap mb-3 border-bottom" style="border-color: #e2e8f0; gap: 8px;">
                         <ul class="nav nav-tabs border-bottom-0 gmfm-dim-tabs" style="gap: 4px; margin-bottom: -1px;">
                             <li class="nav-item">
                                 <a href="#gmfm-pane-a" class="nav-link gmfm-dim-btn active" data-target-dim="#gmfm-pane-a">
-                                    <i class="fa fa-bed mr-1.5 text-primary"></i> A: Berbaring & Berguling
+                                    <i class="fa fa-bed mr-2 text-primary"></i> A: Berbaring & Berguling
                                     <span class="badge-counter">17</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#gmfm-pane-b" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-pane-b">
-                                    <i class="fa fa-street-view mr-1.5 text-muted"></i> B: Duduk
+                                    <i class="fa fa-street-view mr-2 text-muted"></i> B: Duduk
                                     <span class="badge-counter">20</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#gmfm-pane-c" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-pane-c">
-                                    <i class="fa fa-child mr-1.5 text-muted"></i> C: Merangkak & Berlutut
+                                    <i class="fa fa-child mr-2 text-muted"></i> C: Merangkak & Berlutut
                                     <span class="badge-counter">14</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#gmfm-pane-d" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-pane-d">
-                                    <i class="fa fa-male mr-1.5 text-muted"></i> D: Berdiri
+                                    <i class="fa fa-male mr-2 text-muted"></i> D: Berdiri
                                     <span class="badge-counter">13</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#gmfm-pane-e" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-pane-e">
-                                    <i class="fa fa-running mr-1.5 text-muted"></i> E: Jalan, Lari & Lompat
+                                    <i class="fa fa-running mr-2 text-muted"></i> E: Jalan, Lari & Lompat
                                     <span class="badge-counter">24</span>
                                 </a>
                             </li>
                         </ul>
-                        <div class="d-flex align-items-center p-1.5 px-3 mb-2 rounded" style="background: #f8fafc; border: 1px solid #e2e8f0; gap: 8px;">
-                            <span class="font-w700 text-dark" style="font-size: 11.5px;"><i class="fa-solid fa-calculator text-primary mr-1"></i> TOTAL GMFM-88:</span>
-                            <span class="badge badge-dark font-w700" id="gmfm-total-live-badge-score" style="font-size: 12px; padding: 4px 8px; border-radius: 6px;">{{ old('gmfm_total_score', $assessment->gmfm_total_score ?? 0) }} / 264</span>
-                            <span class="badge badge-success font-w700" id="gmfm-total-live-badge-persen" style="font-size: 12px; padding: 4px 8px; border-radius: 6px;">{{ number_format(old('gmfm_total_persen', $assessment->gmfm_total_persen ?? 0), 1) }}%</span>
+                        <div class="d-flex align-items-center p-2 px-3 mt-1 mt-md-0 mb-2 rounded" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; box-shadow: 0 2px 5px rgba(37, 99, 235, 0.08); gap: 8px;">
+                            <span class="font-w700" style="font-size: 11.5px; color: #1e40af; letter-spacing: 0.3px;"><i class="fa-solid fa-calculator mr-1.5" style="color: #2563eb;"></i> TOTAL GMFM-88:</span>
+                            <span class="badge font-w800" id="gmfm-total-live-badge-score" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #2563eb; color: #ffffff; letter-spacing: 0.3px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);">{{ old('gmfm_total_score', $assessment->gmfm_total_score ?? 0) }} / 264</span>
+                            <span class="badge font-w800" id="gmfm-total-live-badge-persen" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #059669; color: #ffffff; letter-spacing: 0.3px; box-shadow: 0 1px 3px rgba(5, 150, 105, 0.2);">{{ number_format(old('gmfm_total_persen', $assessment->gmfm_total_persen ?? 0), 1) }}%</span>
                             <input type="hidden" name="gmfm_total_score" id="input-gmfm-total-score" value="{{ old('gmfm_total_score', $assessment->gmfm_total_score ?? 0) }}">
                             <input type="hidden" name="gmfm_total_persen" id="input-gmfm-total-persen" value="{{ old('gmfm_total_persen', $assessment->gmfm_total_persen ?? 0) }}">
                         </div>
@@ -2786,17 +2973,17 @@
                                         <i class="fa-solid fa-chart-pie mr-1 text-primary"></i> Rekapitulasi Hasil Skrining DDST II (19 Task)
                                     </small>
                                     <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 8px;">
-                                        <span class="badge px-3 py-2 font-w700" style="background: #10b981; color: white; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(16, 185, 129, 0.2);">
-                                            <i class="fa fa-check mr-1"></i> Pass (P): <strong id="denver-live-p">{{ $saved_denver_pass ?: 0 }}</strong>
+                                        <span class="badge px-3 py-2 font-w700" style="background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);">
+                                            <i class="fa fa-check mr-1" style="color: #2563eb;"></i> Pass (P): <strong id="denver-live-p" style="color: #1e3a8a;">{{ $saved_denver_pass ?: 0 }}</strong>
                                         </span>
-                                        <span class="badge px-3 py-2 font-w700" style="background: #ef4444; color: white; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(239, 68, 68, 0.2);">
-                                            <i class="fa fa-times mr-1"></i> Fail (F): <strong id="denver-live-f">{{ $saved_denver_fail ?: 0 }}</strong>
+                                        <span class="badge px-3 py-2 font-w700" style="background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);">
+                                            <i class="fa fa-times mr-1" style="color: #2563eb;"></i> Fail (F): <strong id="denver-live-f" style="color: #1e3a8a;">{{ $saved_denver_fail ?: 0 }}</strong>
                                         </span>
-                                        <span class="badge px-3 py-2 font-w700" style="background: #f59e0b; color: white; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(245, 158, 11, 0.2);">
-                                            <i class="fa fa-ban mr-1"></i> Refusal (R): <strong id="denver-live-r">{{ $saved_denver_refusal ?: 0 }}</strong>
+                                        <span class="badge px-3 py-2 font-w700" style="background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);">
+                                            <i class="fa fa-ban mr-1" style="color: #2563eb;"></i> Refusal (R): <strong id="denver-live-r" style="color: #1e3a8a;">{{ $saved_denver_refusal ?: 0 }}</strong>
                                         </span>
-                                        <span class="badge px-3 py-2 font-w700" style="background: #64748b; color: white; font-size: 12px; border-radius: 6px;">
-                                            <i class="fa fa-minus-circle mr-1"></i> No Opp (NO): <strong id="denver-live-no">{{ $saved_denver_no ?: 0 }}</strong>
+                                        <span class="badge px-3 py-2 font-w700" style="background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);">
+                                            <i class="fa fa-minus-circle mr-1" style="color: #2563eb;"></i> No Opp (NO): <strong id="denver-live-no" style="color: #1e3a8a;">{{ $saved_denver_no ?: 0 }}</strong>
                                         </span>
                                     </div>
                                     <input type="hidden" name="denver_pass_count" id="input-denver-pass" value="{{ $saved_denver_pass }}">
@@ -2828,76 +3015,102 @@
                         </div>
                     </div>
 
-                    <!-- 4 Sectors Task List (Matrix Grid) -->
+                    <!-- Denver Sectors Navigation Underline Tabs (A, B, C, D) & Summary -->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap mt-3 mb-3 border-bottom" style="border-color: #e2e8f0; gap: 8px;">
+                        <ul class="nav nav-tabs border-bottom-0 denver-sec-tabs" style="gap: 4px; margin-bottom: -1px;">
+                            <li class="nav-item">
+                                <a href="#denver-pane-a" class="nav-link denver-sec-btn active" data-target-dim="#denver-pane-a">
+                                    <i class="fa-solid fa-users mr-2 text-primary"></i> A: Personal Sosial
+                                    <span class="badge-counter">4</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#denver-pane-b" class="nav-link denver-sec-btn" data-target-dim="#denver-pane-b">
+                                    <i class="fa-solid fa-hand mr-2 text-muted"></i> B: Motorik Halus - Adaptif
+                                    <span class="badge-counter">5</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#denver-pane-c" class="nav-link denver-sec-btn" data-target-dim="#denver-pane-c">
+                                    <i class="fa-solid fa-comments mr-2 text-muted"></i> C: Bahasa
+                                    <span class="badge-counter">5</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#denver-pane-d" class="nav-link denver-sec-btn" data-target-dim="#denver-pane-d">
+                                    <i class="fa-solid fa-running mr-2 text-muted"></i> D: Motorik Kasar
+                                    <span class="badge-counter">5</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="d-flex align-items-center p-2 px-3 mt-1 mt-md-0 mb-2 rounded" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; box-shadow: 0 2px 5px rgba(37, 99, 235, 0.08); gap: 8px;">
+                            <span class="font-w700" style="font-size: 11.5px; color: #1e40af; letter-spacing: 0.3px;"><i class="fa-solid fa-graduation-cap mr-2" style="color: #2563eb;"></i> TOTAL DDST II:</span>
+                            <span class="badge font-w800" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #2563eb; color: #ffffff; letter-spacing: 0.3px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);">19 Task</span>
+                        </div>
+                    </div>
+
+                    <!-- 4 Sectors Tab Panes -->
                     @foreach($denver_sectors as $sKey => $sector)
-                        <div class="card mb-3 border" style="border-radius: 8px; border-color: #e2e8f0;">
-                            <div class="card-header py-2 px-3 d-flex align-items-center justify-content-between" style="background: {{ $sector['bg_header'] }}; border-bottom: 1px solid #e2e8f0;">
-                                <h6 class="font-w700 mb-0" style="color: {{ $sector['badge_color'] }}; font-size: 13.5px;">
-                                    {{ $sector['title'] }}
-                                </h6>
-                                <span class="badge badge-light border font-w600" style="font-size: 11px;">{{ count($sector['tasks']) }} Task</span>
-                            </div>
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
-                                        <thead style="background: #fafafa; color: #475569; font-size: 11.5px;">
+                        <div class="denver-sec-pane" id="denver-pane-{{ strtolower($sKey) }}" style="{{ $sKey === 'A' ? '' : 'display: none;' }}">
+                            <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
+                                <table class="table table-bordered table-hover mb-0 matrix-grid-table" style="font-size: 12px; vertical-align: middle;">
+                                    <thead style="background: #fafafa; color: #475569; font-size: 11.5px;">
+                                        <tr>
+                                            <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
+                                            <th style="width: 32%; vertical-align: middle;">Nama Task Perkembangan</th>
+                                            <th style="width: 12%; text-align: center; vertical-align: middle;">Rentang Usia</th>
+                                            <th style="width: 8%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">Pass<br><small class="font-w700">(P)</small></th>
+                                            <th style="width: 8%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">Fail<br><small class="font-w700">(F)</small></th>
+                                            <th style="width: 8%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">Refusal<br><small class="font-w700">(R)</small></th>
+                                            <th style="width: 8%; text-align: center; vertical-align: middle; background: #f1f5f9; color: #475569;">No Opp<br><small class="font-w700">(NO)</small></th>
+                                            <th style="width: 20%; vertical-align: middle;">Catatan Terapis</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($sector['tasks'] as $tKey => $task)
+                                            @php
+                                                $itemVal = $saved_denver_data[$tKey]['score'] ?? (old('denver_data.'.$tKey.'.score', ''));
+                                                $itemNote = $saved_denver_data[$tKey]['catatan'] ?? (old('denver_data.'.$tKey.'.catatan', ''));
+                                            @endphp
                                             <tr>
-                                                <th style="width: 4%; text-align: center; vertical-align: middle;">No</th>
-                                                <th style="width: 32%; vertical-align: middle;">Nama Task Perkembangan</th>
-                                                <th style="width: 12%; text-align: center; vertical-align: middle;">Rentang Usia</th>
-                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #dcfce7; color: #166534;">Pass<br><small class="font-w700">(P)</small></th>
-                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #fee2e2; color: #991b1b;">Fail<br><small class="font-w700">(F)</small></th>
-                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #fef3c7; color: #92400e;">Refusal<br><small class="font-w700">(R)</small></th>
-                                                <th style="width: 8%; text-align: center; vertical-align: middle; background: #f1f5f9; color: #475569;">No Opp<br><small class="font-w700">(NO)</small></th>
-                                                <th style="width: 20%; vertical-align: middle;">Catatan Terapis</th>
+                                                <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $task['no'] }}</td>
+                                                <td style="vertical-align: middle;">
+                                                    <strong class="text-dark" style="font-size: 12.5px;">{{ $task['name'] }}</strong>
+                                                </td>
+                                                <td class="text-center" style="vertical-align: middle;">
+                                                    <span class="badge badge-light border font-w600" style="font-size: 11px; color: #475569;">{{ $task['age'] }}</span>
+                                                </td>
+                                                <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
+                                                    <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                        <input type="radio" name="denver_data[{{ $tKey }}][score]" value="P" class="denver-radio matrix-input" {{ $itemVal === 'P' ? 'checked' : '' }}>
+                                                        <span class="matrix-score-indicator success">P</span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
+                                                    <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                        <input type="radio" name="denver_data[{{ $tKey }}][score]" value="F" class="denver-radio matrix-input" {{ $itemVal === 'F' ? 'checked' : '' }}>
+                                                        <span class="matrix-score-indicator danger">F</span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
+                                                    <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                        <input type="radio" name="denver_data[{{ $tKey }}][score]" value="R" class="denver-radio matrix-input" {{ $itemVal === 'R' ? 'checked' : '' }}>
+                                                        <span class="matrix-score-indicator warning">R</span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center matrix-cell" style="vertical-align: middle; background: #f8fafc;">
+                                                    <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
+                                                        <input type="radio" name="denver_data[{{ $tKey }}][score]" value="NO" class="denver-radio matrix-input" {{ $itemVal === 'NO' ? 'checked' : '' }}>
+                                                        <span class="matrix-score-indicator muted">NO</span>
+                                                    </label>
+                                                </td>
+                                                <td style="vertical-align: middle;">
+                                                    <input type="text" name="denver_data[{{ $tKey }}][catatan]" value="{{ $itemNote }}" class="form-control form-control-sm" placeholder="Catatan respon..." style="font-size: 11.5px;">
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($sector['tasks'] as $tKey => $task)
-                                                @php
-                                                    $itemVal = $saved_denver_data[$tKey]['score'] ?? (old('denver_data.'.$tKey.'.score', ''));
-                                                    $itemNote = $saved_denver_data[$tKey]['catatan'] ?? (old('denver_data.'.$tKey.'.catatan', ''));
-                                                @endphp
-                                                <tr>
-                                                    <td class="text-center font-w700 text-muted" style="vertical-align: middle;">{{ $task['no'] }}</td>
-                                                    <td style="vertical-align: middle;">
-                                                        <strong class="text-dark" style="font-size: 12.5px;">{{ $task['name'] }}</strong>
-                                                    </td>
-                                                    <td class="text-center" style="vertical-align: middle;">
-                                                        <span class="badge badge-light border font-w600" style="font-size: 11px; color: #475569;">{{ $task['age'] }}</span>
-                                                    </td>
-                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #fbfffd;">
-                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="P" class="denver-radio matrix-input" {{ $itemVal === 'P' ? 'checked' : '' }}>
-                                                            <span class="matrix-score-indicator success">P</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffdfd;">
-                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="F" class="denver-radio matrix-input" {{ $itemVal === 'F' ? 'checked' : '' }}>
-                                                            <span class="matrix-score-indicator danger">F</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #fffefb;">
-                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="R" class="denver-radio matrix-input" {{ $itemVal === 'R' ? 'checked' : '' }}>
-                                                            <span class="matrix-score-indicator warning">R</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-center matrix-cell" style="vertical-align: middle; background: #f8fafc;">
-                                                        <label class="matrix-radio-label mb-0 py-1 d-block cursor-pointer">
-                                                            <input type="radio" name="denver_data[{{ $tKey }}][score]" value="NO" class="denver-radio matrix-input" {{ $itemVal === 'NO' ? 'checked' : '' }}>
-                                                            <span class="matrix-score-indicator muted">NO</span>
-                                                        </label>
-                                                    </td>
-                                                    <td style="vertical-align: middle;">
-                                                        <input type="text" name="denver_data[{{ $tKey }}][catatan]" value="{{ $itemNote }}" class="form-control form-control-sm" placeholder="Catatan respon..." style="font-size: 11.5px;">
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     @endforeach
@@ -3511,18 +3724,56 @@
 }
 
 /* Pain Scale Buttons */
+.pain-scale-group.mini {
+    display: flex !important;
+    gap: 3px !important;
+    overflow: hidden !important;
+    width: 100% !important;
+}
 .pain-scale-btn {
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
     transition: all 0.15s ease;
     font-weight: 600;
 }
+.pain-scale-btn .num {
+    color: #2563eb !important;
+    font-size: 14px;
+    font-weight: 800;
+    transition: color 0.15s ease;
+}
+.pain-scale-btn.mini {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    padding: 6px 1px !important;
+    text-align: center !important;
+    border-radius: 6px !important;
+}
+.pain-scale-btn.mini .num {
+    font-size: 11.5px;
+    line-height: 1;
+}
 .pain-scale-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    border-color: #2563eb !important;
+    background: #eff6ff !important;
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.15);
 }
 .pain-scale-btn.active {
+    background: #2563eb !important;
+    border-color: #1d4ed8 !important;
+    color: #ffffff !important;
     transform: scale(1.08);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    outline: 2.5px solid #2563eb;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    outline: none;
+}
+.pain-scale-btn.active .num {
+    color: #ffffff !important;
+}
+.pain-scale-btn.active .desc {
+    color: #ffffff !important;
+    opacity: 0.95;
 }
 
 /* Matrix table styling */
@@ -3618,17 +3869,70 @@
     border-bottom: 2.5px solid #2563eb !important;
     font-weight: 700 !important;
 }
+.gmfm-dim-tabs .gmfm-dim-btn i,
+.denver-sec-tabs .denver-sec-btn i {
+    margin-right: 8px !important;
+}
 .gmfm-dim-tabs .gmfm-dim-btn .badge-counter {
     font-size: 10.5px;
     padding: 2px 7px;
     border-radius: 999px;
     background: #e2e8f0;
     color: #475569;
-    margin-left: 6px;
+    margin-left: 8px;
     font-weight: 700;
     transition: all 0.18s ease;
 }
 .gmfm-dim-tabs .gmfm-dim-btn.active .badge-counter {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+/* Denver DDST II Sectors Underline Tabs */
+.denver-sec-tabs {
+    border-bottom: 2px solid #e2e8f0 !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 0 !important;
+}
+.denver-sec-tabs .denver-sec-btn {
+    border: none !important;
+    border-bottom: 2.5px solid transparent !important;
+    background: transparent !important;
+    color: #64748b !important;
+    font-weight: 600 !important;
+    font-size: 12.5px !important;
+    padding: 10px 14px !important;
+    border-radius: 8px 8px 0 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    transition: all 0.18s ease;
+    cursor: pointer;
+    margin-bottom: -2px;
+}
+.denver-sec-tabs .denver-sec-btn:hover {
+    color: #2563eb !important;
+    background: #f8fafc !important;
+}
+.denver-sec-tabs .denver-sec-btn.active {
+    color: #1e40af !important;
+    background: #eff6ff !important;
+    border-bottom: 2.5px solid #2563eb !important;
+    font-weight: 700 !important;
+}
+.denver-sec-tabs .denver-sec-btn .badge-counter {
+    font-size: 10.5px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    color: #475569;
+    margin-left: 8px;
+    font-weight: 700;
+    transition: all 0.18s ease;
+}
+.denver-sec-tabs .denver-sec-btn.active .badge-counter {
     background: #2563eb;
     color: #ffffff;
 }
@@ -3897,24 +4201,25 @@ function restoreDraftData() {
         }
 
         // 3. Update Pain Scale UI buttons
-        if (data.nyeri_skala_istirahat !== undefined && data.nyeri_skala_istirahat !== null && data.nyeri_skala_istirahat !== '') {
-            var valIst = data.nyeri_skala_istirahat;
-            var btnIst = $('.pain-scale-btn[data-target="#input-score-istirahat"][data-val="' + valIst + '"]');
-            if (btnIst.length) {
-                btnIst.closest('.pain-scale-group').find('.pain-scale-btn').removeClass('active');
-                btnIst.addClass('active');
-                var bgIst = valIst == 0 ? '#10b981' : (valIst <= 3 ? '#3b82f6' : (valIst <= 6 ? '#f59e0b' : '#ef4444'));
-                $('#badge-skala-istirahat').text(valIst + ' / 10').css({ 'background': bgIst, 'color': '#ffffff' });
+        if (data.nyeri_skor_total !== undefined && data.nyeri_skor_total !== null && data.nyeri_skor_total !== '') {
+            var valTot = data.nyeri_skor_total;
+            var btnTot = $('.pain-scale-btn[data-target="#input-score-total"][data-val="' + valTot + '"]');
+            if (btnTot.length) {
+                btnTot.trigger('click');
             }
         }
-        if (data.nyeri_skala_aktivitas !== undefined && data.nyeri_skala_aktivitas !== null && data.nyeri_skala_aktivitas !== '') {
-            var valAkt = data.nyeri_skala_aktivitas;
+        if (data.nyeri_saat_istirahat !== undefined && data.nyeri_saat_istirahat !== null && data.nyeri_saat_istirahat !== '') {
+            var valIst = data.nyeri_saat_istirahat;
+            var btnIst = $('.pain-scale-btn[data-target="#input-score-istirahat"][data-val="' + valIst + '"]');
+            if (btnIst.length) {
+                btnIst.trigger('click');
+            }
+        }
+        if (data.nyeri_saat_aktivitas !== undefined && data.nyeri_saat_aktivitas !== null && data.nyeri_saat_aktivitas !== '') {
+            var valAkt = data.nyeri_saat_aktivitas;
             var btnAkt = $('.pain-scale-btn[data-target="#input-score-aktivitas"][data-val="' + valAkt + '"]');
             if (btnAkt.length) {
-                btnAkt.closest('.pain-scale-group').find('.pain-scale-btn').removeClass('active');
-                btnAkt.addClass('active');
-                var bgAkt = valAkt == 0 ? '#10b981' : (valAkt <= 3 ? '#3b82f6' : (valAkt <= 6 ? '#f59e0b' : '#ef4444'));
-                $('#badge-skala-aktivitas').text(valAkt + ' / 10').css({ 'background': bgAkt, 'color': '#ffffff' });
+                btnAkt.trigger('click');
             }
         }
 
@@ -4433,6 +4738,140 @@ function updateDenverLiveScore() {
     $('#denver-live-desc-kesimpulan').text(desc);
 }
 
+
+// ----------------------------------------------------
+// LIVE INTERPRETASI INSTRUMEN UJI KESEIMBANGAN & RISIKO JATUH
+// ----------------------------------------------------
+function updateKeseimbanganLiveInterpretations() {
+    // 1. Berg Balance Scale (BBS) (0 - 56)
+    var bbsVal = $('input[name="keseimbangan_bbs_skor"]').val();
+    var $bbsTarget = $('#interpretasi_bbs');
+    if (bbsVal !== '' && bbsVal !== null && !isNaN(bbsVal)) {
+        var bbs = parseInt(bbsVal, 10);
+        if (bbs >= 41 && bbs <= 56) {
+            $bbsTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Risiko Rendah (Mandiri)</span>');
+        } else if (bbs >= 21 && bbs <= 40) {
+            $bbsTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Risiko Sedang (Bantuan)</span>');
+        } else if (bbs >= 0 && bbs <= 20) {
+            $bbsTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa fa-circle-exclamation mr-1"></i> Risiko Jatuh Tinggi</span>');
+        } else {
+            $bbsTarget.html('<span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>');
+        }
+    } else {
+        $bbsTarget.html('<span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>');
+    }
+
+    // 2. Timed Up and Go (TUG)
+    var tugStr = $('input[name="keseimbangan_tug_detik"]').val();
+    var $tugTarget = $('#interpretasi_tug');
+    if (tugStr !== '' && tugStr !== null) {
+        var tug = parseFloat(tugStr.toString().replace(',', '.'));
+        if (!isNaN(tug) && tug > 0) {
+            if (tug <= 13.5) {
+                $tugTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Normal / Mandiri</span>');
+            } else if (tug <= 20) {
+                $tugTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Risiko Jatuh</span>');
+            } else {
+                $tugTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa fa-circle-exclamation mr-1"></i> Risiko Jatuh Tinggi</span>');
+            }
+        } else {
+            $tugTarget.html('<span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>');
+        }
+    } else {
+        $tugTarget.html('<span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>');
+    }
+
+    // 3. Romberg Test (Mata Tertutup)
+    var rombergVal = $('input[name="keseimbangan_romberg"]:checked').val();
+    var $rombergTarget = $('#interpretasi_romberg');
+    if (rombergVal === 'Negatif') {
+        $rombergTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Normal</span>');
+    } else if (rombergVal === 'Positif') {
+        $rombergTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa fa-circle-exclamation mr-1"></i> Defisit Sensoris / Propriosepsi</span>');
+    } else {
+        $rombergTarget.html('<span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>');
+    }
+
+    // 4. One-Leg Stance (OLS)
+    var olsKananStr = $('input[name="keseimbangan_ols_kanan"]').val();
+    var olsKiriStr = $('input[name="keseimbangan_ols_kiri"]').val();
+    var $olsTarget = $('#interpretasi_ols');
+    var olsKanan = olsKananStr !== '' && olsKananStr !== null ? parseFloat(olsKananStr.toString().replace(',', '.')) : null;
+    var olsKiri = olsKiriStr !== '' && olsKiriStr !== null ? parseFloat(olsKiriStr.toString().replace(',', '.')) : null;
+
+    if ((olsKanan !== null && !isNaN(olsKanan)) || (olsKiri !== null && !isNaN(olsKiri))) {
+        if (olsKanan !== null && !isNaN(olsKanan) && olsKiri !== null && !isNaN(olsKiri)) {
+            if (olsKanan >= 5 && olsKiri >= 5) {
+                $olsTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Normal (D & S &ge; 5s)</span>');
+            } else if (olsKanan < 5 && olsKiri < 5) {
+                $olsTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa fa-circle-exclamation mr-1"></i> Risiko Jatuh (D & S &lt; 5s)</span>');
+            } else {
+                $olsTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Asimetri (Salah satu &lt; 5s)</span>');
+            }
+        } else if (olsKanan !== null && !isNaN(olsKanan)) {
+            if (olsKanan >= 5) {
+                $olsTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Normal D (&ge; 5s)</span>');
+            } else {
+                $olsTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Risiko Jatuh D (&lt; 5s)</span>');
+            }
+        } else {
+            if (olsKiri >= 5) {
+                $olsTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Normal S (&ge; 5s)</span>');
+            } else {
+                $olsTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Risiko Jatuh S (&lt; 5s)</span>');
+            }
+        }
+    } else {
+        $olsTarget.html('<span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>');
+    }
+
+    // 5. Dual-Task TUG
+    var dualTugStr = $('input[name="keseimbangan_dual_task_tug"]').val();
+    var $dualTarget = $('#interpretasi_dual_task');
+    if (dualTugStr !== '' && dualTugStr !== null) {
+        var dualTug = parseFloat(dualTugStr.toString().replace(',', '.'));
+        if (!isNaN(dualTug) && dualTug > 0) {
+            if (tugStr !== '' && tugStr !== null) {
+                var baseTug = parseFloat(tugStr.toString().replace(',', '.'));
+                if (!isNaN(baseTug) && baseTug > 0) {
+                    var diff = dualTug - baseTug;
+                    if (diff <= 4.5) {
+                        $dualTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Dual-Task Normal (&Delta; ' + (diff >= 0 ? '+' : '') + diff.toFixed(1) + 's)</span>');
+                    } else {
+                        $dualTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Perlu Perhatian (&Delta; +' + diff.toFixed(1) + 's)</span>');
+                    }
+                } else {
+                    $dualTarget.html('<span class="badge badge-info light font-w600" style="font-size: 11px;"><i class="fa fa-info-circle mr-1"></i> ' + dualTug + 's (Isi TUG reguler)</span>');
+                }
+            } else {
+                $dualTarget.html('<span class="badge badge-info light font-w600" style="font-size: 11px;"><i class="fa fa-info-circle mr-1"></i> ' + dualTug + 's (Isi TUG reguler)</span>');
+            }
+        } else {
+            $dualTarget.html('<span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>');
+        }
+    } else {
+        $dualTarget.html('<span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>');
+    }
+
+    // 6. Falls Efficacy Scale - International (FES-I) (16 - 64)
+    var fesiVal = $('input[name="keseimbangan_fesi_skor"]').val();
+    var $fesiTarget = $('#interpretasi_fesi');
+    if (fesiVal !== '' && fesiVal !== null && !isNaN(fesiVal)) {
+        var fesi = parseInt(fesiVal, 10);
+        if (fesi >= 16 && fesi <= 19) {
+            $fesiTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Ketakutan Rendah</span>');
+        } else if (fesi >= 20 && fesi <= 27) {
+            $fesiTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Ketakutan Sedang</span>');
+        } else if (fesi >= 28 && fesi <= 64) {
+            $fesiTarget.html('<span class="badge font-w600" style="font-size: 11px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa fa-circle-exclamation mr-1"></i> Ketakutan Jatuh Tinggi</span>');
+        } else {
+            $fesiTarget.html('<span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>');
+        }
+    } else {
+        $fesiTarget.html('<span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">Belum Dinilai</span>');
+    }
+}
+
 function togglePerencanaanLainnya() {
     var isModalitasLainnya = $('input[name="rencana_modalitas_fisik[]"][value="Lainnya"]').is(':checked');
     if (isModalitasLainnya) {
@@ -4642,7 +5081,7 @@ $(document).ready(function() {
         $(this).addClass('active');
         
         $(targetInput).val(val);
-        var bg = val == 0 ? '#10b981' : (val <= 3 ? '#84cc16' : (val <= 6 ? '#f59e0b' : '#ef4444'));
+        var bg = val == 0 ? '#10b981' : (val <= 3 ? '#3b82f6' : (val <= 6 ? '#f59e0b' : '#ef4444'));
         $(targetLabel).text(val + ' / 10').css({
             'background': bg,
             'color': '#ffffff'
@@ -4712,8 +5151,22 @@ $(document).ready(function() {
         e.preventDefault();
         var targetPane = $(this).data('target-dim');
         $('.gmfm-dim-btn').removeClass('active');
+        $('.gmfm-dim-btn i').removeClass('text-primary').addClass('text-muted');
         $(this).addClass('active');
+        $(this).find('i').removeClass('text-muted').addClass('text-primary');
         $('.gmfm-dim-pane').hide();
+        $(targetPane).fadeIn(150);
+    });
+
+    // 13b. Denver DDST II Sector Switcher
+    $(document).on('click', '.denver-sec-btn', function(e) {
+        e.preventDefault();
+        var targetPane = $(this).data('target-dim');
+        $('.denver-sec-btn').removeClass('active');
+        $('.denver-sec-btn i').removeClass('text-primary').addClass('text-muted');
+        $(this).addClass('active');
+        $(this).find('i').removeClass('text-muted').addClass('text-primary');
+        $('.denver-sec-pane').hide();
         $(targetPane).fadeIn(150);
     });
 
@@ -4727,6 +5180,9 @@ $(document).ready(function() {
     // 15. Event listeners for Denver
     $(document).on('change', '.denver-radio', updateDenverLiveScore);
 
+    // 15b. Event listeners for Instrumen Keseimbangan Live Interpretation
+    $(document).on('input change', 'input[name="keseimbangan_bbs_skor"], input[name="keseimbangan_tug_detik"], input[name="keseimbangan_romberg"], input[name="keseimbangan_ols_kanan"], input[name="keseimbangan_ols_kiri"], input[name="keseimbangan_dual_task_tug"], input[name="keseimbangan_fesi_skor"]', updateKeseimbanganLiveInterpretations);
+
     // 16. Event listeners for Perencanaan Terapi
     $(document).on('change', 'input[name="rencana_modalitas_fisik[]"], input[name="rencana_manual_terapi[]"], input[name="rencana_latihan_terapi[]"], input[name="rencana_edukasi_konseling[]"]', togglePerencanaanLainnya);
     togglePerencanaanLainnya();
@@ -4738,6 +5194,7 @@ $(document).ready(function() {
     updateGmfmDLiveScore();
     updateGmfmELiveScore();
     updateDenverLiveScore();
+    updateKeseimbanganLiveInterpretations();
     updateFormOverallProgress();
     checkExistingDraft();
 });

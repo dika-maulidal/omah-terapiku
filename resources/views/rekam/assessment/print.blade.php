@@ -1369,25 +1369,62 @@
                     <thead>
                         <tr>
                             <th>Instrumen Keseimbangan</th>
-                            <th style="width: 25%; text-align: center;">Skor / Waktu</th>
-                            <th style="width: 35%;">Nilai Normal / Cut-off</th>
+                            <th style="width: 20%; text-align: center;">Skor / Waktu</th>
+                            <th style="width: 25%;">Cut-off</th>
+                            <th style="width: 30%;">Interpretasi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>Berg Balance Scale (BBS)</td>
                             <td class="text-center"><strong>{{ $assessment->keseimbangan_bbs_skor !== null ? $assessment->keseimbangan_bbs_skor . '/56' : '-' }}</strong></td>
-                            <td>&lt; 45 (Risiko jatuh tinggi)</td>
+                            <td>41–56: Mandiri<br><small style="color:#64748b;">&le; 40: Bantuan/Risiko</small></td>
+                            <td>
+                                @if($assessment->keseimbangan_bbs_skor !== null)
+                                    @if($assessment->keseimbangan_bbs_skor >= 41)
+                                        <strong>Risiko Rendah (Mandiri)</strong>
+                                    @elseif($assessment->keseimbangan_bbs_skor >= 21)
+                                        <strong>Risiko Sedang (Bantuan)</strong>
+                                    @else
+                                        <strong>Risiko Jatuh Tinggi</strong>
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Timed Up and Go (TUG)</td>
                             <td class="text-center"><strong>{{ $assessment->keseimbangan_tug_detik ? $assessment->keseimbangan_tug_detik . 's' : '-' }}</strong></td>
-                            <td>&gt; 13,5s (Risiko jatuh)</td>
+                            <td>&le; 13,5s: Normal<br><small style="color:#64748b;">&gt; 13,5s: Risiko Jatuh</small></td>
+                            <td>
+                                @if(!empty($assessment->keseimbangan_tug_detik))
+                                    @php $tugVal = (float)str_replace(',', '.', $assessment->keseimbangan_tug_detik); @endphp
+                                    @if($tugVal > 0 && $tugVal <= 13.5)
+                                        <strong>Normal / Mandiri</strong>
+                                    @elseif($tugVal <= 20)
+                                        <strong>Risiko Jatuh</strong>
+                                    @else
+                                        <strong>Risiko Jatuh Tinggi</strong>
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Romberg Test (Mata Tertutup)</td>
                             <td class="text-center"><strong>{{ $assessment->keseimbangan_romberg ?: '-' }}</strong></td>
-                            <td>Positif (Defisit propriosepsi)</td>
+                            <td>Negatif: Normal<br><small style="color:#64748b;">Positif: Defisit</small></td>
+                            <td>
+                                @if($assessment->keseimbangan_romberg == 'Negatif')
+                                    <strong>Normal</strong>
+                                @elseif($assessment->keseimbangan_romberg == 'Positif')
+                                    <strong>Defisit Sensoris/Propriosepsi</strong>
+                                @else
+                                    -
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>One-Leg Stance (OLS)</td>
@@ -1395,17 +1432,67 @@
                                 D: {{ $assessment->keseimbangan_ols_kanan ? $assessment->keseimbangan_ols_kanan . 's' : '-' }} &bull;
                                 S: {{ $assessment->keseimbangan_ols_kiri ? $assessment->keseimbangan_ols_kiri . 's' : '-' }}
                             </td>
-                            <td>&lt; 5s (Risiko jatuh)</td>
+                            <td>&ge; 5s: Normal<br><small style="color:#64748b;">&lt; 5s: Risiko Jatuh</small></td>
+                            <td>
+                                @php
+                                    $olsD = !empty($assessment->keseimbangan_ols_kanan) ? (float)str_replace(',', '.', $assessment->keseimbangan_ols_kanan) : null;
+                                    $olsS = !empty($assessment->keseimbangan_ols_kiri) ? (float)str_replace(',', '.', $assessment->keseimbangan_ols_kiri) : null;
+                                @endphp
+                                @if($olsD !== null && $olsS !== null)
+                                    @if($olsD >= 5 && $olsS >= 5)
+                                        <strong>Normal (D & S &ge; 5s)</strong>
+                                    @elseif($olsD < 5 && $olsS < 5)
+                                        <strong>Risiko Jatuh (D & S &lt; 5s)</strong>
+                                    @else
+                                        <strong>Asimetri (Salah satu &lt; 5s)</strong>
+                                    @endif
+                                @elseif($olsD !== null)
+                                    <strong>{{ $olsD >= 5 ? 'Normal D' : 'Risiko Jatuh D' }}</strong>
+                                @elseif($olsS !== null)
+                                    <strong>{{ $olsS >= 5 ? 'Normal S' : 'Risiko Jatuh S' }}</strong>
+                                @else
+                                    -
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Dual-Task TUG</td>
                             <td class="text-center"><strong>{{ $assessment->keseimbangan_dual_task_tug ? $assessment->keseimbangan_dual_task_tug . 's' : '-' }}</strong></td>
-                            <td>Selisih &gt; 4,5s dari TUG</td>
+                            <td>Selisih &le; 4,5s: Normal<br><small style="color:#64748b;">&gt; 4,5s: Perlu Perhatian</small></td>
+                            <td>
+                                @if(!empty($assessment->keseimbangan_dual_task_tug))
+                                    @php
+                                        $dualVal = (float)str_replace(',', '.', $assessment->keseimbangan_dual_task_tug);
+                                        $baseTug = !empty($assessment->keseimbangan_tug_detik) ? (float)str_replace(',', '.', $assessment->keseimbangan_tug_detik) : null;
+                                    @endphp
+                                    @if($baseTug !== null && $baseTug > 0)
+                                        @php $diff = $dualVal - $baseTug; @endphp
+                                        <strong>{{ $diff <= 4.5 ? 'Normal (Δ ' . ($diff >= 0 ? '+' : '') . number_format($diff, 1) . 's)' : 'Perlu Perhatian (Δ +' . number_format($diff, 1) . 's)' }}</strong>
+                                    @else
+                                        {{ $dualVal }}s
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Falls Efficacy Scale (FES-I)</td>
                             <td class="text-center"><strong>{{ $assessment->keseimbangan_fesi_skor !== null ? $assessment->keseimbangan_fesi_skor . '/64' : '-' }}</strong></td>
-                            <td>&gt; 28 (Ketakutan jatuh tinggi)</td>
+                            <td>16–19: Rendah<br><small style="color:#64748b;">20–27: Sedang | &ge; 28: Tinggi</small></td>
+                            <td>
+                                @if($assessment->keseimbangan_fesi_skor !== null)
+                                    @if($assessment->keseimbangan_fesi_skor <= 19)
+                                        <strong>Ketakutan Rendah</strong>
+                                    @elseif($assessment->keseimbangan_fesi_skor <= 27)
+                                        <strong>Ketakutan Sedang</strong>
+                                    @else
+                                        <strong>Ketakutan Jatuh Tinggi</strong>
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </td>
                         </tr>
                     </tbody>
                 </table>

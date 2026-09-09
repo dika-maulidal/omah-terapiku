@@ -47,7 +47,7 @@
     $has_sub_4_1 = $hasStr($assessment->neuro_sensasi) || $hasStr($assessment->neuro_sensasi_area) || $hasStr($assessment->neuro_tonus_otot) || $hasStr($assessment->neuro_refleks_bisep_d) || $hasStr($assessment->neuro_refleks_bisep_s) || $hasStr($assessment->neuro_refleks_trisep_d) || $hasStr($assessment->neuro_refleks_trisep_s) || $hasStr($assessment->neuro_refleks_patela_d) || $hasStr($assessment->neuro_refleks_patela_s) || $hasStr($assessment->neuro_refleks_achilles_d) || $hasStr($assessment->neuro_refleks_achilles_s) || (!empty($assessment->neuro_koordinasi) && is_array($assessment->neuro_koordinasi) && count(array_filter($assessment->neuro_koordinasi, $hasStr)) > 0) || $hasStr($assessment->neuro_catatan);
 
     // Subtest 4.2 Postur & Keseimbangan
-    $has_sub_4_2 = (!empty($assessment->postur_temuan) && is_array($assessment->postur_temuan) && count(array_filter($assessment->postur_temuan, $hasStr)) > 0) || $hasStr($assessment->postur_tangan_tongkat) || ($assessment->keseimbangan_bbs_skor !== null && (int)$assessment->keseimbangan_bbs_skor > 0) || $hasStr($assessment->keseimbangan_tug_detik) || $hasStr($assessment->keseimbangan_romberg) || $hasStr($assessment->keseimbangan_single_leg_kanan) || $hasStr($assessment->keseimbangan_single_leg_kiri) || $hasStr($assessment->keseimbangan_dual_task_tug) || ($assessment->keseimbangan_fesi_skor !== null && (int)$assessment->keseimbangan_fesi_skor > 0) || $hasStr($assessment->keseimbangan_catatan);
+    $has_sub_4_2 = (!empty($assessment->postur_temuan) && is_array($assessment->postur_temuan) && count(array_filter($assessment->postur_temuan, $hasStr)) > 0) || $hasStr($assessment->postur_tangan_tongkat) || ($assessment->keseimbangan_bbs_skor !== null && (int)$assessment->keseimbangan_bbs_skor >= 0) || $hasStr($assessment->keseimbangan_tug_detik) || $hasStr($assessment->keseimbangan_romberg) || $hasStr($assessment->keseimbangan_ols_kanan) || $hasStr($assessment->keseimbangan_ols_kiri) || $hasStr($assessment->keseimbangan_single_leg_kanan) || $hasStr($assessment->keseimbangan_single_leg_kiri) || $hasStr($assessment->keseimbangan_dual_task_tug) || ($assessment->keseimbangan_fesi_skor !== null && (int)$assessment->keseimbangan_fesi_skor > 0) || $hasStr($assessment->keseimbangan_catatan) || $hasStr($assessment->postur_keseimbangan_catatan);
 
     // Subtest 4.3 Gaya Berjalan (Gait)
     $has_sub_4_3 = (!empty($assessment->gait_deviasi) && is_array($assessment->gait_deviasi) && count(array_filter($assessment->gait_deviasi, $hasStr)) > 0) || (!empty($assessment->gait_karakteristik) && is_array($assessment->gait_karakteristik) && count(array_filter($assessment->gait_karakteristik, $hasStr)) > 0) || $hasStr($assessment->gait_deteksi_lantai) || $hasStr($assessment->gait_fase) || $hasStr($assessment->gait_alat_bantu) || $hasStr($assessment->gait_jarak_mwt) || $hasStr($assessment->gait_10mwt_kecepatan_nyaman) || $hasStr($assessment->gait_10mwt_kecepatan_cepat) || $hasStr($assessment->gait_10mwt_jumlah_langkah) || $hasStr($assessment->gait_catatan);
@@ -703,8 +703,8 @@
                                                     <td style="font-weight: 600; color: #475569;">Saat Istirahat / Aktivitas</td>
                                                     <td>:</td>
                                                     <td>
-                                                        Istirahat: <strong>{{ $assessment->nyeri_saat_istirahat !== null ? $assessment->nyeri_saat_istirahat . '/10' : '-' }}</strong> &bull; 
-                                                        Aktivitas: <strong>{{ $assessment->nyeri_saat_aktivitas !== null ? $assessment->nyeri_saat_aktivitas . '/10' : '-' }}</strong>
+                                                        Istirahat: <strong class="text-primary">{{ $assessment->nyeri_saat_istirahat !== null && $assessment->nyeri_saat_istirahat !== '' ? $assessment->nyeri_saat_istirahat . ' / 10' : '-' }}</strong> &bull; 
+                                                        Aktivitas: <strong class="text-primary">{{ $assessment->nyeri_saat_aktivitas !== null && $assessment->nyeri_saat_aktivitas !== '' ? $assessment->nyeri_saat_aktivitas . ' / 10' : '-' }}</strong>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -975,36 +975,223 @@
                             <table class="table table-bordered table-hover mb-0" style="font-size: 13px; background: #ffffff;">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th style="width: 45%;">Instrumen Penilaian Keseimbangan</th>
-                                        <th style="width: 25%; text-align: center;">Skor / Waktu</th>
-                                        <th style="width: 30%;">Nilai Cut-Off / Interpretasi</th>
+                                        <th style="width: 26%;">Instrumen Penilaian Keseimbangan</th>
+                                        <th style="width: 22%; text-align: center;">Skor / Waktu</th>
+                                        <th style="width: 28%;">Nilai Normal / Cut-Off</th>
+                                        <th style="width: 24%; text-align: center;">Interpretasi Hasil</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- BBS -->
                                     <tr>
-                                        <td class="font-w600 text-dark">Berg Balance Scale (BBS)</td>
-                                        <td class="text-center font-w700 text-primary">{{ $assessment->keseimbangan_bbs_skor !== null ? $assessment->keseimbangan_bbs_skor . ' / 56' : '-' }}</td>
-                                        <td><small class="text-muted">&lt; 45 (Risiko jatuh tinggi)</small></td>
+                                        <td class="font-w600 text-dark align-middle">Berg Balance Scale (BBS)</td>
+                                        <td class="text-center font-w700 text-primary align-middle">{{ $assessment->keseimbangan_bbs_skor !== null ? $assessment->keseimbangan_bbs_skor . ' / 56' : '-' }}</td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">41 – 56</span>
+                                                    <span class="cutoff-desc">Mandiri (Risiko Rendah)</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-warning">21 – 40</span>
+                                                    <span class="cutoff-desc">Bantuan (Risiko Sedang)</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-danger">0 – 20</span>
+                                                    <span class="cutoff-desc font-w600 text-danger">Risiko Jatuh Tinggi</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            @if($assessment->keseimbangan_bbs_skor !== null)
+                                                @if($assessment->keseimbangan_bbs_skor >= 41)
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Risiko Rendah (Mandiri)</span>
+                                                @elseif($assessment->keseimbangan_bbs_skor >= 21)
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Risiko Sedang (Bantuan)</span>
+                                                @else
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa fa-circle-exclamation mr-1"></i> Risiko Jatuh Tinggi</span>
+                                                @endif
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
                                     </tr>
+                                    <!-- TUG -->
                                     <tr>
-                                        <td class="font-w600 text-dark">Timed Up & Go (TUG)</td>
-                                        <td class="text-center font-w700 text-primary">{{ $assessment->keseimbangan_tug_detik !== null ? $assessment->keseimbangan_tug_detik . ' Detik' : '-' }}</td>
-                                        <td><small class="text-muted">&gt; 13,5 Detik (Risiko jatuh)</small></td>
+                                        <td class="font-w600 text-dark align-middle">Timed Up & Go (TUG)</td>
+                                        <td class="text-center font-w700 text-primary align-middle">{{ $assessment->keseimbangan_tug_detik !== null && $assessment->keseimbangan_tug_detik !== '' ? $assessment->keseimbangan_tug_detik . ' Detik' : '-' }}</td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">&le; 13.5 dtk</span>
+                                                    <span class="cutoff-desc">Normal / Mandiri</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-danger">&gt; 13.5 dtk</span>
+                                                    <span class="cutoff-desc font-w600 text-danger">Risiko Jatuh Meningkat</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            @if(!empty($assessment->keseimbangan_tug_detik))
+                                                @php $tugVal = (float)str_replace(',', '.', $assessment->keseimbangan_tug_detik); @endphp
+                                                @if($tugVal > 0 && $tugVal <= 13.5)
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Normal / Mandiri</span>
+                                                @elseif($tugVal <= 20)
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Risiko Jatuh</span>
+                                                @else
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa fa-circle-exclamation mr-1"></i> Risiko Jatuh Tinggi</span>
+                                                @endif
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
                                     </tr>
+                                    <!-- Romberg -->
                                     <tr>
-                                        <td class="font-w600 text-dark">Functional Reach Test (FRT)</td>
-                                        <td class="text-center font-w700 text-primary">{{ $assessment->keseimbangan_frt_cm !== null ? $assessment->keseimbangan_frt_cm . ' cm' : '-' }}</td>
-                                        <td><small class="text-muted">&lt; 15 cm (Keseimbangan terbatas)</small></td>
+                                        <td class="font-w600 text-dark align-middle">Romberg Test (Mata Tertutup)</td>
+                                        <td class="text-center font-w700 text-primary align-middle">{{ $assessment->keseimbangan_romberg ?: '-' }}</td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">Negatif</span>
+                                                    <span class="cutoff-desc">Normal (Propriosepsi Baik)</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-danger">Positif</span>
+                                                    <span class="cutoff-desc font-w600 text-danger">Defisit Sensoris / Propriosepsi</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            @if($assessment->keseimbangan_romberg == 'Negatif')
+                                                <span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Normal</span>
+                                            @elseif($assessment->keseimbangan_romberg == 'Positif')
+                                                <span class="badge font-w600" style="font-size: 11px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa fa-circle-exclamation mr-1"></i> Defisit Propriosepsi / Vestibular</span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
                                     </tr>
+                                    <!-- OLS -->
                                     <tr>
-                                        <td class="font-w600 text-dark">Romberg Test (Mata Tertutup) & Tandem Stance</td>
-                                        <td class="text-center font-w700 text-primary">{{ $assessment->keseimbangan_romberg ?: '-' }} / {{ $assessment->keseimbangan_tandem ?: '-' }}</td>
-                                        <td><small class="text-muted">Positif: Defisit propriosepsi</small></td>
+                                        <td class="font-w600 text-dark align-middle">One-Leg Stance (OLS)</td>
+                                        <td class="text-center font-w700 text-primary align-middle">
+                                            D: {{ $assessment->keseimbangan_ols_kanan ? $assessment->keseimbangan_ols_kanan . 's' : '-' }} &bull;
+                                            S: {{ $assessment->keseimbangan_ols_kiri ? $assessment->keseimbangan_ols_kiri . 's' : '-' }}
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">&ge; 5 detik</span>
+                                                    <span class="cutoff-desc">Normal (Kanan &amp; Kiri)</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-danger">&lt; 5 detik</span>
+                                                    <span class="cutoff-desc font-w600 text-danger">Risiko Jatuh</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            @php
+                                                $olsD = !empty($assessment->keseimbangan_ols_kanan) ? (float)str_replace(',', '.', $assessment->keseimbangan_ols_kanan) : null;
+                                                $olsS = !empty($assessment->keseimbangan_ols_kiri) ? (float)str_replace(',', '.', $assessment->keseimbangan_ols_kiri) : null;
+                                            @endphp
+                                            @if($olsD !== null && $olsS !== null)
+                                                @if($olsD >= 5 && $olsS >= 5)
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Normal (D & S &ge; 5s)</span>
+                                                @elseif($olsD < 5 && $olsS < 5)
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa fa-circle-exclamation mr-1"></i> Risiko Jatuh (D & S &lt; 5s)</span>
+                                                @else
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Asimetri (Salah satu &lt; 5s)</span>
+                                                @endif
+                                            @elseif($olsD !== null)
+                                                @if($olsD >= 5)
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Normal D (&ge; 5s)</span>
+                                                @else
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Risiko Jatuh D (&lt; 5s)</span>
+                                                @endif
+                                            @elseif($olsS !== null)
+                                                @if($olsS >= 5)
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Normal S (&ge; 5s)</span>
+                                                @else
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Risiko Jatuh S (&lt; 5s)</span>
+                                                @endif
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
                                     </tr>
+                                    <!-- Dual-Task TUG -->
                                     <tr>
-                                        <td class="font-w600 text-dark">Single Leg Stance (D / S)</td>
-                                        <td class="text-center font-w700 text-primary">D: {{ $assessment->keseimbangan_single_leg_kanan ? $assessment->keseimbangan_single_leg_kanan . 's' : '-' }} &bull; S: {{ $assessment->keseimbangan_single_leg_kiri ? $assessment->keseimbangan_single_leg_kiri . 's' : '-' }}</td>
-                                        <td><small class="text-muted">&lt; 5s (Risiko jatuh)</small></td>
+                                        <td class="font-w600 text-dark align-middle">Dual-Task TUG</td>
+                                        <td class="text-center font-w700 text-primary align-middle">{{ $assessment->keseimbangan_dual_task_tug ? $assessment->keseimbangan_dual_task_tug . ' Detik' : '-' }}</td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">&le; 4.5 dtk</span>
+                                                    <span class="cutoff-desc">Normal (&Delta; selisih TUG)</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-warning">&gt; 4.5 dtk</span>
+                                                    <span class="cutoff-desc font-w600 text-warning text-dark">Perlu Perhatian</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            @if(!empty($assessment->keseimbangan_dual_task_tug))
+                                                @php
+                                                    $dualVal = (float)str_replace(',', '.', $assessment->keseimbangan_dual_task_tug);
+                                                    $baseTug = !empty($assessment->keseimbangan_tug_detik) ? (float)str_replace(',', '.', $assessment->keseimbangan_tug_detik) : null;
+                                                @endphp
+                                                @if($baseTug !== null && $baseTug > 0)
+                                                    @php $diff = $dualVal - $baseTug; @endphp
+                                                    @if($diff <= 4.5)
+                                                        <span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Dual-Task Normal (&Delta; {{ ($diff >= 0 ? '+' : '') . number_format($diff, 1) }}s)</span>
+                                                    @else
+                                                        <span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Perlu Perhatian (&Delta; +{{ number_format($diff, 1) }}s)</span>
+                                                    @endif
+                                                @else
+                                                    <span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">{{ $dualVal }}s</span>
+                                                @endif
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <!-- FES-I -->
+                                    <tr>
+                                        <td class="font-w600 text-dark align-middle">Falls Efficacy Scale – Int. (FES-I)</td>
+                                        <td class="text-center font-w700 text-primary align-middle">{{ $assessment->keseimbangan_fesi_skor !== null ? $assessment->keseimbangan_fesi_skor . ' / 64' : '-' }}</td>
+                                        <td class="align-middle">
+                                            <div class="cutoff-list">
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-success">16 – 19</span>
+                                                    <span class="cutoff-desc">Ketakutan Rendah</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-warning">20 – 27</span>
+                                                    <span class="cutoff-desc">Ketakutan Sedang</span>
+                                                </div>
+                                                <div class="cutoff-item">
+                                                    <span class="cutoff-badge cutoff-badge-danger">28 – 64</span>
+                                                    <span class="cutoff-desc font-w600 text-danger">Ketakutan Jatuh Tinggi</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            @if($assessment->keseimbangan_fesi_skor !== null)
+                                                @if($assessment->keseimbangan_fesi_skor <= 19)
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa fa-check-circle mr-1"></i> Ketakutan Rendah</span>
+                                                @elseif($assessment->keseimbangan_fesi_skor <= 27)
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa fa-triangle-exclamation mr-1"></i> Ketakutan Sedang</span>
+                                                @else
+                                                    <span class="badge font-w600" style="font-size: 11px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa fa-circle-exclamation mr-1"></i> Ketakutan Jatuh Tinggi</span>
+                                                @endif
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1238,38 +1425,38 @@
                     <div class="card-body p-3 p-md-4">
                         @if($has_gmfm)
                             <!-- GMFM Dimensions Underline Tabs -->
-                            <div class="d-flex align-items-center justify-content-between flex-wrap mb-3 border-bottom" style="border-color: #e2e8f0; gap: 8px;">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap mt-3 mb-3 border-bottom" style="border-color: #e2e8f0; gap: 8px;">
                                 <ul class="nav nav-tabs border-bottom-0 gmfm-dim-tabs" id="gmfmShowDimTabs" style="gap: 4px; margin-bottom: -1px;">
                                     <li class="nav-item">
                                         <a href="#gmfm-show-pane-a" class="nav-link gmfm-dim-btn active" data-target-dim="#gmfm-show-pane-a">
-                                            <i class="fa fa-bed mr-1 text-primary"></i> A: Berbaring & Berguling <span class="badge-counter">17</span>
+                                            <i class="fa fa-bed mr-2 text-primary"></i> A: Berbaring & Berguling <span class="badge-counter">17</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="#gmfm-show-pane-b" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-show-pane-b">
-                                            <i class="fa fa-street-view mr-1 text-muted"></i> B: Duduk <span class="badge-counter">20</span>
+                                            <i class="fa fa-street-view mr-2 text-muted"></i> B: Duduk <span class="badge-counter">20</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="#gmfm-show-pane-c" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-show-pane-c">
-                                            <i class="fa fa-child mr-1 text-muted"></i> C: Merangkak & Berlutut <span class="badge-counter">14</span>
+                                            <i class="fa fa-child mr-2 text-muted"></i> C: Merangkak & Berlutut <span class="badge-counter">14</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="#gmfm-show-pane-d" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-show-pane-d">
-                                            <i class="fa fa-male mr-1 text-muted"></i> D: Berdiri <span class="badge-counter">13</span>
+                                            <i class="fa fa-male mr-2 text-muted"></i> D: Berdiri <span class="badge-counter">13</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="#gmfm-show-pane-e" class="nav-link gmfm-dim-btn" data-target-dim="#gmfm-show-pane-e">
-                                            <i class="fa fa-running mr-1 text-muted"></i> E: Jalan, Lari & Lompat <span class="badge-counter">24</span>
+                                            <i class="fa fa-running mr-2 text-muted"></i> E: Jalan, Lari & Lompat <span class="badge-counter">24</span>
                                         </a>
                                     </li>
                                 </ul>
-                                <div class="d-flex align-items-center p-1.5 px-3 mb-2 rounded" style="background: #f8fafc; border: 1px solid #e2e8f0; gap: 8px;">
-                                    <span class="font-w700 text-dark" style="font-size: 11.5px;"><i class="fa-solid fa-calculator text-primary mr-1"></i> TOTAL GMFM-88:</span>
-                                    <span class="badge badge-dark font-w700" style="font-size: 12px; padding: 4px 8px; border-radius: 6px;">{{ $assessment->gmfm_total_score ?? 0 }} / 264</span>
-                                    <span class="badge badge-success font-w700" style="font-size: 12px; padding: 4px 8px; border-radius: 6px;">{{ number_format($assessment->gmfm_total_persen ?? 0, 1) }}%</span>
+                                <div class="d-flex align-items-center p-2 px-3 mt-1 mt-md-0 mb-2 rounded" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; box-shadow: 0 2px 5px rgba(37, 99, 235, 0.08); gap: 8px;">
+                                    <span class="font-w700" style="font-size: 11.5px; color: #1e40af; letter-spacing: 0.3px;"><i class="fa-solid fa-calculator mr-1.5" style="color: #2563eb;"></i> TOTAL GMFM-88:</span>
+                                    <span class="badge font-w800" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #2563eb; color: #ffffff; letter-spacing: 0.3px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);">{{ $assessment->gmfm_total_score ?? 0 }} / 264</span>
+                                    <span class="badge font-w800" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #059669; color: #ffffff; letter-spacing: 0.3px; box-shadow: 0 1px 3px rgba(5, 150, 105, 0.2);">{{ number_format($assessment->gmfm_total_persen ?? 0, 1) }}%</span>
                                 </div>
                             </div>
 
@@ -1645,10 +1832,10 @@
                         @endphp
                         @if($has_denver)
                             <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
-                                <span class="badge badge-success font-w700" style="font-size: 11px; padding: 4px 7px;">P: {{ $assessment->denver_pass_count ?? 0 }}</span>
-                                <span class="badge badge-danger font-w700" style="font-size: 11px; padding: 4px 7px;">F: {{ $assessment->denver_fail_count ?? 0 }}</span>
-                                <span class="badge badge-warning font-w700" style="font-size: 11px; padding: 4px 7px;">R: {{ $assessment->denver_refusal_count ?? 0 }}</span>
-                                <span class="badge badge-secondary font-w700" style="font-size: 11px; padding: 4px 7px;">NO: {{ $assessment->denver_no_count ?? 0 }}</span>
+                                <span class="badge font-w700" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11px; padding: 4px 7px;">P: {{ $assessment->denver_pass_count ?? 0 }}</span>
+                                <span class="badge font-w700" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11px; padding: 4px 7px;">F: {{ $assessment->denver_fail_count ?? 0 }}</span>
+                                <span class="badge font-w700" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11px; padding: 4px 7px;">R: {{ $assessment->denver_refusal_count ?? 0 }}</span>
+                                <span class="badge font-w700" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11px; padding: 4px 7px;">NO: {{ $assessment->denver_no_count ?? 0 }}</span>
                                 <span class="badge badge-primary font-w700 text-uppercase ml-2" style="font-size: 11.5px; padding: 4px 8px;">{{ $assessment->denver_kesimpulan ?: 'Evaluasi DDST II' }}</span>
                             </div>
                         @endif
@@ -1664,17 +1851,17 @@
                                                 <i class="fa-solid fa-chart-pie mr-1 text-primary"></i> Rekapitulasi Hasil Skrining DDST II (19 Task)
                                             </small>
                                             <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 8px;">
-                                                <span class="badge px-3 py-2 font-w700" style="background: #10b981; color: white; font-size: 12px; border-radius: 6px;">
-                                                    Pass (P): <strong>{{ $assessment->denver_pass_count ?? 0 }}</strong>
+                                                <span class="badge px-3 py-2 font-w700" style="background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);">
+                                                    <i class="fa fa-check mr-1" style="color: #2563eb;"></i> Pass (P): <strong style="color: #1e3a8a;">{{ $assessment->denver_pass_count ?? 0 }}</strong>
                                                 </span>
-                                                <span class="badge px-3 py-2 font-w700" style="background: #ef4444; color: white; font-size: 12px; border-radius: 6px;">
-                                                    Fail (F): <strong>{{ $assessment->denver_fail_count ?? 0 }}</strong>
+                                                <span class="badge px-3 py-2 font-w700" style="background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);">
+                                                    <i class="fa fa-times mr-1" style="color: #2563eb;"></i> Fail (F): <strong style="color: #1e3a8a;">{{ $assessment->denver_fail_count ?? 0 }}</strong>
                                                 </span>
-                                                <span class="badge px-3 py-2 font-w700" style="background: #f59e0b; color: white; font-size: 12px; border-radius: 6px;">
-                                                    Refusal (R): <strong>{{ $assessment->denver_refusal_count ?? 0 }}</strong>
+                                                <span class="badge px-3 py-2 font-w700" style="background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);">
+                                                    <i class="fa fa-ban mr-1" style="color: #2563eb;"></i> Refusal (R): <strong style="color: #1e3a8a;">{{ $assessment->denver_refusal_count ?? 0 }}</strong>
                                                 </span>
-                                                <span class="badge px-3 py-2 font-w700" style="background: #64748b; color: white; font-size: 12px; border-radius: 6px;">
-                                                    No Opp (NO): <strong>{{ $assessment->denver_no_count ?? 0 }}</strong>
+                                                <span class="badge px-3 py-2 font-w700" style="background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);">
+                                                    <i class="fa fa-minus-circle mr-1" style="color: #2563eb;"></i> No Opp (NO): <strong style="color: #1e3a8a;">{{ $assessment->denver_no_count ?? 0 }}</strong>
                                                 </span>
                                             </div>
                                         </div>
@@ -1693,46 +1880,86 @@
                                 $denver_sectors = config('denver.sectors', []);
                             @endphp
 
-                            <div class="row">
-                                @foreach($denver_sectors as $sector)
-                                    <div class="col-md-6 col-12 mb-3">
-                                        <div class="p-3 rounded h-100" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                            <h6 class="font-w700 mb-2" style="color: {{ $sector['badge_color'] }}; font-size: 13px;">
-                                                {{ $sector['title'] }}
-                                            </h6>
-                                            <div class="table-responsive">
-                                                <table class="table table-sm mb-0" style="font-size: 12px;">
-                                                    <tbody>
-                                                        @foreach($sector['tasks'] as $tKey => $task)
-                                                            @php
-                                                                $tScore = $denver_data[$tKey]['score'] ?? null;
-                                                                $tNote = $denver_data[$tKey]['catatan'] ?? null;
-                                                            @endphp
-                                                            <tr>
-                                                                <td style="width: 60%;">
-                                                                    <strong class="text-dark">{{ $task['name'] }}</strong>
-                                                                    <small class="text-muted d-block">Rentang: {{ $task['age'] }}</small>
-                                                                    @if($tNote)
-                                                                        <small class="text-info font-italic d-block">Catatan: {{ $tNote }}</small>
-                                                                    @endif
-                                                                </td>
-                                                                <td class="text-right" style="width: 40%; vertical-align: middle;">
-                                                                    @if($tScore === 'P') <span class="badge badge-success font-w700">Pass (P)</span>
-                                                                    @elseif($tScore === 'F') <span class="badge badge-danger font-w700">Fail (F)</span>
-                                                                    @elseif($tScore === 'R') <span class="badge badge-warning font-w700">Refusal (R)</span>
-                                                                    @elseif($tScore === 'NO') <span class="badge badge-light border font-w700">No Opp (NO)</span>
-                                                                    @else <span class="text-muted">-</span>
-                                                                    @endif
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
+                            <!-- Denver Sectors Navigation Underline Tabs (A, B, C, D) & Summary -->
+                            <div class="d-flex align-items-center justify-content-between flex-wrap mt-3 mb-3 border-bottom" style="border-color: #e2e8f0; gap: 8px;">
+                                <ul class="nav nav-tabs border-bottom-0 denver-show-sec-tabs" id="denverShowSecTabs" style="gap: 4px; margin-bottom: -1px;">
+                                    <li class="nav-item">
+                                        <a href="#denver-show-pane-a" class="nav-link denver-show-sec-btn active" data-target-dim="#denver-show-pane-a">
+                                            <i class="fa-solid fa-users mr-2 text-primary"></i> A: Personal Sosial <span class="badge-counter">4</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#denver-show-pane-b" class="nav-link denver-show-sec-btn" data-target-dim="#denver-show-pane-b">
+                                            <i class="fa-solid fa-hand mr-2 text-muted"></i> B: Motorik Halus - Adaptif <span class="badge-counter">5</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#denver-show-pane-c" class="nav-link denver-show-sec-btn" data-target-dim="#denver-show-pane-c">
+                                            <i class="fa-solid fa-comments mr-2 text-muted"></i> C: Bahasa <span class="badge-counter">5</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#denver-show-pane-d" class="nav-link denver-show-sec-btn" data-target-dim="#denver-show-pane-d">
+                                            <i class="fa-solid fa-running mr-2 text-muted"></i> D: Motorik Kasar <span class="badge-counter">5</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="d-flex align-items-center p-2 px-3 mt-1 mt-md-0 mb-2 rounded" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; box-shadow: 0 2px 5px rgba(37, 99, 235, 0.08); gap: 8px;">
+                                    <span class="font-w700" style="font-size: 11.5px; color: #1e40af; letter-spacing: 0.3px;"><i class="fa-solid fa-graduation-cap mr-2" style="color: #2563eb;"></i> TOTAL DDST II:</span>
+                                    <span class="badge font-w800" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; background: #2563eb; color: #ffffff; letter-spacing: 0.3px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);">19 Task</span>
+                                </div>
                             </div>
+
+                            <!-- Denver Show Sector Panes -->
+                            @foreach($denver_sectors as $sKey => $sector)
+                                <div class="denver-show-sec-pane" id="denver-show-pane-{{ strtolower($sKey) }}" style="{{ $sKey === 'A' ? '' : 'display: none;' }}">
+                                    <div class="table-responsive mb-3" style="border-radius: 8px; border: 1px solid #e2e8f0;">
+                                        <table class="table table-hover mb-0" style="font-size: 12.5px; vertical-align: middle;">
+                                            <thead style="background: #f8fafc; color: #475569; font-size: 11.5px;">
+                                                <tr>
+                                                    <th style="width: 5%; text-align: center;">No</th>
+                                                    <th style="width: 45%;">Nama Task Perkembangan</th>
+                                                    <th style="width: 15%; text-align: center;">Rentang Usia</th>
+                                                    <th style="width: 15%; text-align: center;">Hasil Uji</th>
+                                                    <th style="width: 20%;">Catatan Terapis</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($sector['tasks'] as $tKey => $task)
+                                                    @php
+                                                        $tScore = $denver_data[$tKey]['score'] ?? null;
+                                                        $tNote = $denver_data[$tKey]['catatan'] ?? null;
+                                                    @endphp
+                                                    <tr>
+                                                        <td class="text-center font-w700 text-muted">{{ $task['no'] }}</td>
+                                                        <td>
+                                                            <strong class="text-dark">{{ $task['name'] }}</strong>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span class="badge badge-light border font-w600" style="font-size: 11px;">{{ $task['age'] }}</span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @if($tScore === 'P') <span class="badge badge-success font-w700 px-2 py-1" style="font-size: 11px;">Pass (P)</span>
+                                                            @elseif($tScore === 'F') <span class="badge badge-danger font-w700 px-2 py-1" style="font-size: 11px;">Fail (F)</span>
+                                                            @elseif($tScore === 'R') <span class="badge badge-warning font-w700 px-2 py-1" style="font-size: 11px;">Refusal (R)</span>
+                                                            @elseif($tScore === 'NO') <span class="badge badge-secondary font-w700 px-2 py-1" style="font-size: 11px;">No Opp (NO)</span>
+                                                            @else <span class="text-muted">-</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if($tNote)
+                                                                <span class="text-dark font-w500" style="font-size: 12px;">{{ $tNote }}</span>
+                                                            @else
+                                                                <span class="text-muted">-</span>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            @endforeach
 
                             @if($assessment->denver_catatan)
                                 <div class="mt-2 p-3 bg-light rounded border">
@@ -2167,13 +2394,17 @@
     border-bottom: 2.5px solid #2563eb !important;
     font-weight: 700 !important;
 }
+.gmfm-dim-tabs .gmfm-dim-btn i,
+.denver-show-sec-tabs .denver-show-sec-btn i {
+    margin-right: 8px !important;
+}
 .gmfm-dim-tabs .gmfm-dim-btn .badge-counter {
     font-size: 10.5px;
     padding: 2px 7px;
     border-radius: 999px;
     background: #e2e8f0;
     color: #475569;
-    margin-left: 6px;
+    margin-left: 8px;
     font-weight: 700;
     transition: all 0.18s ease;
 }
@@ -2190,6 +2421,55 @@
     border-radius: 10px !important;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.05) !important;
     color: #1e293b !important;
+}
+
+/* Denver DDST II Sectors Underline Tabs (Show View) */
+.denver-show-sec-tabs {
+    border-bottom: 2px solid #e2e8f0 !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 0 !important;
+}
+.denver-show-sec-tabs .denver-show-sec-btn {
+    border: none !important;
+    border-bottom: 2.5px solid transparent !important;
+    background: transparent !important;
+    color: #64748b !important;
+    font-weight: 600 !important;
+    font-size: 12.5px !important;
+    padding: 10px 14px !important;
+    border-radius: 8px 8px 0 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    transition: all 0.18s ease;
+    cursor: pointer;
+    margin-bottom: -2px;
+}
+.denver-show-sec-tabs .denver-show-sec-btn:hover {
+    color: #2563eb !important;
+    background: #f8fafc !important;
+}
+.denver-show-sec-tabs .denver-show-sec-btn.active {
+    color: #1e40af !important;
+    background: #eff6ff !important;
+    border-bottom: 2.5px solid #2563eb !important;
+    font-weight: 700 !important;
+}
+.denver-show-sec-tabs .denver-show-sec-btn .badge-counter {
+    font-size: 10.5px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    color: #475569;
+    margin-left: 8px;
+    font-weight: 700;
+    transition: all 0.18s ease;
+}
+.denver-show-sec-tabs .denver-show-sec-btn.active .badge-counter {
+    background: #2563eb;
+    color: #ffffff;
 }
 
 </style>
@@ -2212,8 +2492,22 @@ $(document).ready(function() {
         e.preventDefault();
         var targetPane = $(this).data('target-dim');
         $('.gmfm-dim-btn').removeClass('active');
+        $('.gmfm-dim-btn i').removeClass('text-primary').addClass('text-muted');
         $(this).addClass('active');
+        $(this).find('i').removeClass('text-muted').addClass('text-primary');
         $('.gmfm-show-pane').hide();
+        $(targetPane).fadeIn(150);
+    });
+
+    // 1b. Denver DDST II Sector Switcher inside Show view
+    $(document).on('click', '.denver-show-sec-btn', function(e) {
+        e.preventDefault();
+        var targetPane = $(this).data('target-dim');
+        $('.denver-show-sec-btn').removeClass('active');
+        $('.denver-show-sec-btn i').removeClass('text-primary').addClass('text-muted');
+        $(this).addClass('active');
+        $(this).find('i').removeClass('text-muted').addClass('text-primary');
+        $('.denver-show-sec-pane').hide();
         $(targetPane).fadeIn(150);
     });
 
