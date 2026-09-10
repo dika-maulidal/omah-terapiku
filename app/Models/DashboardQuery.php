@@ -990,13 +990,10 @@ class DashboardQuery
             $dokterId = $dokter ? $dokter->id : null;
         }
 
-        $query = Rekam::with(['pasien', 'dokter', 'assessment', 'terapisPendamping'])
+        $query = Rekam::with(['pasien', 'dokter', 'assessment'])
             ->whereNotNull('pasien_id')
             ->when($dokterId, function ($q) use ($dokterId) {
-                $q->where(function($sq) use ($dokterId) {
-                    $sq->where('dokter_id', $dokterId)
-                       ->orWhere('terapis_pendamping_id', $dokterId);
-                });
+                $q->where('dokter_id', $dokterId);
             });
 
         $this->scopeUpt($query);

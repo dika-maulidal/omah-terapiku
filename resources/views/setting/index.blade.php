@@ -193,7 +193,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="profile-info-box">
                                     <small class="text-muted d-block mb-1"><i class="fa-solid fa-shield-halved mr-1 text-primary"></i> Role Akses Sistem</small>
-                                    <strong class="text-dark d-block" style="font-size: 14px;">{{ $user->role_display() }}</strong>
+                                    <strong class="text-dark d-block" style="font-size: 14px;">{{ $user->role_label() }}</strong>
                                 </div>
                             </div>
 

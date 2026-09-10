@@ -100,14 +100,14 @@
                             </div>
                             <div class="header-info">
                                 <span class="user-greeting">Halo, <strong>{{auth()->user()->name}}</strong></span>
-                                <p class="fs-12 mb-0 user-role">{{auth()->user()->role_display()}}</p>
+                                <p class="fs-12 mb-0 user-role">{{auth()->user()->role_label()}}</p>
                             </div> 
                             <i class="fa-solid fa-chevron-down user-dropdown-caret"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <div class="dropdown-header px-3 py-2 border-bottom">
                                 <h6 class="mb-0 text-primary font-w600" style="color: #2e4b82 !important;">{{auth()->user()->name}}</h6>
-                                <span class="fs-12 text-muted">{{auth()->user()->role_display()}}</span>
+                                <span class="fs-12 text-muted">{{auth()->user()->role_label()}}</span>
                             </div>
                             <a href="{{Route('setting.index')}}" class="dropdown-item ai-icon">
                                 <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>

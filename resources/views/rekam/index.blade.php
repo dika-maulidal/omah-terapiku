@@ -183,11 +183,6 @@
                                             <div class="mt-1" style="font-size: 11.5px; color: #64748b;">
                                                 <i class="fa-solid fa-user-doctor mr-1" style="color: #2563eb;"></i>{{$row->dokter->nama ?? '-'}}
                                             </div>
-                                            @if($row->terapisPendamping)
-                                                <div class="mt-0.5" style="font-size: 11px; color: #0284c7;">
-                                                    <i class="fa-solid fa-hands-holding-child mr-1"></i>Pendamping: {{$row->terapisPendamping->nama}}
-                                                </div>
-                                            @endif
                                         </td>
                                         <td style="padding: 12px 14px; vertical-align: middle; max-width: 260px;">
                                             <span style="font-size: 12.5px; line-height: 1.45; color: #475569; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="{{$row->keluhan ?: '-'}}">

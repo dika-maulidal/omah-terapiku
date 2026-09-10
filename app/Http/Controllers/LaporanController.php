@@ -404,10 +404,7 @@ class LaporanController extends Controller
         // 7. Rekap Kinerja Terapis
         $terapisRekap = Dokter::where('status', 1)->get()->map(function ($terapis) use ($startDate, $endDate) {
             $sesiQuery = Rekam::whereBetween('tgl_rekam', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
-                ->where(function ($q) use ($terapis) {
-                    $q->where('dokter_id', $terapis->id)
-                      ->orWhere('terapis_pendamping_id', $terapis->id);
-                });
+                ->where('dokter_id', $terapis->id);
 
             $totalSesi = (clone $sesiQuery)->count();
             $selesai = (clone $sesiQuery)->where('status', 4)->count();
@@ -436,7 +433,7 @@ class LaporanController extends Controller
 
         // 9. Daftar Sesi Rekam Medis (Sample Log Terbaru untuk lampiran)
         $daftarSesi = (clone $rekamQuery)
-            ->with(['pasien', 'dokter', 'terapisPendamping'])
+            ->with(['pasien', 'dokter'])
             ->orderBy('tgl_rekam', 'desc')
             ->orderBy('id', 'desc')
             ->limit(100)

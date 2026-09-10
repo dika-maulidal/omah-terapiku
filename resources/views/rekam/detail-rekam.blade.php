@@ -712,11 +712,8 @@
                                                     <div class="font-w600" style="color: #1e293b;">{{ $row->layanan_terapi ?: 'Terapi Terpadu' }}</div>
                                                     <small class="text-muted"><i class="fa-solid fa-hospital-user mr-1 text-primary"></i>{{ $row->upt_lokasi ?: ($row->poli ?: 'Omah Terapi') }}</small>
                                                 </td>
-                                                <td style="vertical-align: top;">
+                                                 <td style="vertical-align: top;">
                                                     <div class="font-w600" style="color: #1e293b;">{{ $row->dokter->nama ?? '-' }}</div>
-                                                    @if($row->terapisPendamping)
-                                                        <small class="text-muted d-block"><i class="fa-solid fa-user-plus text-info mr-1"></i>{{ $row->terapisPendamping->nama }}</small>
-                                                    @endif
                                                 </td>
                                                 <td style="vertical-align: top;">
                                                     <div class="text-truncate" style="max-width: 160px;" title="{{ $row->keluhan }}">
@@ -759,7 +756,6 @@
                                                             data-layanan="{{ $row->layanan_terapi ?? 'Terapi Terpadu' }}"
                                                             data-upt="{{ $row->upt_lokasi ?: ($row->poli ?: 'Omah Terapi') }}"
                                                             data-terapis="{{ $row->dokter->nama ?? '-' }}"
-                                                            data-pendamping="{{ $row->terapisPendamping->nama ?? '-' }}"
                                                             data-status="{{ $row->status }}"
                                                             data-keluhan="{{ htmlspecialchars($row->keluhan ?? '', ENT_QUOTES) }}"
                                                             data-pemeriksaan="{{ htmlspecialchars($row->pemeriksaan ?? '', ENT_QUOTES) }}"
@@ -1209,7 +1205,6 @@
         var layanan = btn.data('layanan');
         var upt = btn.data('upt');
         var terapis = btn.data('terapis');
-        var pendamping = btn.data('pendamping');
         var status = parseInt(btn.data('status'));
         var keluhan = btn.data('keluhan') || '-';
         var pemeriksaan = btn.data('pemeriksaan') || '<span class="text-muted font-italic">Belum ada catatan pemeriksaan objektif.</span>';

@@ -49,9 +49,12 @@ class JadwalController extends Controller
         }
 
         if ($role === 'Dokter') {
-            $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
+            $dokter = Dokter::where('user_id', $user->id)->first()
+                    ?: Dokter::where('nama', $user->name)->first();
             if ($dokter) {
                 $query->where('dokter_id', $dokter->id);
+            } else {
+                $query->whereRaw('1 = 0');
             }
         } elseif ($dokterFilter && $dokterFilter !== 'all') {
             $query->where('dokter_id', $dokterFilter);
@@ -134,9 +137,12 @@ class JadwalController extends Controller
         }
 
         if ($role === 'Dokter') {
-            $dokter = Dokter::where('user_id', $user->id)->where('status', 1)->first();
+            $dokter = Dokter::where('user_id', $user->id)->first()
+                    ?: Dokter::where('nama', $user->name)->first();
             if ($dokter) {
                 $query->where('dokter_id', $dokter->id);
+            } else {
+                $query->whereRaw('1 = 0');
             }
         } elseif ($dokterFilter && $dokterFilter !== 'all') {
             $query->where('dokter_id', $dokterFilter);

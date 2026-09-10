@@ -289,9 +289,13 @@
                                                 <span class="badge font-w700" style="font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0;">
                                                     <i class="fa-solid fa-user-pen mr-1"></i> Pendaftaran
                                                 </span>
+                                            @elseif($row->role == 3)
+                                                <span class="badge font-w700" style="font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #faf5ff; color: #6b21a8; border: 1px solid #e9d5ff;">
+                                                    <i class="fa-solid fa-user-doctor mr-1"></i> Terapis
+                                                </span>
                                             @else
                                                 <span class="badge font-w600" style="font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;">
-                                                    {{$row->role_display()}}
+                                                    {{$row->role_label()}}
                                                 </span>
                                             @endif
                                         </td>

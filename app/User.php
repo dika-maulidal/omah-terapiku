@@ -33,6 +33,23 @@ class User extends Authenticatable
                 break;
         }
     }
+
+    function role_label(){
+        switch ($this->role) {
+            case 1:
+                return 'Admin';
+                break;
+            case 2:
+                return 'Petugas Pendaftaran';
+                break;
+            case 3:
+                return 'Terapis';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
     protected $hidden = [
         'password', 'remember_token',
     ];
