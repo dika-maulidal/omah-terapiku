@@ -299,8 +299,27 @@
         ? 'data:image/png;base64,' . base64_encode(file_get_contents($pathLogoDinsos)) 
         : asset('images/logo-dinsos.png');
 
-    $usiaTahun = $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->age : '-';
-    $tglSesiFormatted = $rekam->tgl_rekam ? \Carbon\Carbon::parse($rekam->tgl_rekam)->translatedFormat('d F Y') : date('d F Y');
+    // Safe Date Helper (Anti-Crash Carbon Parse)
+    $safeFormatDate = function($date, $default = '-') {
+        if (empty($date)) return $default;
+        try {
+            return \Carbon\Carbon::parse($date)->translatedFormat('d F Y');
+        } catch (\Throwable $e) {
+            return (string)$date;
+        }
+    };
+
+    $safeAge = function($date) {
+        if (empty($date)) return '-';
+        try {
+            return \Carbon\Carbon::parse($date)->age . ' Tahun';
+        } catch (\Throwable $e) {
+            return '-';
+        }
+    };
+
+    $usiaTahun = $safeAge($pasien->tgl_lahir);
+    $tglSesiFormatted = $safeFormatDate($rekam->tgl_rekam, date('d F Y'));
     $tglCetak = \Carbon\Carbon::now()->translatedFormat('d F Y');
 @endphp
 
@@ -434,7 +453,7 @@
             </tr>
             <tr>
                 <td style="font-weight: bold; border: 1px solid #000000 !important;">TTL / Usia</td>
-                <td style="border: 1px solid #000000 !important;">: {{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->translatedFormat('d F Y') : '-' }} ({{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->age . ' Tahun' : '-' }})</td>
+                <td style="border: 1px solid #000000 !important;">: {{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $safeFormatDate($pasien->tgl_lahir) }} ({{ $safeAge($pasien->tgl_lahir) }})</td>
                 <td style="font-weight: bold; border: 1px solid #000000 !important;">No. Kontak / HP</td>
                 <td style="border: 1px solid #000000 !important;">: {{ $pasien->no_hp ?: '-' }}</td>
             </tr>

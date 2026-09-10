@@ -102,7 +102,6 @@
                     </div>
                 </div>
                 <div class="ot-stat-footer">
-                    <span class="badge badge-pill badge-primary light">Hari Ini</span>
                     <span>Bulan Ini: {{ $query->perikaBulanini() }}</span>
                 </div>
             </div>
@@ -121,8 +120,7 @@
                     </div>
                 </div>
                 <div class="ot-stat-footer">
-                    <span class="badge badge-pill badge-info light">Terdaftar</span>
-                    <span>Penerima Manfaat</span>
+                    <span>Database Penerima Manfaat</span>
                 </div>
             </div>
         </div>
@@ -140,8 +138,7 @@
                     </div>
                 </div>
                 <div class="ot-stat-footer">
-                    <span class="badge badge-pill badge-primary light">Aktif</span>
-                    <span>Terapis Medis</span>
+                    <span>Terapis Medis Aktif</span>
                 </div>
             </div>
         </div>
@@ -159,7 +156,6 @@
                     </div>
                 </div>
                 <div class="ot-stat-footer">
-                    <span class="badge badge-pill badge-info light">Akumulasi</span>
                     <span>Tahun {{ date('Y') }}: {{ $query->perikaTahunini() }}</span>
                 </div>
             </div>
@@ -279,9 +275,6 @@
                             <i class="fa fa-pie-chart mr-2" style="color: #2563eb;"></i> Penerima Manfaat per Omah Terapiku
                         </h4>
                     </div>
-                    <span class="badge badge-primary light font-w600" style="font-size: 11.5px;">
-                        Total: {{ $pasienOmah['total_pasien'] }} Pasien
-                    </span>
                 </div>
                 <div class="card-body p-3">
                     <div class="row align-items-center">
@@ -337,9 +330,6 @@
                             <i class="fa fa-pie-chart mr-2" style="color: #2563eb;"></i> Distribusi Jenis Layanan Terapi
                         </h4>
                     </div>
-                    <span class="badge badge-primary light font-w600" style="font-size: 11.5px;">
-                        Total: {{ $distribusiTerapi['total'] }} Sesi Pelayanan
-                    </span>
                 </div>
                 <div class="card-body p-3">
                     <div class="row align-items-center">
@@ -401,7 +391,6 @@
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                         <span class="fs-12 text-muted font-w600" id="labelPeriodeTindakan">Periode: <strong class="text-primary">{{ $bulan }} {{ date('Y') }}</strong></span>
-                        <span class="badge badge-primary light font-w700" id="badgeTotalTindakan" style="font-size: 11px;">Total: {{ $topTindakan['total'] }} Tindakan</span>
                     </div>
                     <div class="dz-scroll" id="containerTopTindakan" style="max-height: 220px; overflow-y: auto;">
                         @forelse($topTindakan['items'] as $index => $tdk)
@@ -462,7 +451,6 @@
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                         <span class="fs-12 text-muted font-w600" id="labelPeriodeKeluhan">Periode: <strong class="text-primary">{{ $bulan }} {{ date('Y') }}</strong></span>
-                        <span class="badge badge-primary light font-w700" id="badgeTotalKeluhan" style="font-size: 11px;">Total: {{ $topKeluhan['total'] }} Keluhan</span>
                     </div>
 
                     <!-- Canvas Wrapper with Floating Tooltip -->
@@ -505,7 +493,6 @@
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                         <span class="fs-12 text-muted font-w600" id="labelPeriodeDiagnosa">Periode: <strong class="text-primary">{{ $bulan }} {{ date('Y') }}</strong></span>
-                        <span class="badge badge-primary light font-w700" id="badgeTotalDiagnosa" style="font-size: 11px;">Total: {{ $topDiagnosa['total'] }} Kasus</span>
                     </div>
                     <div class="dz-scroll" id="containerTopDiagnosa" style="max-height: 220px; overflow-y: auto;">
                         @forelse($topDiagnosa['items'] as $index => $dg)
@@ -557,9 +544,6 @@
                             <i class="fa fa-users mr-2" style="color: #2563eb;"></i> Demografi Kelompok Usia Penerima Manfaat
                         </h4>
                     </div>
-                    <span class="badge badge-info light font-w600" style="font-size: 11.5px;">
-                        Total: {{ $demografi['total'] }} Pasien
-                    </span>
                 </div>
                 <div class="card-body p-3">
                     <!-- Ringkasan Usia (Di Atas Grafik) -->
@@ -663,12 +647,6 @@
                             </h4>
                         </div>
                     </div>
-                    
-                    <div class="d-flex align-items-center" style="gap: 8px;">
-                        <span class="badge badge-primary light font-w700" style="font-size: 11.5px; padding: 7px 12px; border-radius: 8px; border: 1px solid #dbeafe;">
-                            <i class="fa-solid fa-location-dot mr-1 text-primary"></i> {{ count($sebaranWilayah['breakdown']) }} Kab/Kota Terdata
-                        </span>
-                    </div>
                 </div>
                 
                 <div class="card-body p-3 p-md-4">
@@ -702,9 +680,6 @@
                             <i class="fa fa-circle-o-notch mr-2" style="color: #2563eb;"></i> Status Antrian Pasien
                         </h4>
                     </div>
-                    <span class="badge badge-primary light font-w600" style="font-size: 11.5px;">
-                        Total: {{ $statusAntrian['total'] }}
-                    </span>
                 </div>
                 <div class="card-body p-3 d-flex flex-column justify-content-between">
                     <div style="position: relative; height: 170px;">
@@ -756,11 +731,8 @@
             <div class="card h-100 mb-0 shadow-sm" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
                 <div class="card-header d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid #edf2f7;">
                     <h4 class="fs-15 font-w700 text-primary mb-0" style="color: var(--ot-navy) !important; font-weight: 700;">
-                        <i class="fa fa-user-plus mr-1" style="color: #2563eb;"></i> Pendaftaran Hari Ini
+                        <i class="fa fa-heartbeat mr-1" style="color: #2563eb;"></i> Perawatan Hari Ini
                     </h4>
-                    <span class="badge badge-primary light font-w600">
-                        {{ $query->rekam_day()->count() }} Pasien
-                    </span>
                 </div>
                 <div class="card-body p-3">
                     <div class="dz-scroll" id="appointment-schedule" style="overflow-y: auto; max-height: 270px; padding-right: 4px;">
@@ -837,7 +809,7 @@
                         </div>
                     </div>
                     
-                    <!-- Filter Kategori & Counter -->
+                    <!-- Filter Kategori -->
                     <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
                         <div class="btn-group btn-group-sm" role="group" id="filterTherapistActivity" style="background: #f8fafc; padding: 3px; border-radius: 8px; border: 1px solid #e2e8f0;">
                             <button type="button" class="btn btn-xs btn-activity-filter active font-w600" data-filter="all" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: #2563eb; color: #ffffff; border: none; cursor: pointer;">Semua</button>
@@ -845,9 +817,6 @@
                             <button type="button" class="btn btn-xs btn-activity-filter font-w600" data-filter="pemeriksaan" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: transparent; color: #64748b; border: none; cursor: pointer;">Pemeriksaan</button>
                             <button type="button" class="btn btn-xs btn-activity-filter font-w600" data-filter="selesai" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: transparent; color: #64748b; border: none; cursor: pointer;">Selesai</button>
                         </div>
-                        <span class="badge badge-primary light font-w700" style="font-size: 11.5px; padding: 7px 12px; border-radius: 8px; border: 1px solid #dbeafe;">
-                            <i class="fa-solid fa-bolt mr-1 text-primary"></i> {{ count($recentActivities) }} Aktivitas
-                        </span>
                     </div>
                 </div>
 

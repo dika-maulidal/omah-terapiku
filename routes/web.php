@@ -54,10 +54,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/gantipassword/{id}', [AuthController::class, 'updatepassword'])->name('gantipassword');
     Route::post('/ai-assistant/chat', [AiAssistantController::class, 'chat'])->name('ai.chat');
 
-    // Laporan Eksekutif & Statistik Dinas Sosial (Executive Dashboard & Rekap PDF)
-    Route::get('/laporan/eksekutif', [LaporanController::class, 'index'])->name('laporan.eksekutif');
-    Route::get('/laporan/eksekutif/print', [LaporanController::class, 'printPdf'])->name('laporan.eksekutif.print');
-
     // AJAX dropdown helpers (Accessible by all logged in users)
     Route::get('/getDokter', [DokterController::class, 'getDokter'])->name('getDokter');
     Route::get('/getTerapis', [DokterController::class, 'getDokter'])->name('getTerapis');
@@ -111,8 +107,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/rekam/diagnosa/delete/{id}', [RekamPemeriksaanController::class, 'diagnosa_delete'])->name('rekam.diagnosa.delete');
     });
 
-    // --- Role: Admin Only (Master Data & Deletion) ---
+    // --- Role: Admin Only (Master Data, Laporan Eksekutif, & Deletion) ---
     Route::group(['middleware' => 'role:Admin'], function () {
+        // Laporan Eksekutif & Statistik Dinas Sosial (Executive Dashboard & Rekap PDF)
+        Route::get('/laporan/eksekutif', [LaporanController::class, 'index'])->name('laporan.eksekutif');
+        Route::get('/laporan/eksekutif/print', [LaporanController::class, 'printPdf'])->name('laporan.eksekutif.print');
+
         // Master Omah Terapiku / Poli
         Route::get('/omahterapiku', [PoliController::class, 'index'])->name('omahterapiku');
         Route::post('/omahterapiku', [PoliController::class, 'store'])->name('omahterapiku.store');

@@ -311,108 +311,107 @@
 <!-- Card Ringkasan Sesi Terapi & Jadwal Kunjungan Terkini -->
 <div class="row mb-4">
     <div class="col-12">
-        <div class="p-4 rounded-lg shadow-sm" style="border-radius: 14px; border: 1px solid #cce5ff; background: linear-gradient(135deg, #f0f7ff 0%, #edf3fc 100%); box-shadow: 0 4px 18px rgba(37, 99, 235, 0.06); padding: 26px 26px 36px 26px !important;">
-            @php
-                $activeRekam = $rekamLatest ?: ($rekams->first() ?: null);
-            @endphp
+        <div class="card" style="border-radius: 12px; border: 1px solid #cce5ff; background: linear-gradient(135deg, #f0f7ff 0%, #edf3fc 100%); box-shadow: 0 4px 18px rgba(37, 99, 235, 0.06);">
+            <div class="card-body p-4">
+                @php
+                    $activeRekam = $rekamLatest ?: ($rekams->first() ?: null);
+                @endphp
 
-            <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 15px;">
-                <div class="d-flex align-items-center">
-                    <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 10px; background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; flex-shrink: 0; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);">
-                        <i class="fa-solid fa-calendar-check" style="font-size: 22px; color: #2563eb;"></i>
-                    </div>
-                    <div>
-                        <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                            <h5 class="font-w700 mb-0" style="font-size: 16px; color: var(--ot-navy) !important;">Sesi Terapi & Jadwal Kunjungan Terkini</h5>
-                            @if($rekamLatest)
-                                <span class="badge badge-warning font-w600 text-dark" style="font-size: 11px; background-color: #fef08a; border: 1px solid #fde047; color: #854d0e !important;">Sesi Aktif Dalam Penanganan</span>
-                            @elseif($activeRekam)
-                                <span class="badge badge-success font-w600" style="font-size: 11px; background-color: #dcfce7; border: 1px solid #bbf7d0; color: #166534 !important;">Sesi Terakhir Tercatat</span>
-                            @else
-                                <span class="badge badge-light font-w600" style="font-size: 11px; background-color: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b !important;">Belum Ada Sesi Terdaftar</span>
-                            @endif
+                <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 15px;">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 10px; background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; flex-shrink: 0; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);">
+                            <i class="fa-solid fa-calendar-check" style="font-size: 22px; color: #2563eb;"></i>
                         </div>
-                        <p class="text-muted mb-0" style="font-size: 12.5px;">
-                            Informasi tanggal periksa, slot jadwal sesi terapi berkala, unit Omah Terapiku, serta terapis penanggung jawab.
-                        </p>
+                        <div>
+                            <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                                <h5 class="font-w700 mb-0" style="font-size: 16px; color: var(--ot-navy) !important;">Sesi Terapi & Jadwal Kunjungan Terkini</h5>
+                                @if($rekamLatest)
+                                    <span class="badge badge-warning font-w600 text-dark" style="font-size: 11px; background-color: #fef08a; border: 1px solid #fde047; color: #854d0e !important;">Sesi Aktif Dalam Penanganan</span>
+                                @elseif($activeRekam)
+                                    <span class="badge badge-success font-w600" style="font-size: 11px; background-color: #dcfce7; border: 1px solid #bbf7d0; color: #166534 !important;">Sesi Terakhir Tercatat</span>
+                                @else
+                                    <span class="badge badge-light font-w600" style="font-size: 11px; background-color: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b !important;">Belum Ada Sesi Terdaftar</span>
+                                @endif
+                            </div>
+                        </div>
                     </div>
+
+                    @if($activeRekam && (auth()->user()->role_display() == "Admin" || auth()->user()->role_display() == "Pendaftaran"))
+                        <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                            <a href="{{ Route('rekam.edit', $activeRekam->id) }}" class="btn btn-xs btn-outline-primary bg-white font-w600 shadow-sm" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; border-color: #bfdbfe;">
+                                <i class="fa-solid fa-pen-to-square mr-1"></i> Edit Sesi Ini
+                            </a>
+                        </div>
+                    @endif
                 </div>
 
-                @if($activeRekam && (auth()->user()->role_display() == "Admin" || auth()->user()->role_display() == "Pendaftaran"))
-                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                        <a href="{{ Route('rekam.edit', $activeRekam->id) }}" class="btn btn-xs btn-outline-primary bg-white font-w600 shadow-sm" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; border-color: #bfdbfe;">
-                            <i class="fa-solid fa-pen-to-square mr-1"></i> Edit Sesi Ini
+                @if($activeRekam)
+                    <div class="row mt-3 pt-3 mb-0" style="border-top: 1px solid #cce5ff;">
+                        <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
+                            <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%; border-radius: 8px;">
+                                <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
+                                    <i class="fa-solid fa-calendar-day mr-1 text-primary"></i> Tanggal Periksa / Kunjungan
+                                </small>
+                                <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
+                                    {{ \Carbon\Carbon::parse($activeRekam->tgl_rekam)->translatedFormat('l, d F Y') }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
+                            <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%; border-radius: 8px;">
+                                <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
+                                    <i class="fa-solid fa-clock mr-1 text-info"></i> Slot Jadwal Sesi Terapi
+                                </small>
+                                <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
+                                    {{ $activeRekam->sesi_waktu ?: 'Sesi Reguler (Rabu)' }}
+                                </span>
+                                <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                                    Estimasi Durasi: 30 - 45 Menit / Sesi
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
+                            <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%; border-radius: 8px;">
+                                <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
+                                    <i class="fa-solid fa-hospital-user mr-1 text-primary"></i> Omah Terapiku & Layanan
+                                </small>
+                                <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
+                                    {{ $activeRekam->upt_lokasi ?: ($activeRekam->poli ?: 'Omah Terapiku') }}
+                                </span>
+                                <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                                    Layanan: <span class="text-primary font-w600">{{ $activeRekam->layanan_terapi ?: 'Fisioterapi' }}</span>
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
+                            <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%; border-radius: 8px;">
+                                <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
+                                    <i class="fa-solid fa-user-doctor mr-1 text-danger"></i> Terapis Pemeriksa
+                                </small>
+                                <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
+                                    {{ $activeRekam->dokter->nama ?? 'Belum Ditugaskan' }}
+                                </span>
+                                <div class="mt-1">
+                                    {!! $activeRekam->status_display() !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="alert alert-light mt-3 mb-0 text-dark d-flex align-items-center justify-content-between p-3" style="border-radius: 8px; font-size: 12.5px; border: 1px solid #e2e8f0; background: #ffffff;">
+                        <div>
+                            <i class="fa-solid fa-circle-info text-primary mr-2"></i>
+                            Penerima manfaat ini belum memiliki catatan sesi terapi. Silakan daftarkan sesi terapi baru untuk memulai perawatan.
+                        </div>
+                        <a href="{{ Route('rekam.add', ['pasien_id' => $pasien->id]) }}" class="btn btn-sm btn-primary font-w600" style="font-size: 12px; padding: 5px 14px;">
+                            <i class="fa-solid fa-plus mr-1"></i> Daftarkan Sesi Sekarang
                         </a>
                     </div>
                 @endif
             </div>
-
-            @if($activeRekam)
-                <div class="row mt-3 pt-3 mb-0" style="border-top: 1px solid #cce5ff;">
-                    <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
-                        <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%;">
-                            <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
-                                <i class="fa-solid fa-calendar-day mr-1 text-primary"></i> Tanggal Periksa / Kunjungan
-                            </small>
-                            <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
-                                {{ \Carbon\Carbon::parse($activeRekam->tgl_rekam)->translatedFormat('l, d F Y') }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
-                        <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%;">
-                            <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
-                                <i class="fa-solid fa-clock mr-1 text-info"></i> Slot Jadwal Sesi Terapi
-                            </small>
-                            <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
-                                {{ $activeRekam->sesi_waktu ?: 'Sesi Reguler (Rabu)' }}
-                            </span>
-                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
-                                Estimasi Durasi: 30 - 45 Menit / Sesi
-                            </small>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
-                        <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%;">
-                            <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
-                                <i class="fa-solid fa-hospital-user mr-1 text-primary"></i> Omah Terapiku & Layanan
-                            </small>
-                            <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
-                                {{ $activeRekam->upt_lokasi ?: ($activeRekam->poli ?: 'Omah Terapiku') }}
-                            </span>
-                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
-                                Layanan: <span class="text-primary font-w600">{{ $activeRekam->layanan_terapi ?: 'Fisioterapi' }}</span>
-                            </small>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
-                        <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%;">
-                            <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
-                                <i class="fa-solid fa-user-doctor mr-1 text-danger"></i> Terapis Pemeriksa
-                            </small>
-                            <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
-                                {{ $activeRekam->dokter->nama ?? 'Belum Ditugaskan' }}
-                            </span>
-                            <div class="mt-1">
-                                {!! $activeRekam->status_display() !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @else
-                <div class="alert alert-light mt-3 mb-0 text-dark d-flex align-items-center justify-content-between p-3" style="border-radius: 8px; font-size: 12.5px; border: 1px solid #e2e8f0; background: #ffffff;">
-                    <div>
-                        <i class="fa-solid fa-circle-info text-primary mr-2"></i>
-                        Penerima manfaat ini belum memiliki catatan sesi terapi. Silakan daftarkan sesi terapi baru untuk memulai perawatan.
-                    </div>
-                    <a href="{{ Route('rekam.add', ['pasien_id' => $pasien->id]) }}" class="btn btn-sm btn-primary font-w600" style="font-size: 12px; padding: 5px 14px;">
-                        <i class="fa-solid fa-plus mr-1"></i> Daftarkan Sesi Sekarang
-                    </a>
-                </div>
-            @endif
         </div>
     </div>
 </div>
@@ -442,7 +441,7 @@
                         @if ($rekamLatest->status==1)
                             @if (auth()->user()->role_display()=="Admin" || auth()->user()->role_display()=="Pendaftaran")
                                 <a href="{{Route('rekam.status',[$rekamLatest->id,2])}}" class="btn btn-sm btn-primary shadow-sm font-w600" style="font-size: 12.5px; padding: 7px 16px; border-radius: 8px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important;">
-                                    Lanjutkan Ke Dokter <i class="fa-solid fa-arrow-right ml-1"></i>
+                                    Lanjutkan Ke Terapis <i class="fa-solid fa-arrow-right ml-1"></i>
                                 </a>
                             @endif
                         @elseif ($rekamLatest->status==2)

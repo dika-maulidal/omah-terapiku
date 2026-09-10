@@ -32,22 +32,14 @@
                 </a>
             </li>
             
-            @if (auth()->user()->role_display() == 'Admin' || auth()->user()->role_display() == 'Pendaftaran')
             <li>
                 <a href="{{Route('rekam')}}" class="ai-icon {{ request()->routeIs('rekam*') && !request()->routeIs('jadwal.*') ? 'mm-active' : '' }}" aria-expanded="false">
                     <i class="fa-solid fa-notes-medical"></i>
                     <span class="nav-text">Rekam Medis</span>
                 </a>
             </li>
-            @elseif (auth()->user()->role_display() == 'Dokter')
-            <li>
-                <a href="{{Route('rekam', ['tab' => 2])}}" class="ai-icon {{ request()->routeIs('rekam*') && !request()->routeIs('jadwal.*') ? 'mm-active' : '' }}" aria-expanded="false">
-                    <i class="fa-solid fa-notes-medical"></i>
-                    <span class="nav-text">Rekam Medis</span>
-                </a>
-            </li>
-            @endif
 
+            @if (auth()->user()->role_display() == 'Admin')
             <li class="nav-label">Laporan & Evaluasi</li>
 
             <li>
@@ -56,6 +48,7 @@
                     <span class="nav-text">Laporan Eksekutif</span>
                 </a>
             </li>
+            @endif
 
             @if (auth()->user()->role_display() == 'Admin')
             <li class="nav-label">Master Data</li>
