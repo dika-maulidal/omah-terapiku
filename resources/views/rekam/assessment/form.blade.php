@@ -497,8 +497,8 @@
                                         <label class="font-w700 text-dark mb-1 d-block" style="font-size: 13px;">
                                             Usia Onset
                                         </label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" name="penglihatan_usia_onset" class="form-control" value="{{ old('penglihatan_usia_onset', $assessment->penglihatan_usia_onset) }}" placeholder="Contoh: 3">
+                                        <div class="input-group input-group-sm input-group-seamless">
+                                            <input type="text" name="penglihatan_usia_onset" class="form-control font-w700" value="{{ old('penglihatan_usia_onset', $assessment->penglihatan_usia_onset) }}" placeholder="Contoh: 3">
                                             <div class="input-group-append">
                                                 <span class="input-group-text font-w600" style="font-size: 11px;">Tahun</span>
                                             </div>
@@ -508,8 +508,8 @@
                                         <label class="font-w700 text-dark mb-1 d-block" style="font-size: 13px;">
                                             Durasi
                                         </label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" name="penglihatan_durasi" class="form-control" value="{{ old('penglihatan_durasi', $assessment->penglihatan_durasi) }}" placeholder="Contoh: 5">
+                                        <div class="input-group input-group-sm input-group-seamless">
+                                            <input type="text" name="penglihatan_durasi" class="form-control font-w700" value="{{ old('penglihatan_durasi', $assessment->penglihatan_durasi) }}" placeholder="Contoh: 5">
                                             <div class="input-group-append">
                                                 <span class="input-group-text font-w600" style="font-size: 11px;">Tahun</span>
                                             </div>
@@ -638,7 +638,7 @@
 
                                 <!-- Wrap Alat Bantu Lainnya (Jika Lainnya Dipilih) -->
                                 <div id="wrap-alat-lainnya" class="mt-2" style="max-width: 520px; {{ in_array('Lainnya', $saved_alat) ? '' : 'display: none;' }}">
-                                    <div class="input-group">
+                                    <div class="input-group input-group-seamless">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-light font-w600 text-primary" style="font-size: 12px;">Alat Bantu Lainnya:</span>
                                         </div>
@@ -2017,7 +2017,7 @@
                             <div class="col-md-4 col-12 mb-2 mb-md-0">
                                 <div class="p-3 bg-white rounded border h-100">
                                     <label class="font-w700 text-dark mb-1 d-block" style="font-size: 12.5px;">Kecepatan Nyaman (m/s)</label>
-                                    <div class="input-group input-group-sm">
+                                    <div class="input-group input-group-sm input-group-seamless">
                                         <input type="text" name="gait_10mwt_kecepatan_nyaman" class="form-control font-w700" value="{{ old('gait_10mwt_kecepatan_nyaman', $assessment->gait_10mwt_kecepatan_nyaman) }}" placeholder="Contoh: 1.1">
                                         <div class="input-group-append"><span class="input-group-text font-w600" style="font-size: 11px;">m/s</span></div>
                                     </div>
@@ -2027,7 +2027,7 @@
                             <div class="col-md-4 col-12 mb-2 mb-md-0">
                                 <div class="p-3 bg-white rounded border h-100">
                                     <label class="font-w700 text-dark mb-1 d-block" style="font-size: 12.5px;">Kecepatan Cepat (m/s)</label>
-                                    <div class="input-group input-group-sm">
+                                    <div class="input-group input-group-sm input-group-seamless">
                                         <input type="text" name="gait_10mwt_kecepatan_cepat" class="form-control font-w700" value="{{ old('gait_10mwt_kecepatan_cepat', $assessment->gait_10mwt_kecepatan_cepat) }}" placeholder="Contoh: 1.4">
                                         <div class="input-group-append"><span class="input-group-text font-w600" style="font-size: 11px;">m/s</span></div>
                                     </div>
@@ -2037,7 +2037,7 @@
                             <div class="col-md-4 col-12">
                                 <div class="p-3 bg-white rounded border h-100">
                                     <label class="font-w700 text-dark mb-1 d-block" style="font-size: 12.5px;">Jumlah Langkah</label>
-                                    <div class="input-group input-group-sm">
+                                    <div class="input-group input-group-sm input-group-seamless">
                                         <input type="text" name="gait_10mwt_jumlah_langkah" class="form-control font-w700" value="{{ old('gait_10mwt_jumlah_langkah', $assessment->gait_10mwt_jumlah_langkah) }}" placeholder="Contoh: 14">
                                         <div class="input-group-append"><span class="input-group-text font-w600" style="font-size: 11px;">Langkah</span></div>
                                     </div>
@@ -3176,7 +3176,7 @@
                                     @endforeach
                                 </div>
                                 <div id="wrap_modalitas_lainnya" class="mt-2 {{ $has_modalitas_lainnya ? '' : 'd-none' }}">
-                                    <div class="input-group input-group-sm">
+                                    <div class="input-group input-group-sm input-group-seamless">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text font-w600 text-primary" style="font-size: 11.5px; background: #edf3fc; border-color: #cbd5e1;">Modalitas Lainnya:</span>
                                         </div>
@@ -3209,7 +3209,7 @@
                                     @endforeach
                                 </div>
                                 <div id="wrap_manual_lainnya" class="mt-2 {{ $has_manual_lainnya ? '' : 'd-none' }}">
-                                    <div class="input-group input-group-sm">
+                                    <div class="input-group input-group-sm input-group-seamless">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text font-w600 text-primary" style="font-size: 11.5px; background: #edf3fc; border-color: #cbd5e1;">Manual Lainnya:</span>
                                         </div>
@@ -3242,7 +3242,7 @@
                                     @endforeach
                                 </div>
                                 <div id="wrap_latihan_lainnya" class="mt-2 {{ $has_latihan_lainnya ? '' : 'd-none' }}">
-                                    <div class="input-group input-group-sm">
+                                    <div class="input-group input-group-sm input-group-seamless">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text font-w600 text-primary" style="font-size: 11.5px; background: #edf3fc; border-color: #cbd5e1;">Latihan Lainnya:</span>
                                         </div>
@@ -3275,7 +3275,7 @@
                                     @endforeach
                                 </div>
                                 <div id="wrap_edukasi_lainnya" class="mt-2 {{ $has_edukasi_lainnya ? '' : 'd-none' }}">
-                                    <div class="input-group input-group-sm">
+                                    <div class="input-group input-group-sm input-group-seamless">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text font-w600 text-primary" style="font-size: 11.5px; background: #edf3fc; border-color: #cbd5e1;">Edukasi Lainnya:</span>
                                         </div>
@@ -3296,7 +3296,7 @@
                                 <div class="col-lg-3 col-md-6 col-12 mb-2 mb-lg-0">
                                     <div class="p-2 bg-white rounded border">
                                         <label class="font-w700 text-dark mb-1 d-block" style="font-size: 12px;">Frekuensi Terapi</label>
-                                        <div class="input-group input-group-sm">
+                                        <div class="input-group input-group-sm input-group-seamless">
                                             <input type="text" name="rencana_dosis_frekuensi" class="form-control text-center font-w700" value="{{ old('rencana_dosis_frekuensi', $assessment->rencana_dosis_frekuensi) }}" placeholder="Contoh: 2">
                                             <div class="input-group-append"><span class="input-group-text font-w600" style="font-size: 11px;">x / minggu</span></div>
                                         </div>
@@ -3306,7 +3306,7 @@
                                 <div class="col-lg-3 col-md-6 col-12 mb-2 mb-lg-0">
                                     <div class="p-2 bg-white rounded border">
                                         <label class="font-w700 text-dark mb-1 d-block" style="font-size: 12px;">Durasi per Sesi</label>
-                                        <div class="input-group input-group-sm">
+                                        <div class="input-group input-group-sm input-group-seamless">
                                             <input type="text" name="rencana_dosis_durasi" class="form-control text-center font-w700" value="{{ old('rencana_dosis_durasi', $assessment->rencana_dosis_durasi) }}" placeholder="Contoh: 45">
                                             <div class="input-group-append"><span class="input-group-text font-w600" style="font-size: 11px;">Menit</span></div>
                                         </div>
@@ -3316,7 +3316,7 @@
                                 <div class="col-lg-3 col-md-6 col-12 mb-2 mb-lg-0">
                                     <div class="p-2 bg-white rounded border">
                                         <label class="font-w700 text-dark mb-1 d-block" style="font-size: 12px;">Estimasi Total Sesi</label>
-                                        <div class="input-group input-group-sm">
+                                        <div class="input-group input-group-sm input-group-seamless">
                                             <input type="text" name="rencana_dosis_total_sesi" class="form-control text-center font-w700" value="{{ old('rencana_dosis_total_sesi', $assessment->rencana_dosis_total_sesi) }}" placeholder="Contoh: 8 - 12 Sesi">
                                         </div>
                                     </div>
@@ -3325,7 +3325,9 @@
                                 <div class="col-lg-3 col-md-6 col-12">
                                     <div class="p-2 bg-white rounded border">
                                         <label class="font-w700 text-dark mb-1 d-block" style="font-size: 12px;">Jadwal Re-assessment</label>
-                                        <input type="text" name="rencana_dosis_reassessment" class="form-control form-control-sm text-center font-w700" value="{{ old('rencana_dosis_reassessment', $assessment->rencana_dosis_reassessment) }}" placeholder="Contoh: Evaluasi Sesi ke-4" style="font-size: 12px; height: 31px;">
+                                        <div class="input-group input-group-sm input-group-seamless">
+                                            <input type="text" name="rencana_dosis_reassessment" class="form-control text-center font-w700" value="{{ old('rencana_dosis_reassessment', $assessment->rencana_dosis_reassessment) }}" placeholder="Contoh: Evaluasi Sesi ke-4">
+                                        </div>
                                     </div>
                                 </div>
                             </div>

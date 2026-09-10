@@ -37,7 +37,7 @@
         $distribusiTerapi = $query->getDistribusiJenisTerapi();
         $allTopTindakan = $query->getTopTindakanAll(5);
         $topTindakan = $allTopTindakan['bulan'];
-        $allTopDiagnosa = $query->getTopDiagnosaAll(10);
+        $allTopDiagnosa = $query->getTopDiagnosaAll(5);
         $topDiagnosa = $allTopDiagnosa['bulan'];
         $allTopKeluhan = $query->getTopKeluhanAll(40);
         $topKeluhan = $allTopKeluhan['bulan'];
@@ -388,38 +388,57 @@
                         </select>
                     </div>
                 </div>
-                <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-center mb-3 px-1">
                         <span class="fs-12 text-muted font-w600" id="labelPeriodeTindakan">Periode: <strong class="text-primary">{{ $bulan }} {{ date('Y') }}</strong></span>
                     </div>
-                    <div class="dz-scroll" id="containerTopTindakan" style="max-height: 220px; overflow-y: auto;">
-                        @forelse($topTindakan['items'] as $index => $tdk)
-                            <div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <div class="d-flex align-items-center text-truncate" style="max-width: 70%;">
-                                        <span class="badge badge-pill badge-primary mr-2 font-w700" style="width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: {{ $tdk['color'] }};">
-                                            #{{ $index + 1 }}
-                                        </span>
-                                        <span class="fs-12 text-dark font-w600 text-truncate" title="{{ $tdk['nama'] }}">
+
+                    <!-- Horizontal Bar Chart Area with Vertical Grid Lines (Styled like graph.png) -->
+                    <div class="position-relative" style="padding-bottom: 2px;">
+                        <!-- Vertical Dashed Grid Lines (0, 20, 40, 60, 80, 100) -->
+                        <div style="position: absolute; top: 0; bottom: 22px; left: 0; right: 0; pointer-events: none; display: flex; justify-content: space-between; z-index: 1;">
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                        </div>
+
+                        <!-- Bars Container -->
+                        <div class="dz-scroll" id="containerTopTindakan" style="position: relative; z-index: 2; max-height: 235px; overflow-y: auto; padding-right: 2px;">
+                            @forelse($topTindakan['items'] as $index => $tdk)
+                                <div class="mb-3" style="position: relative;">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="font-w600 text-dark text-truncate mr-2" style="font-size: 13px;" title="{{ $tdk['nama'] }}">
                                             {{ $tdk['nama'] }}
                                         </span>
+                                        <div class="badge font-w600 flex-shrink-0" style="background: #ffffff; color: #1e293b; border: 1px solid #bfdbfe; border-radius: 20px; padding: 2px 10px; font-size: 11px; box-shadow: 0 1px 4px rgba(37, 99, 235, 0.08);">
+                                            <span style="display: inline-block; width: 7px; height: 7px; background: #2563eb; border-radius: 50%; margin-right: 5px;"></span>
+                                            {{ $tdk['total'] }} Kali <span class="text-muted">({{ $tdk['bar_persen'] }}%)</span>
+                                        </div>
                                     </div>
-                                    <div class="text-right flex-shrink-0">
-                                        <span class="badge badge-light font-w700 text-primary" style="font-size: 11px; background: #f1f5f9;">
-                                            {{ $tdk['total'] }} Kali
-                                        </span>
+                                    <div style="height: 16px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">
+                                        <div style="width: {{ $tdk['bar_persen'] }}%; height: 100%; background: linear-gradient(90deg, #1e40af 0%, #2563eb 55%, #38bdf8 100%); border-radius: 4px; transition: width 0.6s ease; border: 1px solid #1d4ed8;" title="{{ $tdk['nama'] }}: {{ $tdk['total'] }} Kali"></div>
                                     </div>
                                 </div>
-                                <div class="progress" style="height: 6px; background: #f1f5f9; border-radius: 4px;">
-                                    <div class="progress-bar" role="progressbar" style="width: {{ $tdk['bar_persen'] }}%; background-color: {{ $tdk['color'] }}; border-radius: 4px;" aria-valuenow="{{ $tdk['bar_persen'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            @empty
+                                <div class="text-center py-4 text-muted">
+                                    <i class="fa-solid fa-clipboard-list fa-2x mb-2 text-muted" style="opacity: 0.5;"></i>
+                                    <p class="fs-12 mb-0">Belum ada data tindakan terapi pada periode ini.</p>
                                 </div>
-                            </div>
-                        @empty
-                            <div class="text-center py-4 text-muted">
-                                <i class="fa-solid fa-clipboard-list fa-2x mb-2 text-muted" style="opacity: 0.5;"></i>
-                                <p class="fs-12 mb-0">Belum ada data tindakan terapi pada periode ini.</p>
-                            </div>
-                        @endforelse
+                            @endforelse
+                        </div>
+
+                        <!-- Bottom X-Axis (0 - 100) -->
+                        <div class="d-flex justify-content-between pt-1.5 font-w600" style="font-size: 11px; border-top: 1px solid #e2e8f0; margin-top: 4px; color: #94a3b8 !important;">
+                            <span>0</span>
+                            <span>20</span>
+                            <span>40</span>
+                            <span>60</span>
+                            <span>80</span>
+                            <span>100</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -490,41 +509,62 @@
                         </select>
                     </div>
                 </div>
-                <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-center mb-3 px-1">
                         <span class="fs-12 text-muted font-w600" id="labelPeriodeDiagnosa">Periode: <strong class="text-primary">{{ $bulan }} {{ date('Y') }}</strong></span>
                     </div>
-                    <div class="dz-scroll" id="containerTopDiagnosa" style="max-height: 220px; overflow-y: auto;">
-                        @forelse($topDiagnosa['items'] as $index => $dg)
-                            <div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <div class="d-flex align-items-center text-truncate" style="max-width: 72%;">
-                                        <span class="badge badge-pill badge-primary mr-2 font-w700" style="width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: {{ $dg['color'] }};">
-                                            #{{ $index + 1 }}
-                                        </span>
-                                        <span class="badge badge-info light font-w700 mr-1" style="font-size: 10.5px; padding: 2px 6px;">
-                                            {{ $dg['code'] }}
-                                        </span>
-                                        <span class="fs-12 text-dark font-w600 text-truncate" title="{{ $dg['nama'] }}">
-                                            {{ $dg['nama'] }}
-                                        </span>
+
+                    <!-- Horizontal Bar Chart Area with Vertical Grid Lines (Styled like graph.png) -->
+                    <div class="position-relative" style="padding-bottom: 2px;">
+                        <!-- Vertical Dashed Grid Lines (0, 20, 40, 60, 80, 100) -->
+                        <div style="position: absolute; top: 0; bottom: 22px; left: 0; right: 0; pointer-events: none; display: flex; justify-content: space-between; z-index: 1;">
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                            <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
+                        </div>
+
+                        <!-- Bars Container -->
+                        <div class="dz-scroll" id="containerTopDiagnosa" style="position: relative; z-index: 2; max-height: 235px; overflow-y: auto; padding-right: 2px;">
+                            @forelse($topDiagnosa['items'] as $index => $dg)
+                                <div class="mb-3" style="position: relative;">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center text-truncate mr-2" style="max-width: 75%;">
+                                            <span class="badge badge-info light font-w700 mr-1.5 flex-shrink-0" style="font-size: 10.5px; padding: 2px 6px; background: #e0f2fe; color: #0284c7; border-radius: 4px;">
+                                                {{ $dg['code'] }}
+                                            </span>
+                                            <span class="font-w600 text-dark text-truncate" style="font-size: 13px;" title="{{ $dg['nama'] }}">
+                                                {{ $dg['nama'] }}
+                                            </span>
+                                        </div>
+                                        <div class="badge font-w600 flex-shrink-0" style="background: #ffffff; color: #1e293b; border: 1px solid #bfdbfe; border-radius: 20px; padding: 2px 10px; font-size: 11px; box-shadow: 0 1px 4px rgba(37, 99, 235, 0.08);">
+                                            <span style="display: inline-block; width: 7px; height: 7px; background: #2563eb; border-radius: 50%; margin-right: 5px;"></span>
+                                            {{ $dg['total'] }} Kasus <span class="text-muted">({{ $dg['bar_persen'] }}%)</span>
+                                        </div>
                                     </div>
-                                    <div class="text-right flex-shrink-0">
-                                        <span class="badge badge-light font-w700 text-primary" style="font-size: 11px; background: #f1f5f9;">
-                                            {{ $dg['total'] }} Kasus
-                                        </span>
+                                    <div style="height: 16px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">
+                                        <div style="width: {{ $dg['bar_persen'] }}%; height: 100%; background: linear-gradient(90deg, #1e40af 0%, #2563eb 55%, #38bdf8 100%); border-radius: 4px; transition: width 0.6s ease; border: 1px solid #1d4ed8;" title="{{ $dg['code'] }} - {{ $dg['nama'] }}: {{ $dg['total'] }} Kasus"></div>
                                     </div>
                                 </div>
-                                <div class="progress" style="height: 6px; background: #f1f5f9; border-radius: 4px;">
-                                    <div class="progress-bar" role="progressbar" style="width: {{ $dg['bar_persen'] }}%; background-color: {{ $dg['color'] }}; border-radius: 4px;" aria-valuenow="{{ $dg['bar_persen'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            @empty
+                                <div class="text-center py-4 text-muted">
+                                    <i class="fa fa-stethoscope text-muted fs-24 mb-2 d-block" style="opacity: 0.5;"></i>
+                                    <p class="fs-12 mb-0">Belum ada data diagnosa pada periode ini.</p>
                                 </div>
-                            </div>
-                        @empty
-                            <div class="text-center py-4 text-muted">
-                                <i class="fa fa-stethoscope text-muted fs-24 mb-2 d-block" style="opacity: 0.5;"></i>
-                                <p class="fs-12 mb-0">Belum ada data diagnosa pada periode ini.</p>
-                            </div>
-                        @endforelse
+                            @endforelse
+                        </div>
+
+                        <!-- Bottom X-Axis (0 - 100) -->
+                        <div class="d-flex justify-content-between pt-1.5 font-w600" style="font-size: 11px; border-top: 1px solid #e2e8f0; margin-top: 4px; color: #94a3b8 !important;">
+                            <span>0</span>
+                            <span>20</span>
+                            <span>40</span>
+                            <span>60</span>
+                            <span>80</span>
+                            <span>100</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -592,21 +632,44 @@
                     </div>
                 </div>
                 <div class="card-body p-3 d-flex flex-column justify-content-between">
-                    <!-- Gender Split Bar -->
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div class="d-flex align-items-center">
-                                <span class="badge badge-primary mr-2" style="background: #1e40af; padding: 5px 8px;"><i class="fa fa-mars"></i> Laki-laki</span>
-                                <strong class="fs-13 text-dark">{{ $demografi['jk']['laki'] }} ({{ $demografi['jk']['persen_laki'] }}%)</strong>
+                    <!-- Gender Bars (Atas - Bawah) -->
+                    <div class="d-flex flex-column" style="gap: 10px;">
+                        <!-- Laki-laki -->
+                        <div class="d-flex align-items-center rounded" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 9px 12px;">
+                            <div class="d-flex align-items-center justify-content-center mr-3" style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: #1e40af; font-size: 16px; border: 1px solid #bfdbfe; flex-shrink: 0;">
+                                <i class="fa fa-mars"></i>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <strong class="fs-13 text-dark mr-2">{{ $demografi['jk']['perempuan'] }} ({{ $demografi['jk']['persen_perempuan'] }}%)</strong>
-                                <span class="badge badge-info" style="background: #38bdf8; color: #fff; padding: 5px 8px;"><i class="fa fa-venus"></i> Perempuan</span>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="font-w700 text-dark" style="font-size: 12.5px;">Laki-laki</span>
+                                    <div>
+                                        <strong class="font-w700 fs-13" style="color: #1e40af;">{{ $demografi['jk']['laki'] }}</strong>
+                                        <span class="text-muted font-w600" style="font-size: 11.5px;">({{ $demografi['jk']['persen_laki'] }}%)</span>
+                                    </div>
+                                </div>
+                                <div class="progress" style="height: 7px; background-color: #e2e8f0; border-radius: 6px; overflow: hidden; margin-bottom: 0;">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ $demografi['jk']['persen_laki'] }}%; background: linear-gradient(90deg, #1e40af, #3b82f6); border-radius: 6px;" aria-valuenow="{{ $demografi['jk']['persen_laki'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="progress" style="height: 10px; background: #e2e8f0; border-radius: 6px; overflow: hidden;">
-                            <div class="progress-bar" role="progressbar" style="width: {{ $demografi['jk']['persen_laki'] }}%; background-color: #1e40af;" aria-valuenow="{{ $demografi['jk']['persen_laki'] }}" aria-valuemin="0" aria-valuemax="100"></div>
-                            <div class="progress-bar" role="progressbar" style="width: {{ $demografi['jk']['persen_perempuan'] }}%; background-color: #38bdf8;" aria-valuenow="{{ $demografi['jk']['persen_perempuan'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+
+                        <!-- Perempuan -->
+                        <div class="d-flex align-items-center rounded" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 9px 12px;">
+                            <div class="d-flex align-items-center justify-content-center mr-3" style="width: 36px; height: 36px; border-radius: 8px; background: #fdf2f8; color: #db2777; font-size: 16px; border: 1px solid #fbcfe8; flex-shrink: 0;">
+                                <i class="fa fa-venus"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="font-w700 text-dark" style="font-size: 12.5px;">Perempuan</span>
+                                    <div>
+                                        <strong class="font-w700 fs-13" style="color: #db2777;">{{ $demografi['jk']['perempuan'] }}</strong>
+                                        <span class="text-muted font-w600" style="font-size: 11.5px;">({{ $demografi['jk']['persen_perempuan'] }}%)</span>
+                                    </div>
+                                </div>
+                                <div class="progress" style="height: 7px; background-color: #e2e8f0; border-radius: 6px; overflow: hidden; margin-bottom: 0;">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ $demografi['jk']['persen_perempuan'] }}%; background: linear-gradient(90deg, #db2777, #f43f5e); border-radius: 6px;" aria-valuenow="{{ $demografi['jk']['persen_perempuan'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1694,10 +1757,7 @@ $(document).ready(function() {
     function renderTopTindakan(periode) {
         var data = allTopTindakan[periode] || { items: [], total: 0 };
         var container = $('#containerTopTindakan');
-        var badgeTotal = $('#badgeTotalTindakan');
         var labelPeriode = $('#labelPeriodeTindakan');
-
-        badgeTotal.text('Total: ' + (data.total || 0) + ' Tindakan');
 
         if (periode === 'bulan') {
             labelPeriode.html('Periode: <strong class="text-primary">' + labelBulanIniTindakan + '</strong>');
@@ -1720,24 +1780,18 @@ $(document).ready(function() {
         var html = '';
         data.items.forEach(function(tdk, index) {
             var safeNama = $('<div>').text(tdk.nama).html();
-            html += '<div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">' +
+            html += '<div class="mb-3" style="position: relative;">' +
                 '<div class="d-flex justify-content-between align-items-center mb-1">' +
-                    '<div class="d-flex align-items-center text-truncate" style="max-width: 70%;">' +
-                        '<span class="badge badge-pill badge-primary mr-2 font-w700" style="width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: ' + tdk.color + ';">' +
-                            '#' + (index + 1) +
-                        '</span>' +
-                        '<span class="fs-12 text-dark font-w600 text-truncate" title="' + safeNama + '">' +
-                            safeNama +
-                        '</span>' +
-                    '</div>' +
-                    '<div class="text-right flex-shrink-0">' +
-                        '<span class="badge badge-light font-w700 text-primary" style="font-size: 11px; background: #f1f5f9;">' +
-                            tdk.total + ' Kali' +
-                        '</span>' +
+                    '<span class="font-w600 text-dark text-truncate mr-2" style="font-size: 13px;" title="' + safeNama + '">' +
+                        safeNama +
+                    '</span>' +
+                    '<div class="badge font-w600 flex-shrink-0" style="background: #ffffff; color: #1e293b; border: 1px solid #bfdbfe; border-radius: 20px; padding: 2px 10px; font-size: 11px; box-shadow: 0 1px 4px rgba(37, 99, 235, 0.08);">' +
+                        '<span style="display: inline-block; width: 7px; height: 7px; background: #2563eb; border-radius: 50%; margin-right: 5px;"></span>' +
+                        tdk.total + ' Kali <span class="text-muted">(' + (tdk.bar_persen || 0) + '%)</span>' +
                     '</div>' +
                 '</div>' +
-                '<div class="progress" style="height: 6px; background: #f1f5f9; border-radius: 4px;">' +
-                    '<div class="progress-bar" role="progressbar" style="width: ' + tdk.bar_persen + '%; background-color: ' + tdk.color + '; border-radius: 4px;" aria-valuenow="' + tdk.bar_persen + '" aria-valuemin="0" aria-valuemax="100"></div>' +
+                '<div style="height: 16px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">' +
+                    '<div style="width: ' + tdk.bar_persen + '%; height: 100%; background: linear-gradient(90deg, #1e40af 0%, #2563eb 55%, #38bdf8 100%); border-radius: 4px; transition: width 0.6s ease; border: 1px solid #1d4ed8;" title="' + safeNama + ': ' + tdk.total + ' Kali"></div>' +
                 '</div>' +
             '</div>';
         });
@@ -1789,10 +1843,7 @@ $(document).ready(function() {
     function renderTopDiagnosa(periode) {
         var data = allTopDiagnosa[periode] || { items: [], total: 0 };
         var container = $('#containerTopDiagnosa');
-        var badgeTotal = $('#badgeTotalDiagnosa');
         var labelPeriode = $('#labelPeriodeDiagnosa');
-
-        badgeTotal.text('Total: ' + (data.total || 0) + ' Kasus');
 
         if (periode === 'bulan') {
             labelPeriode.html('Periode: <strong class="text-primary">' + labelBulanIniDiagnosa + '</strong>');
@@ -1816,27 +1867,23 @@ $(document).ready(function() {
         data.items.forEach(function(dg, index) {
             var safeCode = $('<div>').text(dg.code).html();
             var safeNama = $('<div>').text(dg.nama).html();
-            html += '<div class="p-2 mb-2 rounded" style="background: #ffffff; border: 1px solid #edf2f7; transition: all 0.2s ease;">' +
+            html += '<div class="mb-3" style="position: relative;">' +
                 '<div class="d-flex justify-content-between align-items-center mb-1">' +
-                    '<div class="d-flex align-items-center text-truncate" style="max-width: 72%;">' +
-                        '<span class="badge badge-pill badge-primary mr-2 font-w700" style="width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: ' + dg.color + ';">' +
-                            '#' + (index + 1) +
-                        '</span>' +
-                        '<span class="badge badge-info light font-w700 mr-1" style="font-size: 10.5px; padding: 2px 6px;">' +
+                    '<div class="d-flex align-items-center text-truncate mr-2" style="max-width: 75%;">' +
+                        '<span class="badge badge-info light font-w700 mr-1.5 flex-shrink-0" style="font-size: 10.5px; padding: 2px 6px; background: #e0f2fe; color: #0284c7; border-radius: 4px;">' +
                             safeCode +
                         '</span>' +
-                        '<span class="fs-12 text-dark font-w600 text-truncate" title="' + safeNama + '">' +
+                        '<span class="font-w600 text-dark text-truncate" style="font-size: 13px;" title="' + safeNama + '">' +
                             safeNama +
                         '</span>' +
                     '</div>' +
-                    '<div class="text-right flex-shrink-0">' +
-                        '<span class="badge badge-light font-w700 text-primary" style="font-size: 11px; background: #f1f5f9;">' +
-                            dg.total + ' Kasus' +
-                        '</span>' +
+                    '<div class="badge font-w600 flex-shrink-0" style="background: #ffffff; color: #1e293b; border: 1px solid #bfdbfe; border-radius: 20px; padding: 2px 10px; font-size: 11px; box-shadow: 0 1px 4px rgba(37, 99, 235, 0.08);">' +
+                        '<span style="display: inline-block; width: 7px; height: 7px; background: #2563eb; border-radius: 50%; margin-right: 5px;"></span>' +
+                        dg.total + ' Kasus <span class="text-muted">(' + (dg.bar_persen || 0) + '%)</span>' +
                     '</div>' +
                 '</div>' +
-                '<div class="progress" style="height: 6px; background: #f1f5f9; border-radius: 4px;">' +
-                    '<div class="progress-bar" role="progressbar" style="width: ' + dg.bar_persen + '%; background-color: ' + dg.color + '; border-radius: 4px;" aria-valuenow="' + dg.bar_persen + '" aria-valuemin="0" aria-valuemax="100"></div>' +
+                '<div style="height: 16px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">' +
+                    '<div style="width: ' + dg.bar_persen + '%; height: 100%; background: linear-gradient(90deg, #1e40af 0%, #2563eb 55%, #38bdf8 100%); border-radius: 4px; transition: width 0.6s ease; border: 1px solid #1d4ed8;" title="' + safeCode + ' - ' + safeNama + ': ' + dg.total + ' Kasus"></div>' +
                 '</div>' +
             '</div>';
         });

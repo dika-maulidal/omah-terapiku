@@ -513,12 +513,13 @@
                                                 <span class="font-w600 text-dark">
                                                     <i class="fa-solid fa-mars" style="color: #2563eb; margin-right: 6px;"></i> Laki-laki
                                                 </span>
-                                                <span class="font-w700" style="color: #2563eb;">
-                                                    {{ $data['demografi']['laki'] }} <small class="text-muted font-w500">({{ $pctLaki }}%)</small>
-                                                </span>
+                                                <div>
+                                                    <strong class="font-w700" style="color: #2563eb;">{{ $data['demografi']['laki'] }}</strong>
+                                                    <span class="text-muted font-w500">({{ $pctLaki }}%)</span>
+                                                </div>
                                             </div>
-                                            <div class="progress" style="height: 5px; border-radius: 3px; background: #e2e8f0;">
-                                                <div class="progress-bar" role="progressbar" style="width: {{ $pctLaki }}%; background-color: #2563eb; border-radius: 3px;" aria-valuenow="{{ $pctLaki }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress" style="height: 6px; border-radius: 6px; background: #e2e8f0; overflow: hidden; margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" style="width: {{ $pctLaki }}%; background: linear-gradient(90deg, #1e40af, #3b82f6); border-radius: 6px;" aria-valuenow="{{ $pctLaki }}" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                         </div>
 
@@ -526,14 +527,15 @@
                                         <div>
                                             <div class="d-flex align-items-center justify-content-between mb-1" style="font-size: 11.5px;">
                                                 <span class="font-w600 text-dark">
-                                                    <i class="fa-solid fa-venus" style="color: #ec4899; margin-right: 6px;"></i> Perempuan
+                                                    <i class="fa-solid fa-venus" style="color: #db2777; margin-right: 6px;"></i> Perempuan
                                                 </span>
-                                                <span class="font-w700" style="color: #ec4899;">
-                                                    {{ $data['demografi']['perempuan'] }} <small class="text-muted font-w500">({{ $pctPerempuan }}%)</small>
-                                                </span>
+                                                <div>
+                                                    <strong class="font-w700" style="color: #db2777;">{{ $data['demografi']['perempuan'] }}</strong>
+                                                    <span class="text-muted font-w500">({{ $pctPerempuan }}%)</span>
+                                                </div>
                                             </div>
-                                            <div class="progress" style="height: 5px; border-radius: 3px; background: #e2e8f0;">
-                                                <div class="progress-bar" role="progressbar" style="width: {{ $pctPerempuan }}%; background-color: #ec4899; border-radius: 3px;" aria-valuenow="{{ $pctPerempuan }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress" style="height: 6px; border-radius: 6px; background: #e2e8f0; overflow: hidden; margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" style="width: {{ $pctPerempuan }}%; background: linear-gradient(90deg, #db2777, #f43f5e); border-radius: 6px;" aria-valuenow="{{ $pctPerempuan }}" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                         </div>
                                     </div>

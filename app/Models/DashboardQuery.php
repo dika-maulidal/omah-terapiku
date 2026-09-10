@@ -244,7 +244,7 @@ class DashboardQuery
         ];
     }
 
-    public function getTopDiagnosaAll($limit = 10)
+    public function getTopDiagnosaAll($limit = 5)
     {
         return [
             'bulan' => $this->getTopDiagnosaTerbanyak($limit, 'bulan'),
