@@ -418,17 +418,25 @@
                                     Alat Bantu Mobilitas <small class="text-muted font-w400">(Dapat dipilih lebih dari satu)</small>
                                 </label>
                                 @php
-                                    $abOpts = ['Tidak Ada', 'Kursi Roda', 'Tongkat Ketiak (Crutches)', 'Walker', 'Tripod / Quadripod', 'Alat Bantu Dengar', 'Kruk / Tongkat Penuntun', 'AFO / Splint', 'Lainnya'];
+                                    $isTidakAda = in_array('Tidak Ada', $selectedAb);
+                                    $abOpts = ['Kursi Roda', 'Tongkat Ketiak (Crutches)', 'Walker', 'Tripod / Quadripod', 'Alat Bantu Dengar', 'Kruk / Tongkat Penuntun', 'AFO / Splint', 'Lainnya'];
                                 @endphp
                                 <div class="d-flex flex-wrap" style="gap: 8px;">
+                                    <!-- Opsi Tidak Ada -->
+                                    <label class="check-pill-card {{ $isTidakAda ? 'active' : '' }}" style="padding: 7px 16px; font-size: 12.5px; border-radius: 8px;">
+                                        <input type="checkbox" name="alat_bantu[]" id="ab_tidak_ada" class="ab-tidak-ada-check" value="Tidak Ada" {{ $isTidakAda ? 'checked' : '' }}>
+                                        <span>Tidak Ada</span>
+                                    </label>
+
+                                    <!-- Opsi-opsi Alat Bantu Lainnya (Hilang jika Tidak Ada dipilih) -->
                                     @foreach($abOpts as $abOpt)
-                                        <label class="check-pill-card {{ in_array($abOpt, $selectedAb) ? 'active' : '' }}" style="padding: 7px 16px; font-size: 12.5px; border-radius: 8px;">
-                                            <input type="checkbox" name="alat_bantu[]" value="{{ $abOpt }}" {{ in_array($abOpt, $selectedAb) ? 'checked' : '' }}>
+                                        <label class="check-pill-card ab-option-pill {{ in_array($abOpt, $selectedAb) && !$isTidakAda ? 'active' : '' }}" style="padding: 7px 16px; font-size: 12.5px; border-radius: 8px; {{ $isTidakAda ? 'display: none !important;' : '' }}">
+                                            <input type="checkbox" name="alat_bantu[]" class="ab-item-check" value="{{ $abOpt }}" {{ in_array($abOpt, $selectedAb) && !$isTidakAda ? 'checked' : '' }}>
                                             <span>{{ $abOpt }}</span>
                                         </label>
                                     @endforeach
                                 </div>
-                                <div id="wrapper_alat_bantu_lainnya" class="mt-2 {{ in_array('Lainnya', $selectedAb) || $isAbLainnya ? '' : 'd-none' }}" style="max-width: 480px;">
+                                <div id="wrapper_alat_bantu_lainnya" class="mt-2 {{ (in_array('Lainnya', $selectedAb) || $isAbLainnya) && !$isTidakAda ? '' : 'd-none' }}" style="max-width: 480px;">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-light font-w600 text-primary" style="font-size: 12px;">Sebutkan Alat Bantu Lainnya:</span>
@@ -613,6 +621,24 @@
         }
     }
 
+    function toggleAlatBantuMobilitas() {
+        var isTidakAdaChecked = $('#ab_tidak_ada').is(':checked');
+        if (isTidakAdaChecked) {
+            $('.ab-option-pill').attr('style', 'display: none !important;');
+            $('.ab-item-check').prop('checked', false).closest('.check-pill-card').removeClass('active');
+            $('#wrapper_alat_bantu_lainnya').addClass('d-none');
+            $('#input_alat_bantu_lainnya').val('');
+        } else {
+            $('.ab-option-pill').attr('style', 'display: inline-flex !important; padding: 7px 16px; font-size: 12.5px; border-radius: 8px;');
+            var isAbLainnya = $('.ab-item-check[value="Lainnya"]').is(':checked');
+            if (isAbLainnya) {
+                $('#wrapper_alat_bantu_lainnya').removeClass('d-none');
+            } else {
+                $('#wrapper_alat_bantu_lainnya').addClass('d-none');
+            }
+        }
+    }
+
     function toggleLainnyaInputs() {
         var isDisLainnya = $('input[name="jenis_disabilitas[]"][value="Lainnya"]').is(':checked');
         if (isDisLainnya) {
@@ -621,8 +647,8 @@
             $('#wrapper_disabilitas_lainnya').addClass('d-none');
         }
 
-        var isAbLainnya = $('input[name="alat_bantu[]"][value="Lainnya"]').is(':checked');
-        if (isAbLainnya) {
+        var isAbLainnya = $('.ab-item-check[value="Lainnya"]').is(':checked');
+        if (isAbLainnya && !$('#ab_tidak_ada').is(':checked')) {
             $('#wrapper_alat_bantu_lainnya').removeClass('d-none');
         } else {
             $('#wrapper_alat_bantu_lainnya').addClass('d-none');
@@ -892,6 +918,7 @@
         $('#desil').on('change', updateDesilBadge);
         updateDesilBadge();
 
+        toggleAlatBantuMobilitas();
         toggleLainnyaInputs();
 
         $(document).on('change', '.check-pill-card input[type="checkbox"]', function() {
@@ -900,6 +927,13 @@
             } else {
                 $(this).closest('.check-pill-card').removeClass('active');
             }
+
+            if ($(this).attr('id') === 'ab_tidak_ada') {
+                toggleAlatBantuMobilitas();
+            } else if ($(this).hasClass('ab-item-check') && $(this).is(':checked')) {
+                $('#ab_tidak_ada').prop('checked', false).closest('.check-pill-card').removeClass('active');
+            }
+
             toggleLainnyaInputs();
         });
 

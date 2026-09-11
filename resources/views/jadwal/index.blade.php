@@ -174,8 +174,8 @@
                 </div>
             </div>
             <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                <a href="{{ Route('rekam.add', array_filter(['tanggal' => $tanggal, 'upt' => $uptFilter != 'all' ? $uptFilter : null, 'layanan' => $layananFilter != 'all' ? $layananFilter : null, 'dokter_id' => $dokterFilter != 'all' ? $dokterFilter : null])) }}" class="btn btn-sm btn-primary font-w700 shadow-sm" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 18px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
-                    <i class="fa-solid fa-circle-plus mr-1"></i> + Input Sesi Baru
+                <a href="{{ $inputSesiUrl }}" id="btnInputSesiBaru" class="btn btn-sm btn-primary font-w700 shadow-sm" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 18px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                    <i class="fa-solid fa-circle-plus mr-1"></i> Input Sesi Baru
                 </a>
             </div>
         </div>
@@ -193,7 +193,7 @@
                     <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">
                         <i class="fa-solid fa-calendar mr-1 text-primary"></i> Tanggal Periksa:
                     </label>
-                    <input type="date" name="tanggal" id="inputTanggal" class="form-control" value="{{ $tanggal }}" style="height: 42px; font-size: 13px; border-radius: 8px;" onchange="this.form.submit()">
+                    <input type="date" name="tanggal" id="inputTanggal" class="form-control filter-control" value="{{ $tanggal }}" style="height: 42px; font-size: 13px; border-radius: 8px;">
                 </div>
 
                 <!-- Filter Omah Terapiku (UPT) -->
@@ -201,7 +201,7 @@
                     <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">
                         <i class="fa-solid fa-hospital-user mr-1 text-primary"></i> Penempatan UPT:
                     </label>
-                    <select name="upt" class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;" onchange="this.form.submit()">
+                    <select name="upt" id="selectUpt" class="form-control filter-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
                         <option value="all">Semua Omah Terapiku (UPT)</option>
                         @foreach($polis as $p)
                             <option value="{{ $p->nama }}" {{ $uptFilter == $p->nama ? 'selected' : '' }}>
@@ -216,7 +216,7 @@
                     <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">
                         <i class="fa-solid fa-stethoscope mr-1 text-primary"></i> Kategori Layanan:
                     </label>
-                    <select name="layanan" class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;" onchange="this.form.submit()">
+                    <select name="layanan" id="selectLayanan" class="form-control filter-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
                         <option value="all">Semua Layanan Terapi</option>
                         <option value="Fisioterapi" {{ $layananFilter == 'Fisioterapi' ? 'selected' : '' }}>Fisioterapi</option>
                         <option value="Terapi Okupasi / Sensorik Integrasi" {{ $layananFilter == 'Terapi Okupasi / Sensorik Integrasi' ? 'selected' : '' }}>Terapi Okupasi / SI</option>
@@ -225,43 +225,54 @@
                     </select>
                 </div>
 
-                <!-- Filter Terapis -->
+                <!-- Filter Terapis + Reset Button Inline -->
                 <div class="col-xl-3 col-lg-3 col-md-6 col-12">
                     <label class="form-label font-w600 text-dark mb-1" style="font-size: 12.5px;">
                         <i class="fa-solid fa-user-doctor mr-1 text-primary"></i> Terapis Pemeriksa:
                     </label>
-                    <select name="dokter_id" class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;" onchange="this.form.submit()">
-                        <option value="all">Semua Terapis</option>
-                        @foreach($dokters as $d)
-                            <option value="{{ $d->id }}" {{ $dokterFilter == $d->id ? 'selected' : '' }}>
-                                {{ $d->nama }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <div class="d-flex align-items-center" style="gap: 8px;">
+                        <select name="dokter_id" id="selectDokter" class="form-control filter-control flex-grow-1" style="height: 42px; font-size: 13px; border-radius: 8px;">
+                            <option value="all">Semua Terapis</option>
+                            @foreach($dokters as $d)
+                                <option value="{{ $d->id }}" {{ $dokterFilter == $d->id ? 'selected' : '' }}>
+                                    {{ $d->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <!-- Tombol Reset Filter (Icon-Only 38x38px) -->
+                        <div id="resetButtonWrapper" style="{{ $hasFilters ? '' : 'display: none;' }}">
+                            <button type="button" id="btnResetFilter" class="btn btn-sm btn-light" style="width: 42px; height: 42px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #cbd5e1; border-radius: 8px; color: #64748b; font-size: 13px; transition: all 0.2s ease; flex-shrink: 0;" title="Reset Filter">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
             </div>
 
             <!-- Quick Date Presets (Rabu Rutin & Hari Ini) -->
-            <div class="d-flex align-items-center flex-wrap pt-3 mt-3" style="border-top: 1px dashed #e2e8f0; gap: 8px;">
+            <div class="d-flex align-items-center flex-wrap pt-3 mt-3" id="quickDatePresets" style="border-top: 1px dashed #e2e8f0; gap: 8px;">
                 <span class="text-muted font-w600 mr-2" style="font-size: 12px;">
                     <i class="fa-solid fa-calendar-days text-primary mr-1"></i> Akses Cepat Tanggal:
                 </span>
                 
-                <a href="{{ Route('jadwal.index', array_merge(request()->except('tanggal'), ['tanggal' => date('Y-m-d')])) }}" 
-                   class="btn btn-xs {{ $tanggal == date('Y-m-d') ? 'btn-primary font-w700 text-white' : 'btn-light font-w600' }}" 
-                   style="border-radius: 20px; padding: 5px 14px; font-size: 11.5px; border: 1px solid {{ $tanggal == date('Y-m-d') ? '#2563eb' : '#cbd5e1' }};">
+                <button type="button" 
+                   data-tanggal="{{ date('Y-m-d') }}"
+                   class="quick-date-btn btn btn-xs {{ $tanggal == date('Y-m-d') ? 'btn-primary font-w700 text-white active' : 'btn-light font-w600' }}" 
+                   style="border-radius: 20px; padding: 5px 14px; font-size: 11.5px; border: 1px solid {{ $tanggal == date('Y-m-d') ? '#2563eb' : '#cbd5e1' }}; transition: all 0.15s ease;">
                     <i class="fa-solid fa-calendar-day mr-1" style="{{ $tanggal == date('Y-m-d') ? 'color:#fff;' : 'color:#2563eb;' }}"></i> Hari Ini ({{ date('d M') }})
-                </a>
+                </button>
 
                 @foreach($rabuDates as $index => $rDate)
                     @php $rStr = $rDate->format('Y-m-d'); @endphp
-                    <a href="{{ Route('jadwal.index', array_merge(request()->except('tanggal'), ['tanggal' => $rStr])) }}" 
-                       class="btn btn-xs {{ $tanggal == $rStr ? 'btn-primary font-w700 text-white' : 'btn-light font-w600' }}" 
-                       style="border-radius: 20px; padding: 5px 14px; font-size: 11.5px; border: 1px solid {{ $tanggal == $rStr ? '#2563eb' : '#cbd5e1' }};">
+                    <button type="button" 
+                       data-tanggal="{{ $rStr }}"
+                       class="quick-date-btn btn btn-xs {{ $tanggal == $rStr ? 'btn-primary font-w700 text-white active' : 'btn-light font-w600' }}" 
+                       style="border-radius: 20px; padding: 5px 14px; font-size: 11.5px; border: 1px solid {{ $tanggal == $rStr ? '#2563eb' : '#cbd5e1' }}; transition: all 0.15s ease;">
                         <i class="fa-solid fa-calendar-check mr-1" style="{{ $tanggal == $rStr ? 'color:#fff;' : 'color:#2563eb;' }}"></i> 
                         {{ $index == 0 ? 'Rabu Terdekat' : 'Rabu (+'.($index).' Mgg)' }} ({{ $rDate->format('d M') }})
-                    </a>
+                    </button>
                 @endforeach
             </div>
         </form>
@@ -280,7 +291,7 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="tab-timeline-link" data-toggle="tab" href="#tab-timeline" role="tab" aria-controls="tab-timeline" aria-selected="true" style="padding: 10px 8px 14px 8px; font-size: 14.5px;">
                                 <i class="fa-solid fa-timeline mr-2"></i> Timeline Sesi Waktu
-                                <span class="badge font-w700 ml-2" style="font-size: 11px; padding: 3px 8px; border-radius: 12px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
+                                <span class="badge font-w700 ml-2" id="totalSesiBadge" style="font-size: 11px; padding: 3px 8px; border-radius: 12px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
                                     {{ $stats['total'] }} Sesi
                                 </span>
                             </a>
@@ -293,9 +304,9 @@
                     </ul>
 
                     <div class="pb-2">
-                        <span class="badge font-w600" style="font-size: 12px; padding: 7px 14px; border-radius: 8px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1;">
+                        <span class="badge font-w600" id="currentDateBadge" style="font-size: 12px; padding: 7px 14px; border-radius: 8px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1;">
                             <i class="fa-solid fa-calendar-day mr-1 text-primary"></i>
-                            {{ \Carbon\Carbon::parse($tanggal)->translatedFormat('l, d F Y') }}
+                            <span id="currentDateText">{{ $formattedDate }}</span>
                         </span>
                     </div>
                 </div>
@@ -307,147 +318,20 @@
                     <!-- ============================================================= -->
                     <div class="tab-pane fade show active" id="tab-timeline" role="tabpanel" aria-labelledby="tab-timeline-link">
                         
-                        <!-- Mini Alert Info Waktu Terapi -->
-                        <div class="alert alert-light d-flex align-items-center justify-content-between flex-wrap mb-4 py-2.5 px-3" style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 8px; font-size: 12px; gap: 8px;">
-                            <div class="d-flex align-items-center">
-                                <i class="fa-solid fa-circle-info text-primary mr-2" style="font-size: 14px;"></i>
-                                <span class="text-dark font-w500">
-                                    Jadwal pelayanan terapi beroperasi setiap hari <strong>Rabu</strong> dalam 7 slot sesi waktu (30–45 menit per sesi).
-                                </span>
-                            </div>
-                            <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 10px; border-radius: 6px; background: #ffffff; color: #1e40af; border: 1px solid #bfdbfe;">
-                                Total: {{ $stats['total'] }} Pasien
-                            </span>
-                        </div>
-
-                        <div class="row">
-                            @foreach($masterSlots as $slotName => $meta)
-                                @php
-                                    $pasienDiSlot = $jadwalPerSlot[$slotName] ?? [];
-                                    $hasPasien = count($pasienDiSlot) > 0;
-                                @endphp
-
-                                <div class="col-xl-6 col-12 mb-4">
-                                    <div class="slot-session-card h-100 p-3" style="{{ $hasPasien ? 'border-top: 3.5px solid #2563eb; background: #ffffff;' : 'background: #fafbfc;' }}">
-                                        
-                                        <!-- Header Slot Sesi -->
-                                        <div class="d-flex justify-content-between align-items-center pb-2 mb-3" style="border-bottom: 1px solid #edf2f7;">
-                                            <div class="d-flex align-items-center">
-                                                <span class="badge font-w700 mr-2 py-1 px-2" style="font-size: 11.5px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                                                    <i class="fa-solid {{ $meta['icon'] }} mr-1"></i> {{ explode(' (', $slotName)[0] }}
-                                                </span>
-                                                <strong class="text-dark" style="font-size: 13.5px;">{{ $meta['jam'] }}</strong>
-                                            </div>
-                                            <span class="badge {{ $hasPasien ? 'font-w700' : 'font-w600 text-muted' }}" style="font-size: 11.5px; padding: 4px 10px; border-radius: 20px; {{ $hasPasien ? 'background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;' : 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;' }}">
-                                                {{ count($pasienDiSlot) }} Penerima Manfaat
-                                            </span>
-                                        </div>
-
-                                        <!-- Pasien List di Slot Ini -->
-                                        @if($hasPasien)
-                                            <div class="d-flex flex-column" style="gap: 10px;">
-                                                @foreach($pasienDiSlot as $pRecord)
-                                                    @php
-                                                        $p = $pRecord->pasien;
-                                                        $layanan = $pRecord->layanan_terapi ?: 'Fisioterapi';
-                                                        
-                                                        // Color badge border
-                                                        $borderClr = '#2563eb';
-                                                        $layananBadge = 'background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;';
-                                                        if (str_contains($layanan, 'Okupasi')) {
-                                                            $borderClr = '#d97706';
-                                                            $layananBadge = 'background: #fef3c7; color: #b45309; border: 1px solid #fde68a;';
-                                                        } elseif (str_contains($layanan, 'Wicara')) {
-                                                            $borderClr = '#059669';
-                                                            $layananBadge = 'background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;';
-                                                        } elseif (str_contains($layanan, 'Netra')) {
-                                                            $borderClr = '#7c3aed';
-                                                            $layananBadge = 'background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe;';
-                                                        }
-                                                    @endphp
-
-                                                    <div class="patient-session-item p-3" style="border-left-color: {{ $borderClr }};">
-                                                        <div class="d-flex justify-content-between align-items-start flex-wrap" style="gap: 8px;">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="mr-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; border-radius: 50%; background: #eff6ff; color: {{ $borderClr }}; font-weight: 700; font-size: 14px; flex-shrink: 0; border: 1px solid #bfdbfe;">
-                                                                    {{ strtoupper(substr($p->nama ?? 'P', 0, 1)) }}
-                                                                </div>
-                                                                <div>
-                                                                    <a href="{{ Route('rekam.detail', $pRecord->pasien_id) }}" class="font-w700 text-dark mb-0 d-block" style="font-size: 13.5px; transition: color 0.15s ease;">
-                                                                        {{ $p->nama ?? 'Pasien Tidak Ditemukan' }}
-                                                                    </a>
-                                                                    <div class="d-flex align-items-center flex-wrap mt-1" style="gap: 6px; font-size: 11px;">
-                                                                        <span class="badge font-w600" style="font-size: 10.5px; padding: 2px 6px; border-radius: 4px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1;">
-                                                                            RM# {{ $p->no_rm ?? '-' }}
-                                                                        </span>
-                                                                        <span class="badge font-w600" style="font-size: 10.5px; padding: 2px 8px; border-radius: 4px; {{ $layananBadge }}">
-                                                                            {{ $layanan }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="text-right">
-                                                                @if($pRecord->status == 1)
-                                                                    <span class="badge font-w600" style="font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;">
-                                                                        <i class="fa-solid fa-clock mr-1"></i> Antrean
-                                                                    </span>
-                                                                @elseif($pRecord->status == 2)
-                                                                    <span class="badge font-w600" style="font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
-                                                                        <i class="fa-solid fa-stethoscope mr-1"></i> Sedang Terapi
-                                                                    </span>
-                                                                @else
-                                                                    <span class="badge font-w600" style="font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
-                                                                        <i class="fa-solid fa-circle-check mr-1"></i> Selesai
-                                                                    </span>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row mt-2 pt-2" style="border-top: 1px dashed #cbd5e1; font-size: 12px;">
-                                                            <div class="col-sm-6 mb-1">
-                                                                <span class="text-muted"><i class="fa-solid fa-user-doctor text-primary mr-1"></i> Terapis:</span>
-                                                                <strong class="text-dark">{{ $pRecord->dokter->nama ?? '-' }}</strong>
-                                                            </div>
-                                                            <div class="col-sm-6 mb-1">
-                                                                <span class="text-muted"><i class="fa-solid fa-hospital-user text-primary mr-1"></i> UPT:</span>
-                                                                <span class="text-dark font-w500">{{ $pRecord->upt_lokasi ?: ($pRecord->poli ?: 'Omah Terapiku') }}</span>
-                                                            </div>
-                                                            @if($pRecord->keluhan)
-                                                                <div class="col-12 mt-1">
-                                                                    <span class="text-muted"><i class="fa-solid fa-comment-dots text-warning mr-1"></i> Keluhan:</span>
-                                                                    <span class="text-dark font-italic">{{ Str::limit($pRecord->keluhan, 70) }}</span>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-
-                                                        <!-- Action Buttons -->
-                                                        <div class="d-flex justify-content-end align-items-center mt-2 pt-2" style="border-top: 1px solid #edf2f7; gap: 6px;">
-                                                            @if($pRecord->assessment)
-                                                                <a href="{{ Route('rekam.assessment.show', $pRecord->id) }}" class="btn btn-xs font-w600" style="font-size: 11px; padding: 4px 9px; border-radius: 6px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0;">
-                                                                    <i class="fa-solid fa-clipboard-check mr-1"></i> Asesmen
-                                                                </a>
-                                                            @endif
-                                                            <a href="{{ Route('rekam.detail', $pRecord->pasien_id) }}" class="btn btn-xs font-w600" style="font-size: 11px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;">
-                                                                <i class="fa-solid fa-folder-open mr-1"></i> Detail Sesi
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <div class="text-center py-4 text-muted" style="border: 1px dashed #cbd5e1; border-radius: 8px; background: #ffffff;">
-                                                <i class="fa-solid fa-calendar-xmark text-muted mb-1" style="font-size: 20px; opacity: 0.4;"></i>
-                                                <p class="mb-0 text-muted" style="font-size: 12px;">Slot waktu kosong &bull; Belum ada penerima manfaat</p>
-                                                <a href="{{ Route('rekam.add', array_filter(['tanggal' => $tanggal, 'sesi' => $slotName, 'upt' => $uptFilter != 'all' ? $uptFilter : null, 'layanan' => $layananFilter != 'all' ? $layananFilter : null, 'dokter_id' => $dokterFilter != 'all' ? $dokterFilter : null])) }}" class="btn btn-xs btn-primary font-w600 mt-2" style="font-size: 11.5px; border-radius: 6px; padding: 4px 12px; text-decoration: none;">
-                                                    <i class="fa-solid fa-plus mr-1"></i> + Jadwalkan di Slot Ini
-                                                </a>
-                                            </div>
-                                        @endif
-
-                                    </div>
+                        <!-- Timeline Data Container with Loading Overlay -->
+                        <div id="timelineDataContainer" style="position: relative; min-height: 280px;">
+                            <!-- Loading Processing Overlay -->
+                            <div id="timelineLoadingOverlay" class="d-none" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.82); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); z-index: 20; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                                <div class="spinner-border text-primary" role="status" style="width: 2.5rem; height: 2.5rem; border-width: 3px;">
+                                    <span class="sr-only">Loading...</span>
                                 </div>
-                            @endforeach
+                                <span class="mt-2 text-primary font-w600" style="font-size: 13px; letter-spacing: 0.2px;">Memuat jadwal sesi terapi...</span>
+                            </div>
+
+                            <!-- Timeline Content Wrapper -->
+                            <div id="timelineContentWrapper">
+                                @include('jadwal.partial.timeline')
+                            </div>
                         </div>
 
                     </div>
@@ -568,9 +452,132 @@
 <script src="{{ asset('vendor/fullcalendar/js/fullcalendar.min.js') }}"></script>
 <script>
     $(document).ready(function() {
-        var calendarEl = document.getElementById('calendar');
         var calendarInitialized = false;
+        var currentAjax = null;
 
+        // Function to fetch Jadwal & Timeline data via AJAX
+        function fetchJadwalData(updateUrl = true) {
+            var formData = $('#filterForm').serializeArray();
+
+            // Build clean params for URL
+            var cleanParams = $.param(formData.filter(function(item) {
+                if (!item.value) return false;
+                if (item.name === 'upt' && item.value === 'all') return false;
+                if (item.name === 'layanan' && item.value === 'all') return false;
+                if (item.name === 'dokter_id' && item.value === 'all') return false;
+                return true;
+            }));
+            var targetUrl = "{{ Route('jadwal.index') }}" + (cleanParams ? '?' + cleanParams : '');
+
+            if (currentAjax) {
+                currentAjax.abort();
+            }
+
+            // Show loading overlay
+            $('#timelineLoadingOverlay').removeClass('d-none').addClass('d-flex');
+
+            currentAjax = $.ajax({
+                url: "{{ Route('jadwal.index') }}",
+                type: 'GET',
+                data: formData,
+                dataType: 'json',
+                success: function(res) {
+                    $('#timelineContentWrapper').html(res.html);
+
+                    // Update total sesi badge
+                    if (res.total !== undefined) {
+                        $('#totalSesiBadge').text(res.total + ' Sesi');
+                    }
+
+                    // Update header formatted date
+                    if (res.formatted_date) {
+                        $('#currentDateText').text(res.formatted_date);
+                    }
+
+                    // Update input sesi url
+                    if (res.input_sesi_url) {
+                        $('#btnInputSesiBaru').attr('href', res.input_sesi_url);
+                    }
+
+                    // Toggle Reset Button
+                    if (res.has_filters) {
+                        $('#resetButtonWrapper').fadeIn(150);
+                    } else {
+                        $('#resetButtonWrapper').fadeOut(150);
+                    }
+
+                    // Update active state of quick date presets
+                    var currentTgl = res.tanggal || $('#inputTanggal').val();
+                    $('.quick-date-btn').each(function() {
+                        var btnTgl = $(this).data('tanggal');
+                        if (btnTgl === currentTgl) {
+                            $(this).removeClass('btn-light font-w600').addClass('btn-primary font-w700 text-white active')
+                                   .css({ 'border-color': '#2563eb' });
+                            $(this).find('i').css('color', '#fff');
+                        } else {
+                            $(this).removeClass('btn-primary font-w700 text-white active').addClass('btn-light font-w600')
+                                   .css({ 'border-color': '#cbd5e1' });
+                            $(this).find('i').css('color', '#2563eb');
+                        }
+                    });
+
+                    // Update browser URL
+                    if (updateUrl && window.history.pushState) {
+                        window.history.pushState({ path: targetUrl }, '', targetUrl);
+                    }
+
+                    // Refetch Calendar events if initialized
+                    if (calendarInitialized) {
+                        $('#calendar').fullCalendar('refetchEvents');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    if (status !== 'abort') {
+                        console.error('AJAX Error:', error);
+                    }
+                },
+                complete: function() {
+                    $('#timelineLoadingOverlay').addClass('d-none').removeClass('d-flex');
+                }
+            });
+        }
+
+        // 1. Trigger fetch on filter control changes (Tanggal, UPT, Layanan, Terapis)
+        $('.filter-control').on('change', function() {
+            fetchJadwalData(true);
+        });
+
+        // 2. Click Quick Date Presets
+        $(document).on('click', '.quick-date-btn', function(e) {
+            e.preventDefault();
+            var targetTgl = $(this).data('tanggal');
+            if (targetTgl) {
+                $('#inputTanggal').val(targetTgl);
+                fetchJadwalData(true);
+            }
+        });
+
+        // 3. Click Reset Filter Button
+        $(document).on('click', '#btnResetFilter', function(e) {
+            e.preventDefault();
+            $('#inputTanggal').val("{{ date('Y-m-d') }}");
+            $('#selectUpt').val('all');
+            $('#selectLayanan').val('all');
+            $('#selectDokter').val('all');
+            fetchJadwalData(true);
+        });
+
+        // 4. Handle browser Back/Forward (popstate)
+        window.addEventListener('popstate', function() {
+            var params = new URLSearchParams(window.location.search);
+            $('#inputTanggal').val(params.get('tanggal') || "{{ date('Y-m-d') }}");
+            $('#selectUpt').val(params.get('upt') || 'all');
+            $('#selectLayanan').val(params.get('layanan') || 'all');
+            $('#selectDokter').val(params.get('dokter_id') || 'all');
+            fetchJadwalData(false);
+        });
+
+        // 5. Initialize FullCalendar
         function initCalendar() {
             if (calendarInitialized) return;
 
@@ -593,9 +600,9 @@
                     var filterData = {
                         start: start.format('YYYY-MM-DD'),
                         end: end.format('YYYY-MM-DD'),
-                        upt: "{{ $uptFilter }}",
-                        layanan: "{{ $layananFilter }}",
-                        dokter_id: "{{ $dokterFilter }}"
+                        upt: $('#selectUpt').val() || 'all',
+                        layanan: $('#selectLayanan').val() || 'all',
+                        dokter_id: $('#selectDokter').val() || 'all'
                     };
 
                     $.ajax({
@@ -606,7 +613,9 @@
                             callback(response);
                         },
                         error: function() {
-                            toastr.error('Gagal memuat event jadwal kalender');
+                            if (typeof toastr !== 'undefined') {
+                                toastr.error('Gagal memuat event jadwal kalender');
+                            }
                         }
                     });
                 },
@@ -632,12 +641,13 @@
         }
 
         // Initialize calendar when tab is shown
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
             if (e.target.id === 'tab-kalender-link') {
                 if (!calendarInitialized) {
                     initCalendar();
                 } else {
                     $('#calendar').fullCalendar('render');
+                    $('#calendar').fullCalendar('refetchEvents');
                 }
             }
         });

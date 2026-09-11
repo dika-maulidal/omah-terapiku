@@ -196,7 +196,7 @@
                                     <td class="text-center font-w600" style="vertical-align: middle;">{{ $k + 1 }}</td>
                                     <td style="vertical-align: middle;">
                                         <strong class="text-primary">{{ $hist->tgl_assessment ? $hist->tgl_assessment->format('d/m/Y') : '-' }}</strong>
-                                        <br><small class="text-muted">REG# {{ $hist->rekam ? $hist->rekam->no_rekam : '-' }}</small>
+                                        <br><small class="text-muted"><i class="fa-solid fa-calendar-day mr-1"></i>Sesi: {{ $hist->rekam ? $hist->rekam->tgl_rekam : '-' }}</small>
                                     </td>
                                     <td style="vertical-align: middle;">
                                         <strong style="color: #1e293b;">{{ $hist->dokter->nama ?? 'Terapis' }}</strong>
@@ -598,32 +598,37 @@
 
                                 @php
                                     $saved_alat = is_array($assessment->penglihatan_alat_bantu) ? $assessment->penglihatan_alat_bantu : [];
+                                    $isTidakPakaiAlat = in_array('Tidak menggunakan alat bantu', $saved_alat);
+                                    $alatOpts = [
+                                        'Tongkat putih',
+                                        'Kacamata / Low Vision Aid',
+                                        'Guide dog / Pendamping manusia',
+                                        'Screen reader / Teknologi assistive',
+                                    ];
                                 @endphp
 
                                 <div class="d-flex flex-wrap" style="gap: 8px;">
-                                    @php
-                                        $alatOpts = [
-                                            'Tongkat putih',
-                                            'Kacamata / Low Vision Aid',
-                                            'Tidak menggunakan alat bantu',
-                                            'Guide dog / Pendamping manusia',
-                                            'Screen reader / Teknologi assistive',
-                                        ];
-                                    @endphp
+                                    <!-- Opsi Tidak menggunakan alat bantu -->
+                                    <label class="check-pill-card {{ $isTidakPakaiAlat ? 'active' : '' }}">
+                                        <input type="checkbox" name="penglihatan_alat_bantu[]" id="alat_tidak_menggunakan" class="penglihatan-tidak-pakai-check" value="Tidak menggunakan alat bantu" {{ $isTidakPakaiAlat ? 'checked' : '' }}>
+                                        <span>Tidak menggunakan alat bantu</span>
+                                    </label>
+
+                                    <!-- Opsi Alat Bantu Lainnya (Hilang jika Tidak menggunakan alat bantu dipilih) -->
                                     @foreach($alatOpts as $aOpt)
-                                        <label class="check-pill-card {{ in_array($aOpt, $saved_alat) ? 'active' : '' }}">
-                                            <input type="checkbox" name="penglihatan_alat_bantu[]" value="{{ $aOpt }}" {{ in_array($aOpt, $saved_alat) ? 'checked' : '' }} @if($aOpt == 'Tongkat putih') id="alat_tongkat" onchange="toggleTongkatTeknik(this.checked)" @endif>
+                                        <label class="check-pill-card penglihatan-alat-opt-pill {{ in_array($aOpt, $saved_alat) && !$isTidakPakaiAlat ? 'active' : '' }}" style="{{ $isTidakPakaiAlat ? 'display: none !important;' : '' }}">
+                                            <input type="checkbox" name="penglihatan_alat_bantu[]" class="penglihatan-alat-item-check" value="{{ $aOpt }}" {{ in_array($aOpt, $saved_alat) && !$isTidakPakaiAlat ? 'checked' : '' }} @if($aOpt == 'Tongkat putih') id="alat_tongkat" @endif>
                                             <span>{{ $aOpt }}</span>
                                         </label>
                                     @endforeach
-                                    <label class="check-pill-card {{ in_array('Lainnya', $saved_alat) ? 'active' : '' }}">
-                                        <input type="checkbox" name="penglihatan_alat_bantu[]" value="Lainnya" id="alat_lainnya" {{ in_array('Lainnya', $saved_alat) ? 'checked' : '' }} onchange="toggleAlatLainnya(this.checked)">
+                                    <label class="check-pill-card penglihatan-alat-opt-pill {{ in_array('Lainnya', $saved_alat) && !$isTidakPakaiAlat ? 'active' : '' }}" style="{{ $isTidakPakaiAlat ? 'display: none !important;' : '' }}">
+                                        <input type="checkbox" name="penglihatan_alat_bantu[]" class="penglihatan-alat-item-check" value="Lainnya" id="alat_lainnya" {{ in_array('Lainnya', $saved_alat) && !$isTidakPakaiAlat ? 'checked' : '' }}>
                                         <span>Lainnya</span>
                                     </label>
                                 </div>
 
                                 <!-- Wrap Teknik Tongkat Putih (Jika Tongkat Putih Dipilih) -->
-                                <div id="wrap-teknik-tongkat" class="mt-2 p-2.5 rounded" style="background: #ffffff; border: 1px solid #bfdbfe; max-width: 520px; {{ in_array('Tongkat putih', $saved_alat) ? '' : 'display: none;' }}">
+                                <div id="wrap-teknik-tongkat" class="mt-2 p-2.5 rounded" style="background: #ffffff; border: 1px solid #bfdbfe; max-width: 520px; {{ in_array('Tongkat putih', $saved_alat) && !$isTidakPakaiAlat ? '' : 'display: none;' }}">
                                     <small class="text-primary d-block mb-1.5 font-w700" style="font-size: 12px;"><i class="fa fa-info-circle mr-1"></i> Teknik Tongkat Putih yang Dikuasai:</small>
                                     <div class="d-flex flex-wrap" style="gap: 6px;">
                                         @php $tek = old('penglihatan_teknik_tongkat', $assessment->penglihatan_teknik_tongkat); @endphp
@@ -637,12 +642,12 @@
                                 </div>
 
                                 <!-- Wrap Alat Bantu Lainnya (Jika Lainnya Dipilih) -->
-                                <div id="wrap-alat-lainnya" class="mt-2" style="max-width: 520px; {{ in_array('Lainnya', $saved_alat) ? '' : 'display: none;' }}">
+                                <div id="wrap-alat-lainnya" class="mt-2" style="max-width: 520px; {{ in_array('Lainnya', $saved_alat) && !$isTidakPakaiAlat ? '' : 'display: none;' }}">
                                     <div class="input-group input-group-seamless">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-light font-w600 text-primary" style="font-size: 12px;">Alat Bantu Lainnya:</span>
                                         </div>
-                                        <input type="text" name="penglihatan_alat_bantu_lainnya" class="form-control" value="{{ old('penglihatan_alat_bantu_lainnya', $assessment->penglihatan_alat_bantu_lainnya) }}" placeholder="Sebutkan alat bantu lainnya..." style="height: 38px; font-size: 12.5px;">
+                                        <input type="text" name="penglihatan_alat_bantu_lainnya" id="input_penglihatan_alat_bantu_lainnya" class="form-control" value="{{ old('penglihatan_alat_bantu_lainnya', $assessment->penglihatan_alat_bantu_lainnya) }}" placeholder="Sebutkan alat bantu lainnya..." style="height: 38px; font-size: 12.5px;">
                                     </div>
                                 </div>
                             </div>
@@ -4920,8 +4925,32 @@ function toggleMenelanKeterangan(val) {
     }
 }
 
+function togglePenglihatanAlatBantu() {
+    var isTidakPakai = $('#alat_tidak_menggunakan').is(':checked');
+    if (isTidakPakai) {
+        $('.penglihatan-alat-opt-pill').attr('style', 'display: none !important;');
+        $('.penglihatan-alat-item-check').prop('checked', false).closest('.check-pill-card').removeClass('active');
+        $('#wrap-teknik-tongkat').slideUp(150);
+        $('input[name="penglihatan_teknik_tongkat"]').prop('checked', false).closest('.radio-pill-card').removeClass('active');
+        $('#wrap-alat-lainnya').slideUp(150);
+        $('#input_penglihatan_alat_bantu_lainnya').val('');
+    } else {
+        $('.penglihatan-alat-opt-pill').attr('style', 'display: inline-flex !important;');
+        if ($('#alat_tongkat').is(':checked')) {
+            $('#wrap-teknik-tongkat').slideDown(150);
+        } else {
+            $('#wrap-teknik-tongkat').slideUp(150);
+        }
+        if ($('#alat_lainnya').is(':checked')) {
+            $('#wrap-alat-lainnya').slideDown(150);
+        } else {
+            $('#wrap-alat-lainnya').slideUp(150);
+        }
+    }
+}
+
 function toggleTongkatTeknik(isChecked) {
-    if (isChecked) {
+    if (isChecked && !$('#alat_tidak_menggunakan').is(':checked')) {
         $('#wrap-teknik-tongkat').slideDown(150);
     } else {
         $('#wrap-teknik-tongkat').slideUp(150);
@@ -4930,7 +4959,7 @@ function toggleTongkatTeknik(isChecked) {
 }
 
 function toggleAlatLainnya(isChecked) {
-    if (isChecked) {
+    if (isChecked && !$('#alat_tidak_menggunakan').is(':checked')) {
         $('#wrap-alat-lainnya').slideDown(150);
     } else {
         $('#wrap-alat-lainnya').slideUp(150);
@@ -5128,6 +5157,20 @@ $(document).ready(function() {
         } else {
             $(this).closest('.check-pill-card').removeClass('active');
         }
+
+        if ($(this).attr('id') === 'alat_tidak_menggunakan') {
+            togglePenglihatanAlatBantu();
+        } else if ($(this).hasClass('penglihatan-alat-item-check') && $(this).is(':checked')) {
+            $('#alat_tidak_menggunakan').prop('checked', false).closest('.check-pill-card').removeClass('active');
+        }
+
+        if ($(this).attr('id') === 'alat_tongkat') {
+            toggleTongkatTeknik($(this).is(':checked'));
+        }
+        if ($(this).attr('id') === 'alat_lainnya') {
+            toggleAlatLainnya($(this).is(':checked'));
+        }
+
         updateFormOverallProgress();
         triggerAutoSave();
     });
@@ -5190,6 +5233,7 @@ $(document).ready(function() {
     togglePerencanaanLainnya();
 
     // 17. Initial calculations on load
+    togglePenglihatanAlatBantu();
     updateGmfmALiveScore();
     updateGmfmBLiveScore();
     updateGmfmCLiveScore();

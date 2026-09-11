@@ -23,7 +23,7 @@
                 <a href="{{Route('rekam.add')}}" class="btn btn-sm btn-primary font-w600" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 8px 16px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); font-size: 13px;">
                     <i class="fa-solid fa-circle-plus mr-1"></i> Input Sesi Terapi
                 </a>
-                <a href="{{Route('rekam.export-csv', ['keyword' => request('keyword'), 'status' => request('status', request('tab')), 'layanan' => request('layanan'), 'upt' => request('upt', session('selected_upt'))])}}" class="btn btn-sm font-w600" style="border: 1px solid #a7f3d0; border-radius: 8px; background: #ecfdf5; color: #059669; padding: 8px 14px; font-size: 13px; transition: all 0.2s ease;" title="Download data rekam medis ke CSV">
+                <a href="{{Route('rekam.export-csv', ['keyword' => request('keyword'), 'status' => request('status', request('tab')), 'layanan' => request('layanan'), 'upt' => request('upt', session('selected_upt'))])}}" id="btnExportCsv" class="btn btn-sm font-w600" style="border: 1px solid #a7f3d0; border-radius: 8px; background: #ecfdf5; color: #059669; padding: 8px 14px; font-size: 13px; transition: all 0.2s ease;" title="Download data rekam medis ke CSV">
                     <i class="fa-solid fa-file-csv mr-1"></i> Export CSV
                 </a>
             </div>
@@ -40,17 +40,17 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-between mb-3" style="gap: 12px;">
                     <div class="d-flex align-items-center">
                         <span class="fs-13 font-w600 text-muted">
-                            Total: <strong class="text-primary font-w700">{{ $rekams->total() }}</strong> Sesi Rekam Medis
+                            Total: <strong class="text-primary font-w700" id="totalRekamCount">{{ number_format($rekams->total(), 0, ',', '.') }}</strong> Sesi Rekam Medis
                         </span>
                     </div>
 
                     <!-- Filter & Pencarian Sejajar -->
                     <div class="flex-grow-1 d-flex justify-content-xl-end">
-                        <form method="get" action="{{ url()->current() }}" class="d-flex align-items-center flex-wrap" style="gap: 6px; max-width: 100%;">
+                        <form id="filterForm" method="get" action="{{ url()->current() }}" class="d-flex align-items-center flex-wrap" style="gap: 6px; max-width: 100%;">
                             <!-- 0. Filter Lokasi UPT -->
                             <div class="ot-filter-wrapper" style="width: 175px;">
                                 <i class="fa-solid fa-hospital-user"></i>
-                                <select name="upt" class="form-control form-control-sm ot-filter-select" onchange="this.form.submit()" title="Filter Lokasi UPT" style="width: 100%;">
+                                <select name="upt" class="form-control form-control-sm ot-filter-select filter-select" title="Filter Lokasi UPT" style="width: 100%;">
                                     <option value="all" {{ (!session('selected_upt') || session('selected_upt') == 'all' || request('upt') == 'all') ? 'selected' : '' }}>Semua Lokasi UPT</option>
                                     @foreach($activeUpts as $u)
                                         <option value="{{ $u->nama }}" {{ ((session('selected_upt') == $u->nama && request('upt') !== 'all') || request('upt') == $u->nama) ? 'selected' : '' }}>
@@ -63,7 +63,7 @@
                             <!-- 1. Filter Status -->
                             <div class="ot-filter-wrapper" style="width: 140px;">
                                 <i class="fa-solid fa-circle-check"></i>
-                                <select name="status" class="form-control form-control-sm ot-filter-select" onchange="this.form.submit()" title="Filter Status Pelayanan" style="width: 100%;">
+                                <select name="status" class="form-control form-control-sm ot-filter-select filter-select" title="Filter Status Pelayanan" style="width: 100%;">
                                     <option value="" {{ request('status') == '' && request('tab') == '' ? 'selected' : '' }}>Semua Status</option>
                                     <option value="1" {{ request('status') == '1' || request('tab') == '1' ? 'selected' : '' }}>Antrian</option>
                                     <option value="2" {{ request('status') == '2' || request('tab') == '2' ? 'selected' : '' }}>Pemeriksaan</option>
@@ -75,7 +75,7 @@
                             <!-- 2. Filter Layanan Terapi -->
                             <div class="ot-filter-wrapper" style="width: 155px;">
                                 <i class="fa-solid fa-hand-holding-medical"></i>
-                                <select name="layanan" class="form-control form-control-sm ot-filter-select" onchange="this.form.submit()" title="Filter Layanan Terapi" style="width: 100%;">
+                                <select name="layanan" class="form-control form-control-sm ot-filter-select filter-select" title="Filter Layanan Terapi" style="width: 100%;">
                                     <option value="">Semua Layanan</option>
                                     <option value="Fisioterapi" {{ request('layanan') == 'Fisioterapi' ? 'selected' : '' }}>Fisioterapi</option>
                                     <option value="Okupasi" {{ request('layanan') == 'Okupasi' ? 'selected' : '' }}>Terapi Okupasi / SI</option>
@@ -87,7 +87,7 @@
                             <!-- 3. Filter Shows (Per Page Limit) -->
                             <div class="ot-filter-wrapper" style="width: 120px;" title="Tampilkan jumlah baris data per halaman">
                                 <i class="fa-solid fa-list-ol"></i>
-                                <select name="per_page" class="form-control form-control-sm ot-filter-select" onchange="this.form.submit()" style="width: 100%;">
+                                <select name="per_page" class="form-control form-control-sm ot-filter-select filter-select" style="width: 100%;">
                                     <option value="10" {{ request('per_page', 10) == '10' ? 'selected' : '' }}>Show 10</option>
                                     <option value="25" {{ request('per_page') == '25' ? 'selected' : '' }}>Show 25</option>
                                     <option value="50" {{ request('per_page') == '50' ? 'selected' : '' }}>Show 50</option>
@@ -100,144 +100,35 @@
                             <!-- Kolom Pencarian Sejajar -->
                             <div class="ot-search-wrapper" style="min-width: 185px; max-width: 220px;">
                                 <i class="fa-solid fa-magnifying-glass ot-search-icon"></i>
-                                <input type="text" class="ot-search-input" name="keyword" value="{{request('keyword')}}" placeholder="Cari no. RM, pasien..." autocomplete="off">
+                                <input type="text" class="ot-search-input" id="keywordInput" name="keyword" value="{{request('keyword')}}" placeholder="Cari no. RM, pasien..." autocomplete="off">
                                 <button type="submit" class="ot-search-btn" title="Cari Data">
                                     <i class="fa-solid fa-arrow-right"></i>
                                 </button>
                             </div>
 
                             <!-- Tombol Reset Filter -->
-                            @if(request('keyword') || request('status') || request('tab') || request('layanan') || (request('upt') && request('upt') != 'all') || (session('selected_upt') && session('selected_upt') != 'all') || (request('per_page') && request('per_page') != '10'))
-                                <a href="{{ Route('rekam', ['upt' => 'all']) }}" class="btn btn-sm btn-light font-w600" style="height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; font-size: 12px; transition: all 0.2s ease;" title="Reset Filter">
-                                    <i class="fa-solid fa-rotate-right mr-1" style="color: #64748b;"></i> Reset
-                                </a>
-                            @endif
+                            <div id="resetButtonWrapper" style="{{ (request('keyword') || request('status') || request('tab') || request('layanan') || (request('upt') && request('upt') != 'all') || (session('selected_upt') && session('selected_upt') != 'all') || (request('per_page') && request('per_page') != '10')) ? '' : 'display: none;' }}">
+                                <button type="button" id="btnResetFilter" class="btn btn-sm btn-light" style="width: 38px; height: 38px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #cbd5e1; border-radius: 8px; color: #64748b; font-size: 13px; transition: all 0.2s ease; flex-shrink: 0;" title="Reset Filter">
+                                    <i class="fa-solid fa-rotate-right"></i>
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
 
-                <!-- Tabel Data Rekam Medis -->
-                <div class="table-responsive card-table" style="border: 1px solid #edf2f7; border-radius: 10px; overflow-x: auto !important; width: 100%;"> 
-                    <table class="table table-hover mb-0" style="font-size: 13px; min-width: 1050px; width: 100%;">
-                        <thead>
-                            <tr style="background: #f8fafc; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #475569; border-bottom: 2px solid #e2e8f0;">
-                                <th style="padding: 12px 14px; width: 45px; text-align: center;">#</th>
-                                <th style="padding: 12px 14px; width: 130px;">No. RM & Tanggal</th>
-                                <th style="padding: 12px 14px; min-width: 200px;">Nama Penerima Manfaat</th>
-                                <th style="padding: 12px 14px; min-width: 190px;">Omah Terapi & Terapis</th>
-                                <th style="padding: 12px 14px; min-width: 220px;">Keluhan (Anamnesa)</th>
-                                <th style="padding: 12px 14px; width: 120px; text-align: center;">Status</th>
-                                <th style="padding: 12px 14px; min-width: 130px; text-align: center; position: sticky; right: 0; background: #f8fafc; z-index: 2; box-shadow: -3px 0 8px rgba(0,0,0,0.04);">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if(count($rekams) > 0)
-                                @foreach ($rekams as $key => $row)
-                                    <tr style="transition: background-color 0.15s ease;">
-                                        <td style="padding: 12px 14px; vertical-align: middle; text-align: center; color: #64748b;">
-                                            {{ $rekams->firstItem() + $key }}
-                                        </td>
-                                        <td style="padding: 12px 14px; vertical-align: middle;">
-                                            <a href="{{Route('rekam.detail', $row->pasien_id)}}" class="font-w700" style="color: #2563eb; font-size: 13.5px; text-decoration: none;">
-                                                {{ $row->pasien && $row->pasien->no_rm ? $row->pasien->no_rm : ($row->no_rekam ?? '-') }}
-                                            </a>
-                                            <div class="mt-1" style="font-size: 11.5px; color: #64748b;">
-                                                <i class="fa-solid fa-calendar mr-1" style="color: #94a3b8;"></i>{{$row->tgl_rekam}}
-                                            </div>
-                                            @if($row->sesi_waktu)
-                                                <div class="mt-1">
-                                                    <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 10.5px; font-weight: 600; border-radius: 4px; padding: 2px 6px;">
-                                                        <i class="fa-solid fa-clock mr-1"></i> {{$row->sesi_waktu}}
-                                                    </span>
-                                                </div>
-                                            @endif
-                                        </td>
-                                        <td style="padding: 12px 14px; vertical-align: middle;">
-                                            <strong style="font-size: 13.5px;">
-                                                <a href="{{Route('rekam.detail', $row->pasien_id)}}" style="color: #1e293b; text-decoration: none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#1e293b'">
-                                                    {{$row->pasien->nama ?? '-'}}
-                                                </a>
-                                            </strong>
-                                            @if ($row->pasien && $row->pasien->jenis_disabilitas && $row->pasien->jenis_disabilitas != 'Tidak Ada')
-                                                <div class="mt-1">
-                                                    <span class="badge" style="background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; font-size: 11px; font-weight: 500; border-radius: 4px; padding: 2px 6px;">
-                                                        <i class="fa-solid fa-wheelchair mr-1"></i>{{$row->pasien->jenis_disabilitas}}
-                                                    </span>
-                                                </div>
-                                            @endif
-                                            @if ($row->pasien && $row->pasien->nama_wali)
-                                                <div class="mt-1" style="font-size: 11.5px; color: #64748b;">
-                                                    <i class="fa-solid fa-user-group mr-1" style="color: #94a3b8;"></i>Wali: {{$row->pasien->nama_wali}}
-                                                </div>
-                                            @endif
-                                        </td>
-                                        <td style="padding: 12px 14px; vertical-align: middle;">
-                                            <strong style="color: #334155; font-size: 13px;">{{$row->upt_lokasi ?: ($row->poli ?: 'Omah Terapi')}}</strong>
-                                            @if ($row->layanan_terapi)
-                                                <div class="mt-1">
-                                                    <span class="badge" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 11px; font-weight: 600; border-radius: 4px; padding: 2px 6px;">
-                                                        {{$row->layanan_terapi}}
-                                                    </span>
-                                                </div>
-                                            @endif
-                                            <div class="mt-1" style="font-size: 11.5px; color: #64748b;">
-                                                <i class="fa-solid fa-user-doctor mr-1" style="color: #2563eb;"></i>{{$row->dokter->nama ?? '-'}}
-                                            </div>
-                                        </td>
-                                        <td style="padding: 12px 14px; vertical-align: middle; max-width: 260px;">
-                                            <span style="font-size: 12.5px; line-height: 1.45; color: #475569; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="{{$row->keluhan ?: '-'}}">
-                                                {{$row->keluhan ?: '-'}}
-                                            </span>
-                                        </td>
-                                        <td style="padding: 12px 14px; vertical-align: middle; text-align: center;">
-                                            {!! $row->status_display() !!}
-                                        </td>
-                                        <td style="padding: 12px 14px; vertical-align: middle; white-space: nowrap; position: sticky; right: 0; background: #ffffff; z-index: 1; box-shadow: -3px 0 8px rgba(0,0,0,0.04); text-align: center;">
-                                            <div class="d-flex align-items-center justify-content-center" style="gap: 4px;">
-                                                <a href="{{Route('rekam.detail', $row->pasien_id)}}" class="btn btn-xs btn-primary shadow-sm" style="border-radius: 6px; padding: 4px 8px; background: #2563eb; border: none;" title="Lihat Rekam Medis">
-                                                    <i class="fa-solid fa-eye"></i>
-                                                </a>
-                                                @if (in_array(auth()->user()->role_display(), ['Admin', 'Dokter']))
-                                                    <a href="{{Route('rekam.assessment', $row->id)}}" class="btn btn-xs shadow-sm text-white" style="border-radius: 6px; padding: 4px 8px; background: #f59e0b; border: none;" title="Form Assessment Terapis">
-                                                        <i class="fa-solid fa-clipboard-list"></i>
-                                                    </a>
-                                                @endif
-                                                @if (auth()->user()->role_display() == "Admin" && $row->status == 2)
-                                                    <a href="{{Route('rekam.edit', $row->id)}}" class="btn btn-xs shadow-sm text-white" style="border-radius: 6px; padding: 4px 8px; background: #0284c7; border: none;" title="Edit Data Rekam Medis">
-                                                        <i class="fa-solid fa-pencil"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-xs btn-danger shadow-sm delete" r-link="{{Route('rekam.delete', $row->id)}}"
-                                                       r-name="{{$row->pasien->nama ?? 'Rekam'}}" r-id="{{$row->id}}" style="border-radius: 6px; padding: 4px 8px;" title="Hapus Data">
-                                                        <i class="fa-solid fa-trash"></i>
-                                                    </a>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="7" class="text-center py-5 text-muted">
-                                        <div class="d-flex flex-column align-items-center justify-content-center">
-                                            <div class="mb-2" style="width: 54px; height: 54px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 22px;">
-                                                <i class="fa-solid fa-clipboard-question"></i>
-                                            </div>
-                                            <h6 class="font-w600 text-dark mb-1">Tidak ada data rekam medis</h6>
-                                            <p class="mb-0 text-muted" style="font-size: 12.5px;">Coba ubah kata kunci pencarian atau reset filter di atas.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
+                <!-- Container Tabel dengan Loading Processing Overlay -->
+                <div id="tableDataContainer" style="position: relative; min-height: 250px;">
+                    <!-- Loading Processing Overlay -->
+                    <div id="tableLoadingOverlay" class="d-none" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.78); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); z-index: 20; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                        <div class="spinner-border text-primary" role="status" style="width: 2.5rem; height: 2.5rem; border-width: 3px;">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <span class="mt-2 text-primary font-w600" style="font-size: 13px; letter-spacing: 0.2px;">Memuat data rekam medis...</span>
+                    </div>
 
-                    <div class="d-flex align-items-center justify-content-between p-3 flex-wrap" style="border-top: 1px solid #edf2f7; gap: 10px;">
-                        <div class="dataTables_info" id="example_info" role="status" aria-live="polite" style="font-size: 12.5px; color: #64748b;">
-                            Menampilkan <strong class="text-dark">{{$rekams->firstItem() ?: 0}}</strong> sampai <strong class="text-dark">{{$rekams->lastItem() ?: 0}}</strong> dari <strong class="text-dark">{{$rekams->total()}}</strong> data rekam medis
-                        </div>
-                        <div>
-                            {{ $rekams->appends(request()->except('page'))->links() }}
-                        </div>
+                    <!-- Table Partial Content -->
+                    <div id="tableContentWrapper">
+                        @include('rekam.partial.table')
                     </div>
                 </div>
             </div>
@@ -248,8 +139,142 @@
 
 @section('script')
 <script>
-    $().ready( function () {
-        $(".delete").click(function(e) {
+    $(document).ready(function () {
+        let currentAjax = null;
+        let searchDebounceTimer = null;
+
+        // Function to fetch data via AJAX
+        function fetchRekamData(page = 1, updateUrl = true) {
+            let form = $('#filterForm');
+            let formData = form.serializeArray();
+            
+            // Check if page parameter is needed
+            let hasPage = false;
+            for (let i = 0; i < formData.length; i++) {
+                if (formData[i].name === 'page') {
+                    formData[i].value = page;
+                    hasPage = true;
+                    break;
+                }
+            }
+            if (!hasPage && page) {
+                formData.push({ name: 'page', value: page });
+            }
+
+            // Filter out default params for clean URL query
+            let cleanParams = $.param(formData.filter(item => item.value !== '' && !(item.name === 'per_page' && item.value === '10') && !(item.name === 'page' && item.value == '1') && !(item.name === 'upt' && item.value === 'all')));
+            let targetUrl = "{{ Route('rekam') }}" + (cleanParams ? '?' + cleanParams : '');
+
+            if (currentAjax) {
+                currentAjax.abort();
+            }
+
+            // Show loading overlay
+            $('#tableLoadingOverlay').removeClass('d-none').addClass('d-flex');
+
+            currentAjax = $.ajax({
+                url: "{{ Route('rekam') }}",
+                type: 'GET',
+                data: formData,
+                dataType: 'json',
+                success: function (res) {
+                    $('#tableContentWrapper').html(res.html);
+                    
+                    // Update total count
+                    if (res.total !== undefined) {
+                        let formattedTotal = new Intl.NumberFormat('id-ID').format(res.total);
+                        $('#totalRekamCount').text(formattedTotal);
+                    }
+
+                    // Update export CSV URL
+                    if (res.export_url) {
+                        $('#btnExportCsv').attr('href', res.export_url);
+                    }
+
+                    // Toggle Reset Button
+                    if (res.has_filters) {
+                        $('#resetButtonWrapper').fadeIn(150);
+                    } else {
+                        $('#resetButtonWrapper').fadeOut(150);
+                    }
+
+                    // Update browser URL
+                    if (updateUrl && window.history.pushState) {
+                        window.history.pushState({ path: targetUrl }, '', targetUrl);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    if (status !== 'abort') {
+                        console.error('AJAX Error:', error);
+                    }
+                },
+                complete: function () {
+                    $('#tableLoadingOverlay').addClass('d-none').removeClass('d-flex');
+                }
+            });
+        }
+
+        // 1. Debounce on search keyword input
+        $('#keywordInput').on('input', function () {
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(function () {
+                fetchRekamData(1);
+            }, 350);
+        });
+
+        // 2. Submit form on Enter or Search Button
+        $('#filterForm').on('submit', function (e) {
+            e.preventDefault();
+            clearTimeout(searchDebounceTimer);
+            fetchRekamData(1);
+        });
+
+        // 3. Trigger fetch on filter select changes
+        $('.filter-select').on('change', function () {
+            fetchRekamData(1);
+        });
+
+        // 4. Reset Filter Button click
+        $(document).on('click', '#btnResetFilter', function (e) {
+            e.preventDefault();
+            $('#filterForm select[name="upt"]').val('all');
+            $('#filterForm select[name="status"]').val('');
+            $('#filterForm select[name="layanan"]').val('');
+            $('#filterForm select[name="per_page"]').val('10');
+            $('#keywordInput').val('');
+            fetchRekamData(1);
+        });
+
+        // 5. Intercept pagination link clicks
+        $(document).on('click', '#tableDataContainer .pagination a', function (e) {
+            e.preventDefault();
+            let href = $(this).attr('href');
+            if (href) {
+                let urlObj = new URL(href, window.location.origin);
+                let page = urlObj.searchParams.get('page') || 1;
+                fetchRekamData(page);
+
+                // Smooth scroll to top of table
+                $('html, body').animate({
+                    scrollTop: $('#tableDataContainer').offset().top - 100
+                }, 300);
+            }
+        });
+
+        // 6. Handle browser Back/Forward (popstate)
+        window.addEventListener('popstate', function () {
+            let params = new URLSearchParams(window.location.search);
+            $('#filterForm select[name="upt"]').val(params.get('upt') || 'all');
+            $('#filterForm select[name="status"]').val(params.get('status') || params.get('tab') || '');
+            $('#filterForm select[name="layanan"]').val(params.get('layanan') || '');
+            $('#filterForm select[name="per_page"]').val(params.get('per_page') || '10');
+            $('#keywordInput').val(params.get('keyword') || '');
+            let page = params.get('page') || 1;
+            fetchRekamData(page, false);
+        });
+
+        // 7. Delete Button Confirmation (Event Delegation)
+        $(document).on('click', '.delete', function(e) {
             e.preventDefault();
             var id = $(this).attr('r-id');
             var name = $(this).attr('r-name');

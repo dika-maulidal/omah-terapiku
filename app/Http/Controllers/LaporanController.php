@@ -472,6 +472,26 @@ class LaporanController extends Controller
         $allUpts = Poli::where('status', 1)->orderBy('nama', 'asc')->get();
         $availableYears = range(date('Y'), date('Y') - 4);
 
+        if ($request->ajax()) {
+            $html = view('laporan.partial.content', compact('meta', 'data', 'allUpts', 'availableYears'))->render();
+            $printUrl = route('laporan.eksekutif.print', $request->all());
+
+            return response()->json([
+                'html' => $html,
+                'meta' => [
+                    'periode_text' => $meta['periode_text'],
+                    'upt_text' => $meta['upt_text'],
+                    'layanan_text' => $meta['layanan_text'],
+                    'layanan' => $meta['layanan'],
+                    'start_date_formatted' => $meta['start_date']->format('d M Y'),
+                    'end_date_formatted' => $meta['end_date']->format('d M Y'),
+                ],
+                'map_patient_points' => $data['map_patient_points'] ?? [],
+                'map_balai_points' => $data['map_balai_points'] ?? [],
+                'print_url' => $printUrl
+            ]);
+        }
+
         return view('laporan.index', compact('meta', 'data', 'allUpts', 'availableYears'));
     }
 

@@ -115,12 +115,7 @@
         <div class="card" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
             <div class="card-body p-4">
                 <div class="mb-3">
-                    <h4 class="font-w700 mb-1" style="font-size: 17px; color: #1e293b;">{{$pasien->nama}}</h4>
-                    <div class="text-muted font-w500" style="font-size: 12.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                        <span style="color: #1e40af; font-weight: 600;">No. RM: {{ $pasien->no_rm }}</span>
-                        <span class="text-muted">&bull;</span>
-                        <span style="color: #64748b;">NIK: {{ $pasien->nik ?: '-' }}</span>
-                    </div>
+                    <h4 class="font-w700 mb-0" style="font-size: 17px; color: #1e293b;">{{$pasien->nama}}</h4>
                 </div>
 
                 <div class="pt-2" style="border-top: 1px solid #edf2f7;">
@@ -144,6 +139,11 @@
                     <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
                         <span class="text-muted"><i class="fa-solid fa-id-card mr-2 text-primary"></i>No. Rekam Medis (RM)</span>
                         <span class="font-w700" style="color: #1e293b; font-size: 13.5px;">{{ $pasien->no_rm }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                        <span class="text-muted"><i class="fa-solid fa-address-card mr-2 text-primary"></i>NIK (Kependudukan)</span>
+                        <span class="font-w600" style="color: #334155;">{{ $pasien->nik ?: '-' }}</span>
                     </div>
 
                     <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
@@ -389,7 +389,7 @@
                         <div class="col-xl-3 col-md-6 col-12 mb-3 mb-xl-0">
                             <div class="p-3 rounded bg-white shadow-xs" style="border: 1px solid #e2e8f0; height: 100%; border-radius: 8px;">
                                 <small class="text-muted d-block font-w600 mb-1" style="font-size: 11px; text-transform: uppercase;">
-                                    <i class="fa-solid fa-user-doctor mr-1 text-danger"></i> Terapis Pemeriksa
+                                    <i class="fa-solid fa-user-doctor mr-1 text-primary"></i> Terapis Pemeriksa
                                 </small>
                                 <span class="font-w700 d-block" style="font-size: 14.5px; color: #1e293b;">
                                     {{ $activeRekam->dokter->nama ?? 'Belum Ditugaskan' }}
@@ -1221,7 +1221,7 @@
         var urlhomeprint = btn.data('urlhomeprint');
 
         // Populate Modal Fields
-        $("#modalSoapSubTitle").text(norekam + " — " + layanan);
+        $("#modalSoapSubTitle").text(tanggal + " — " + layanan);
         $("#modalSoapTanggal").text(tanggal);
         $("#modalSoapWaktu").html('<i class="fa-solid fa-clock mr-1"></i> ' + (sesiwaktu !== '-' ? sesiwaktu : 'Sesi Reguler (08.00 - 13.00)'));
         $("#modalSoapLayanan").text(layanan);
@@ -1235,7 +1235,7 @@
         // O: Objektif
         $("#modalSoapPemeriksaan").html(pemeriksaan);
         if (filepemeriksaan) {
-            $("#modalSoapFilePemeriksaanContainer").html('<button type="button" class="btn btn-xs btn-outline-info font-w600 btn-open-preview-berkas" data-type="pemeriksaan" data-title="Dokumen / Foto Pemeriksaan Objektif (' + norekam + ')" data-url="' + filepemeriksaan + '" data-filename="Pemeriksaan-' + norekam + '" style="border-radius: 6px; font-size: 11.5px;"><i class="fa-solid fa-image mr-1"></i> Foto Pemeriksaan</button>');
+            $("#modalSoapFilePemeriksaanContainer").html('<button type="button" class="btn btn-xs btn-outline-info font-w600 btn-open-preview-berkas" data-type="pemeriksaan" data-title="Dokumen / Foto Pemeriksaan Objektif (' + tanggal + ')" data-url="' + filepemeriksaan + '" data-filename="Pemeriksaan-' + tanggal + '" style="border-radius: 6px; font-size: 11.5px;"><i class="fa-solid fa-image mr-1"></i> Foto Pemeriksaan</button>');
         } else {
             $("#modalSoapFilePemeriksaanContainer").empty();
         }
@@ -1274,7 +1274,7 @@
         }
 
         if (filetindakan) {
-            $("#modalSoapFileTindakanContainer").html('<button type="button" class="btn btn-xs btn-outline-success font-w600 btn-open-preview-berkas" data-type="tindakan" data-title="Dokumen / Foto Tindakan Terapi (' + norekam + ')" data-url="' + filetindakan + '" data-filename="Tindakan-' + norekam + '" style="border-radius: 6px; font-size: 11.5px;"><i class="fa-solid fa-image mr-1"></i> Foto Tindakan</button>');
+            $("#modalSoapFileTindakanContainer").html('<button type="button" class="btn btn-xs btn-outline-success font-w600 btn-open-preview-berkas" data-type="tindakan" data-title="Dokumen / Foto Tindakan Terapi (' + tanggal + ')" data-url="' + filetindakan + '" data-filename="Tindakan-' + tanggal + '" style="border-radius: 6px; font-size: 11.5px;"><i class="fa-solid fa-image mr-1"></i> Foto Tindakan</button>');
         } else {
             $("#modalSoapFileTindakanContainer").empty();
         }

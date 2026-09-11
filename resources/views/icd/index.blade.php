@@ -177,112 +177,59 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-between mb-3" style="gap: 12px;">
                     <div class="d-flex align-items-center">
                         <span class="fs-13 font-w600 text-muted">
-                            Total: <strong class="text-primary font-w700">{{ $datas->total() }}</strong> Diagnosis ICD-10
+                            Total: <strong class="text-primary font-w700" id="totalIcdCount">{{ number_format($datas->total(), 0, ',', '.') }}</strong> Diagnosis ICD-10
                         </span>
                     </div>
 
                     <!-- Filter & Pencarian Sejajar -->
                     <div class="flex-grow-1 d-flex justify-content-xl-end">
-                        <form method="get" action="{{ url()->current() }}" class="d-flex align-items-center flex-wrap" style="gap: 6px; max-width: 100%;">
+                        <form id="filterForm" method="get" action="{{ url()->current() }}" class="d-flex align-items-center flex-wrap" style="gap: 6px; max-width: 100%;">
                             
+                            <!-- 1. Filter Shows (Per Page Limit) -->
+                            <div class="ot-filter-wrapper" style="width: 120px;" title="Tampilkan jumlah baris data per halaman">
+                                <i class="fa-solid fa-list-ol"></i>
+                                <select name="per_page" class="form-control form-control-sm ot-filter-select filter-select" style="width: 100%;">
+                                    <option value="10" {{ request('per_page', 10) == '10' ? 'selected' : '' }}>Show 10</option>
+                                    <option value="25" {{ request('per_page') == '25' ? 'selected' : '' }}>Show 25</option>
+                                    <option value="50" {{ request('per_page') == '50' ? 'selected' : '' }}>Show 50</option>
+                                    <option value="100" {{ request('per_page') == '100' ? 'selected' : '' }}>Show 100</option>
+                                    <option value="all" {{ request('per_page') == 'all' ? 'selected' : '' }}>Show Semua</option>
+                                </select>
+                            </div>
+
                             <!-- Kolom Pencarian Sejajar -->
                             <div class="ot-search-wrapper" style="min-width: 210px; max-width: 260px;">
                                 <i class="fa-solid fa-magnifying-glass ot-search-icon"></i>
-                                <input type="text" class="ot-search-input" name="keyword" value="{{request('keyword')}}" placeholder="Cari kode atau diagnosis..." autocomplete="off">
+                                <input type="text" class="ot-search-input" id="keywordInput" name="keyword" value="{{request('keyword')}}" placeholder="Cari kode atau diagnosis..." autocomplete="off">
                                 <button type="submit" class="ot-search-btn" title="Cari Data">
                                     <i class="fa-solid fa-arrow-right"></i>
                                 </button>
                             </div>
 
-                            <!-- Tombol Reset Filter -->
-                            @if(request('keyword'))
-                                <a href="{{ Route('icd') }}" class="btn btn-sm btn-light font-w600" style="height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; font-size: 12px; transition: all 0.2s ease;" title="Reset Filter">
-                                    <i class="fa-solid fa-rotate-right mr-1" style="color: #64748b;"></i> Reset
-                                </a>
-                            @endif
+                            <!-- Tombol Reset Filter (Icon-Only 38x38px) -->
+                            <div id="resetButtonWrapper" style="{{ (request('keyword') || (request('per_page') && request('per_page') != '10')) ? '' : 'display: none;' }}">
+                                <button type="button" id="btnResetFilter" class="btn btn-sm btn-light" style="width: 38px; height: 38px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #cbd5e1; border-radius: 8px; color: #64748b; font-size: 13px; transition: all 0.2s ease; flex-shrink: 0;" title="Reset Filter">
+                                    <i class="fa-solid fa-rotate-right"></i>
+                                </button>
+                            </div>
 
                         </form>
                     </div>
                 </div>
 
-                <!-- Tabel Data ICD -->
-                <div class="table-responsive card-table" style="border: 1px solid #edf2f7; border-radius: 10px; overflow-x: auto !important; width: 100%;">
-                    <table class="table table-hover mb-0" style="font-size: 13px; min-width: 850px; width: 100%;">
-                        <thead>
-                            <tr style="background: #f8fafc; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #475569; border-bottom: 2px solid #e2e8f0;">
-                                <th style="padding: 12px 14px; width: 50px; text-align: center;">#</th>
-                                <th style="padding: 12px 14px; width: 140px;">Kode ICD-10</th>
-                                <th style="padding: 12px 14px; min-width: 280px;">Nama Diagnosis (Indonesia)</th>
-                                <th style="padding: 12px 14px; min-width: 250px;">Nama Diagnosis (English / Medis)</th>
-                                <th style="padding: 12px 14px; width: 120px; text-align: center; position: sticky; right: 0; background: #f8fafc; z-index: 2; box-shadow: -3px 0 8px rgba(0,0,0,0.04);">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if(count($datas) > 0)
-                                @foreach ($datas as $key => $row)
-                                    <tr>
-                                        <td class="text-center font-w600 text-muted" style="vertical-align: middle;">
-                                            {{ $datas->firstItem() + $key }}
-                                        </td>
-                                        <td style="vertical-align: middle;">
-                                            <span class="badge font-w700" style="font-size: 12px; letter-spacing: 0.5px; padding: 5px 10px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                                                {{$row->code}}
-                                            </span>
-                                        </td>
-                                        <td style="vertical-align: middle;">
-                                            <div class="d-flex align-items-center">
-                                                <div class="mr-2" style="width: 32px; height: 32px; border-radius: 8px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0;">
-                                                    <i class="fa-solid fa-heart-pulse"></i>
-                                                </div>
-                                                <strong style="font-size: 13.5px; color: #1e293b; font-weight: 700;">
-                                                    {{$row->name_id}}
-                                                </strong>
-                                            </div>
-                                        </td>
-                                        <td style="vertical-align: middle;">
-                                            <span style="color: #475569; font-size: 12.5px; font-style: italic;">
-                                                {{$row->name_en ?: '-'}}
-                                            </span>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: center; white-space: nowrap; position: sticky; right: 0; background: #fff; z-index: 1; box-shadow: -3px 0 8px rgba(0,0,0,0.04);">
-                                            <div class="btn-group" role="group" style="gap: 4px;">
-                                                <!-- Tombol Edit -->
-                                                <button type="button" data-toggle="modal" data-target="#editPoli{{$row->code}}" class="btn btn-xs font-w600" style="padding: 5px 9px; font-size: 11.5px; border-radius: 6px; background: #fef3c7; color: #d97706; border: 1px solid #fde68a;" title="Edit ICD-10">
-                                                    <i class="fa-solid fa-pencil mr-1"></i> Edit
-                                                </button>
-                                                <!-- Tombol Hapus -->
-                                                <a href="#" class="btn btn-xs font-w600 delete" r-link="{{Route('icd.delete',$row->code)}}"
-                                                   r-name="{{$row->name_id}}" r-id="{{$row->code}}" style="padding: 5px 8px; font-size: 11.5px; border-radius: 6px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;" title="Hapus ICD-10">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="5" class="text-center py-5 text-muted">
-                                        <div class="d-flex flex-column align-items-center justify-content-center">
-                                            <div class="mb-2" style="width: 50px; height: 50px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 22px;">
-                                                <i class="fa-solid fa-folder-open"></i>
-                                            </div>
-                                            <strong class="text-dark mb-1" style="font-size: 14px;">Tidak ada data ICD-10</strong>
-                                            <p class="mb-0 text-muted" style="font-size: 12.5px;">Coba ubah kata kunci pencarian untuk melihat data lainnya.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Pagination Section -->
-                <div class="d-flex justify-content-between align-items-center flex-wrap pt-3 mt-2" style="font-size: 12.5px;">
-                    <div class="text-muted mb-2 mb-md-0">
-                        Menampilkan <strong class="text-dark">{{ $datas->firstItem() ?? 0 }}</strong> - <strong class="text-dark">{{ $datas->firstItem() ? ($datas->firstItem() + count($datas) - 1) : 0 }}</strong> dari <strong class="text-dark">{{ $datas->total() }}</strong> diagnosis
+                <!-- Container Tabel dengan Loading Processing Overlay -->
+                <div id="tableDataContainer" style="position: relative; min-height: 250px;">
+                    <!-- Loading Processing Overlay -->
+                    <div id="tableLoadingOverlay" class="d-none" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.78); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); z-index: 20; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                        <div class="spinner-border text-primary" role="status" style="width: 2.5rem; height: 2.5rem; border-width: 3px;">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <span class="mt-2 text-primary font-w600" style="font-size: 13px; letter-spacing: 0.2px;">Memuat data ICD-10...</span>
                     </div>
-                    <div>
-                        {{ $datas->appends(request()->except('page'))->links() }}
+
+                    <!-- Table Partial Content -->
+                    <div id="tableContentWrapper">
+                        @include('icd.partial.table')
                     </div>
                 </div>
 
@@ -291,76 +238,135 @@
     </div>
 </div>
 
-<!-- ============================================================= -->
-<!-- MODAL PER ICD-10 (OUTSIDE TABLE FOR MODAL BACKDROP) -->
-<!-- ============================================================= -->
-@if(isset($datas) && count($datas) > 0)
-    @foreach ($datas as $row)
-        <!-- Modal Edit ICD -->
-        <div class="modal fade" id="editPoli{{$row->code}}" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content ot-modal-content">
-                    <div class="modal-header ot-modal-header d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <div class="ot-modal-icon mr-3">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </div>
-                            <div>
-                                <h5 class="modal-title ot-modal-title">Edit Data ICD-10</h5>
-                                <small class="ot-modal-subtitle">Perbarui rincian kode dan deskripsi diagnosis</small>
-                            </div>
-                        </div>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; color: #64748b; opacity: 0.8; transition: all 0.2s ease;">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body p-4 text-left" style="background: #ffffff;">
-                        <form action="{{Route('icd.update',$row->code)}}" method="POST">
-                            {{ csrf_field() }}
-                            
-                            <div class="form-group mb-3">
-                                <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                                    Kode ICD-10 <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" name="code" value="{{$row->code}}" required class="form-control ot-input-modern">
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                                    Nama Diagnosis (Bahasa Indonesia) <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" name="name_id" value="{{$row->name_id}}" required class="form-control ot-input-modern">
-                            </div>
-
-                            <div class="form-group mb-4">
-                                <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                                    Nama Diagnosis (Bahasa Inggris / Medis) <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" name="name_en" value="{{$row->name_en}}" required class="form-control ot-input-modern">
-                            </div>
-                            
-                            <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top" style="margin: 0 -24px -24px -24px; padding: 14px 24px !important; background: #f8fafc; border-top: 1px solid #e2e8f0;">
-                                <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="padding: 8px 18px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; background: #ffffff;">
-                                    Batal
-                                </button>
-                                <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 24px; font-size: 12.5px; border-radius: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);">
-                                    <i class="fa-solid fa-floppy-disk mr-1"></i> Update Data
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
-@endif
-
 @endsection
 
 @section('script')
 <script>
     $(document).ready(function () {
-        $(".delete").click(function(e) {
+        let currentAjax = null;
+        let searchDebounceTimer = null;
+
+        // Function to fetch ICD data via AJAX
+        function fetchIcdData(page = 1, updateUrl = true) {
+            let form = $('#filterForm');
+            let formData = form.serializeArray();
+            
+            // Check if page parameter is needed
+            let hasPage = false;
+            for (let i = 0; i < formData.length; i++) {
+                if (formData[i].name === 'page') {
+                    formData[i].value = page;
+                    hasPage = true;
+                    break;
+                }
+            }
+            if (!hasPage && page) {
+                formData.push({ name: 'page', value: page });
+            }
+
+            // Filter out default params for clean URL query
+            let cleanParams = $.param(formData.filter(item => item.value !== '' && !(item.name === 'per_page' && item.value === '10') && !(item.name === 'page' && item.value == '1')));
+            let targetUrl = "{{ Route('icd') }}" + (cleanParams ? '?' + cleanParams : '');
+
+            if (currentAjax) {
+                currentAjax.abort();
+            }
+
+            // Show loading overlay
+            $('#tableLoadingOverlay').removeClass('d-none').addClass('d-flex');
+
+            currentAjax = $.ajax({
+                url: "{{ Route('icd') }}",
+                type: 'GET',
+                data: formData,
+                dataType: 'json',
+                success: function (res) {
+                    $('#tableContentWrapper').html(res.html);
+                    
+                    // Update total count
+                    if (res.total !== undefined) {
+                        let formattedTotal = new Intl.NumberFormat('id-ID').format(res.total);
+                        $('#totalIcdCount').text(formattedTotal);
+                    }
+
+                    // Toggle Reset Button
+                    if (res.has_filters) {
+                        $('#resetButtonWrapper').fadeIn(150);
+                    } else {
+                        $('#resetButtonWrapper').fadeOut(150);
+                    }
+
+                    // Update browser URL
+                    if (updateUrl && window.history.pushState) {
+                        window.history.pushState({ path: targetUrl }, '', targetUrl);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    if (status !== 'abort') {
+                        console.error('AJAX Error:', error);
+                    }
+                },
+                complete: function () {
+                    $('#tableLoadingOverlay').addClass('d-none').removeClass('d-flex');
+                }
+            });
+        }
+
+        // 1. Debounce on search keyword input
+        $('#keywordInput').on('input', function () {
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(function () {
+                fetchIcdData(1);
+            }, 350);
+        });
+
+        // 2. Submit form on Enter or Search Button
+        $('#filterForm').on('submit', function (e) {
+            e.preventDefault();
+            clearTimeout(searchDebounceTimer);
+            fetchIcdData(1);
+        });
+
+        // 3. Trigger fetch on filter select changes
+        $('.filter-select').on('change', function () {
+            fetchIcdData(1);
+        });
+
+        // 4. Reset Filter Button click
+        $(document).on('click', '#btnResetFilter', function (e) {
+            e.preventDefault();
+            $('#filterForm select[name="per_page"]').val('10');
+            $('#keywordInput').val('');
+            fetchIcdData(1);
+        });
+
+        // 5. Intercept pagination link clicks
+        $(document).on('click', '#tableDataContainer .pagination a', function (e) {
+            e.preventDefault();
+            let href = $(this).attr('href');
+            if (href) {
+                let urlObj = new URL(href, window.location.origin);
+                let page = urlObj.searchParams.get('page') || 1;
+                fetchIcdData(page);
+
+                // Smooth scroll to top of table
+                $('html, body').animate({
+                    scrollTop: $('#tableDataContainer').offset().top - 100
+                }, 300);
+            }
+        });
+
+        // 6. Handle browser Back/Forward (popstate)
+        window.addEventListener('popstate', function () {
+            let params = new URLSearchParams(window.location.search);
+            $('#filterForm select[name="per_page"]').val(params.get('per_page') || '10');
+            $('#keywordInput').val(params.get('keyword') || '');
+            let page = params.get('page') || 1;
+            fetchIcdData(page, false);
+        });
+
+        // 7. Delete Button Confirmation (Event Delegation)
+        $(document).on('click', '.delete', function(e) {
             e.preventDefault();
             var id = $(this).attr('r-id');
             var name = $(this).attr('r-name');

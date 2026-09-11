@@ -405,10 +405,10 @@
                             <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
                         </div>
 
-                        <!-- Bars Container -->
-                        <div class="dz-scroll" id="containerTopTindakan" style="position: relative; z-index: 2; max-height: 235px; overflow-y: auto; padding-right: 2px;">
+                        <!-- Bars Container (Non-scrollable) -->
+                        <div id="containerTopTindakan" style="position: relative; z-index: 2; overflow: hidden; padding-right: 2px;">
                             @forelse($topTindakan['items'] as $index => $tdk)
-                                <div class="mb-3" style="position: relative;">
+                                <div class="mb-2.5" style="position: relative;">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <span class="font-w600 text-dark text-truncate mr-2" style="font-size: 13px;" title="{{ $tdk['nama'] }}">
                                             {{ $tdk['nama'] }}
@@ -418,7 +418,7 @@
                                             {{ $tdk['total'] }} Kali <span class="text-muted">({{ $tdk['bar_persen'] }}%)</span>
                                         </div>
                                     </div>
-                                    <div style="height: 16px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 14px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">
                                         <div style="width: {{ $tdk['bar_persen'] }}%; height: 100%; background: linear-gradient(90deg, #1e40af 0%, #2563eb 55%, #38bdf8 100%); border-radius: 4px; transition: width 0.6s ease; border: 1px solid #1d4ed8;" title="{{ $tdk['nama'] }}: {{ $tdk['total'] }} Kali"></div>
                                     </div>
                                 </div>
@@ -526,10 +526,10 @@
                             <div style="border-left: 1px dashed #e2e8f0; height: 100%;"></div>
                         </div>
 
-                        <!-- Bars Container -->
-                        <div class="dz-scroll" id="containerTopDiagnosa" style="position: relative; z-index: 2; max-height: 235px; overflow-y: auto; padding-right: 2px;">
+                        <!-- Bars Container (Non-scrollable) -->
+                        <div id="containerTopDiagnosa" style="position: relative; z-index: 2; overflow: hidden; padding-right: 2px;">
                             @forelse($topDiagnosa['items'] as $index => $dg)
-                                <div class="mb-3" style="position: relative;">
+                                <div class="mb-2.5" style="position: relative;">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <div class="d-flex align-items-center text-truncate mr-2" style="max-width: 75%;">
                                             <span class="badge badge-info light font-w700 mr-1.5 flex-shrink-0" style="font-size: 10.5px; padding: 2px 6px; background: #e0f2fe; color: #0284c7; border-radius: 4px;">
@@ -544,7 +544,7 @@
                                             {{ $dg['total'] }} Kasus <span class="text-muted">({{ $dg['bar_persen'] }}%)</span>
                                         </div>
                                     </div>
-                                    <div style="height: 16px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 14px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">
                                         <div style="width: {{ $dg['bar_persen'] }}%; height: 100%; background: linear-gradient(90deg, #1e40af 0%, #2563eb 55%, #38bdf8 100%); border-radius: 4px; transition: width 0.6s ease; border: 1px solid #1d4ed8;" title="{{ $dg['code'] }} - {{ $dg['nama'] }}: {{ $dg['total'] }} Kasus"></div>
                                     </div>
                                 </div>
@@ -1780,7 +1780,7 @@ $(document).ready(function() {
         var html = '';
         data.items.forEach(function(tdk, index) {
             var safeNama = $('<div>').text(tdk.nama).html();
-            html += '<div class="mb-3" style="position: relative;">' +
+            html += '<div class="mb-2.5" style="position: relative;">' +
                 '<div class="d-flex justify-content-between align-items-center mb-1">' +
                     '<span class="font-w600 text-dark text-truncate mr-2" style="font-size: 13px;" title="' + safeNama + '">' +
                         safeNama +
@@ -1790,7 +1790,7 @@ $(document).ready(function() {
                         tdk.total + ' Kali <span class="text-muted">(' + (tdk.bar_persen || 0) + '%)</span>' +
                     '</div>' +
                 '</div>' +
-                '<div style="height: 16px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">' +
+                '<div style="height: 14px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">' +
                     '<div style="width: ' + tdk.bar_persen + '%; height: 100%; background: linear-gradient(90deg, #1e40af 0%, #2563eb 55%, #38bdf8 100%); border-radius: 4px; transition: width 0.6s ease; border: 1px solid #1d4ed8;" title="' + safeNama + ': ' + tdk.total + ' Kali"></div>' +
                 '</div>' +
             '</div>';
@@ -1867,7 +1867,7 @@ $(document).ready(function() {
         data.items.forEach(function(dg, index) {
             var safeCode = $('<div>').text(dg.code).html();
             var safeNama = $('<div>').text(dg.nama).html();
-            html += '<div class="mb-3" style="position: relative;">' +
+            html += '<div class="mb-2.5" style="position: relative;">' +
                 '<div class="d-flex justify-content-between align-items-center mb-1">' +
                     '<div class="d-flex align-items-center text-truncate mr-2" style="max-width: 75%;">' +
                         '<span class="badge badge-info light font-w700 mr-1.5 flex-shrink-0" style="font-size: 10.5px; padding: 2px 6px; background: #e0f2fe; color: #0284c7; border-radius: 4px;">' +
@@ -1882,7 +1882,7 @@ $(document).ready(function() {
                         dg.total + ' Kasus <span class="text-muted">(' + (dg.bar_persen || 0) + '%)</span>' +
                     '</div>' +
                 '</div>' +
-                '<div style="height: 16px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">' +
+                '<div style="height: 14px; background: rgba(241, 245, 249, 0.6); border-radius: 4px; overflow: hidden;">' +
                     '<div style="width: ' + dg.bar_persen + '%; height: 100%; background: linear-gradient(90deg, #1e40af 0%, #2563eb 55%, #38bdf8 100%); border-radius: 4px; transition: width 0.6s ease; border: 1px solid #1d4ed8;" title="' + safeCode + ' - ' + safeNama + ': ' + dg.total + ' Kasus"></div>' +
                 '</div>' +
             '</div>';

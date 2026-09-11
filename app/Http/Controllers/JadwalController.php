@@ -17,9 +17,9 @@ class JadwalController extends Controller
 
         $selectedUpt = session('selected_upt');
         $tanggal = $request->get('tanggal', date('Y-m-d'));
-        $uptFilter = $request->get('upt', $selectedUpt);
-        $layananFilter = $request->get('layanan');
-        $dokterFilter = $request->get('dokter_id');
+        $uptFilter = $request->get('upt', $selectedUpt ?: 'all');
+        $layananFilter = $request->get('layanan', 'all');
+        $dokterFilter = $request->get('dokter_id', 'all');
 
         // Master Slots Sesi Terapi Omah Terapiku
         $masterSlots = [
@@ -100,10 +100,33 @@ class JadwalController extends Controller
             $rabuDates[] = $currentRabu->copy()->addWeeks($i);
         }
 
+        $formattedDate = Carbon::parse($tanggal)->translatedFormat('l, d F Y');
+        $hasFilters = ($tanggal != date('Y-m-d') || ($uptFilter && $uptFilter !== 'all') || ($layananFilter && $layananFilter !== 'all') || ($dokterFilter && $dokterFilter !== 'all'));
+
+        $inputSesiParams = array_filter([
+            'tanggal' => $tanggal,
+            'upt' => ($uptFilter != 'all' && $uptFilter) ? $uptFilter : null,
+            'layanan' => ($layananFilter != 'all' && $layananFilter) ? $layananFilter : null,
+            'dokter_id' => ($dokterFilter != 'all' && $dokterFilter) ? $dokterFilter : null
+        ]);
+        $inputSesiUrl = route('rekam.add', $inputSesiParams);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('jadwal.partial.timeline', compact('jadwals', 'jadwalPerSlot', 'masterSlots', 'stats', 'tanggal', 'uptFilter', 'layananFilter', 'dokterFilter'))->render(),
+                'stats' => $stats,
+                'total' => $stats['total'],
+                'formatted_date' => $formattedDate,
+                'tanggal' => $tanggal,
+                'has_filters' => $hasFilters,
+                'input_sesi_url' => $inputSesiUrl,
+            ]);
+        }
+
         return view('jadwal.index', compact(
             'jadwals', 'jadwalPerSlot', 'masterSlots', 'stats',
             'tanggal', 'uptFilter', 'layananFilter', 'dokterFilter',
-            'polis', 'dokters', 'rabuDates'
+            'polis', 'dokters', 'rabuDates', 'formattedDate', 'hasFilters', 'inputSesiUrl'
         ));
     }
 

@@ -95,6 +95,28 @@ class RekamController extends Controller
         }
 
         $rekams = $rekams->paginate($perPage);
+
+        if ($request->ajax()) {
+            $hasFilters = ($request->filled('keyword') || $request->filled('status') || $request->filled('tab') || $request->filled('layanan') || ($request->filled('upt') && $request->upt !== 'all') || ($request->filled('per_page') && $request->per_page != '10'));
+
+            $exportParams = [
+                'keyword' => $request->keyword,
+                'status' => $request->status ?? $request->tab,
+                'layanan' => $request->layanan,
+                'upt' => $request->filled('upt') ? $request->upt : session('selected_upt', 'all'),
+                'per_page' => $request->per_page,
+            ];
+
+            return response()->json([
+                'html' => view('rekam.partial.table', compact('rekams', 'activeUpts', 'selectedUpt'))->render(),
+                'total' => $rekams->total(),
+                'first_item' => $rekams->firstItem() ?: 0,
+                'last_item' => $rekams->lastItem() ?: 0,
+                'has_filters' => $hasFilters,
+                'export_url' => route('rekam.export-csv', array_filter($exportParams, fn($v) => !is_null($v) && $v !== '')),
+            ]);
+        }
+
         return view('rekam.index', compact('rekams', 'activeUpts', 'selectedUpt'));
     }
 
@@ -512,7 +534,7 @@ class RekamController extends Controller
         $rekam = Rekam::with(['pasien', 'dokter', 'assessment'])->findOrFail($id);
         $pasien = $rekam->pasien;
         $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
-        $assessment = $rekam->assessment;
+        $assessment = $rekam->assessment ?? \App\Models\RekamAssessment::where('pasien_id', $rekam->pasien_id)->latest()->first();
         return view('rekam.print-soap', compact('rekam', 'pasien', 'upt', 'assessment'));
     }
 

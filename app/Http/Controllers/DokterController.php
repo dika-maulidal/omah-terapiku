@@ -14,6 +14,16 @@ class DokterController extends Controller
 {
     public function index(Request $request)
     {
+        $perPageInput = $request->input('per_page', 10);
+        if ($perPageInput === 'all') {
+            $perPage = 1000;
+        } else {
+            $perPage = (int) $perPageInput;
+            if ($perPage <= 0) {
+                $perPage = 10;
+            }
+        }
+
         $query = Dokter::with('user');
 
         if ($request->filled('keyword')) {
@@ -22,8 +32,10 @@ class DokterController extends Controller
                 $q->where('nama', 'like', "%{$keyword}%")
                   ->orWhere('no_hp', 'like', "%{$keyword}%")
                   ->orWhere('poli', 'like', "%{$keyword}%")
+                  ->orWhere('alamat', 'like', "%{$keyword}%")
                   ->orWhereHas('user', function ($u) use ($keyword) {
-                      $u->where('nip', 'like', "%{$keyword}%");
+                      $u->where('nip', 'like', "%{$keyword}%")
+                        ->orWhere('name', 'like', "%{$keyword}%");
                   });
             });
         }
@@ -36,8 +48,21 @@ class DokterController extends Controller
             $query->where('status', $request->status);
         }
 
-        $datas = $query->orderBy('id', 'desc')->paginate(10);
+        $datas = $query->orderBy('id', 'desc')->paginate($perPage);
         $poli = Poli::all();
+
+        if ($request->ajax()) {
+            $hasFilters = ($request->filled('keyword') || $request->filled('poli') || ($request->filled('status') && $request->status !== '') || ($request->filled('per_page') && $request->per_page != '10'));
+
+            return response()->json([
+                'html' => view('terapis.partial.table', compact('datas', 'poli'))->render(),
+                'total' => $datas->total(),
+                'first_item' => $datas->firstItem() ?: 0,
+                'last_item' => $datas->lastItem() ?: 0,
+                'has_filters' => $hasFilters,
+            ]);
+        }
+
         return view('terapis.index', compact('datas', 'poli'));
     }
 

@@ -25,7 +25,17 @@ class TindakanController extends Controller
             $query->where('poli', $request->poli);
         }
 
-        $datas = $query->paginate(10);
+        $perPageInput = $request->input('per_page', 10);
+        if ($perPageInput === 'all') {
+            $perPage = 1000;
+        } else {
+            $perPage = (int) $perPageInput;
+            if ($perPage <= 0) {
+                $perPage = 10;
+            }
+        }
+
+        $datas = $query->paginate($perPage);
 
         $layananList = [
             'Fisioterapi',
@@ -34,6 +44,18 @@ class TindakanController extends Controller
             'Terapi Netra (Orientasi & Mobilitas)',
             'Umum / Semua Layanan'
         ];
+
+        if ($request->ajax()) {
+            $hasFilters = ($request->filled('keyword') || $request->filled('poli') || ($request->filled('per_page') && $request->per_page != '10'));
+
+            return response()->json([
+                'html' => view('tindakan.partial.table', compact('datas', 'poli', 'layananList'))->render(),
+                'total' => $datas->total(),
+                'first_item' => $datas->firstItem() ?: 0,
+                'last_item' => $datas->lastItem() ?: 0,
+                'has_filters' => $hasFilters,
+            ]);
+        }
 
         return view('tindakan.index', compact('datas', 'poli', 'layananList'));
     }

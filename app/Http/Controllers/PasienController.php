@@ -141,6 +141,19 @@ class PasienController extends Controller
 
         $datas = $datas->orderBy('id', 'desc')->paginate($perPage);
 
+        if ($request->ajax()) {
+            $hasFilters = ($request->filled('keyword') || $request->filled('status') || $request->filled('desil') || $request->filled('jk') || $request->filled('disabilitas') || ($request->filled('per_page') && $request->per_page != '10'));
+
+            return response()->json([
+                'html' => view('pasien.partial.table', compact('datas'))->render(),
+                'total' => $datas->total(),
+                'first_item' => $datas->firstItem() ?: 0,
+                'last_item' => $datas->lastItem() ?: 0,
+                'has_filters' => $hasFilters,
+                'export_url' => route('penerima-manfaat.export-csv', $request->all()),
+            ]);
+        }
+
         return view('pasien.index', compact('datas'));
     }
 

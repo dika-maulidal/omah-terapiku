@@ -10,6 +10,16 @@ class PoliController extends Controller
 {
     public function index(Request $request)
     {
+        $perPageInput = $request->input('per_page', 10);
+        if ($perPageInput === 'all') {
+            $perPage = 1000;
+        } else {
+            $perPage = (int) $perPageInput;
+            if ($perPage <= 0) {
+                $perPage = 10;
+            }
+        }
+
         $datas = Poli::with('terapis')
                 ->when($request->filled('status'), function ($query) use ($request) {
                     $query->where('status', $request->status);
@@ -26,9 +36,21 @@ class PoliController extends Controller
                           ->orWhere('fokus_layanan', 'LIKE', "%{$keyword}%");
                     });
                 })
-                ->paginate(10);
+                ->paginate($perPage);
 
         $allTerapis = Dokter::where('status', 1)->orderBy('nama', 'asc')->get();
+
+        if ($request->ajax()) {
+            $hasFilters = ($request->filled('keyword') || $request->filled('status') || $request->filled('fokus') || ($request->filled('per_page') && $request->per_page != '10'));
+
+            return response()->json([
+                'html' => view('omahterapiku.partial.table', compact('datas', 'allTerapis'))->render(),
+                'total' => $datas->total(),
+                'first_item' => $datas->firstItem() ?: 0,
+                'last_item' => $datas->lastItem() ?: 0,
+                'has_filters' => $hasFilters,
+            ]);
+        }
 
         return view('omahterapiku.index', compact('datas', 'allTerapis'));
     }
