@@ -175,7 +175,7 @@
     <!-- Main Report Data Container with Loading Overlay -->
     <div id="reportDataContainer" style="position: relative; min-height: 400px;">
         <!-- Loading Overlay -->
-        <div id="reportLoadingOverlay" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.85); z-index: 999; backdrop-filter: blur(2px); border-radius: 12px; align-items: center; justify-content: center; flex-direction: column;">
+        <div id="reportLoadingOverlay" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.9); z-index: 999; border-radius: 12px; align-items: center; justify-content: center; flex-direction: column;">
             <div class="spinner-border text-primary mb-2" role="status" style="width: 2.5rem; height: 2.5rem;">
                 <span class="sr-only">Memuat...</span>
             </div>

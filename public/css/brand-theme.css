@@ -77,18 +77,13 @@ small, .small, .caption, .text-muted {
 }
 
 /* ==========================================================================
-   SUBTLE BACKGROUND MOTIF & AMBIENT TEXTURE
+   CLEAN & HIGH-PERFORMANCE LIGHT BACKGROUND
    ========================================================================== */
 body, 
 #main-wrapper, 
 .content-body {
-    background-color: #F1F5F9 !important;
-    background-image: 
-        radial-gradient(circle at 95% 5%, rgba(56, 165, 219, 0.04) 0%, transparent 45%),
-        radial-gradient(circle at 5% 90%, rgba(45, 75, 122, 0.035) 0%, transparent 45%),
-        url("data:image/svg+xml,%3Csvg width='52' height='52' viewBox='0 0 52 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232D4B7A' fill-opacity='0.025' fill-rule='evenodd'%3E%3Cpath d='M25 20h2v12h-2zm-5 5h12v2H20z'/%3E%3Ccircle cx='48' cy='48' r='1.2'/%3E%3Ccircle cx='4' cy='4' r='1.2'/%3E%3Ccircle cx='48' cy='4' r='1.2'/%3E%3Ccircle cx='4' cy='48' r='1.2'/%3E%3C/g%3E%3C/svg%3E") !important;
-    background-attachment: fixed !important;
-    background-repeat: repeat !important;
+    background-color: #f8fafc !important;
+    background-image: none !important;
 }
 
 /* Ensure Cards, Modals, & Headers Pop with Crisp Contrast */

@@ -321,7 +321,7 @@
                         <!-- Timeline Data Container with Loading Overlay -->
                         <div id="timelineDataContainer" style="position: relative; min-height: 280px;">
                             <!-- Loading Processing Overlay -->
-                            <div id="timelineLoadingOverlay" class="d-none" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.82); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); z-index: 20; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                            <div id="timelineLoadingOverlay" class="d-none" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.88); z-index: 20; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
                                 <div class="spinner-border text-primary" role="status" style="width: 2.5rem; height: 2.5rem; border-width: 3px;">
                                     <span class="sr-only">Loading...</span>
                                 </div>

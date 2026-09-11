@@ -12,13 +12,11 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(15, 23, 42, 0.45);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(15, 23, 42, 0.6);
     z-index: 1050;
     display: none;
     opacity: 0;
-    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.25s ease;
 }
 .ai-assistant-backdrop.show {
     display: block;
@@ -413,78 +411,151 @@
 }
 
 /* -------------------------------------------------------------------------
-   Footer & Input Area
+   Footer & Prompt Input Area (Modern Clean Card Style)
    ------------------------------------------------------------------------- */
 .ai-drawer-footer {
     padding: 12px 16px 14px 16px;
     background: #ffffff;
     border-top: 1px solid #E2E8F0;
-    box-shadow: 0 -4px 16px rgba(45, 75, 122, 0.04);
+    box-shadow: 0 -2px 12px rgba(15, 23, 42, 0.04);
 }
-.ai-input-wrap {
+
+.ai-prompt-card {
     display: flex;
-    align-items: flex-end;
-    gap: 8px;
-    background: #f8fafc;
+    flex-direction: column;
+    background: #ffffff;
     border: 1.5px solid #cbd5e1;
-    border-radius: 12px;
-    padding: 6px 8px 6px 12px;
-    transition: all 0.2s ease;
+    border-radius: 14px;
+    padding: 10px 12px 8px 12px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
-.ai-input-wrap:focus-within {
+
+.ai-prompt-card:focus-within {
     border-color: #2563eb;
-    box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.14);
+    box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.12), 0 2px 8px rgba(37, 99, 235, 0.06);
     background: #ffffff;
 }
-.ai-textarea {
-    flex: 1;
+
+.ai-prompt-textarea {
+    width: 100%;
     border: none;
     background: transparent;
     resize: none;
     outline: none;
     font-size: 13px;
-    font-family: inherit;
-    line-height: 1.4;
-    max-height: 110px;
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif !important;
+    line-height: 1.5;
+    min-height: 38px;
+    max-height: 120px;
     color: #1e293b;
-    padding: 5px 0;
+    padding: 0;
+    margin-bottom: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
 }
-.ai-textarea::placeholder {
+
+.ai-prompt-textarea::-webkit-scrollbar {
+    width: 4px;
+}
+
+.ai-prompt-textarea::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.ai-prompt-textarea::placeholder {
     color: #94a3b8;
     font-size: 12.5px;
 }
-.ai-btn-send {
+
+.ai-prompt-action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 4px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.ai-prompt-hints {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #94a3b8;
+    user-select: none;
+}
+
+.ai-key-hint,
+.ai-key-hint-sub {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.ai-key-hint kbd,
+.ai-key-hint-sub kbd {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 1px 4px;
+    font-size: 9.5px;
+    font-family: inherit;
+    font-weight: 600;
+    color: #475569;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.ai-btn-submit {
     background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
     color: #ffffff;
     border: none;
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.18s ease;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28);
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.28);
+    font-size: 12.5px;
 }
-.ai-btn-send:hover:not(:disabled) {
-    transform: scale(1.06);
+
+.ai-btn-submit:hover:not(:disabled) {
+    transform: scale(1.08);
     background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.38);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.38);
 }
-.ai-btn-send:disabled {
-    opacity: 0.5;
+
+.ai-btn-submit:disabled {
+    opacity: 0.45;
     cursor: not-allowed;
     transform: none;
 }
-.ai-disclaimer-text {
-    font-size: 10.5px;
+
+.ai-footer-disclaimer {
+    font-size: 11px;
     color: #64748b;
     text-align: center;
-    margin-top: 6px;
+    margin-top: 8px;
     margin-bottom: 0;
     line-height: 1.35;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+@media (max-width: 576px) {
+    .ai-prompt-hints .ai-key-hint-sub {
+        display: none !important;
+    }
+    .ai-drawer-footer {
+        padding: 10px 12px 12px 12px;
+    }
 }
 
 /* -------------------------------------------------------------------------
@@ -627,21 +698,27 @@
     <!-- Drawer Footer Input -->
     <div class="ai-drawer-footer">
         <form id="aiChatForm" onsubmit="handleSendAiMessage(event)">
-            <div class="ai-input-wrap">
+            <div class="ai-prompt-card">
                 <textarea 
                     id="aiPromptInput" 
-                    class="ai-textarea" 
+                    class="ai-prompt-textarea" 
                     rows="1" 
-                    placeholder="Ketik pertanyaan klinis / saran tindakan terapi... (Enter kirim)"
+                    placeholder="Tanyakan rekomendasi terapi, SOAP, atau kasus klinis..."
                     onkeydown="handleAiTextareaKey(event)"
                 ></textarea>
-                <button type="submit" class="ai-btn-send" id="btnSendAi" title="Kirim Pesan">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
+                <div class="ai-prompt-action-bar">
+                    <div class="ai-prompt-hints">
+                        <span class="ai-key-hint"><kbd>Enter</kbd> kirim</span>
+                        <span class="ai-key-hint-sub"><kbd>Shift+Enter</kbd> baris baru</span>
+                    </div>
+                    <button type="submit" class="ai-btn-submit" id="btnSendAi" title="Kirim Pertanyaan">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </button>
+                </div>
             </div>
-            <p class="ai-disclaimer-text">
-                <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Khusus referensi klinis & konsultasi terapi di Omah Terapi-KU Jawa Timur.
-            </p>
+            <div class="ai-footer-disclaimer">
+                <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Khusus referensi klinis &amp; konsultasi terapi di Omah Terapi-KU Jawa Timur.
+            </div>
         </form>
     </div>
 
@@ -898,7 +975,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (textarea) {
         textarea.addEventListener('input', function() {
             this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
         });
     }
 });
