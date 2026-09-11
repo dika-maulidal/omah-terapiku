@@ -5,10 +5,33 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Sistem Informasi Rekam Medis Omah Terapiku - Login</title>
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>Masuk / Login - Sistem Informasi Rekam Medis Omah Terapiku</title>
+    <meta name="title" content="Masuk / Login - Sistem Informasi Rekam Medis Omah Terapiku">
+    <meta name="description" content="Halaman Masuk Sistem Informasi Manajemen Pelayanan Rekam Medis dan Terapi Terpadu Omah Terapi-KU Dinas Sosial Provinsi Jawa Timur.">
+    <meta name="keywords" content="Login Omah Terapiku, Masuk Omah Terapiku, Rekam Medis Terapi, Dinas Sosial Jatim">
+    <meta name="author" content="Dinas Sosial Provinsi Jawa Timur - Omah Terapiku">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / WhatsApp / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:site_name" content="Omah Terapiku">
+    <meta property="og:title" content="Masuk / Login - Sistem Informasi Rekam Medis Omah Terapiku">
+    <meta property="og:description" content="Halaman Masuk Sistem Informasi Manajemen Pelayanan Rekam Medis dan Terapi Terpadu Omah Terapi-KU Dinas Sosial Provinsi Jawa Timur.">
+    <meta property="og:image" content="{{ asset('images/logo.png') }}">
+    <meta property="og:locale" content="id_ID">
+
+    <!-- Theme Color & Mobile -->
+    <meta name="theme-color" content="#1e40af">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/logo.png')}}">
+    <link rel="apple-touch-icon" href="{{asset('images/logo.png')}}">
     
     <!-- CSS Dependencies -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">

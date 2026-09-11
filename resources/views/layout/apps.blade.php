@@ -1,14 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Omah Terapiku</title>
+
+    <!-- SEO Primary Meta Tags -->
+    <title>@hasSection('title')@yield('title') | Omah Terapiku @else Omah Terapiku - Sistem Informasi Pelayanan Terapi Terpadu @endif</title>
+    <meta name="title" content="@hasSection('title')@yield('title') | Omah Terapiku @else Omah Terapiku - Sistem Informasi Pelayanan Terapi Terpadu @endif">
+    <meta name="description" content="@yield('meta_description', 'Sistem Informasi Manajemen Pelayanan Rekam Medis & Terapi Terpadu Omah Terapi-KU Dinas Sosial Provinsi Jawa Timur.')">
+    <meta name="keywords" content="Omah Terapiku, Terapi Anak, Rekam Medis Terapi, Fisioterapi, Terapi Okupasi, Terapi Wicara, Disabilitas, Dinas Sosial Jawa Timur">
+    <meta name="author" content="Dinas Sosial Provinsi Jawa Timur - Omah Terapiku">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:site_name" content="Omah Terapiku">
+    <meta property="og:title" content="@hasSection('title')@yield('title') | Omah Terapiku @else Omah Terapiku - Sistem Informasi Pelayanan Terapi Terpadu @endif">
+    <meta property="og:description" content="@yield('meta_description', 'Sistem Informasi Manajemen Pelayanan Rekam Medis & Terapi Terpadu Omah Terapi-KU Dinas Sosial Provinsi Jawa Timur.')">
+    <meta property="og:image" content="{{ asset('images/logo.png') }}">
+    <meta property="og:locale" content="id_ID">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="@hasSection('title')@yield('title') | Omah Terapiku @else Omah Terapiku - Sistem Informasi Pelayanan Terapi Terpadu @endif">
+    <meta name="twitter:description" content="@yield('meta_description', 'Sistem Informasi Manajemen Pelayanan Rekam Medis & Terapi Terpadu Omah Terapi-KU Dinas Sosial Provinsi Jawa Timur.')">
+    <meta name="twitter:image" content="{{ asset('images/logo.png') }}">
+
+    <!-- Mobile & PWA Theme Colors -->
+    <meta name="theme-color" content="#1e40af">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Omah Terapiku">
+
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/logo.png')}}">
+    <link rel="apple-touch-icon" href="{{asset('images/logo.png')}}">
+
+    <!-- Schema.org Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Omah Terapiku",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "All",
+        "description": "Sistem Informasi Manajemen Pelayanan Rekam Medis & Terapi Terpadu Omah Terapi-KU Dinas Sosial Provinsi Jawa Timur.",
+        "url": "{{ url('/') }}",
+        "logo": "{{ asset('images/logo.png') }}",
+        "inLanguage": "id-ID"
+    }
+    </script>
 	<link rel="stylesheet" href="{{asset('vendor/chartist/css/chartist.min.css')}}">
 	<!-- Datatable -->
     <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
@@ -30,18 +77,24 @@
     @yield('style')
     @yield('css')
     @stack('styles')
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body data-instant-allow-query-string>
 
+    {{-- =========================================================================
+         PRELOADER SPINNER (DI-NONAKTIFKAN UNTUK NAVIGASI CEPAT & RINGAN)
+         Jika sewaktu-waktu ingin diaktifkan kembali, cukup hapus kurung kurawal komentar ini:
     <div id="preloader">
         <div class="loader-spinner-wrapper">
             <div class="brand-spinner"></div>
             <p class="loader-text">Memuat...</p>
         </div>
     </div>
+    ========================================================================= --}}
     
-    <div id="main-wrapper">
+    <div id="main-wrapper" class="show">
 
      
         <div class="nav-header">
@@ -332,5 +385,7 @@
 	</script>
     @yield('script')
     @stack('scripts')
+    <!-- Instant.page: Hover Prefetching untuk Navigasi Instan Cepat -->
+    <script src="{{asset('js/instantpage.min.js')}}" type="module"></script>
 </body>
 </html>

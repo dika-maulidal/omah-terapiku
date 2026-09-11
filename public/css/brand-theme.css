@@ -1398,20 +1398,16 @@ body,
 }
 
 /* ==========================================================================
-   7. PRELOADER - MODERN SOFT BLUE SPINNER
+   7. PRELOADER & INSTANT PAGE TRANSITIONS
+   (Preloader disembunyikan agar halaman langsung tampil instan tanpa jeda.
+    Hapus baris "#preloader { display: none !important; }" jika ingin mengaktifkan lagi)
    ========================================================================== */
 #preloader {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background-color: #ffffff;
-    z-index: 999999;
+    display: none !important;
 }
 
-#preloader[style*="display: none"] {
-    display: none !important;
+#main-wrapper {
+    opacity: 1 !important;
 }
 
 .loader-spinner-wrapper {
