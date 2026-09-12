@@ -26,7 +26,7 @@
 
         $availableYears = $query->getAvailableYears();
         $activeUpts = $query->getActiveUptList();
-        $selectedUpt = session('selected_upt', 'all');
+        $selectedUpt = session('dashboard_upt', 'all');
         $allYearsPasienData = $query->getAllYearsPasienData();
         $statusAntrian = $query->getStatusAntrianData();
         $trenPelayananAll = $query->getTrenPelayananAll();
@@ -68,7 +68,7 @@
                 <div class="d-flex flex-wrap align-items-center" style="gap: 8px;">
                     <a href="{{ route('set.global.upt') }}?upt=all" 
                        class="btn btn-sm d-inline-flex align-items-center" 
-                       style="{{ (!session('selected_upt') || session('selected_upt') == 'all') 
+                       style="{{ (!session('dashboard_upt') || session('dashboard_upt') == 'all') 
                             ? 'background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; color: #ffffff !important; border: 1px solid #1d4ed8 !important; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28); font-weight: 700;' 
                             : 'background: #f8fafc !important; color: #475569 !important; border: 1px solid #e2e8f0 !important; font-weight: 600;' }} border-radius: 20px; padding: 6px 15px; font-size: 12.5px; transition: all 0.2s;">
                         <i class="fa-solid fa-layer-group" style="font-size: 12px; margin-right: 7px;"></i> Semua UPT
@@ -76,7 +76,7 @@
                     @foreach($activeUpts as $u)
                         <a href="{{ route('set.global.upt') }}?upt={{ urlencode($u->nama) }}" 
                            class="btn btn-sm d-inline-flex align-items-center" 
-                           style="{{ (session('selected_upt') == $u->nama) 
+                           style="{{ (session('dashboard_upt') == $u->nama) 
                                 ? 'background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; color: #ffffff !important; border: 1px solid #1d4ed8 !important; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28); font-weight: 700;' 
                                 : 'background: #f8fafc !important; color: #475569 !important; border: 1px solid #e2e8f0 !important; font-weight: 600;' }} border-radius: 20px; padding: 6px 15px; font-size: 12.5px; transition: all 0.2s;">
                             <i class="fa-solid fa-building-user" style="font-size: 12px; margin-right: 7px;"></i> {{ $u->nama }}
@@ -280,8 +280,12 @@
                     <div class="row align-items-center">
                         <!-- Sisi Kiri: Donut Chart -->
                         <div class="col-md-5 col-12 mb-3 mb-md-0">
-                            <div style="position: relative; height: 200px;">
+                            <div style="position: relative; height: 200px; display: flex; align-items: center; justify-content: center;">
                                 <canvas id="chartOmahTerapiku"></canvas>
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+                                    <span class="font-w700 d-block" style="font-size: 20px; line-height: 1.1; color: #1e40af;">{{ number_format($pasienOmah['total_pasien'] ?? array_sum($pasienOmah['counts'] ?? [])) }}</span>
+                                    <small class="text-muted font-w600" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px;">Total Pasien</small>
+                                </div>
                             </div>
                         </div>
                         <!-- Sisi Kanan: List Rincian Unit & Progress Bar -->
@@ -334,8 +338,12 @@
                 <div class="card-body p-3">
                     <div class="row align-items-center">
                         <div class="col-md-5 col-12 mb-3 mb-md-0">
-                            <div style="position: relative; height: 200px;">
+                            <div style="position: relative; height: 200px; display: flex; align-items: center; justify-content: center;">
                                 <canvas id="chartDistribusiTerapi"></canvas>
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+                                    <span class="font-w700 d-block" style="font-size: 20px; line-height: 1.1; color: #1e40af;">{{ number_format($distribusiTerapi['total'] ?? array_sum($distribusiTerapi['counts'] ?? [])) }}</span>
+                                    <small class="text-muted font-w600" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px;">Total Sesi</small>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-7 col-12">
@@ -745,8 +753,12 @@
                     </div>
                 </div>
                 <div class="card-body p-3 d-flex flex-column justify-content-between">
-                    <div style="position: relative; height: 170px;">
+                    <div style="position: relative; height: 170px; display: flex; align-items: center; justify-content: center;">
                         <canvas id="chartStatusAntrian"></canvas>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+                            <span class="font-w700 d-block" style="font-size: 19px; line-height: 1.1; color: #1e40af;">{{ number_format(array_sum($statusAntrian)) }}</span>
+                            <small class="text-muted font-w600" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px;">Total</small>
+                        </div>
                     </div>
                     <!-- Custom Interactive Legend with counts -->
                     <div class="mt-3 pt-2" style="border-top: 1px dashed #e2e8f0; font-size: 12px;">
@@ -1320,7 +1332,7 @@ $(document).ready(function() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutoutPercentage: 68,
+            cutoutPercentage: 70,
             legend: {
                 display: false
             },
@@ -1350,12 +1362,12 @@ $(document).ready(function() {
     var tren7HariData = allTrenData['7'];
 
     var gradientPeriksa = ctxTren.createLinearGradient(0, 0, 0, 240);
-    gradientPeriksa.addColorStop(0, 'rgba(30, 64, 175, 0.35)');
-    gradientPeriksa.addColorStop(1, 'rgba(30, 64, 175, 0.02)');
+    gradientPeriksa.addColorStop(0, 'rgba(30, 64, 175, 0.05)');
+    gradientPeriksa.addColorStop(1, 'rgba(30, 64, 175, 0.0)');
 
     var gradientPasien = ctxTren.createLinearGradient(0, 0, 0, 240);
-    gradientPasien.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
-    gradientPasien.addColorStop(1, 'rgba(56, 189, 248, 0.01)');
+    gradientPasien.addColorStop(0, 'rgba(56, 189, 248, 0.05)');
+    gradientPasien.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
 
     var chart7Hari = new Chart(ctxTren, {
         type: 'line',
@@ -1485,7 +1497,7 @@ $(document).ready(function() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutoutPercentage: 65,
+            cutoutPercentage: 70,
             legend: {
                 display: false
             },
@@ -1526,7 +1538,7 @@ $(document).ready(function() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutoutPercentage: 65,
+            cutoutPercentage: 70,
             legend: {
                 display: false
             },

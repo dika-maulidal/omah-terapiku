@@ -295,7 +295,7 @@
                             <div class="col-md-4 mb-3">
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">UPT Lokasi Domisili</label>
                                 <select name="upt_lokasi" class="form-control" style="height: 42px; font-size: 13px; border-radius: 8px;">
-                                    @php $currentUpt = old('upt_lokasi', session('selected_upt', 'UPT PPSAB Sidoarjo')); @endphp
+                                    @php $currentUpt = old('upt_lokasi', 'UPT PPSAB Sidoarjo'); @endphp
                                     @if(isset($polis) && count($polis) > 0)
                                         @foreach($polis as $p)
                                             <option value="{{ $p->nama }}" {{ $currentUpt == $p->nama ? 'selected' : '' }}>{{ $p->nama }}</option>

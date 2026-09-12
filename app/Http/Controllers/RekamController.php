@@ -23,12 +23,7 @@ class RekamController extends Controller
         $user = auth()->user();
         $role = $user->role_display();
 
-        if ($request->has('upt')) {
-            $selectedUpt = $request->upt;
-            session(['selected_upt' => $request->upt]);
-        } else {
-            $selectedUpt = session('selected_upt', 'all');
-        }
+        $selectedUpt = $request->get('upt', 'all');
 
         $activeUpts = Poli::where('status', 1)->orderBy('nama', 'asc')->get();
 
@@ -39,9 +34,8 @@ class RekamController extends Controller
                     })
                     ->when($selectedUpt && $selectedUpt !== 'all' && $selectedUpt !== '', function ($query) use ($selectedUpt) {
                         $query->where(function ($q) use ($selectedUpt) {
-                            $q->where('rekam.poli', 'LIKE', "%{$selectedUpt}%")
-                              ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$selectedUpt}%")
-                              ->orWhere('pasien.upt_lokasi', 'LIKE', "%{$selectedUpt}%");
+                            $q->where('rekam.upt_lokasi', 'LIKE', "%{$selectedUpt}%")
+                              ->orWhere('rekam.poli', 'LIKE', "%{$selectedUpt}%");
                         });
                     })
                     ->when($request->keyword, function ($query) use ($request) {
@@ -103,7 +97,7 @@ class RekamController extends Controller
                 'keyword' => $request->keyword,
                 'status' => $request->status ?? $request->tab,
                 'layanan' => $request->layanan,
-                'upt' => $request->filled('upt') ? $request->upt : session('selected_upt', 'all'),
+                'upt' => $request->get('upt', 'all'),
                 'per_page' => $request->per_page,
             ];
 
@@ -125,7 +119,7 @@ class RekamController extends Controller
         $user = auth()->user();
         $role = $user->role_display();
 
-        $selectedUpt = $request->filled('upt') ? $request->upt : session('selected_upt', 'all');
+        $selectedUpt = $request->get('upt', 'all');
 
         $rekams = Rekam::latest('rekam.created_at')
                     ->select('rekam.*')
@@ -134,9 +128,8 @@ class RekamController extends Controller
                     })
                     ->when($selectedUpt && $selectedUpt !== 'all' && $selectedUpt !== '', function ($query) use ($selectedUpt) {
                         $query->where(function ($q) use ($selectedUpt) {
-                            $q->where('rekam.poli', 'LIKE', "%{$selectedUpt}%")
-                              ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$selectedUpt}%")
-                              ->orWhere('pasien.upt_lokasi', 'LIKE', "%{$selectedUpt}%");
+                            $q->where('rekam.upt_lokasi', 'LIKE', "%{$selectedUpt}%")
+                              ->orWhere('rekam.poli', 'LIKE', "%{$selectedUpt}%");
                         });
                     })
                     ->when($request->keyword, function ($query) use ($request) {
@@ -388,7 +381,7 @@ class RekamController extends Controller
                                     ->withErrors(['pasien_id' => 'Pasien ini masih belum selesai periksa, harap selesaikan pemeriksaan sebelumnya']);
         }
 
-        $upt = $request->upt_lokasi ?: ($request->poli ?: (session('selected_upt') ?: null));
+        $upt = $request->upt_lokasi ?: ($request->poli ?: null);
 
         $request->merge([
             'no_rekam' => "REG#" . date('Ymd') . $request->pasien_id,
@@ -412,7 +405,7 @@ class RekamController extends Controller
         $pesanNotif = "Pasien baru " . $namaPasien . " ditugaskan ke Anda untuk " . $layanan . $sesi;
         $this->notifyTerapisPasien($rekam, $pesanNotif, 'penugasan_baru');
 
-        return redirect()->route('rekam.detail', $request->pasien_id)
+        return redirect()->route('rekam.detail', ['id' => $request->pasien_id, 'tab' => 'soap'])
                         ->with('sukses', 'Sesi Terapi Berhasil Didaftarkan. Notifikasi penugasan telah dikirimkan ke terapis.');
     }
 
@@ -439,7 +432,7 @@ class RekamController extends Controller
         $rekam = Rekam::findOrFail($id);
         $oldDokterId = $rekam->dokter_id;
         
-        $upt = $request->upt_lokasi ?: ($request->poli ?: (session('selected_upt') ?: null));
+        $upt = $request->upt_lokasi ?: ($request->poli ?: ($rekam->upt_lokasi ?: null));
 
         $request->merge([
             'cara_bayar' => 'Gratis',
@@ -459,7 +452,7 @@ class RekamController extends Controller
             $this->notifyTerapisPasien($rekam, $pesanNotif, 'update_penugasan');
         }
 
-        return redirect()->route('rekam.detail', $request->pasien_id)
+        return redirect()->route('rekam.detail', ['id' => $request->pasien_id, 'tab' => 'soap'])
                         ->with('sukses', 'Data Sesi Terapi Berhasil Diperbaharui.');
     }
 
@@ -478,13 +471,13 @@ class RekamController extends Controller
 
         if ($status == 3 && $rekam->poli != "Poli Gigi") {
             if ($rekam->pemeriksaan == null) {
-                return redirect()->route('rekam.detail', $rekam->pasien_id)
+                return redirect()->route('rekam.detail', ['id' => $rekam->pasien_id, 'tab' => 'soap'])
                                 ->with('gagal', 'Pemeriksaan Isi lebih dulu');
             }
         }
         if ($status == 3) {
             if ($rekam->tindakan == null) {
-                return redirect()->route('rekam.detail', $rekam->pasien_id)
+                return redirect()->route('rekam.detail', ['id' => $rekam->pasien_id, 'tab' => 'soap'])
                                 ->with('gagal', 'Tindakan dan Diagnosa Belum diisi');
             }
         }
@@ -507,7 +500,7 @@ class RekamController extends Controller
                 Notification::send($users, new RekamUpdateNotification($rekam, $message, 'selesai'));
                 foreach ($users as $item) {
                     try {
-                        $link = route('rekam.detail', $rekam->pasien_id);
+                        $link = route('rekam.detail', ['id' => $rekam->pasien_id, 'tab' => 'soap']);
                         event(new StatusRekamUpdate($item->id, $rekam->no_rekam, $message, $link, $waktu));
                     } catch (\Throwable $e) {
                         // ignore broadcast error
@@ -516,7 +509,7 @@ class RekamController extends Controller
             }
         }
 
-        return redirect()->route('rekam.detail', $rekam->pasien_id)
+        return redirect()->route('rekam.detail', ['id' => $rekam->pasien_id, 'tab' => 'soap'])
                         ->with('sukses', 'Status Rekam medis selesai diperbaharui');
     }
 

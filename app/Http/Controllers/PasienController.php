@@ -66,13 +66,9 @@ class PasienController extends Controller
     public function index(Request $request)
     {
         $datas = Pasien::whereNull('deleted_at')
-                ->when(session('selected_upt'), function ($query) {
-                    $upt = session('selected_upt');
-                    $query->where(function ($q) use ($upt) {
-                        $q->where('upt_lokasi', 'LIKE', "%{$upt}%")
-                          ->orWhereNull('upt_lokasi');
-                    });
-                })
+                ->withCount(['rekams as rekam_selesai_count' => function ($q) {
+                    $q->whereIn('status', [4, 5]);
+                }])
                 ->when($request->keyword, function ($query) use ($request) {
                     $query->where(function ($q) use ($request) {
                         $q->where('no_rm', 'LIKE', "%{$request->keyword}%")
@@ -89,19 +85,22 @@ class PasienController extends Controller
                 })
                 ->when($request->status, function ($query) use ($request) {
                     $status = $request->status;
-                    $lastData = Carbon::createFromFormat('Y-m-d H:i:s', '2023-05-22 18:00:00');
-                    if ($status === 'sudah_periksa') {
+                    if ($status === 'penerima_lama' || $status === 'pasien_lama') {
+                        $query->whereHas('rekams', function ($q) {
+                            $q->whereIn('status', [4, 5]);
+                        }, '>=', 2);
+                    } elseif ($status === 'penerima_baru' || $status === 'pasien_baru') {
+                        $query->whereHas('rekams', function ($q) {
+                            $q->whereIn('status', [4, 5]);
+                        }, '=', 1);
+                    } elseif ($status === 'belum_terapi') {
+                        $query->whereDoesntHave('rekams', function ($q) {
+                            $q->whereIn('status', [4, 5]);
+                        });
+                    } elseif ($status === 'sudah_periksa') {
                         $query->whereHas('rekams', function ($q) {
                             $q->whereIn('status', [4, 5]);
                         });
-                    } elseif ($status === 'pasien_baru') {
-                        $query->whereDoesntHave('rekams', function ($q) {
-                            $q->whereIn('status', [4, 5]);
-                        })->where('created_at', '>', $lastData);
-                    } elseif ($status === 'pasien_lama') {
-                        $query->whereDoesntHave('rekams', function ($q) {
-                            $q->whereIn('status', [4, 5]);
-                        })->where('created_at', '<=', $lastData);
                     }
                 })
                 ->when($request->desil, function ($query) use ($request) {
@@ -160,6 +159,9 @@ class PasienController extends Controller
     public function exportCsv(Request $request)
     {
         $datas = Pasien::whereNull('deleted_at')
+                ->withCount(['rekams as rekam_selesai_count' => function ($q) {
+                    $q->whereIn('status', [4, 5]);
+                }])
                 ->when($request->keyword, function ($query) use ($request) {
                     $query->where(function ($q) use ($request) {
                         $q->where('no_rm', 'LIKE', "%{$request->keyword}%")
@@ -176,19 +178,22 @@ class PasienController extends Controller
                 })
                 ->when($request->status, function ($query) use ($request) {
                     $status = $request->status;
-                    $lastData = Carbon::createFromFormat('Y-m-d H:i:s', '2023-05-22 18:00:00');
-                    if ($status === 'sudah_periksa') {
+                    if ($status === 'penerima_lama' || $status === 'pasien_lama') {
+                        $query->whereHas('rekams', function ($q) {
+                            $q->whereIn('status', [4, 5]);
+                        }, '>=', 2);
+                    } elseif ($status === 'penerima_baru' || $status === 'pasien_baru') {
+                        $query->whereHas('rekams', function ($q) {
+                            $q->whereIn('status', [4, 5]);
+                        }, '=', 1);
+                    } elseif ($status === 'belum_terapi') {
+                        $query->whereDoesntHave('rekams', function ($q) {
+                            $q->whereIn('status', [4, 5]);
+                        });
+                    } elseif ($status === 'sudah_periksa') {
                         $query->whereHas('rekams', function ($q) {
                             $q->whereIn('status', [4, 5]);
                         });
-                    } elseif ($status === 'pasien_baru') {
-                        $query->whereDoesntHave('rekams', function ($q) {
-                            $q->whereIn('status', [4, 5]);
-                        })->where('created_at', '>', $lastData);
-                    } elseif ($status === 'pasien_lama') {
-                        $query->whereDoesntHave('rekams', function ($q) {
-                            $q->whereIn('status', [4, 5]);
-                        })->where('created_at', '<=', $lastData);
                     }
                 })
                 ->when($request->desil, function ($query) use ($request) {
@@ -361,7 +366,7 @@ class PasienController extends Controller
             $alat = implode(', ', array_filter($alat));
         }
 
-        $upt = $request->upt_lokasi ?: (session('selected_upt') ?: null);
+        $upt = $request->upt_lokasi ?: null;
 
         $request->merge([
             'no_rm' => $no_rm,
@@ -429,7 +434,7 @@ class PasienController extends Controller
             $alat = implode(', ', array_filter($alat));
         }
 
-        $upt = $request->upt_lokasi ?: ($data->upt_lokasi ?: (session('selected_upt') ?: null));
+        $upt = $request->upt_lokasi ?: ($data->upt_lokasi ?: null);
 
         $request->merge([
             'cara_bayar' => 'Gratis',

@@ -15,9 +15,8 @@ class JadwalController extends Controller
         $user = auth()->user();
         $role = $user->role_display();
 
-        $selectedUpt = session('selected_upt');
         $tanggal = $request->get('tanggal', date('Y-m-d'));
-        $uptFilter = $request->get('upt', $selectedUpt ?: 'all');
+        $uptFilter = $request->get('upt', 'all');
         $layananFilter = $request->get('layanan', 'all');
         $dokterFilter = $request->get('dokter_id', 'all');
 
@@ -137,8 +136,7 @@ class JadwalController extends Controller
 
         $start = $request->get('start');
         $end = $request->get('end');
-        $selectedUpt = session('selected_upt');
-        $uptFilter = $request->get('upt', $selectedUpt);
+        $uptFilter = $request->get('upt', 'all');
         $layananFilter = $request->get('layanan');
         $dokterFilter = $request->get('dokter_id');
 

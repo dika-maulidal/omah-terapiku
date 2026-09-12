@@ -63,44 +63,40 @@ class Pasien extends Model
 
     public function statusPasien()
     {
-        $lastData = Carbon::createFromFormat('Y-m-d H:i:s', '2023-05-22 18:00:00');
+        $rekam = isset($this->rekam_selesai_count)
+            ? (int) $this->rekam_selesai_count
+            : $this->rekams()->whereIn('status', [4, 5])->count();
 
-        $rekam = Rekam::where('pasien_id', $this->id)
-                      ->whereIn('status', [4, 5])
-                      ->count();
-
-        if ($rekam > 0) {
-            return '<span class="badge badge-success light font-w600">
-                        <i class="fa-solid fa-circle-check mr-1"></i>
-                        Sudah Terapi
+        if ($rekam >= 2) {
+            return '<span class="badge badge-success light font-w600" title="' . $rekam . ' Sesi Terapi Selesai">
+                        <i class="fa-solid fa-user-check mr-1"></i>
+                        Penerima Lama
+                    </span>';
+        } elseif ($rekam === 1) {
+            return '<span class="badge badge-info light font-w600" title="1 Sesi Terapi Selesai">
+                        <i class="fa-solid fa-user-plus mr-1"></i>
+                        Penerima Baru
                     </span>';
         } else {
-            if ($this->created_at > $lastData) {
-                return '<span class="badge badge-info light font-w600">
-                            <i class="fa-solid fa-user-plus mr-1"></i>
-                            Penerima Baru
-                        </span>';
-            } else {
-                return '<span class="badge badge-secondary light font-w600">
-                            <i class="fa-solid fa-user mr-1"></i>
-                            Penerima Lama
-                        </span>';
-            }
+            return '<span class="badge badge-secondary light font-w600" title="Belum Memiliki Riwayat Terapi Selesai">
+                        <i class="fa-solid fa-clock mr-1"></i>
+                        Belum Terapi
+                    </span>';
         }
     }
 
     public function getStatusPasienTextAttribute()
     {
-        $lastData = Carbon::createFromFormat('Y-m-d H:i:s', '2023-05-22 18:00:00');
+        $rekam = isset($this->rekam_selesai_count)
+            ? (int) $this->rekam_selesai_count
+            : $this->rekams()->whereIn('status', [4, 5])->count();
 
-        $rekam = Rekam::where('pasien_id', $this->id)
-                      ->whereIn('status', [4, 5])
-                      ->count();
-
-        if ($rekam > 0) {
-            return 'Sudah Periksa';
+        if ($rekam >= 2) {
+            return 'Penerima Lama';
+        } elseif ($rekam === 1) {
+            return 'Penerima Baru';
         } else {
-            return ($this->created_at && $this->created_at > $lastData) ? 'Pasien Baru' : 'Pasien Lama';
+            return 'Belum Terapi';
         }
     }
 

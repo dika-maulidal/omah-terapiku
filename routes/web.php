@@ -12,6 +12,7 @@ use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\PoliController;
 use App\Http\Controllers\RekamAssessmentController;
 use App\Http\Controllers\RekamController;
+use App\Http\Controllers\PatientPortalController;
 use App\Http\Controllers\RekamPemeriksaanController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TindakanController;
@@ -24,6 +25,19 @@ Route::get('/', [AuthController::class, 'page_login'])->name('login');
 Route::post('/login', [AuthController::class, 'auth'])->name('login.auth');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Public Portal Pasien & Keluarga Routes
+Route::get('/portal', [PatientPortalController::class, 'index'])->name('portal.index');
+Route::post('/portal/login', [PatientPortalController::class, 'login'])->name('portal.login');
+Route::get('/portal/logout', [PatientPortalController::class, 'logout'])->name('portal.logout');
+Route::get('/portal/dashboard', [PatientPortalController::class, 'dashboard'])->name('portal.dashboard');
+Route::get('/portal/profil', [PatientPortalController::class, 'profil'])->name('portal.profil');
+Route::get('/portal/denver', [PatientPortalController::class, 'denver'])->name('portal.denver');
+Route::get('/portal/gmfm', [PatientPortalController::class, 'gmfm'])->name('portal.gmfm');
+Route::get('/portal/nyeri', [PatientPortalController::class, 'nyeri'])->name('portal.nyeri');
+Route::get('/portal/home-program', [PatientPortalController::class, 'homeProgram'])->name('portal.home-program');
+Route::get('/portal/riwayat', [PatientPortalController::class, 'riwayat'])->name('portal.riwayat');
+Route::get('/portal/dokumen', [PatientPortalController::class, 'dokumen'])->name('portal.dokumen');
+
 Route::get('test', function () {
     StatusRekamUpdate::dispatch("5", "REG002", "INI TEST AJA", "http://sss", "25 05 1993");
     return "Event has been sent!";
@@ -34,13 +48,13 @@ Route::get('/loaddata', [RekamPemeriksaanController::class, 'insertToTableNew'])
 // Authenticated Routes
 Route::group(['middleware' => 'auth'], function () {
 
-    // --- Global Shared Routes (Semua Role: Admin, Dokter, Pendaftaran) ---
+    // --- Dashboard UPT Filter Route (Hanya Berpengaruh ke Dashboard Utama) ---
     Route::get('/set-global-upt', function (\Illuminate\Http\Request $request) {
         $upt = $request->get('upt');
         if ($upt === 'all' || empty($upt)) {
-            session()->forget('selected_upt');
+            session()->forget('dashboard_upt');
         } else {
-            session(['selected_upt' => $upt]);
+            session(['dashboard_upt' => $upt]);
         }
         return redirect()->back();
     })->name('set.global.upt');

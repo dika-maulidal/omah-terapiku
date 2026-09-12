@@ -45,13 +45,13 @@
                     <div class="flex-grow-1 d-flex justify-content-xl-end">
                         <form id="filterForm" method="get" action="{{ url()->current() }}" class="d-flex align-items-center flex-wrap" style="gap: 6px; max-width: 100%;">
                             <!-- 1. Filter Status -->
-                            <div class="ot-filter-wrapper" style="width: 135px;">
+                            <div class="ot-filter-wrapper" style="width: 148px;">
                                 <i class="fa-solid fa-circle-check"></i>
                                 <select name="status" class="form-control form-control-sm ot-filter-select filter-select" title="Filter Status Pelayanan" style="width: 100%;">
                                     <option value="">Semua Status</option>
-                                    <option value="sudah_periksa" {{ request('status') == 'sudah_periksa' ? 'selected' : '' }}>Sudah Terapi</option>
-                                    <option value="pasien_baru" {{ request('status') == 'pasien_baru' ? 'selected' : '' }}>Penerima Baru</option>
-                                    <option value="pasien_lama" {{ request('status') == 'pasien_lama' ? 'selected' : '' }}>Penerima Lama</option>
+                                    <option value="penerima_lama" {{ (request('status') == 'penerima_lama' || request('status') == 'pasien_lama') ? 'selected' : '' }}>Penerima Lama (≥2 Sesi)</option>
+                                    <option value="penerima_baru" {{ (request('status') == 'penerima_baru' || request('status') == 'pasien_baru') ? 'selected' : '' }}>Penerima Baru (1 Sesi)</option>
+                                    <option value="belum_terapi" {{ request('status') == 'belum_terapi' ? 'selected' : '' }}>Belum Terapi (0 Sesi)</option>
                                 </select>
                             </div>
 

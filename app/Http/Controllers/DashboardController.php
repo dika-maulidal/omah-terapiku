@@ -11,9 +11,9 @@ class DashboardController extends Controller
         if ($request->has('upt')) {
             $upt = $request->get('upt');
             if ($upt === 'all' || empty($upt)) {
-                session()->forget('selected_upt');
+                session()->forget('dashboard_upt');
             } else {
-                session(['selected_upt' => $upt]);
+                session(['dashboard_upt' => $upt]);
             }
         }
 

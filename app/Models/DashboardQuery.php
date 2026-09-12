@@ -13,13 +13,13 @@ class DashboardQuery
 
     public function getSelectedUpt()
     {
-        return session('selected_upt', 'all');
+        return session('dashboard_upt', 'all');
     }
 
     protected function scopeUpt($query)
     {
-        if (session()->has('selected_upt') && session('selected_upt') != '' && session('selected_upt') != 'all') {
-            $upt = session('selected_upt');
+        if (session()->has('dashboard_upt') && session('dashboard_upt') != '' && session('dashboard_upt') != 'all') {
+            $upt = session('dashboard_upt');
             $query->where(function($q) use ($upt) {
                 $q->where('rekam.poli', 'LIKE', "%{$upt}%")
                   ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");
@@ -30,8 +30,8 @@ class DashboardQuery
 
     protected function scopeUptPasien($query)
     {
-        if (session()->has('selected_upt') && session('selected_upt') != '' && session('selected_upt') != 'all') {
-            $upt = session('selected_upt');
+        if (session()->has('dashboard_upt') && session('dashboard_upt') != '' && session('dashboard_upt') != 'all') {
+            $upt = session('dashboard_upt');
             $query->where('pasien.upt_lokasi', 'LIKE', "%{$upt}%");
         }
         return $query;
@@ -117,8 +117,8 @@ class DashboardQuery
     public function totalDoktor()
     {
         $query = Dokter::where('status', 1);
-        if (session()->has('selected_upt') && session('selected_upt') != '' && session('selected_upt') != 'all') {
-            $upt = session('selected_upt');
+        if (session()->has('dashboard_upt') && session('dashboard_upt') != '' && session('dashboard_upt') != 'all') {
+            $upt = session('dashboard_upt');
             $query->where('poli', 'LIKE', "%{$upt}%");
         }
         return $query->count();
@@ -189,8 +189,8 @@ class DashboardQuery
                 $q->where('rekam.dokter_id', $dokterId);
             });
 
-        if (session()->has('selected_upt') && session('selected_upt') != '' && session('selected_upt') != 'all') {
-            $upt = session('selected_upt');
+        if (session()->has('dashboard_upt') && session('dashboard_upt') != '' && session('dashboard_upt') != 'all') {
+            $upt = session('dashboard_upt');
             $query->where(function($q) use ($upt) {
                 $q->where('rekam.poli', 'LIKE', "%{$upt}%")
                   ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");
@@ -915,8 +915,8 @@ class DashboardQuery
             ->where('tindakan', '!=', '')
             ->where('tindakan', 'NOT LIKE', '%Belum ada catatan%');
 
-        if (session()->has('selected_upt') && session('selected_upt') != '' && session('selected_upt') != 'all') {
-            $upt = session('selected_upt');
+        if (session()->has('dashboard_upt') && session('dashboard_upt') != '' && session('dashboard_upt') != 'all') {
+            $upt = session('dashboard_upt');
             $query->where(function($q) use ($upt) {
                 $q->where('rekam.poli', 'LIKE', "%{$upt}%")
                   ->orWhere('rekam.upt_lokasi', 'LIKE', "%{$upt}%");

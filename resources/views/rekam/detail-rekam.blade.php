@@ -110,76 +110,80 @@
 
 <!-- Top Profile & Information Cards -->
 <div class="row">
-    <!-- Profil Utama Penerima Manfaat -->
+    <!-- Profil & Informasi Personal Penerima Manfaat -->
     <div class="col-xl-5 col-lg-5 col-md-12 mb-4">
         <div class="card" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
-            <div class="card-body p-4">
-                <div class="mb-3">
-                    <h4 class="font-w700 mb-0" style="font-size: 17px; color: #1e293b;">{{$pasien->nama}}</h4>
+            <div class="card-header pb-0 border-0 pt-4 px-4" style="background: transparent;">
+                <h5 class="font-w700 mb-0" style="font-size: 16px; color: var(--ot-navy) !important;">
+                    <i class="fa-solid fa-circle-user mr-2 text-primary"></i> Profil & Informasi Personal
+                </h5>
+            </div>
+            <div class="card-body pt-3 px-4 pb-4">
+                @php
+                    $b_day = $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir) : null;
+                    $now = \Carbon\Carbon::now();
+                    $usia = $b_day ? $b_day->diffInYears($now) . ' Tahun' : '-';
+                @endphp
+
+                <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                    <span class="text-muted"><i class="fa-solid fa-user mr-2 text-primary"></i>Nama Lengkap</span>
+                    <span class="font-w700" style="color: #1e293b; font-size: 13.5px;">{{ $pasien->nama }}</span>
                 </div>
 
-                <div class="pt-2" style="border-top: 1px solid #edf2f7;">
-                    @php
-                        $b_day = $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir) : null;
-                        $now = \Carbon\Carbon::now();
-                        $usia = $b_day ? $b_day->diffInYears($now) . ' Tahun' : '-';
-                    @endphp
-
-                    <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
-                        <span class="text-muted"><i class="fa-solid fa-circle-dot mr-2 text-primary"></i>Status</span>
-                        <div>
-                            @if ($rekamLatest)
-                                {!! $rekamLatest->status_display() !!}
-                            @else
-                                {!! $pasien->statusPasien() !!}
-                            @endif
-                        </div>
+                <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                    <span class="text-muted"><i class="fa-solid fa-circle-dot mr-2 text-primary"></i>Status</span>
+                    <div>
+                        @if ($rekamLatest)
+                            {!! $rekamLatest->status_display() !!}
+                        @else
+                            {!! $pasien->statusPasien() !!}
+                        @endif
                     </div>
+                </div>
 
-                    <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
-                        <span class="text-muted"><i class="fa-solid fa-id-card mr-2 text-primary"></i>No. Rekam Medis (RM)</span>
-                        <span class="font-w700" style="color: #1e293b; font-size: 13.5px;">{{ $pasien->no_rm }}</span>
-                    </div>
+                <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                    <span class="text-muted"><i class="fa-solid fa-id-card mr-2 text-primary"></i>No. Rekam Medis (RM)</span>
+                    <span class="font-w700" style="color: #2563eb; font-size: 13.5px;">{{ $pasien->no_rm }}</span>
+                </div>
 
-                    <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
-                        <span class="text-muted"><i class="fa-solid fa-address-card mr-2 text-primary"></i>NIK (Kependudukan)</span>
-                        <span class="font-w600" style="color: #334155;">{{ $pasien->nik ?: '-' }}</span>
-                    </div>
+                <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                    <span class="text-muted"><i class="fa-solid fa-address-card mr-2 text-primary"></i>NIK (Kependudukan)</span>
+                    <span class="font-w600" style="color: #334155;">{{ $pasien->nik ?: '-' }}</span>
+                </div>
 
-                    <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
-                        <span class="text-muted"><i class="fa-solid fa-calendar mr-2 text-primary"></i>TTL / Usia</span>
-                        <span class="font-w600 text-right" style="color: #334155;">
-                            {{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $pasien->tgl_lahir ?: '-' }} 
-                            <small class="text-muted font-w600">({{ $usia }})</small>
-                        </span>
-                    </div>
+                <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                    <span class="text-muted"><i class="fa-solid fa-calendar mr-2 text-primary"></i>TTL / Usia</span>
+                    <span class="font-w600 text-right" style="color: #334155;">
+                        {{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $pasien->tgl_lahir ?: '-' }} 
+                        <small class="text-muted font-w600">({{ $usia }})</small>
+                    </span>
+                </div>
 
-                    <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
-                        <span class="text-muted"><i class="fa-solid fa-venus-mars mr-2 text-primary"></i>Jenis Kelamin</span>
-                        <span class="font-w600" style="color: #334155;">{{ $pasien->jk ?: '-' }}</span>
-                    </div>
+                <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                    <span class="text-muted"><i class="fa-solid fa-venus-mars mr-2 text-primary"></i>Jenis Kelamin</span>
+                    <span class="font-w600" style="color: #334155;">{{ $pasien->jk ?: '-' }}</span>
+                </div>
 
-                    <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
-                        <span class="text-muted"><i class="fa-solid fa-heart mr-2 text-primary"></i>Status Menikah</span>
-                        <span class="font-w600" style="color: #334155;">{{ $pasien->status_menikah ?: '-' }}</span>
-                    </div>
+                <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                    <span class="text-muted"><i class="fa-solid fa-heart mr-2 text-primary"></i>Status Menikah</span>
+                    <span class="font-w600" style="color: #334155;">{{ $pasien->status_menikah ?: '-' }}</span>
+                </div>
 
-                    <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
-                        <span class="text-muted"><i class="fa-solid fa-graduation-cap mr-2 text-primary"></i>Pendidikan & Pekerjaan</span>
-                        <span class="font-w600 text-right" style="color: #334155;">
-                            {{ $pasien->pendidikan ?: '-' }} / {{ $pasien->pekerjaan ?: '-' }}
-                        </span>
-                    </div>
+                <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
+                    <span class="text-muted"><i class="fa-solid fa-graduation-cap mr-2 text-primary"></i>Pendidikan & Pekerjaan</span>
+                    <span class="font-w600 text-right" style="color: #334155;">
+                        {{ $pasien->pendidikan ?: '-' }} / {{ $pasien->pekerjaan ?: '-' }}
+                    </span>
+                </div>
 
-                    <div class="py-2" style="font-size: 13px;">
-                        <span class="text-muted d-block mb-1"><i class="fa-solid fa-location-dot mr-2 text-primary"></i>Alamat Domisili</span>
-                        <p class="font-w600 mb-0 pl-3" style="color: #334155; font-size: 12.5px; line-height: 1.5;">
-                            {{ $pasien->alamat_lengkap ?: '-' }}
-                            @if ($pasien->kelurahan || $pasien->kecamatan || $pasien->kabupaten)
-                                <br><small class="text-muted">{{ ($pasien->kelurahan ? 'Kel. ' . $pasien->kelurahan . ', ' : '') . ($pasien->kecamatan ? 'Kec. ' . $pasien->kecamatan . ', ' : '') . ($pasien->kabupaten ?: '') }}</small>
-                            @endif
-                        </p>
-                    </div>
+                <div class="py-2" style="font-size: 13px;">
+                    <span class="text-muted d-block mb-1"><i class="fa-solid fa-location-dot mr-2 text-primary"></i>Alamat Domisili</span>
+                    <p class="font-w600 mb-0 pl-3" style="color: #334155; font-size: 12.5px; line-height: 1.5;">
+                        {{ $pasien->alamat_lengkap ?: '-' }}
+                        @if ($pasien->kelurahan || $pasien->kecamatan || $pasien->kabupaten)
+                            <br><small class="text-muted">{{ ($pasien->kelurahan ? 'Kel. ' . $pasien->kelurahan . ', ' : '') . ($pasien->kecamatan ? 'Kec. ' . $pasien->kecamatan . ', ' : '') . ($pasien->kabupaten ?: '') }}</small>
+                        @endif
+                    </p>
                 </div>
             </div>
         </div>
@@ -416,7 +420,11 @@
     </div>
 </div>
 
-<!-- Bottom Section: Tab 1 (Asesmen) & Tab 2 (Log Sesi Terapi SOAP) -->
+@php
+    $isTabSoap = request('tab') == 'soap' || request('tab') == '2' || session('active_tab') == 'soap';
+@endphp
+
+<!-- Bottom Section: Tab 1 (Asesmen Baseline & Re-Evaluasi) & Tab 2 (Log Sesi Terapi SOAP) -->
 <div class="row">
     <div class="col-12">
         <div class="card" style="border-radius: 12px; border: none; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.06);">
@@ -425,12 +433,12 @@
             <div class="card-header border-bottom d-flex justify-content-between align-items-center flex-wrap" style="padding: 12px 24px 0 24px; gap: 12px; background: #ffffff;">
                 <ul class="nav ot-underline-tabs" id="pills-tab-rekam" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="tab-asesmen-link" data-toggle="tab" href="#tab-asesmen" role="tab" aria-controls="tab-asesmen" aria-selected="true">
+                        <a class="nav-link {{ !$isTabSoap ? 'active' : '' }}" id="tab-asesmen-link" data-toggle="tab" href="#tab-asesmen" role="tab" aria-controls="tab-asesmen" aria-selected="{{ !$isTabSoap ? 'true' : 'false' }}">
                             <i class="fa-solid fa-clipboard-list mr-2"></i> Asesmen Baseline & Re-Evaluasi
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="tab-soap-link" data-toggle="tab" href="#tab-soap" role="tab" aria-controls="tab-soap" aria-selected="false">
+                        <a class="nav-link {{ $isTabSoap ? 'active' : '' }}" id="tab-soap-link" data-toggle="tab" href="#tab-soap" role="tab" aria-controls="tab-soap" aria-selected="{{ $isTabSoap ? 'true' : 'false' }}">
                             <i class="fa-solid fa-stethoscope mr-2"></i> Log Sesi Terapi (SOAP Harian)
                         </a>
                     </li>
@@ -467,7 +475,7 @@
                     <!-- ========================================== -->
                     <!-- TAB 1: ASESMEN BASELINE & RE-EVALUASI -->
                     <!-- ========================================== -->
-                    <div class="tab-pane fade show active" id="tab-asesmen" role="tabpanel" aria-labelledby="tab-asesmen-link">
+                    <div class="tab-pane fade {{ !$isTabSoap ? 'show active' : '' }}" id="tab-asesmen" role="tabpanel" aria-labelledby="tab-asesmen-link">
                         
                         <!-- Ringkasan Klinis & Indikator Asesmen Terkini -->
                         <div class="p-3 mb-4 rounded" style="background: linear-gradient(135deg, #f0f7ff 0%, #edf3fc 100%); border: 1px solid #cce5ff;">
@@ -669,7 +677,7 @@
                     <!-- ========================================== -->
                     <!-- TAB 2: LOG SESI TERAPI (SOAP HARIAN) -->
                     <!-- ========================================== -->
-                    <div class="tab-pane fade" id="tab-soap" role="tabpanel" aria-labelledby="tab-soap-link">
+                    <div class="tab-pane fade {{ $isTabSoap ? 'show active' : '' }}" id="tab-soap" role="tabpanel" aria-labelledby="tab-soap-link">
                         
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap" style="gap: 10px;">
                             <h6 class="font-w700 text-dark mb-0" style="font-size: 14px;">
@@ -1306,15 +1314,16 @@
     $(document).ready(function() {
         function activateDetailTab(targetHash) {
             if (!targetHash) return;
-            if (targetHash === '#tab-soap' || targetHash === 'soap' || targetHash === 'tab-soap' || targetHash === '#tab-soap-link' || targetHash === '2') {
-                $('#tab-asesmen-link').removeClass('active').attr('aria-selected', 'false');
+            var isSoap = (targetHash === '#tab-soap' || targetHash === 'soap' || targetHash === 'tab-soap' || targetHash === '#tab-soap-link' || targetHash === '2');
+
+            $('.ot-underline-tabs .nav-link').removeClass('active').attr('aria-selected', 'false');
+            $('.tab-content .tab-pane').removeClass('show active');
+
+            if (isSoap) {
                 $('#tab-soap-link').addClass('active').attr('aria-selected', 'true');
-                $('#tab-asesmen').removeClass('show active');
                 $('#tab-soap').addClass('show active');
-            } else if (targetHash === '#tab-asesmen' || targetHash === 'asesmen' || targetHash === 'tab-asesmen' || targetHash === '#tab-asesmen-link' || targetHash === '1') {
-                $('#tab-soap-link').removeClass('active').attr('aria-selected', 'false');
+            } else {
                 $('#tab-asesmen-link').addClass('active').attr('aria-selected', 'true');
-                $('#tab-soap').removeClass('show active');
                 $('#tab-asesmen').addClass('show active');
             }
         }
@@ -1331,12 +1340,8 @@
             }
         });
 
-        // Activate tab on page load if hash or query param ?tab= exists
-        var urlParams = new URLSearchParams(window.location.search);
-        var tabParam = urlParams.get('tab');
-        if (tabParam) {
-            activateDetailTab(tabParam === '2' || tabParam === 'soap' ? '#tab-soap' : '#tab-asesmen');
-        } else if (window.location.hash) {
+        // Check hash on page load
+        if (window.location.hash) {
             activateDetailTab(window.location.hash);
         }
 

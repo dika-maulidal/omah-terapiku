@@ -199,7 +199,7 @@
                 </div>
             </div>
             <div>
-                <a href="{{Route('rekam')}}" class="btn btn-sm btn-light font-w600" style="border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; padding: 7px 14px;">
+                <a href="{{ isset($data->pasien_id) ? route('rekam.detail', $data->pasien_id) . '#tab-soap' : route('rekam') }}" class="btn btn-sm btn-light font-w600" style="border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; padding: 7px 14px;">
                     <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
                 </a>
             </div>
@@ -456,7 +456,7 @@
 
                         <!-- TOMBOL AKSI UPDATE -->
                         <div class="d-flex align-items-center justify-content-between pt-3 mt-4" style="border-top: 1px solid #edf2f7;">
-                            <a href="{{Route('rekam')}}" class="btn btn-sm btn-light font-w600" style="padding: 8px 18px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
+                            <a href="{{ isset($data->pasien_id) ? route('rekam.detail', $data->pasien_id) . '#tab-soap' : route('rekam') }}" class="btn btn-sm btn-light font-w600" style="padding: 8px 18px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">
                                 <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
                             </a>
                             <button type="submit" class="btn btn-sm btn-primary font-w700" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important; color: #ffffff !important; padding: 9px 24px; font-size: 13px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">

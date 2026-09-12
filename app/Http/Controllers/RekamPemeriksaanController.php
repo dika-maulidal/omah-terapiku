@@ -44,7 +44,7 @@ class RekamPemeriksaanController extends Controller
             );
         }
 
-        return redirect()->route('rekam.detail', $request->pasien_id)
+        return redirect()->route('rekam.detail', ['id' => $request->pasien_id, 'tab' => 'soap'])
                 ->with('sukses', 'Pemeriksaan (O) Berhasil diperbaharui');
     }
 
@@ -55,7 +55,7 @@ class RekamPemeriksaanController extends Controller
         $pasienId = $rekam->pasien_id;
         $rekam->delete();
 
-        return redirect()->route('rekam.detail', $pasienId)
+        return redirect()->route('rekam.detail', ['id' => $pasienId, 'tab' => 'soap'])
                 ->with('sukses', 'Diagnosa Berhasil dihapus');
     }
 
@@ -79,7 +79,7 @@ class RekamPemeriksaanController extends Controller
             ['diagnosa' => $request->diagnosa]
         );
 
-        return redirect()->route('rekam.detail', $request->pasien_id)
+        return redirect()->route('rekam.detail', ['id' => $request->pasien_id, 'tab' => 'soap'])
                 ->with('sukses', 'Assessment / Diagnosa Terapi Berhasil diperbaharui');
     }
 
@@ -113,7 +113,7 @@ class RekamPemeriksaanController extends Controller
             );
         }
 
-        return redirect()->route('rekam.detail', $request->pasien_id)
+        return redirect()->route('rekam.detail', ['id' => $request->pasien_id, 'tab' => 'soap'])
                 ->with('sukses', 'Plan & Tindakan (P) Berhasil diperbaharui');
     }
 

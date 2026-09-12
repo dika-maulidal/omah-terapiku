@@ -388,7 +388,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">Omah Terapi / Lokasi UPT <span class="text-danger">*</span></label>
                                 @php
-                                    $selectedPoli = old('poli', request('upt', request('poli', ($initPasien && $initPasien->upt_lokasi ? $initPasien->upt_lokasi : session('selected_upt')))));
+                                    $selectedPoli = old('poli', request('upt', request('poli', ($initPasien && $initPasien->upt_lokasi ? $initPasien->upt_lokasi : ''))));
                                 @endphp
                                 <select name="poli" id="poli" class="form-control" required style="height: 44px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">
                                     <option value="">--Pilih Omah Terapiku--</option>

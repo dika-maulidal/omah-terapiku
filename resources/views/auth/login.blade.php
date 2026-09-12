@@ -261,6 +261,15 @@
             </button>
         </form>
 
+        <!-- Tautan ke Portal Pasien & Keluarga -->
+        <div style="margin-top: 16px; padding-top: 14px; border-top: 1px dashed #e2e8f0;">
+            <a href="{{ route('portal.index') }}" style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; color: #1e40af; text-decoration: none; padding: 9px 12px; background: #eff6ff; border-radius: 8px; border: 1px solid #bfdbfe; transition: all 0.2s ease;">
+                <i class="fa-solid fa-hospital-user"></i>
+                <span>Masuk ke Portal Pasien & Keluarga</span>
+                <i class="fa-solid fa-arrow-right" style="font-size: 11px;"></i>
+            </a>
+        </div>
+
         <!-- Kendala Hubungi Admin (Teks Sederhana) -->
         <div class="help-admin-link">
             <span>Kendala saat login? Hubungi Admin</span>
