@@ -11,6 +11,13 @@
                 </a>
             </li>
 
+            <li class="{{ request()->routeIs('portal.booking*') ? 'mm-active' : '' }}">
+                <a href="{{ route('portal.booking') }}" class="ai-icon" aria-expanded="false">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    <span class="nav-text">Booking & Jadwal Terapi</span>
+                </a>
+            </li>
+
             <li class="{{ request()->routeIs('portal.profil') ? 'mm-active' : '' }}">
                 <a href="{{ route('portal.profil') }}" class="ai-icon" aria-expanded="false">
                     <i class="fa-solid fa-id-card-clip"></i>

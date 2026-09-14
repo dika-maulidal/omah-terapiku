@@ -61,6 +61,16 @@ class Pasien extends Model
         return $this->hasMany(RekamAssessment::class, 'pasien_id');
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(BookingSesi::class, 'pasien_id');
+    }
+
+    public function pendaftaran()
+    {
+        return $this->hasOne(PendaftaranPasien::class, 'pasien_id');
+    }
+
     public function statusPasien()
     {
         $rekam = isset($this->rekam_selesai_count)

@@ -545,9 +545,11 @@
         }
         badge.removeClass('d-none');
         if (['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4'].indexOf(val) !== -1) {
-            badge.html('<span class="badge badge-success font-w700 py-2 px-3 text-white" style="font-size: 12px; border-radius: 6px; display: inline-flex; align-items: center;"><i class="fa-solid fa-circle-check mr-1"></i> PRIORITAS PROGRAM (Desil 1-4)</span>');
+            badge.html('<div class="d-inline-flex align-items-center py-1.5 px-3" style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; font-size: 12px; font-weight: 700; color: #059669;"><i class="fa-solid fa-circle-check mr-2 text-success"></i> PRIORITAS PROGRAM (' + val + ' - Masuk Kuota Prioritas)</div>');
+        } else if (val === 'Non-Desil') {
+            badge.html('<div class="d-inline-flex align-items-center py-1.5 px-3" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 700; color: #475569;"><i class="fa-solid fa-circle-info mr-2 text-muted"></i> NON-DESIL / BELUM TERDATA (Layanan Terbuka)</div>');
         } else {
-            badge.html('<span class="badge badge-warning font-w700 py-2 px-3 text-dark" style="font-size: 12px; border-radius: 6px; display: inline-flex; align-items: center;"><i class="fa-solid fa-circle-info mr-1"></i> NON-PRIORITAS</span>');
+            badge.html('<div class="d-inline-flex align-items-center py-1.5 px-3" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; font-size: 12px; font-weight: 700; color: #d97706;"><i class="fa-solid fa-triangle-exclamation mr-2 text-warning"></i> NON-PRIORITAS (' + val + ' - Tidak Prioritas / Layanan Terbuka)</div>');
         }
     }
 
@@ -594,6 +596,10 @@
         savedKab: "{{ old('kabupaten') }}",
         savedKec: "{{ old('kecamatan') }}",
         savedKel: "{{ old('kelurahan') }}",
+        provincesData: [],
+        regenciesData: [],
+        districtsData: [],
+        villagesData: [],
 
         async init() {
             this.initSelect2();
@@ -604,6 +610,9 @@
         initSelect2() {
             $('.select2-wilayah').each(function() {
                 const $this = $(this);
+                if ($this.hasClass('select2-hidden-accessible')) {
+                    return;
+                }
                 $this.select2({
                     dropdownParent: $this.closest('.col-wilayah'),
                     width: '100%',
@@ -620,7 +629,13 @@
 
             // Ganti Provinsi -> Muat Kabupaten
             $('#select_provinsi').on('change', function() {
-                const provCode = $(this).find(':selected').data('code');
+                let provCode = $(this).find(':selected').data('code') || $(this).find('option:selected').attr('data-code');
+                if (!provCode && self.provincesData && self.provincesData.length > 0) {
+                    const provName = $(this).val();
+                    const found = self.provincesData.find(p => p.name === provName);
+                    if (found) provCode = found.code;
+                }
+
                 if (provCode) {
                     self.loadRegencies(provCode);
                 } else {
@@ -632,7 +647,13 @@
 
             // Ganti Kabupaten -> Muat Kecamatan
             $('#select_kabupaten').on('change', function() {
-                const regCode = $(this).find(':selected').data('code');
+                let regCode = $(this).find(':selected').data('code') || $(this).find('option:selected').attr('data-code');
+                if (!regCode && self.regenciesData && self.regenciesData.length > 0) {
+                    const regName = $(this).val();
+                    const found = self.regenciesData.find(r => r.name === regName);
+                    if (found) regCode = found.code;
+                }
+
                 if (regCode) {
                     self.loadDistricts(regCode);
                 } else {
@@ -643,7 +664,13 @@
 
             // Ganti Kecamatan -> Muat Kelurahan
             $('#select_kecamatan').on('change', function() {
-                const distCode = $(this).find(':selected').data('code');
+                let distCode = $(this).find(':selected').data('code') || $(this).find('option:selected').attr('data-code');
+                if (!distCode && self.districtsData && self.districtsData.length > 0) {
+                    const distName = $(this).val();
+                    const found = self.districtsData.find(d => d.name === distName);
+                    if (found) distCode = found.code;
+                }
+
                 if (distCode) {
                     self.loadVillages(distCode);
                 } else {
@@ -704,6 +731,7 @@
             this.showLoading('provinsi', true);
             try {
                 const provinces = await this.fetchJson('provinces', 'provinces.json');
+                this.provincesData = provinces;
 
                 let html = '<option value="" data-code="">-- Pilih Provinsi --</option>';
                 let defaultProvCode = '35'; // Default Jawa Timur
@@ -741,6 +769,7 @@
 
             try {
                 const regencies = await this.fetchJson(`regencies/${provCode}`, `regencies/${provCode}.json`);
+                this.regenciesData = regencies;
 
                 let html = '<option value="" data-code="">-- Pilih Kabupaten / Kota --</option>';
                 let matchedCode = '';
@@ -779,6 +808,7 @@
 
             try {
                 const districts = await this.fetchJson(`districts/${regCode}`, `districts/${regCode}.json`);
+                this.districtsData = districts;
 
                 let html = '<option value="" data-code="">-- Pilih Kecamatan --</option>';
                 let matchedCode = '';
@@ -816,6 +846,7 @@
 
             try {
                 const villages = await this.fetchJson(`villages/${distCode}`, `villages/${distCode}.json`);
+                this.villagesData = villages;
 
                 let html = '<option value="" data-code="">-- Pilih Kelurahan / Desa --</option>';
                 let matchedCode = '';

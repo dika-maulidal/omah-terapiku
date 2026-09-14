@@ -25,7 +25,7 @@ class AuthController extends Controller
         $password = $request->input('password');
 
         if (!$loginInput || !$password) {
-            return redirect('/')->with('gagal', 'Mohon masukkan Nama/Username dan password');
+            return redirect()->route('login')->with('gagal', 'Mohon masukkan Nama/Username dan password');
         }
 
         // Coba login berdasarkan name
@@ -43,13 +43,13 @@ class AuthController extends Controller
             return redirect('/dashboard')->with('sukses', 'Selamat, Anda berhasil masuk aplikasi');
         }
 
-        return redirect('/')->with('gagal', 'Mohon periksa Nama/Username dan password dengan benar')->withInput();
+        return redirect()->route('login')->with('gagal', 'Mohon periksa Nama/Username dan password dengan benar')->withInput();
     }
 
     public function logout()
     {
     	Auth::logout();
-    	return redirect('/');
+    	return redirect()->route('login')->with('sukses', 'Anda telah berhasil keluar dari sistem.');
     }
    
     public function password_baru($id)

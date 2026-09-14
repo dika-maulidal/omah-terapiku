@@ -166,6 +166,7 @@ class LaporanController extends Controller
             'Desil 3' => 0,
             'Desil 4' => 0,
             'Desil 5' => 0,
+            'Desil 6-10' => 0,
             'Non-Desil / Belum Terdata' => 0,
         ];
         
@@ -177,16 +178,18 @@ class LaporanController extends Controller
 
             foreach ($pasienDesil as $pd) {
                 $d = trim((string)$pd->desil);
-                if ($d === '1' || str_contains($d, '1')) {
+                if (preg_match('/^desil\s*1$/i', $d)) {
                     $desilBreakdown['Desil 1'] += $pd->total;
-                } elseif ($d === '2' || str_contains($d, '2')) {
+                } elseif (preg_match('/^desil\s*2$/i', $d)) {
                     $desilBreakdown['Desil 2'] += $pd->total;
-                } elseif ($d === '3' || str_contains($d, '3')) {
+                } elseif (preg_match('/^desil\s*3$/i', $d)) {
                     $desilBreakdown['Desil 3'] += $pd->total;
-                } elseif ($d === '4' || str_contains($d, '4')) {
+                } elseif (preg_match('/^desil\s*4$/i', $d)) {
                     $desilBreakdown['Desil 4'] += $pd->total;
-                } elseif ($d === '5' || str_contains($d, '5')) {
+                } elseif (preg_match('/^desil\s*5$/i', $d)) {
                     $desilBreakdown['Desil 5'] += $pd->total;
+                } elseif (preg_match('/^desil\s*(6|7|8|9|10)$/i', $d)) {
+                    $desilBreakdown['Desil 6-10'] += $pd->total;
                 } else {
                     $desilBreakdown['Non-Desil / Belum Terdata'] += $pd->total;
                 }

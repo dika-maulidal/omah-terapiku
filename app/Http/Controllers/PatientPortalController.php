@@ -40,7 +40,9 @@ class PatientPortalController extends Controller
             return redirect()->route('portal.dashboard');
         }
 
-        return view('portal.login');
+        $polis = Poli::where('status', 1)->get();
+
+        return view('portal.login', compact('polis'));
     }
 
     /**
@@ -103,12 +105,33 @@ class PatientPortalController extends Controller
 
         $latestAssessment = $pasien->assessments->first();
         $latestRekam = $pasien->rekams->first();
+        $latestBooking = $pasien->bookings()->latest()->first();
 
-        return view('portal.dashboard', compact('pasien', 'latestAssessment', 'latestRekam'));
+        return view('portal.dashboard', compact('pasien', 'latestAssessment', 'latestRekam', 'latestBooking'));
     }
 
     /**
-     * 2. Profil Penerima Manfaat
+     * 2. Booking & Tracking Jadwal Sesi Terapi
+     */
+    public function booking(Request $request)
+    {
+        $pasien = $this->getAuthenticatedPasien();
+        if (!$pasien) {
+            return redirect()->route('portal.index')->with('gagal', 'Sesi Anda telah berakhir.');
+        }
+
+        $bookings = $pasien->bookings()
+            ->with(['dokter', 'rekam', 'verifier'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $polis = Poli::where('status', 1)->orderBy('nama', 'asc')->get();
+
+        return view('portal.booking', compact('pasien', 'bookings', 'polis'));
+    }
+
+    /**
+     * 3. Profil Penerima Manfaat
      */
     public function profil()
     {

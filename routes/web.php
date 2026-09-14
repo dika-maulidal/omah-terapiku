@@ -19,17 +19,24 @@ use App\Http\Controllers\TindakanController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\AiAssistantController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PendaftaranOnlineController;
 
-// Public / Guest Routes
-Route::get('/', [AuthController::class, 'page_login'])->name('login');
+// Public Portal Pasien & Keluarga Routes (Main Landing / Root)
+Route::get('/', [PatientPortalController::class, 'index'])->name('portal.index');
+Route::get('/portal', function () {
+    return redirect()->route('portal.index');
+});
+
+// Staff / Backoffice Login Routes
+Route::get('/login', [AuthController::class, 'page_login'])->name('login');
 Route::post('/login', [AuthController::class, 'auth'])->name('login.auth');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Public Portal Pasien & Keluarga Routes
-Route::get('/portal', [PatientPortalController::class, 'index'])->name('portal.index');
+// Public Portal Pasien & Keluarga Protected Routes
 Route::post('/portal/login', [PatientPortalController::class, 'login'])->name('portal.login');
 Route::get('/portal/logout', [PatientPortalController::class, 'logout'])->name('portal.logout');
 Route::get('/portal/dashboard', [PatientPortalController::class, 'dashboard'])->name('portal.dashboard');
+Route::get('/portal/booking', [PatientPortalController::class, 'booking'])->name('portal.booking');
 Route::get('/portal/profil', [PatientPortalController::class, 'profil'])->name('portal.profil');
 Route::get('/portal/denver', [PatientPortalController::class, 'denver'])->name('portal.denver');
 Route::get('/portal/gmfm', [PatientPortalController::class, 'gmfm'])->name('portal.gmfm');
@@ -40,6 +47,13 @@ Route::get('/portal/dokumen', [PatientPortalController::class, 'dokumen'])->name
 Route::get('/portal/rekam/{id}/assessment/print', [PatientPortalController::class, 'printAssessment'])->name('portal.assessment.print');
 Route::get('/portal/rekam/{id}/soap/print', [PatientPortalController::class, 'printSoap'])->name('portal.soap.print');
 Route::get('/portal/rekam/{id}/home-program/print', [PatientPortalController::class, 'printHomeProgram'])->name('portal.home-program.print');
+
+// Public Registration & Booking Tracking
+Route::post('/portal/pendaftaran/store', [PendaftaranOnlineController::class, 'storePendaftaran'])->name('portal.pendaftaran.store');
+Route::get('/portal/pendaftaran/{kode}/cetak', [PendaftaranOnlineController::class, 'cetakBuktiPendaftaran'])->name('portal.pendaftaran.cetak');
+Route::get('/portal/booking/{kode}/cetak', [PendaftaranOnlineController::class, 'cetakBuktiBooking'])->name('portal.booking.cetak');
+Route::get('/portal/lacak-status', [PendaftaranOnlineController::class, 'lacakStatus'])->name('portal.lacak.status');
+Route::post('/portal/booking/store', [PendaftaranOnlineController::class, 'storeBookingSesi'])->name('portal.booking.store');
 
 Route::get('test', function () {
     StatusRekamUpdate::dispatch("5", "REG002", "INI TEST AJA", "http://sss", "25 05 1993");
@@ -98,7 +112,32 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penerima-manfaat/json', [PasienController::class, 'json'])->name('penerima-manfaat.json');
     Route::get('/penerima-manfaat/{id}/file', [PasienController::class, 'file'])->name('penerima-manfaat.file');
 
-    // --- Role: Admin & Pendaftaran (Front-Office Management) ---
+    // --- Role: Admin & Pendaftaran (Front-Office Management & Online Registration) ---
+    Route::group(['middleware' => 'role:Admin,Pendaftaran,Dokter'], function () {
+        Route::get('/pendaftaran-online/export-csv', [PendaftaranOnlineController::class, 'exportCsvPasienBaru'])->name('pendaftaran.export-csv');
+        Route::get('/pendaftaran-online', [PendaftaranOnlineController::class, 'indexPasienBaru'])->name('pendaftaran.index');
+        Route::get('/pendaftaran-online/{id}/show', [PendaftaranOnlineController::class, 'showPasienBaru'])->name('pendaftaran.show');
+        Route::post('/pendaftaran-online/{id}/approve', [PendaftaranOnlineController::class, 'approvePasienBaru'])->name('pendaftaran.approve');
+        Route::get('/pendaftaran-online/{id}/approve', function () {
+            return redirect()->route('pendaftaran.index')->with('info', 'Silakan gunakan tombol Setujui pada tabel pendaftaran online.');
+        });
+        Route::post('/pendaftaran-online/{id}/reject', [PendaftaranOnlineController::class, 'rejectPasienBaru'])->name('pendaftaran.reject');
+        Route::get('/pendaftaran-online/{id}/reject', function () {
+            return redirect()->route('pendaftaran.index');
+        });
+
+        Route::get('/booking-sesi/export-csv', [PendaftaranOnlineController::class, 'exportCsvBookingSesi'])->name('booking.export-csv');
+        Route::get('/booking-sesi', [PendaftaranOnlineController::class, 'indexBookingSesi'])->name('booking.index');
+        Route::post('/booking-sesi/{id}/approve', [PendaftaranOnlineController::class, 'approveBookingSesi'])->name('booking.approve');
+        Route::get('/booking-sesi/{id}/approve', function () {
+            return redirect()->route('booking.index')->with('info', 'Silakan gunakan tombol Setujui pada tabel booking sesi.');
+        });
+        Route::post('/booking-sesi/{id}/reject', [PendaftaranOnlineController::class, 'rejectBookingSesi'])->name('booking.reject');
+        Route::get('/booking-sesi/{id}/reject', function () {
+            return redirect()->route('booking.index');
+        });
+    });
+
     Route::group(['middleware' => 'role:Admin,Pendaftaran'], function () {
         Route::get('/penerima-manfaat/add', [PasienController::class, 'add'])->name('penerima-manfaat.add');
         Route::post('/penerima-manfaat/store', [PasienController::class, 'store'])->name('penerima-manfaat.store');

@@ -186,6 +186,35 @@
         </div>
     </div>
 
+    @if(isset($latestBooking))
+        <!-- Active Booking Tracking Notification Banner -->
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm" style="border: 1px solid #bfdbfe; background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%); border-radius: 12px; box-shadow: 0 4px 18px rgba(37, 99, 235, 0.06);">
+                <div class="card-body p-3 p-md-3.5 d-flex flex-wrap align-items-center justify-content-between" style="gap: 12px;">
+                    <div class="d-flex align-items-center" style="gap: 14px;">
+                        <div style="width: 42px; height: 42px; border-radius: 10px; background: #ffffff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 19px; border: 1px solid #bfdbfe; box-shadow: 0 2px 6px rgba(37,99,235,0.08);">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                                <h6 class="font-w700 mb-0" style="color: #1e40af; font-size: 14px;">Status Permohonan Sesi Terakhir:</h6>
+                                <strong class="font-monospace" style="color: #2563eb; font-size: 13.5px;">{{ $latestBooking->kode_booking }}</strong>
+                                {!! $latestBooking->status_badge !!}
+                            </div>
+                            <small class="text-muted" style="font-size: 12px;">
+                                Layanan: <strong class="text-dark">{{ $latestBooking->layanan_terapi }}</strong> &bull; Rencana: <strong class="text-dark">{{ $latestBooking->tgl_rencana ? \Carbon\Carbon::parse($latestBooking->tgl_rencana)->isoFormat('D MMMM Y') : '-' }}</strong> &bull; Sesi: {{ $latestBooking->jam_sesi ?: 'Sesi Pagi (08:00 - 10:00 WIB)' }}
+                            </small>
+                        </div>
+                    </div>
+                    <a href="{{ route('portal.booking') }}" class="btn btn-sm btn-primary font-w700 shadow-sm" style="border-radius: 8px; padding: 7px 16px; font-size: 12px;">
+                        <span>Buka Live Tracking</span>
+                        <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Quick Navigation Cards Grid (No Badges) -->
     <div class="col-12 mb-4">
         <div class="card shadow-sm" style="border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
@@ -196,6 +225,23 @@
             </div>
             <div class="card-body p-4">
                 <div class="row">
+                    <!-- 0. Booking & Tracking Terapi -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="portal-nav-card h-100" style="border-color: #bfdbfe; background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);">
+                            <div class="portal-nav-icon" style="background: #eff6ff; color: #2563eb; border-color: #bfdbfe;">
+                                <i class="fa-solid fa-calendar-plus"></i>
+                            </div>
+                            <h5 class="portal-nav-title" style="color: #1e40af;">Booking &amp; Jadwal Terapi</h5>
+                            <p class="portal-nav-desc">
+                                Reservasi jadwal sesi terapi mandiri dan pantau status persetujuan terapis secara realtime di portal.
+                            </p>
+                            <a href="{{ route('portal.booking') }}" class="btn btn-sm btn-primary font-w700 portal-nav-btn">
+                                <span>Buka Booking &amp; Tracking</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
                     <!-- 1. Denver II -->
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="portal-nav-card h-100">
@@ -411,4 +457,6 @@
         </div>
     </div>
 </div>
+
 @endsection
+

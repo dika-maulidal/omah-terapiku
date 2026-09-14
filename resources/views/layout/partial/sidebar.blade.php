@@ -23,6 +23,33 @@
             </li>
             @endif
 
+            @if (auth()->user()->role_display() == 'Admin' || auth()->user()->role_display() == 'Pendaftaran' || auth()->user()->role_display() == 'Dokter')
+            <li>
+                <a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
+                    <i class="fa-solid fa-clipboard-user"></i>
+                    <span class="nav-text">Pendaftaran Online</span>
+                </a>
+                @php
+                    $pendingDaftar = \App\Models\PendaftaranPasien::where('status', 'menunggu')->count();
+                @endphp
+                <ul aria-expanded="false">
+                    <li>
+                        <a href="{{Route('pendaftaran.index')}}" class="{{ request()->routeIs('pendaftaran.*') ? 'mm-active' : '' }}">
+                            <i class="fa-solid fa-user-check mr-2"></i>Verifikasi Pasien Baru
+                            @if($pendingDaftar > 0)
+                                <span class="badge badge-danger badge-xs ml-1" style="font-size: 9.5px; border-radius: 10px; padding: 1px 5px;">{{ $pendingDaftar }}</span>
+                            @endif
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{Route('booking.index')}}" class="{{ request()->routeIs('booking.*') ? 'mm-active' : '' }}">
+                            <i class="fa-solid fa-calendar-plus mr-2"></i>Antrean Booking Sesi
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @endif
+
             <li class="nav-label">Pelayanan</li>
 
             <li>
