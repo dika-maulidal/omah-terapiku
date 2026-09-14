@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pasien;
+use App\Models\Poli;
 use App\Models\Rekam;
 use App\Models\RekamAssessment;
 use Carbon\Carbon;
@@ -122,7 +123,7 @@ class PatientPortalController extends Controller
     /**
      * 3. Hasil Skala Denver II (DDST II)
      */
-    public function denver()
+    public function denver(Request $request)
     {
         $pasien = $this->getAuthenticatedPasien();
         if (!$pasien) {
@@ -130,7 +131,11 @@ class PatientPortalController extends Controller
         }
 
         $assessments = $pasien->assessments;
-        $latestAssessment = $assessments->first();
+        $selectedAssessmentId = $request->get('assessment_id');
+        $latestAssessment = $selectedAssessmentId
+            ? ($assessments->firstWhere('id', $selectedAssessmentId) ?? $assessments->first())
+            : $assessments->first();
+            
         $denverSectors = config('denver.sectors', []);
 
         return view('portal.denver', compact('pasien', 'assessments', 'latestAssessment', 'denverSectors'));
@@ -139,7 +144,7 @@ class PatientPortalController extends Controller
     /**
      * 4. Gross Motor Function Measure (GMFM)
      */
-    public function gmfm()
+    public function gmfm(Request $request)
     {
         $pasien = $this->getAuthenticatedPasien();
         if (!$pasien) {
@@ -147,7 +152,11 @@ class PatientPortalController extends Controller
         }
 
         $assessments = $pasien->assessments;
-        $latestAssessment = $assessments->first();
+        $selectedAssessmentId = $request->get('assessment_id');
+        $latestAssessment = $selectedAssessmentId
+            ? ($assessments->firstWhere('id', $selectedAssessmentId) ?? $assessments->first())
+            : $assessments->first();
+
         $gmfmDimensions = config('gmfm.dimensions', []);
 
         return view('portal.gmfm', compact('pasien', 'assessments', 'latestAssessment', 'gmfmDimensions'));
@@ -156,7 +165,7 @@ class PatientPortalController extends Controller
     /**
      * 5. Evaluasi Nyeri, Gerak Sendi (ROM), MMT, dan Keseimbangan
      */
-    public function nyeri()
+    public function nyeri(Request $request)
     {
         $pasien = $this->getAuthenticatedPasien();
         if (!$pasien) {
@@ -164,7 +173,10 @@ class PatientPortalController extends Controller
         }
 
         $assessments = $pasien->assessments;
-        $latestAssessment = $assessments->first();
+        $selectedAssessmentId = $request->get('assessment_id');
+        $latestAssessment = $selectedAssessmentId
+            ? ($assessments->firstWhere('id', $selectedAssessmentId) ?? $assessments->first())
+            : $assessments->first();
 
         return view('portal.nyeri', compact('pasien', 'assessments', 'latestAssessment'));
     }
@@ -172,17 +184,28 @@ class PatientPortalController extends Controller
     /**
      * 6. Program Latihan Mandiri di Rumah (Home Program)
      */
-    public function homeProgram()
+    public function homeProgram(Request $request)
     {
         $pasien = $this->getAuthenticatedPasien();
         if (!$pasien) {
             return redirect()->route('portal.index')->with('gagal', 'Sesi Anda telah berakhir.');
         }
 
-        $assessments = $pasien->assessments;
-        $latestAssessment = $assessments->first();
+        $rekams = $pasien->rekams;
+        
+        $selectedRekamId = $request->get('rekam_id');
+        if (!$selectedRekamId && $request->filled('assessment_id')) {
+            $asm = $pasien->assessments->firstWhere('id', $request->get('assessment_id'));
+            $selectedRekamId = $asm ? $asm->rekam_id : null;
+        }
 
-        return view('portal.home-program', compact('pasien', 'assessments', 'latestAssessment'));
+        $selectedRekam = $selectedRekamId
+            ? ($rekams->firstWhere('id', $selectedRekamId) ?? $rekams->first())
+            : $rekams->first();
+
+        $latestAssessment = $selectedRekam ? $selectedRekam->assessment : null;
+
+        return view('portal.home-program', compact('pasien', 'rekams', 'selectedRekam', 'latestAssessment'));
     }
 
     /**
@@ -203,14 +226,79 @@ class PatientPortalController extends Controller
     /**
      * 8. Dokumen & Cetak Laporan Asesmen (PDF)
      */
-    public function dokumen()
+     public function dokumen()
+     {
+         $pasien = $this->getAuthenticatedPasien();
+         if (!$pasien) {
+             return redirect()->route('portal.index')->with('gagal', 'Sesi Anda telah berakhir.');
+         }
+
+         $rekams = $pasien->rekams()->with(['dokter', 'assessment'])->orderBy('tgl_rekam', 'desc')->get();
+
+         return view('portal.dokumen', compact('pasien', 'rekams'));
+     }
+
+    /**
+     * Cetak Lembar Asesmen Terpadu (15 Modul) Khusus Portal Pasien
+     */
+    public function printAssessment($rekamId)
     {
         $pasien = $this->getAuthenticatedPasien();
         if (!$pasien) {
-            return redirect()->route('portal.index')->with('gagal', 'Sesi Anda telah berakhir.');
+            return redirect()->route('portal.index')->with('gagal', 'Sesi Anda telah berakhir. Silakan verifikasi ulang No. RM & Tanggal Lahir.');
         }
 
-        return view('portal.dokumen', compact('pasien'));
+        $rekam = Rekam::with(['pasien', 'dokter', 'assessment'])
+            ->where('pasien_id', $pasien->id)
+            ->findOrFail($rekamId);
+
+        $assessment = $rekam->assessment;
+        if (!$assessment) {
+            return redirect()->route('portal.dokumen')->with('gagal', 'Form assessment belum diisi oleh terapis.');
+        }
+
+        $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
+
+        return view('rekam.assessment.print', compact('rekam', 'pasien', 'assessment', 'upt'));
+    }
+
+    /**
+     * Cetak Lembar Catatan Sesi Terapi (SOAP) Khusus Portal Pasien
+     */
+    public function printSoap($rekamId)
+    {
+        $pasien = $this->getAuthenticatedPasien();
+        if (!$pasien) {
+            return redirect()->route('portal.index')->with('gagal', 'Sesi Anda telah berakhir. Silakan verifikasi ulang No. RM & Tanggal Lahir.');
+        }
+
+        $rekam = Rekam::with(['pasien', 'dokter', 'assessment'])
+            ->where('pasien_id', $pasien->id)
+            ->findOrFail($rekamId);
+
+        $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
+        $assessment = $rekam->assessment;
+
+        return view('rekam.print-soap', compact('rekam', 'pasien', 'upt', 'assessment'));
+    }
+
+    /**
+     * Cetak Lembar Panduan Latihan di Rumah (Home Program) Khusus Portal Pasien
+     */
+    public function printHomeProgram($rekamId)
+    {
+        $pasien = $this->getAuthenticatedPasien();
+        if (!$pasien) {
+            return redirect()->route('portal.index')->with('gagal', 'Sesi Anda telah berakhir. Silakan verifikasi ulang No. RM & Tanggal Lahir.');
+        }
+
+        $rekam = Rekam::with(['pasien', 'dokter', 'assessment'])
+            ->where('pasien_id', $pasien->id)
+            ->findOrFail($rekamId);
+
+        $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
+
+        return view('rekam.print-home-program', compact('rekam', 'pasien', 'upt'));
     }
 
     /**

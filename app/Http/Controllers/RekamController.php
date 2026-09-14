@@ -527,7 +527,7 @@ class RekamController extends Controller
         $rekam = Rekam::with(['pasien', 'dokter', 'assessment'])->findOrFail($id);
         $pasien = $rekam->pasien;
         $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
-        $assessment = $rekam->assessment ?? \App\Models\RekamAssessment::where('pasien_id', $rekam->pasien_id)->latest()->first();
+        $assessment = $rekam->assessment;
         return view('rekam.print-soap', compact('rekam', 'pasien', 'upt', 'assessment'));
     }
 

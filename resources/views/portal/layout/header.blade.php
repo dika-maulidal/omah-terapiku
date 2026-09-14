@@ -5,8 +5,8 @@
                 <!-- Left: Portal Title -->
                 <div class="header-left">
                     <div class="dashboard_bar d-flex align-items-center">
-                        <span class="font-w700 text-primary" style="font-size: 17px;">
-                            <i class="fa-solid fa-hospital-user mr-1"></i> Portal Pasien & Keluarga
+                        <span class="portal-header-title font-w700">
+                            <i class="fa-solid fa-hospital-user mr-1.5"></i> Portal Pasien &amp; Keluarga
                         </span>
                     </div>
                 </div>

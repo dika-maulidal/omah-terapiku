@@ -554,9 +554,15 @@
             <button type="button" id="btnDownloadPdf" onclick="downloadPDF()" class="btn btn-sm btn-primary font-w700 text-white" style="padding: 7px 15px; font-size: 12px; border-radius: 6px; background: #2563eb; border: none; box-shadow: 0 2px 6px rgba(37,99,235,0.25);">
                 <i class="fa-solid fa-download mr-1"></i> Unduh PDF
             </button>
-            <a href="{{ route('rekam.detail', $pasien->id) }}" class="btn btn-sm btn-light border font-w600" style="padding: 7px 12px; font-size: 12px; border-radius: 6px; color: #475569;">
-                <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
-            </a>
+            @if(auth()->check())
+                <a href="{{ route('rekam.detail', $pasien->id) }}" class="btn btn-sm btn-light border font-w600" style="padding: 7px 12px; font-size: 12px; border-radius: 6px; color: #475569;">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                </a>
+            @else
+                <a href="{{ route('portal.dokumen') }}" class="btn btn-sm btn-light border font-w600" style="padding: 7px 12px; font-size: 12px; border-radius: 6px; color: #475569;">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                </a>
+            @endif
         </div>
     </div>
 </div>

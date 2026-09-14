@@ -126,6 +126,68 @@
             align-items: center;
             gap: 8px;
         }
+
+        /* Universal Header Filter Dropdown (DESIGN.md Section 3A) */
+        .portal-select-filter {
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 0 12px;
+            background-color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .portal-select-filter:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Portal Header Title Styling */
+        .portal-header-title {
+            color: #2563eb;
+            display: inline-flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 17px;
+            transition: color 0.2s ease;
+        }
+        .portal-header-title i {
+            color: #2563eb;
+            margin-right: 6px;
+        }
+
+        /* Mobile View: Make "Portal Pasien & Keluarga" White so it doesn't blend with dark navbar */
+        @media (max-width: 991px) {
+            .portal-header-title {
+                color: #ffffff !important;
+                font-size: 15px !important;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+            }
+            .portal-header-title i {
+                color: #ffffff !important;
+            }
+            .header-left .dashboard_bar {
+                display: flex !important;
+                align-items: center !important;
+            }
+            .header-left .dashboard_bar span {
+                color: #ffffff !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .portal-header-title {
+                color: #ffffff !important;
+                font-size: 13.5px !important;
+                white-space: nowrap;
+            }
+            .portal-header-title i {
+                color: #ffffff !important;
+            }
+        }
     </style>
 
     @yield('style')

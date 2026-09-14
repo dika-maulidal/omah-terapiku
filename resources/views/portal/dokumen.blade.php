@@ -43,137 +43,219 @@
     <div class="col-12 mb-4">
         <div class="card shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
             <div class="card-body p-3 p-md-4">
-                <div class="d-flex align-items-center">
-                    <div class="mr-3 rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: #eff6ff; color: #2563eb; font-size: 20px; border: 1px solid #bfdbfe; border-radius: 10px;">
-                        <i class="fa-solid fa-file-pdf"></i>
+                <div class="d-flex flex-wrap align-items-center justify-content-between" style="gap: 14px;">
+                    <!-- Title & Icon -->
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3 rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: #eff6ff; color: #2563eb; font-size: 20px; border: 1px solid #bfdbfe; border-radius: 10px;">
+                            <i class="fa-solid fa-print"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-w700 mb-0" style="color: var(--ot-navy, #1e40af) !important; font-size: 21px;">
+                                Dokumen & Cetak Laporan Terpadu
+                            </h3>
+                            <p class="text-muted mb-0 mt-1" style="font-size: 13px;">
+                                Unduh dan cetak berkas laporan medis per sesi terapi, lembar asesmen 15 modul, catatan SOAP, dan berkas rujukan
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-w700 mb-0" style="color: var(--ot-navy, #1e40af) !important; font-size: 21px;">
-                            Dokumen & Cetak Laporan Asesmen
-                        </h3>
-                        <p class="text-muted mb-0 mt-1" style="font-size: 13px;">
-                            Unduh dan cetak berkas laporan medis, ringkasan asesmen, dan dokumen pendukung
-                        </p>
+
+                    <!-- Meta Badges -->
+                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                        <span class="badge font-w700" style="font-size: 12px; padding: 6px 12px; border-radius: 8px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
+                            <i class="fa-solid fa-calendar-check mr-1.5"></i> {{ ($rekams ?? $pasien->rekams) ? ($rekams ?? $pasien->rekams)->count() : 0 }} Sesi Terapi
+                        </span>
+                        <span class="badge font-w700" style="font-size: 12px; padding: 6px 12px; border-radius: 8px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                            <i class="fa-solid fa-folder-check mr-1.5"></i> {{ ($pasien->file_kk ? 1 : 0) + ($pasien->file_resume ? 1 : 0) }}/2 Berkas Digital
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 1. Cetak Laporan Terapi & Asesmen Terpadu (Catatan Sesi, Asesmen 15 Modul, Home Program) -->
-    <div class="col-lg-7 col-md-12 mb-4">
-        <div class="card shadow-sm h-100 doc-card" style="border: 1px solid #e2e8f0; border-radius: 12px;">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center" style="border-bottom: 1px solid #f1f5f9; padding: 16px 20px;">
-                <div>
-                    <h4 class="card-title font-w700 mb-0" style="color: var(--ot-navy, #1e40af); font-size: 16px;">
-                        <i class="fa-solid fa-print text-primary mr-2"></i> Cetak Laporan Terapi & Asesmen Terpadu
-                    </h4>
-                    <p class="text-muted mb-0 mt-0.5" style="font-size: 12px;">
-                        Pilihan cetak berkas lengkap: Lembar Asesmen Klinis, Catatan Sesi Terapi, dan Panduan Home Program
-                    </p>
-                </div>
-                <span class="badge font-w700" style="font-size: 11.5px; padding: 5px 10px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                    {{ $pasien->assessments ? $pasien->assessments->count() : 0 }} Asesmen
-                </span>
+    <!-- 1. Cetak Laporan Terapi & Asesmen Terpadu (Left/Main Column) -->
+    <div class="col-lg-8 col-12 mb-4">
+        <div class="card shadow-sm h-100 doc-card" style="border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff;">
+            <!-- Card Header -->
+            <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap" style="border-bottom: 1px solid #f1f5f9; padding: 18px 22px;">
+                <h4 class="card-title font-w700 mb-0 d-flex align-items-center" style="color: var(--ot-navy, #1e40af); font-size: 16.5px;">
+                    <i class="fa-solid fa-print text-primary mr-2"></i>
+                    <span>Cetak Laporan Terapi & Asesmen Terpadu</span>
+                </h4>
             </div>
-            <div class="card-body p-0">
-                @if($pasien->assessments && $pasien->assessments->count() > 0)
-                    <div class="list-group list-group-flush">
-                        @foreach($pasien->assessments as $asm)
-                            <div class="doc-item d-flex justify-content-between align-items-center flex-wrap" style="gap: 14px;">
-                                <div style="flex: 1; min-width: 240px;">
-                                    <h6 class="font-w700 text-dark mb-1" style="font-size: 14.5px;">
-                                        <i class="fa-solid fa-file-waveform text-primary mr-1.5"></i>
-                                        Laporan Asesmen Klinis Terpadu (15 Modul)
-                                    </h6>
-                                    <div class="text-muted mb-1.5" style="font-size: 12.5px;">
-                                        <i class="fa-regular fa-calendar-check mr-1 text-primary"></i> Sesi: <strong>{{ $asm->tgl_assessment ? \Carbon\Carbon::parse($asm->tgl_assessment)->isoFormat('D MMMM Y') : '-' }}</strong> &bull; 
-                                        <i class="fa-solid fa-user-doctor mr-1 text-primary"></i> {{ $asm->dokter ? $asm->dokter->nama : 'Terapis Medis Omah Terapi-KU' }}
+
+            <!-- Card Body / List of Session Items -->
+            <div class="card-body p-3 p-md-4">
+                @php
+                    $allRekams = $rekams ?? $pasien->rekams;
+                @endphp
+                @if($allRekams && $allRekams->count() > 0)
+                    <div class="d-flex flex-column" style="gap: 16px;">
+                        @foreach($allRekams as $rekam)
+                            @php
+                                $asm = $rekam->assessment;
+                            @endphp
+                            <div class="p-3 p-md-4 rounded" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: all 0.2s ease;">
+                                <!-- Item Header: Date, Service, Location -->
+                                <div class="d-flex justify-content-between align-items-center flex-wrap pb-2.5 mb-2.5" style="border-bottom: 1px solid #f1f5f9; gap: 10px;">
+                                    <div class="d-flex align-items-center flex-wrap" style="gap: 10px;">
+                                        <!-- Date Pill with Spacious Gap -->
+                                        <span class="d-inline-flex align-items-center font-w700" style="gap: 8px; padding: 5px 12px; font-size: 12px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; border-radius: 6px;">
+                                            <i class="fa-regular fa-calendar-check" style="font-size: 13px;"></i>
+                                            <span>{{ $rekam->tgl_rekam ? \Carbon\Carbon::parse($rekam->tgl_rekam)->isoFormat('D MMMM Y') : 'Sesi Terapi' }}</span>
+                                        </span>
+                                        <!-- Service Name -->
+                                        <span class="font-w700 text-dark d-inline-flex align-items-center" style="font-size: 13.5px; gap: 6px;">
+                                            <i class="fa-solid fa-hand-holding-medical text-primary"></i>
+                                            <span>{{ $rekam->layanan_terapi ?: 'Layanan Terapi Terpadu' }}</span>
+                                        </span>
                                     </div>
-                                    <div class="d-flex align-items-center flex-wrap" style="gap: 5px;">
-                                        @if($asm->gmfm_total_persen !== null)
-                                            <span class="badge font-w700" style="font-size: 11px; padding: 3px 8px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                                                GMFM: {{ $asm->gmfm_total_persen }}%
-                                            </span>
+                                    
+                                    @if($rekam->poli || $rekam->upt_lokasi)
+                                        <span class="text-muted font-w600 d-inline-flex align-items-center" style="font-size: 12px; gap: 5px;">
+                                            <i class="fa-solid fa-location-dot text-muted"></i>
+                                            <span>{{ $rekam->poli ?: $rekam->upt_lokasi }}</span>
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <!-- Middle Info: Doctor, Diagnosis, & Clinical Assessment Badges -->
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center flex-wrap mb-1.5" style="gap: 14px; font-size: 12.5px;">
+                                        <div class="text-muted font-w600">
+                                            <i class="fa-solid fa-user-doctor mr-1.5 text-primary"></i>
+                                            Terapis: <strong class="text-dark">{{ $rekam->dokter ? $rekam->dokter->nama : 'Terapis Medis Omah Terapi-KU' }}</strong>
+                                        </div>
+                                        @if($rekam->diagnosa)
+                                            <div class="text-muted font-w600">
+                                                <i class="fa-solid fa-stethoscope mr-1.5 text-primary"></i>
+                                                Diagnosa: <strong class="text-dark">{{ $rekam->diagnosa }}</strong>
+                                            </div>
                                         @endif
-                                        @if($asm->denver_kesimpulan)
-                                            <span class="badge font-w700" style="font-size: 11px; padding: 3px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
-                                                Denver: {{ $asm->denver_kesimpulan }}
+                                    </div>
+
+                                    <!-- Clinical Outcome Pills -->
+                                    <div class="d-flex align-items-center flex-wrap mt-2" style="gap: 6px;">
+                                        @if($asm)
+                                            <span class="badge font-w700" style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
+                                                <i class="fa-solid fa-clipboard-check mr-1"></i> Asesmen 15 Modul Terisi
                                             </span>
-                                        @endif
-                                        @if($asm->nyeri_skor_total !== null)
-                                            <span class="badge font-w700" style="font-size: 11px; padding: 3px 8px; border-radius: 6px; background: #fffbeb; color: #d97706; border: 1px solid #fde68a;">
-                                                VAS: {{ $asm->nyeri_skor_total }}/10
+                                            @if($asm->gmfm_total_persen !== null)
+                                                <span class="badge font-w700" style="font-size: 11px; padding: 4px 8px; border-radius: 6px; {{ $asm->gmfm_total_persen >= 80 ? 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;' : ($asm->gmfm_total_persen >= 50 ? 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;' : 'background: #fffbeb; color: #d97706; border: 1px solid #fde68a;') }}">
+                                                    <i class="fa-solid fa-child-reaching mr-1"></i> GMFM: {{ $asm->gmfm_total_persen }}%
+                                                </span>
+                                            @endif
+                                            @if($asm->denver_kesimpulan)
+                                                <span class="badge font-w700" style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                                    <i class="fa-solid fa-brain mr-1"></i> Denver: {{ $asm->denver_kesimpulan }}
+                                                </span>
+                                            @endif
+                                            @if($asm->nyeri_skor_total !== null)
+                                                <span class="badge font-w700" style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background: #fffbeb; color: #d97706; border: 1px solid #fde68a;">
+                                                    <i class="fa-solid fa-heart-pulse mr-1"></i> VAS: {{ $asm->nyeri_skor_total }}/10
+                                                </span>
+                                            @endif
+                                        @else
+                                            <span class="badge font-w600" style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0;">
+                                                <i class="fa-regular fa-clock mr-1"></i> Asesmen Klinis Belum Diisi
                                             </span>
                                         @endif
                                     </div>
                                 </div>
 
-                                <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
-                                    @if($asm->rekam_id)
-                                        <a href="{{ route('rekam.assessment.print', $asm->rekam_id) }}" target="_blank" class="btn btn-sm btn-primary font-w700 shadow-sm" style="border-radius: 6px; padding: 6px 12px; font-size: 12px;" title="Cetak Lembar Asesmen Lengkap">
-                                            <i class="fa-solid fa-file-pdf mr-1"></i> Asesmen
+                                <!-- Action Buttons: 3 Clean PDF Options -->
+                                <div class="pt-2.5 d-flex align-items-center justify-content-end flex-wrap" style="border-top: 1px dashed #e2e8f0; gap: 8px;">
+                                    @if($asm)
+                                        <a href="{{ route('portal.assessment.print', $rekam->id) }}" target="_blank" 
+                                           class="btn btn-sm btn-primary font-w700 shadow-sm d-inline-flex align-items-center" 
+                                           style="border-radius: 7px; padding: 7px 14px; font-size: 12.5px; gap: 6px;" 
+                                           title="Cetak Lembar Asesmen Klinis Lengkap (15 Modul)">
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                            <span>Asesmen (15 Modul)</span>
                                         </a>
-                                        <a href="{{ route('rekam.soap.print', $asm->rekam_id) }}" target="_blank" class="btn btn-sm btn-outline-primary font-w700" style="border-radius: 6px; padding: 6px 12px; font-size: 12px;" title="Cetak Catatan Sesi Terapi">
-                                            <i class="fa-solid fa-file-lines mr-1"></i> Catatan Sesi
-                                        </a>
-                                        <a href="{{ route('rekam.home-program.print', $asm->rekam_id) }}" target="_blank" class="btn btn-sm btn-outline-success font-w700" style="border-radius: 6px; padding: 6px 12px; font-size: 12px;" title="Cetak Panduan Home Program">
-                                            <i class="fa-solid fa-house-chimney mr-1"></i> Home Program
-                                        </a>
+                                    @else
+                                        <button type="button" class="btn btn-sm btn-light font-w600 text-muted disabled d-inline-flex align-items-center" 
+                                                style="border-radius: 7px; padding: 7px 14px; font-size: 12.5px; border: 1px solid #e2e8f0; gap: 6px;" 
+                                                disabled title="Form asesmen klinis belum diisi pada sesi ini">
+                                            <i class="fa-solid fa-file-pdf text-muted"></i>
+                                            <span>Asesmen Belum Ada</span>
+                                        </button>
                                     @endif
+
+                                    <a href="{{ route('portal.soap.print', $rekam->id) }}" target="_blank" 
+                                       class="btn btn-sm font-w700 d-inline-flex align-items-center" 
+                                       style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; border-radius: 7px; padding: 7px 14px; font-size: 12.5px; gap: 6px; transition: all 0.2s ease;" 
+                                       title="Cetak Catatan Sesi Terapi (SOAP)">
+                                        <i class="fa-solid fa-file-lines text-primary"></i>
+                                        <span>Catatan Sesi (SOAP)</span>
+                                    </a>
+
+                                    <a href="{{ route('portal.home-program.print', $rekam->id) }}" target="_blank" 
+                                       class="btn btn-sm font-w700 d-inline-flex align-items-center" 
+                                       style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-radius: 7px; padding: 7px 14px; font-size: 12.5px; gap: 6px; transition: all 0.2s ease;" 
+                                       title="Cetak Panduan Latihan Mandiri di Rumah (Home Program)">
+                                        <i class="fa-solid fa-house-chimney text-success"></i>
+                                        <span>Home Program</span>
+                                    </a>
                                 </div>
                             </div>
                         @endforeach
                     </div>
                 @else
                     <div class="text-center p-5 text-muted">
-                        <div class="d-inline-flex align-items-center justify-content-center mb-3 rounded-circle" style="width: 56px; height: 56px; background: #eff6ff; color: #2563eb; font-size: 24px; border: 1px solid #bfdbfe;">
+                        <div class="d-inline-flex align-items-center justify-content-center mb-3 rounded-circle" style="width: 60px; height: 60px; background: #eff6ff; color: #2563eb; font-size: 26px; border: 1px solid #bfdbfe;">
                             <i class="fa-regular fa-folder-open"></i>
                         </div>
-                        <h5 class="font-w700 text-dark mb-1">Belum Ada Laporan Asesmen</h5>
-                        <p class="text-muted mb-0" style="font-size: 13px;">Laporan asesmen klinis dan catatan sesi terapi akan muncul setelah sesi pemeriksaan dicatat.</p>
+                        <h5 class="font-w700 text-dark mb-1" style="font-size: 16px;">Belum Ada Sesi Terapi</h5>
+                        <p class="text-muted mb-0" style="font-size: 13px; max-width: 380px; margin: 0 auto; line-height: 1.5;">
+                            Laporan catatan sesi terapi dan asesmen klinis resmi akan tersedia otomatis setelah kunjungan terapi direkam.
+                        </p>
                     </div>
                 @endif
             </div>
         </div>
     </div>
 
-    <!-- 2. Berkas Dokumen Pasien (Dengan Popup Modal Interaktif) -->
-    <div class="col-lg-5 col-md-12 mb-4">
-        <div class="card shadow-sm h-100 doc-card" style="border: 1px solid #e2e8f0; border-radius: 12px;">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center" style="border-bottom: 1px solid #f1f5f9; padding: 16px 20px;">
-                <h4 class="card-title font-w700 mb-0" style="color: var(--ot-navy, #1e40af); font-size: 16px;">
-                    <i class="fa-solid fa-folder-open text-primary mr-2"></i> Berkas Dokumen Pasien
+    <!-- 2. Berkas Dokumen Pasien (Right Column) -->
+    <div class="col-lg-4 col-12 mb-4">
+        <div class="card shadow-sm h-100 doc-card" style="border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff;">
+            <!-- Card Header -->
+            <div class="card-header bg-white d-flex justify-content-between align-items-center" style="border-bottom: 1px solid #f1f5f9; padding: 18px 22px;">
+                <h4 class="card-title font-w700 mb-0 d-flex align-items-center" style="color: var(--ot-navy, #1e40af); font-size: 16.5px;">
+                    <i class="fa-solid fa-folder-open text-primary mr-2"></i>
+                    <span>Berkas Pasien</span>
                 </h4>
-                <span class="badge badge-light border text-muted font-w600" style="font-size: 11px;">
+                <span class="badge font-w600" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #f8fafc; color: #475569; border: 1px solid #e2e8f0;">
                     Identitas & Rujukan
                 </span>
             </div>
-            <div class="card-body p-4">
+
+            <!-- Card Body -->
+            <div class="card-body p-3 p-md-4">
                 <!-- Berkas Kartu Keluarga (KK) -->
-                <div class="file-box mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
+                <div class="file-box mb-3" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 12px;">
                         <div class="d-flex align-items-center">
-                            <div class="rounded p-2.5 mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background: #eff6ff; color: #2563eb; font-size: 20px; border: 1px solid #bfdbfe; border-radius: 10px;">
+                            <div class="mr-3 rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: #eff6ff; color: #2563eb; font-size: 18px; border: 1px solid #bfdbfe; border-radius: 10px;">
                                 <i class="fa-solid fa-people-roof"></i>
                             </div>
                             <div>
-                                <h6 class="font-w700 text-dark mb-0.5" style="font-size: 14px;">Kartu Keluarga (KK)</h6>
-                                <span class="text-muted" style="font-size: 12px;">Identitas kependudukan & domisili keluarga</span>
+                                <h6 class="font-w700 text-dark mb-0.5" style="font-size: 13.5px;">Kartu Keluarga (KK)</h6>
+                                <span class="text-muted font-w500" style="font-size: 11.5px;">Identitas kependudukan keluarga</span>
                             </div>
                         </div>
                         <div>
                             @if($pasien->file_kk)
-                                <button type="button" class="btn btn-sm btn-outline-primary font-w700 btn-open-preview-berkas" 
+                                <button type="button" class="btn btn-sm font-w700 btn-open-preview-berkas d-inline-flex align-items-center" 
                                     data-type="kk" 
                                     data-title="Kartu Keluarga (KK)" 
                                     data-url="{{ $pasien->getFileKk() }}" 
                                     data-filename="{{ $pasien->file_kk }}"
-                                    style="border-radius: 6px; padding: 6px 14px; font-size: 12.5px;">
-                                    <i class="fa-solid fa-eye mr-1.5"></i> Lihat
+                                    style="border-radius: 6px; padding: 6px 14px; font-size: 12px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; gap: 6px;">
+                                    <i class="fa-solid fa-eye"></i> Lihat
                                 </button>
                             @else
-                                <span class="badge font-w600" style="font-size: 11.5px; padding: 5px 10px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                <span class="badge font-w600" style="font-size: 11px; padding: 5px 9px; border-radius: 6px; background: #f8fafc; color: #94a3b8; border: 1px solid #e2e8f0;">
                                     <i class="fa-solid fa-circle-xmark mr-1"></i> Belum Ada
                                 </span>
                             @endif
@@ -182,29 +264,29 @@
                 </div>
 
                 <!-- Berkas Resume Medis / Rujukan -->
-                <div class="file-box mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
+                <div class="file-box mb-3" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 12px;">
                         <div class="d-flex align-items-center">
-                            <div class="rounded p-2.5 mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background: #ecfdf5; color: #10b981; font-size: 20px; border: 1px solid #a7f3d0; border-radius: 10px;">
+                            <div class="mr-3 rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: #ecfdf5; color: #10b981; font-size: 18px; border: 1px solid #a7f3d0; border-radius: 10px;">
                                 <i class="fa-solid fa-file-medical"></i>
                             </div>
                             <div>
-                                <h6 class="font-w700 text-dark mb-0.5" style="font-size: 14px;">Resume Medis / Rujukan</h6>
-                                <span class="text-muted" style="font-size: 12px;">Surat rujukan dokter spesialis / riwayat berobat</span>
+                                <h6 class="font-w700 text-dark mb-0.5" style="font-size: 13.5px;">Resume / Rujukan Medis</h6>
+                                <span class="text-muted font-w500" style="font-size: 11.5px;">Surat rujukan dokter spesialis</span>
                             </div>
                         </div>
                         <div>
                             @if($pasien->file_resume)
-                                <button type="button" class="btn btn-sm btn-outline-success font-w700 btn-open-preview-berkas" 
+                                <button type="button" class="btn btn-sm font-w700 btn-open-preview-berkas d-inline-flex align-items-center" 
                                     data-type="resume" 
                                     data-title="Resume Berobat / Rujukan Medis" 
                                     data-url="{{ $pasien->getFileResume() }}" 
                                     data-filename="{{ $pasien->file_resume }}"
-                                    style="border-radius: 6px; padding: 6px 14px; font-size: 12.5px;">
-                                    <i class="fa-solid fa-eye mr-1.5"></i> Lihat
+                                    style="border-radius: 6px; padding: 6px 14px; font-size: 12px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; gap: 6px;">
+                                    <i class="fa-solid fa-eye"></i> Lihat
                                 </button>
                             @else
-                                <span class="badge font-w600" style="font-size: 11.5px; padding: 5px 10px; border-radius: 6px; background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0;">
+                                <span class="badge font-w600" style="font-size: 11px; padding: 5px 9px; border-radius: 6px; background: #f8fafc; color: #94a3b8; border: 1px solid #e2e8f0;">
                                     <i class="fa-solid fa-circle-xmark mr-1"></i> Belum Ada
                                 </span>
                             @endif
@@ -213,12 +295,14 @@
                 </div>
 
                 <!-- Info Alert -->
-                <div class="p-3 rounded" style="background: #eff6ff; border: 1px solid #bfdbfe; font-size: 12.5px; border-radius: 10px;">
-                    <div class="d-flex align-items-start">
-                        <i class="fa-solid fa-circle-info text-primary mr-2 mt-1" style="font-size: 15px;"></i>
-                        <span style="color: #1e40af; line-height: 1.5;">
-                            Dokumen PDF yang diunduh dapat digunakan saat rujukan ke fasilitas kesehatan atau saat pelaporan evaluasi berkala di Dinas Sosial.
-                        </span>
+                <div class="p-3 rounded" style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px;">
+                    <div class="d-flex align-items-center" style="gap: 12px;">
+                        <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px; border-radius: 8px; background: #dbeafe; color: #1e40af; font-size: 14px; border: 1px solid #bfdbfe;">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div style="color: #1e40af; font-size: 12px; font-weight: 500; line-height: 1.45;">
+                            Dokumen PDF resmi dapat digunakan saat rujukan ke fasilitas kesehatan atau saat evaluasi berkala di Dinas Sosial.
+                        </div>
                     </div>
                 </div>
             </div>

@@ -97,13 +97,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center flex-wrap" style="gap: 10px;">
-                        <div class="px-3 py-2 rounded d-flex align-items-center" style="background: #f8fafc; border: 1px solid #e2e8f0; font-size: 13px; font-weight: 600; color: #334155; border-radius: 8px;">
-                            <span class="text-muted mr-1.5">No. RM:</span>
-                            <strong class="text-primary font-w800" style="font-size: 14.5px;">{{ $pasien->no_rm }}</strong>
+                    <div class="d-flex align-items-center flex-wrap mt-2 mt-md-0" style="gap: 8px;">
+                        <div class="d-inline-flex align-items-center" style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 6px 12px; font-size: 12.5px; box-shadow: 0 1px 2px rgba(37, 99, 235, 0.04);">
+                            <i class="fa-solid fa-id-card-clip mr-2" style="color: #2563eb; font-size: 13px;"></i>
+                            <span class="mr-1 font-w600" style="color: #64748b;">No. RM:</span>
+                            <strong class="font-w800" style="color: #1e40af; font-size: 13px; letter-spacing: 0.3px;">{{ $pasien->no_rm }}</strong>
                         </div>
-                        <div class="px-3 py-2 rounded d-flex align-items-center" style="background: #f8fafc; border: 1px solid #e2e8f0; font-size: 12.5px; font-weight: 600; color: #334155; border-radius: 8px;">
-                            <i class="fa fa-calendar mr-2" style="color: #2563eb;"></i> {{ $tanggalFormatted }}
+                        <div class="d-inline-flex align-items-center" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; font-size: 12.5px; font-weight: 600; color: #334155; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);">
+                            <i class="fa-regular fa-calendar-days mr-2" style="color: #2563eb; font-size: 13px;"></i>
+                            <span>{{ $tanggalFormatted }}</span>
                         </div>
                     </div>
                 </div>
@@ -187,13 +189,10 @@
     <!-- Quick Navigation Cards Grid (No Badges) -->
     <div class="col-12 mb-4">
         <div class="card shadow-sm" style="border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
-            <div class="card-header bg-white" style="border-bottom: 1px solid #f1f5f9; padding: 18px 24px;">
-                <div>
-                    <h4 class="card-title font-w700 mb-0" style="color: var(--ot-navy, #1e40af); font-size: 16px;">
-                        <i class="fa-solid fa-compass mr-2" style="color: #2563eb;"></i> Modul Navigasi Portal Pasien
-                    </h4>
-                    <p class="text-muted mb-0 mt-1" style="font-size: 12.5px;">Akses mandiri ke modul asesmen perkembangan, evaluasi fisik, dan rekam medis</p>
-                </div>
+            <div class="card-header bg-white d-flex align-items-center justify-content-between" style="border-bottom: 1px solid #f1f5f9; padding: 16px 20px;">
+                <h4 class="card-title font-w700 mb-0" style="color: var(--ot-navy, #1e40af); font-size: 16px;">
+                    <i class="fa-solid fa-compass mr-2" style="color: #2563eb;"></i> Modul Navigasi Portal Pasien
+                </h4>
             </div>
             <div class="card-body p-4">
                 <div class="row">
@@ -315,14 +314,9 @@
                 </a>
             </div>
             <div class="card-body p-3 p-md-4">
-                <div class="d-flex align-items-center mb-3 pb-3 border-bottom" style="border-color: #f1f5f9 !important;">
-                    <div class="rounded-circle mr-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: #eff6ff; border: 2px solid #bfdbfe; color: #2563eb; font-size: 20px;">
-                        <i class="fa-solid fa-user-check"></i>
-                    </div>
-                    <div>
-                        <h5 class="font-w700 text-dark mb-0" style="font-size: 15.5px;">{{ $pasien->nama }}</h5>
-                        <span class="fs-12 text-muted font-w600">No. RM: <strong class="text-primary">{{ $pasien->no_rm }}</strong></span>
-                    </div>
+                <div class="mb-3 pb-3 border-bottom" style="border-color: #f1f5f9 !important;">
+                    <h5 class="font-w700 text-dark mb-1" style="font-size: 16px;">{{ $pasien->nama }}</h5>
+                    <span class="fs-12 text-muted font-w600">No. RM: <strong class="text-primary">{{ $pasien->no_rm }}</strong></span>
                 </div>
 
                 <table class="table table-borderless table-sm mb-0" style="font-size: 13px;">

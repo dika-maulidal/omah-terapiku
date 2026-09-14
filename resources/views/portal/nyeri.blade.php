@@ -53,18 +53,34 @@
     <div class="col-12 mb-4">
         <div class="card shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
             <div class="card-body p-3 p-md-4">
-                <div class="d-flex align-items-center">
-                    <div class="mr-3 rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: #eff6ff; color: #2563eb; font-size: 20px; border: 1px solid #bfdbfe; border-radius: 10px;">
-                        <i class="fa-solid fa-heart-pulse"></i>
+                <div class="d-flex flex-wrap align-items-center justify-content-between" style="gap: 14px;">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3 rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: #eff6ff; color: #2563eb; font-size: 20px; border: 1px solid #bfdbfe; border-radius: 10px;">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-w700 mb-0" style="color: var(--ot-navy, #1e40af) !important; font-size: 21px;">
+                                Evaluasi Nyeri, Gerak Sendi & Keseimbangan
+                            </h3>
+                            <p class="text-muted mb-0 mt-1" style="font-size: 13px;">
+                                Pemeriksaan intensitas nyeri (VAS), lingkup gerak sendi (ROM), kekuatan otot (MMT), dan postur
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-w700 mb-0" style="color: var(--ot-navy, #1e40af) !important; font-size: 21px;">
-                            Evaluasi Nyeri, Gerak Sendi & Keseimbangan
-                        </h3>
-                        <p class="text-muted mb-0 mt-1" style="font-size: 13px;">
-                            Pemeriksaan intensitas nyeri (VAS), lingkup gerak sendi (ROM), kekuatan otot (MMT), dan postur
-                        </p>
-                    </div>
+
+                    <!-- Actions & Filter (Standardized Dashboard Dropdown Filter) -->
+                    @if($assessments && $assessments->count() > 0)
+                        <div class="position-relative mt-2 mt-sm-0" style="min-width: 240px;">
+                            <i class="fa fa-filter" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 12px; pointer-events: none; z-index: 2;"></i>
+                            <select id="filterNyeriAssessment" class="form-control form-control-sm font-w700" onchange="if(this.value) window.location.href = '{{ route('portal.nyeri') }}?assessment_id=' + this.value;" style="color: #2563eb !important; padding-left: 32px; padding-right: 36px; height: 36px; font-size: 12.5px; border-radius: 8px; border-color: #cbd5e1; cursor: pointer; background-color: #ffffff; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%232563eb' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e&quot;); background-repeat: no-repeat; background-position: right 14px center; background-size: 11px 11px;">
+                                @foreach($assessments as $asm)
+                                    <option value="{{ $asm->id }}" {{ $latestAssessment && $latestAssessment->id == $asm->id ? 'selected' : '' }}>
+                                        {{ $asm->tgl_assessment ? \Carbon\Carbon::parse($asm->tgl_assessment)->isoFormat('D MMMM Y') : 'Sesi #' . $asm->id }}@if($asm->nyeri_skor_total !== null) (VAS: {{ $asm->nyeri_skor_total }}/10)@endif
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -250,58 +266,137 @@
                                 <tr>
                                     <th style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: #475569;">Instrumen Tes</th>
                                     <th style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: #475569;">Hasil Pengukuran</th>
-                                    <th style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: #475569;">Standar Klinis</th>
+                                    <th style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: #475569;">Interpretasi</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <!-- 1. Berg Balance Scale (BBS) -->
                                 <tr>
-                                    <td><strong>Berg Balance Scale (BBS)</strong></td>
-                                    <td>
+                                    <td class="align-middle"><strong>Berg Balance Scale (BBS)</strong></td>
+                                    <td class="align-middle">
                                         @if($latestAssessment->keseimbangan_bbs_skor !== null)
-                                            <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; {{ $latestAssessment->keseimbangan_bbs_skor >= 45 ? 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;' : 'background: #fffbeb; color: #d97706; border: 1px solid #fde68a;' }}">
+                                            <span class="badge font-w700" style="font-size: 12px; padding: 5px 9px; border-radius: 6px; {{ $latestAssessment->keseimbangan_bbs_skor >= 45 ? 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;' : ($latestAssessment->keseimbangan_bbs_skor >= 21 ? 'background: #fffbeb; color: #d97706; border: 1px solid #fde68a;' : 'background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;') }}">
                                                 {{ $latestAssessment->keseimbangan_bbs_skor }} / 56
                                             </span>
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
                                     </td>
-                                    <td class="text-muted" style="font-size: 12px;">&lt; 45 (Risiko jatuh)</td>
+                                    <td class="align-middle">
+                                        @if($latestAssessment->keseimbangan_bbs_skor !== null)
+                                            @if($latestAssessment->keseimbangan_bbs_skor >= 45)
+                                                <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                                    <i class="fa-solid fa-circle-check mr-1"></i> Risiko Jatuh Rendah (Mandiri)
+                                                </span>
+                                            @elseif($latestAssessment->keseimbangan_bbs_skor >= 21)
+                                                <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #fffbeb; color: #d97706; border: 1px solid #fde68a;">
+                                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Risiko Jatuh Sedang (Perlu Bantuan)
+                                                </span>
+                                            @else
+                                                <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">
+                                                    <i class="fa-solid fa-circle-xmark mr-1"></i> Risiko Jatuh Tinggi (Ketergantungan)
+                                                </span>
+                                            @endif
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
                                 </tr>
+
+                                <!-- 2. Timed Up and Go (TUG) -->
                                 <tr>
-                                    <td><strong>Timed Up and Go (TUG)</strong></td>
-                                    <td>
-                                        @if($latestAssessment->keseimbangan_tug_detik)
-                                            <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; {{ $latestAssessment->keseimbangan_tug_detik <= 13.5 ? 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;' : 'background: #fffbeb; color: #d97706; border: 1px solid #fde68a;' }}">
+                                    <td class="align-middle"><strong>Timed Up and Go (TUG)</strong></td>
+                                    <td class="align-middle">
+                                        @if($latestAssessment->keseimbangan_tug_detik !== null)
+                                            <span class="badge font-w700" style="font-size: 12px; padding: 5px 9px; border-radius: 6px; {{ $latestAssessment->keseimbangan_tug_detik <= 10 ? 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;' : ($latestAssessment->keseimbangan_tug_detik <= 13.5 ? 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;' : ($latestAssessment->keseimbangan_tug_detik <= 30 ? 'background: #fffbeb; color: #d97706; border: 1px solid #fde68a;' : 'background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;')) }}">
                                                 {{ $latestAssessment->keseimbangan_tug_detik }} detik
                                             </span>
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
                                     </td>
-                                    <td class="text-muted" style="font-size: 12px;">&gt; 13,5 detik (Risiko)</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Romberg Test (Mata Tertutup)</strong></td>
-                                    <td>
-                                        @if($latestAssessment->keseimbangan_romberg == 'Positif')
-                                            <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">Positif</span>
-                                        @elseif($latestAssessment->keseimbangan_romberg == 'Negatif')
-                                            <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">Negatif (Normal)</span>
+                                    <td class="align-middle">
+                                        @if($latestAssessment->keseimbangan_tug_detik !== null)
+                                            @if($latestAssessment->keseimbangan_tug_detik <= 10)
+                                                <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                                    <i class="fa-solid fa-circle-check mr-1"></i> Mobilitas Normal & Mandiri (&le; 10s)
+                                                </span>
+                                            @elseif($latestAssessment->keseimbangan_tug_detik <= 13.5)
+                                                <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;">
+                                                    <i class="fa-solid fa-circle-info mr-1"></i> Mobilitas Cukup Baik (10–13,5s)
+                                                </span>
+                                            @elseif($latestAssessment->keseimbangan_tug_detik <= 30)
+                                                <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #fffbeb; color: #d97706; border: 1px solid #fde68a;">
+                                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Ada Risiko Jatuh (&gt; 13,5s)
+                                                </span>
+                                            @else
+                                                <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">
+                                                    <i class="fa-solid fa-circle-xmark mr-1"></i> Risiko Jatuh Tinggi (&gt; 30s)
+                                                </span>
+                                            @endif
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
                                     </td>
-                                    <td class="text-muted" style="font-size: 12px;">Negatif (Normal)</td>
                                 </tr>
+
+                                <!-- 3. Romberg Test (Mata Tertutup) -->
                                 <tr>
-                                    <td><strong>One-Leg Stance (OLS)</strong></td>
-                                    <td>
+                                    <td class="align-middle"><strong>Romberg Test (Mata Tertutup)</strong></td>
+                                    <td class="align-middle">
+                                        @if($latestAssessment->keseimbangan_romberg == 'Positif')
+                                            <span class="badge font-w700" style="font-size: 12px; padding: 5px 9px; border-radius: 6px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">Positif</span>
+                                        @elseif($latestAssessment->keseimbangan_romberg == 'Negatif')
+                                            <span class="badge font-w700" style="font-size: 12px; padding: 5px 9px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">Negatif</span>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="align-middle">
+                                        @if($latestAssessment->keseimbangan_romberg == 'Negatif')
+                                            <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                                <i class="fa-solid fa-circle-check mr-1"></i> Normal (Proprioseptif Baik)
+                                            </span>
+                                        @elseif($latestAssessment->keseimbangan_romberg == 'Positif')
+                                            <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">
+                                                <i class="fa-solid fa-circle-xmark mr-1"></i> Ada Gangguan Keseimbangan / Ataksia
+                                            </span>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                </tr>
+
+                                <!-- 4. One-Leg Stance (OLS) -->
+                                <tr>
+                                    <td class="align-middle"><strong>One-Leg Stance (OLS)</strong></td>
+                                    <td class="align-middle">
                                         <div class="font-w600" style="font-size: 12.5px;">
-                                            Kanan: <span class="text-primary">{{ $latestAssessment->keseimbangan_ols_kanan ? $latestAssessment->keseimbangan_ols_kanan . 's' : '-' }}</span> &bull; 
-                                            Kiri: <span class="text-primary">{{ $latestAssessment->keseimbangan_ols_kiri ? $latestAssessment->keseimbangan_ols_kiri . 's' : '-' }}</span>
+                                            Kanan: <span class="text-primary font-w700">{{ $latestAssessment->keseimbangan_ols_kanan ? $latestAssessment->keseimbangan_ols_kanan . 's' : '-' }}</span> &bull; 
+                                            Kiri: <span class="text-primary font-w700">{{ $latestAssessment->keseimbangan_ols_kiri ? $latestAssessment->keseimbangan_ols_kiri . 's' : '-' }}</span>
                                         </div>
                                     </td>
-                                    <td class="text-muted" style="font-size: 12px;">&ge; 5 detik</td>
+                                    <td class="align-middle">
+                                        @php
+                                            $olsKanan = $latestAssessment->keseimbangan_ols_kanan;
+                                            $olsKiri = $latestAssessment->keseimbangan_ols_kiri;
+                                        @endphp
+                                        @if($olsKanan !== null || $olsKiri !== null)
+                                            @if((float)$olsKanan >= 5 && (float)$olsKiri >= 5)
+                                                <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                                                    <i class="fa-solid fa-circle-check mr-1"></i> Keseimbangan Unilateral Normal (&ge; 5s)
+                                                </span>
+                                            @elseif((float)$olsKanan < 5 || (float)$olsKiri < 5)
+                                                <span class="badge font-w700" style="font-size: 11.5px; padding: 4px 8px; border-radius: 6px; background: #fffbeb; color: #d97706; border: 1px solid #fde68a;">
+                                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Keseimbangan Satu Kaki Berkurang (&lt; 5s)
+                                                </span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

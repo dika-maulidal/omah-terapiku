@@ -607,16 +607,22 @@
                 <i class="fa-solid fa-download mr-1"></i> Unduh PDF
             </button>
             @if($assessment)
-                <a href="{{ route('rekam.assessment.print', $rekam->id) }}" class="btn btn-sm btn-info text-white" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; background: #0284c7; border: none;" title="Cetak Lembar Asesmen Saja">
+                <a href="{{ auth()->check() ? route('rekam.assessment.print', $rekam->id) : route('portal.assessment.print', $rekam->id) }}" class="btn btn-sm btn-info text-white" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; background: #0284c7; border: none;" title="Cetak Lembar Asesmen Saja">
                     <i class="fa-solid fa-clipboard-check mr-1"></i> Asesmen
                 </a>
             @endif
-            <a href="{{ route('rekam.home-program.print', $rekam->id) }}" class="btn btn-sm btn-success text-white" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; background: #16a34a; border: none;" title="Cetak Panduan Latihan Rumahan">
+            <a href="{{ auth()->check() ? route('rekam.home-program.print', $rekam->id) : route('portal.home-program.print', $rekam->id) }}" class="btn btn-sm btn-success text-white" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; background: #16a34a; border: none;" title="Cetak Panduan Latihan Rumahan">
                 <i class="fa-solid fa-house-user mr-1"></i> Home Program
             </a>
-            <a href="{{ route('rekam.detail', $pasien->id) }}" class="btn btn-sm btn-light border font-w600" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; color: #334155;">
-                <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
-            </a>
+            @if(auth()->check())
+                <a href="{{ route('rekam.detail', $pasien->id) }}" class="btn btn-sm btn-light border font-w600" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; color: #334155;">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                </a>
+            @else
+                <a href="{{ route('portal.dokumen') }}" class="btn btn-sm btn-light border font-w600" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; color: #334155;">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                </a>
+            @endif
         </div>
     </div>
 </div>

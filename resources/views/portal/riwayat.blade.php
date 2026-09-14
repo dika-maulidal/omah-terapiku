@@ -113,11 +113,11 @@
                                         <td class="text-center">
                                             <div class="d-inline-flex" style="gap: 5px;">
                                                 @if($rekam->assessment)
-                                                    <a href="{{ route('rekam.assessment.print', $rekam->id) }}" target="_blank" class="btn btn-xs btn-primary font-w700" style="border-radius: 6px; padding: 4px 9px;" title="Cetak Hasil Asesmen">
+                                                    <a href="{{ route('portal.assessment.print', $rekam->id) }}" target="_blank" class="btn btn-xs btn-primary font-w700" style="border-radius: 6px; padding: 4px 9px;" title="Cetak Hasil Asesmen">
                                                         <i class="fa-solid fa-file-waveform mr-1"></i> Asesmen
                                                     </a>
                                                 @endif
-                                                <a href="{{ route('rekam.soap.print', $rekam->id) }}" target="_blank" class="btn btn-xs btn-outline-primary font-w600" style="border-radius: 6px; padding: 4px 9px;" title="Cetak Catatan Sesi Terapi">
+                                                <a href="{{ route('portal.soap.print', $rekam->id) }}" target="_blank" class="btn btn-xs btn-outline-primary font-w600" style="border-radius: 6px; padding: 4px 9px;" title="Cetak Catatan Sesi Terapi">
                                                     <i class="fa-solid fa-file-lines mr-1"></i> Catatan Sesi
                                                 </a>
                                             </div>

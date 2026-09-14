@@ -37,6 +37,9 @@ Route::get('/portal/nyeri', [PatientPortalController::class, 'nyeri'])->name('po
 Route::get('/portal/home-program', [PatientPortalController::class, 'homeProgram'])->name('portal.home-program');
 Route::get('/portal/riwayat', [PatientPortalController::class, 'riwayat'])->name('portal.riwayat');
 Route::get('/portal/dokumen', [PatientPortalController::class, 'dokumen'])->name('portal.dokumen');
+Route::get('/portal/rekam/{id}/assessment/print', [PatientPortalController::class, 'printAssessment'])->name('portal.assessment.print');
+Route::get('/portal/rekam/{id}/soap/print', [PatientPortalController::class, 'printSoap'])->name('portal.soap.print');
+Route::get('/portal/rekam/{id}/home-program/print', [PatientPortalController::class, 'printHomeProgram'])->name('portal.home-program.print');
 
 Route::get('test', function () {
     StatusRekamUpdate::dispatch("5", "REG002", "INI TEST AJA", "http://sss", "25 05 1993");

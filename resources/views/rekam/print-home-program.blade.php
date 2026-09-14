@@ -340,17 +340,23 @@
             <button type="button" id="btnDownloadPdf" onclick="downloadPDF()" class="btn btn-sm btn-success text-white" style="padding: 5px 12px; font-size: 11.5px; font-weight: bold; border-radius: 4px; background: #16a34a; border: none;">
                 <i class="fa-solid fa-download mr-1"></i> Unduh PDF
             </button>
-            <a href="{{ route('rekam.soap.print', $rekam->id) }}" class="btn btn-sm btn-primary text-white" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; background: #2563eb; border: none;" title="Cetak Lembar SOAP Lengkap">
+            <a href="{{ auth()->check() ? route('rekam.soap.print', $rekam->id) : route('portal.soap.print', $rekam->id) }}" class="btn btn-sm btn-primary text-white" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; background: #2563eb; border: none;" title="Cetak Lembar SOAP Lengkap">
                 <i class="fa-solid fa-file-medical mr-1"></i> SOAP
             </a>
             @if($rekam->assessment)
-                <a href="{{ route('rekam.assessment.print', $rekam->id) }}" class="btn btn-sm btn-info text-white" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; background: #0284c7; border: none;" title="Cetak Lembar Asesmen">
+                <a href="{{ auth()->check() ? route('rekam.assessment.print', $rekam->id) : route('portal.assessment.print', $rekam->id) }}" class="btn btn-sm btn-info text-white" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; background: #0284c7; border: none;" title="Cetak Lembar Asesmen">
                     <i class="fa-solid fa-clipboard-check mr-1"></i> Asesmen
                 </a>
             @endif
-            <a href="{{ route('rekam.detail', $pasien->id) }}" class="btn btn-sm btn-light border" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; color: #334155;">
-                <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
-            </a>
+            @if(auth()->check())
+                <a href="{{ route('rekam.detail', $pasien->id) }}" class="btn btn-sm btn-light border" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; color: #334155;">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                </a>
+            @else
+                <a href="{{ route('portal.dokumen') }}" class="btn btn-sm btn-light border" style="padding: 5px 10px; font-size: 11.5px; border-radius: 4px; color: #334155;">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                </a>
+            @endif
         </div>
     </div>
 </div>
