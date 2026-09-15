@@ -76,7 +76,7 @@
                             </div>
                             <div class="mt-1 font-w500" style="font-size: 11px; color: #64748b;">
                                 <i class="fa-regular fa-calendar-check mr-1" style="color: #2563eb;"></i>{{ $row->tgl_rencana_kunjungan ? \Carbon\Carbon::parse($row->tgl_rencana_kunjungan)->isoFormat('D MMM Y') : '-' }}
-                                <span class="d-block text-muted">{{ $row->jam_rencana_kunjungan ?: 'Sesi Pagi' }}</span>
+                                <span class="d-block text-muted">{{ $row->jam_rencana_kunjungan ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}</span>
                             </div>
                         </td>
                         <td style="padding: 12px 14px; vertical-align: middle; text-align: center;">
@@ -114,7 +114,7 @@
                                         data-nama="{{ $row->nama }}" 
                                         data-layanan="{{ $row->layanan_terapi }}" 
                                         data-tgl="{{ $row->tgl_rencana_kunjungan ?: date('Y-m-d') }}" 
-                                        data-jam="{{ $row->jam_rencana_kunjungan ?: 'Sesi Pagi I (08:00 - 10:00 WIB)' }}"
+                                        data-jam="{{ $row->jam_rencana_kunjungan ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}"
                                         data-upt="{{ $row->upt_lokasi }}"
                                         title="Setujui, Pilih Terapis & Terbitkan No. RM" 
                                         style="width: 28px; height: 28px; padding: 0; border-radius: 8px; background: #10b981; color: #ffffff; border: none;">

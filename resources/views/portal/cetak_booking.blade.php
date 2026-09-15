@@ -485,7 +485,7 @@
                 <td style="font-weight: bold;">Rencana Tgl. Kunjungan</td>
                 <td style="font-weight: bold;">: {{ $tglRencanaFormatted }}</td>
                 <td style="font-weight: bold;">Preferensi Sesi Waktu</td>
-                <td>: {{ $booking->jam_sesi ?: 'Sesi Pagi (08:00 - 10:00 WIB)' }}</td>
+                <td>: {{ $booking->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}</td>
             </tr>
             <tr>
                 <td style="font-weight: bold;">Fokus / Catatan Pasien</td>
@@ -507,7 +507,7 @@
                     <td style="width: 20%; font-weight: bold;">Terapis Penanggung Jawab</td>
                     <td style="width: 30%;">: <strong>{{ $booking->dokter ? $booking->dokter->nama : 'Petugas Medis Omah Terapi-KU' }}</strong></td>
                     <td style="width: 20%; font-weight: bold;">Jadwal Sesi Terapi</td>
-                    <td style="width: 30%; font-weight: bold;">: {{ $tglRencanaFormatted }} ({{ $booking->jam_sesi ?: 'Sesi Pagi' }})</td>
+                    <td style="width: 30%; font-weight: bold;">: {{ $tglRencanaFormatted }} ({{ $booking->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)' }})</td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Status Pelaksanaan</td>

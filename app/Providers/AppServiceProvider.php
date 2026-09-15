@@ -28,5 +28,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
         date_default_timezone_set('Asia/Singapore');
+
+        // Force HTTPS in production, Azure App Service, or behind reverse proxy
+        if (config('app.env') === 'production' || request()->header('x-forwarded-proto') === 'https' || request()->server('HTTP_X_FORWARDED_PROTO') === 'https') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 }

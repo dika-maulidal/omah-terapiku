@@ -202,7 +202,7 @@
                                 {!! $latestBooking->status_badge !!}
                             </div>
                             <small class="text-muted" style="font-size: 12px;">
-                                Layanan: <strong class="text-dark">{{ $latestBooking->layanan_terapi }}</strong> &bull; Rencana: <strong class="text-dark">{{ $latestBooking->tgl_rencana ? \Carbon\Carbon::parse($latestBooking->tgl_rencana)->isoFormat('D MMMM Y') : '-' }}</strong> &bull; Sesi: {{ $latestBooking->jam_sesi ?: 'Sesi Pagi (08:00 - 10:00 WIB)' }}
+                                Layanan: <strong class="text-dark">{{ $latestBooking->layanan_terapi }}</strong> &bull; Rencana: <strong class="text-dark">{{ $latestBooking->tgl_rencana ? \Carbon\Carbon::parse($latestBooking->tgl_rencana)->isoFormat('D MMMM Y') : '-' }}</strong> &bull; Sesi: {{ $latestBooking->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}
                             </small>
                         </div>
                     </div>

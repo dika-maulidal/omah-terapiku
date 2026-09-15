@@ -588,7 +588,7 @@
     }
 
     // =========================================================================
-    // INTEGRASI API WILAYAH.ID BERJENJANG DENGAN SELECT2 SEARCHABLE (MUNCUL KE BAWAH)
+    // INTEGRASI API WILAYAH.ID BERJENJANG DENGAN SELECT2 SEARCHABLE
     // =========================================================================
     const WilayahManager = {
         proxyUrl: "{{ url('/api/wilayah') }}",
@@ -600,21 +600,105 @@
         regenciesData: [],
         districtsData: [],
         villagesData: [],
+        isInitializing: false,
+
+        fallbackProvinces: [
+            { code: "35", name: "JAWA TIMUR" },
+            { code: "31", name: "DKI JAKARTA" },
+            { code: "32", name: "JAWA BARAT" },
+            { code: "33", name: "JAWA TENGAH" },
+            { code: "34", name: "DAERAH ISTIMEWA YOGYAKARTA" },
+            { code: "36", name: "BANTEN" },
+            { code: "51", name: "BALI" },
+            { code: "52", name: "NUSA TENGGARA BARAT" },
+            { code: "53", name: "NUSA TENGGARA TIMUR" },
+            { code: "11", name: "ACEH" },
+            { code: "12", name: "SUMATERA UTARA" },
+            { code: "13", name: "SUMATERA BARAT" },
+            { code: "14", name: "RIAU" },
+            { code: "15", name: "JAMBI" },
+            { code: "16", name: "SUMATERA SELATAN" },
+            { code: "17", name: "BENGKULU" },
+            { code: "18", name: "LAMPUNG" },
+            { code: "19", name: "KEPULAUAN BANGKA BELITUNG" },
+            { code: "21", name: "KEPULAUAN RIAU" },
+            { code: "61", name: "KALIMANTAN BARAT" },
+            { code: "62", name: "KALIMANTAN TENGAH" },
+            { code: "63", name: "KALIMANTAN SELATAN" },
+            { code: "64", name: "KALIMANTAN TIMUR" },
+            { code: "65", name: "KALIMANTAN UTARA" },
+            { code: "71", name: "SULAWESI UTARA" },
+            { code: "72", name: "SULAWESI TENGAH" },
+            { code: "73", name: "SULAWESI SELATAN" },
+            { code: "74", name: "SULAWESI TENGGARA" },
+            { code: "75", name: "GORONTALO" },
+            { code: "76", name: "SULAWESI BARAT" },
+            { code: "81", name: "MALUKU" },
+            { code: "82", name: "MALUKU UTARA" },
+            { code: "91", name: "PAPUA" },
+            { code: "92", name: "PAPUA BARAT" },
+            { code: "93", name: "PAPUA SELATAN" },
+            { code: "94", name: "PAPUA TENGAH" },
+            { code: "95", name: "PAPUA PEGUNUNGAN" },
+            { code: "96", name: "PAPUA BARAT DAYA" }
+        ],
+
+        fallbackJatimRegencies: [
+            { code: "35.01", name: "KABUPATEN PACITAN" },
+            { code: "35.02", name: "KABUPATEN PONOROGO" },
+            { code: "35.03", name: "KABUPATEN TRENGGALEK" },
+            { code: "35.04", name: "KABUPATEN TULUNGAGUNG" },
+            { code: "35.05", name: "KABUPATEN BLITAR" },
+            { code: "35.06", name: "KABUPATEN KEDIRI" },
+            { code: "35.07", name: "KABUPATEN MALANG" },
+            { code: "35.08", name: "KABUPATEN LUMAJANG" },
+            { code: "35.09", name: "KABUPATEN JEMBER" },
+            { code: "35.10", name: "KABUPATEN BANYUWANGI" },
+            { code: "35.11", name: "KABUPATEN BONDOWOSO" },
+            { code: "35.12", name: "KABUPATEN SITUBONDO" },
+            { code: "35.13", name: "KABUPATEN PROBOLINGGO" },
+            { code: "35.14", name: "KABUPATEN PASURUAN" },
+            { code: "35.15", name: "KABUPATEN SIDOARJO" },
+            { code: "35.16", name: "KABUPATEN MOJOKERTO" },
+            { code: "35.17", name: "KABUPATEN JOMBANG" },
+            { code: "35.18", name: "KABUPATEN NGANJUK" },
+            { code: "35.19", name: "KABUPATEN MADIUN" },
+            { code: "35.20", name: "KABUPATEN MAGETAN" },
+            { code: "35.21", name: "KABUPATEN NGAWI" },
+            { code: "35.22", name: "KABUPATEN BOJONEGORO" },
+            { code: "35.23", name: "KABUPATEN TUBAN" },
+            { code: "35.24", name: "KABUPATEN LAMONGAN" },
+            { code: "35.25", name: "KABUPATEN GRESIK" },
+            { code: "35.26", name: "KABUPATEN BANGKALAN" },
+            { code: "35.27", name: "KABUPATEN SAMPANG" },
+            { code: "35.28", name: "KABUPATEN PAMEKASAN" },
+            { code: "35.29", name: "KABUPATEN SUMENEP" },
+            { code: "35.71", name: "KOTA KEDIRI" },
+            { code: "35.72", name: "KOTA BLITAR" },
+            { code: "35.73", name: "KOTA MALANG" },
+            { code: "35.74", name: "KOTA PROBOLINGGO" },
+            { code: "35.75", name: "KOTA PASURUAN" },
+            { code: "35.76", name: "KOTA MOJOKERTO" },
+            { code: "35.77", name: "KOTA MADIUN" },
+            { code: "35.78", name: "KOTA SURABAYA" },
+            { code: "35.79", name: "KOTA BATU" }
+        ],
 
         async init() {
             this.initSelect2();
             this.bindEvents();
+            this.isInitializing = true;
             await this.loadProvinces();
+            this.isInitializing = false;
         },
 
         initSelect2() {
             $('.select2-wilayah').each(function() {
                 const $this = $(this);
                 if ($this.hasClass('select2-hidden-accessible')) {
-                    return;
+                    $this.select2('destroy');
                 }
                 $this.select2({
-                    dropdownParent: $this.closest('.col-wilayah'),
                     width: '100%',
                     language: {
                         noResults: function() { return 'Tidak ada data ditemukan'; },
@@ -624,20 +708,37 @@
             });
         },
 
+        normalizeName(str) {
+            if (!str) return '';
+            return str.toString().toLowerCase()
+                .replace(/^(kabupaten|kab\.|kota|kecamatan|kec\.|kelurahan|kel\.|desa|ds\.)\s+/i, '')
+                .replace(/[^a-z0-9]/g, '')
+                .trim();
+        },
+
+        getSelectedCode(selectElement, dataList) {
+            if (!selectElement || selectElement.selectedIndex < 0) return '';
+            const opt = selectElement.options[selectElement.selectedIndex];
+            if (!opt) return '';
+            let code = opt.getAttribute('data-code') || '';
+            if (!code && dataList && dataList.length > 0) {
+                const val = opt.value;
+                const normVal = this.normalizeName(val);
+                const found = dataList.find(d => this.normalizeName(d.name) === normVal || d.name === val);
+                if (found) code = found.code;
+            }
+            return code;
+        },
+
         bindEvents() {
             const self = this;
 
             // Ganti Provinsi -> Muat Kabupaten
-            $('#select_provinsi').on('change', function() {
-                let provCode = $(this).find(':selected').data('code') || $(this).find('option:selected').attr('data-code');
-                if (!provCode && self.provincesData && self.provincesData.length > 0) {
-                    const provName = $(this).val();
-                    const found = self.provincesData.find(p => p.name === provName);
-                    if (found) provCode = found.code;
-                }
-
+            $('#select_provinsi').on('change', async function() {
+                if (self.isInitializing) return;
+                const provCode = self.getSelectedCode(this, self.provincesData);
                 if (provCode) {
-                    self.loadRegencies(provCode);
+                    await self.loadRegencies(provCode);
                 } else {
                     self.resetSelect('#select_kabupaten', '-- Pilih Kabupaten / Kota --', true);
                     self.resetSelect('#select_kecamatan', '-- Pilih Kab/Kota Dahulu --', true);
@@ -646,16 +747,11 @@
             });
 
             // Ganti Kabupaten -> Muat Kecamatan
-            $('#select_kabupaten').on('change', function() {
-                let regCode = $(this).find(':selected').data('code') || $(this).find('option:selected').attr('data-code');
-                if (!regCode && self.regenciesData && self.regenciesData.length > 0) {
-                    const regName = $(this).val();
-                    const found = self.regenciesData.find(r => r.name === regName);
-                    if (found) regCode = found.code;
-                }
-
+            $('#select_kabupaten').on('change', async function() {
+                if (self.isInitializing) return;
+                const regCode = self.getSelectedCode(this, self.regenciesData);
                 if (regCode) {
-                    self.loadDistricts(regCode);
+                    await self.loadDistricts(regCode);
                 } else {
                     self.resetSelect('#select_kecamatan', '-- Pilih Kab/Kota Dahulu --', true);
                     self.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
@@ -663,16 +759,11 @@
             });
 
             // Ganti Kecamatan -> Muat Kelurahan
-            $('#select_kecamatan').on('change', function() {
-                let distCode = $(this).find(':selected').data('code') || $(this).find('option:selected').attr('data-code');
-                if (!distCode && self.districtsData && self.districtsData.length > 0) {
-                    const distName = $(this).val();
-                    const found = self.districtsData.find(d => d.name === distName);
-                    if (found) distCode = found.code;
-                }
-
+            $('#select_kecamatan').on('change', async function() {
+                if (self.isInitializing) return;
+                const distCode = self.getSelectedCode(this, self.districtsData);
                 if (distCode) {
-                    self.loadVillages(distCode);
+                    await self.loadVillages(distCode);
                 } else {
                     self.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
                 }
@@ -681,7 +772,10 @@
 
         resetSelect(selector, placeholder, disable = true) {
             const $el = $(selector);
-            $el.html(`<option value="" data-code="">${placeholder}</option>`);
+            $el.empty();
+            const opt = new Option(placeholder, '', true, true);
+            opt.setAttribute('data-code', '');
+            $el.append(opt);
             $el.prop('disabled', disable).trigger('change.select2');
         },
 
@@ -694,68 +788,72 @@
             }
         },
 
-        normalizeName(str) {
-            if (!str) return '';
-            return str.toLowerCase()
-                .replace(/^(kabupaten|kab\.|kota|kecamatan|kec\.|kelurahan|kel\.|desa|ds\.)\s+/i, '')
-                .trim();
-        },
-
-        async fetchJson(endpoint, directEndpoint) {
+        async fetchJson(endpoint, directEndpoint, fallbackData = []) {
+            // Tier 1: Laravel Proxy
             try {
                 const res = await fetch(`${this.proxyUrl}/${endpoint}`);
                 if (res.ok) {
                     const json = await res.json();
-                    if (json.data && json.data.length > 0) {
+                    if (json && json.data && json.data.length > 0) {
                         return json.data;
                     }
                 }
             } catch (e) {
-                console.warn(`Proxy fetch failed for ${endpoint}, trying direct...`, e);
+                console.warn(`Proxy fetch failed for ${endpoint}, trying fallback...`, e);
             }
 
-            // Fallback direct
+            // Tier 2: Direct Wilayah.id API
             try {
                 const resDirect = await fetch(`${this.directUrl}/${directEndpoint}`);
                 if (resDirect.ok) {
                     const jsonDirect = await resDirect.json();
-                    return jsonDirect.data || [];
+                    if (jsonDirect && jsonDirect.data && jsonDirect.data.length > 0) {
+                        return jsonDirect.data;
+                    }
                 }
             } catch (err) {
-                console.error(`Direct fetch failed for ${directEndpoint}:`, err);
+                console.warn(`Direct fetch failed for ${directEndpoint}:`, err);
             }
-            return [];
+
+            // Tier 3: Static Embedded Fallback
+            return fallbackData;
         },
 
         async loadProvinces() {
             this.showLoading('provinsi', true);
             try {
-                const provinces = await this.fetchJson('provinces', 'provinces.json');
+                let provinces = await this.fetchJson('provinces', 'provinces.json', this.fallbackProvinces);
+                if (!provinces || provinces.length === 0) {
+                    provinces = this.fallbackProvinces;
+                }
                 this.provincesData = provinces;
 
-                let html = '<option value="" data-code="">-- Pilih Provinsi --</option>';
+                const $prov = $('#select_provinsi');
+                $prov.empty();
+
+                const defaultOpt = new Option('-- Pilih Provinsi --', '', false, false);
+                defaultOpt.setAttribute('data-code', '');
+                $prov.append(defaultOpt);
+
                 let defaultProvCode = '35'; // Default Jawa Timur
+                let targetProvCode = defaultProvCode;
 
                 provinces.forEach(p => {
-                    html += `<option value="${p.name}" data-code="${p.code}">${p.name}</option>`;
+                    const isSelected = (p.code === targetProvCode || this.normalizeName(p.name) === 'jawatimur');
+                    const opt = new Option(p.name, p.name, false, isSelected);
+                    opt.setAttribute('data-code', p.code);
+                    $prov.append(opt);
                 });
-                $('#select_provinsi').html(html).prop('disabled', false);
 
-                // Auto-select Provinsi (Default: Jawa Timur)
-                let targetProvCode = defaultProvCode;
-                $('#select_provinsi option').each(function() {
-                    if ($(this).data('code') == targetProvCode) {
-                        $(this).prop('selected', true);
-                    }
-                });
-                $('#select_provinsi').trigger('change.select2');
+                $prov.prop('disabled', false).trigger('change.select2');
 
-                // Load Regencies for selected province
+                // Load Regencies for default selected province (Jawa Timur)
                 await this.loadRegencies(targetProvCode, this.savedKab);
 
             } catch (err) {
-                console.error('Gagal memuat provinsi dari Wilayah.id:', err);
-                $('#select_provinsi').html('<option value="">Gagal memuat data API</option>').trigger('change.select2');
+                console.error('Gagal memuat provinsi:', err);
+                const $prov = $('#select_provinsi');
+                $prov.empty().append(new Option('Gagal memuat data API', '', true, true)).trigger('change.select2');
             } finally {
                 this.showLoading('provinsi', false);
             }
@@ -768,26 +866,42 @@
             this.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
 
             try {
-                const regencies = await this.fetchJson(`regencies/${provCode}`, `regencies/${provCode}.json`);
+                const fallback = (provCode === '35') ? this.fallbackJatimRegencies : [];
+                let regencies = await this.fetchJson(`regencies/${provCode}`, `regencies/${provCode}.json`, fallback);
+                if ((!regencies || regencies.length === 0) && provCode === '35') {
+                    regencies = this.fallbackJatimRegencies;
+                }
                 this.regenciesData = regencies;
 
-                let html = '<option value="" data-code="">-- Pilih Kabupaten / Kota --</option>';
+                const $kab = $('#select_kabupaten');
+                $kab.empty();
+
+                const defaultOpt = new Option('-- Pilih Kabupaten / Kota --', '', true, !preselectedKab);
+                defaultOpt.setAttribute('data-code', '');
+                $kab.append(defaultOpt);
+
                 let matchedCode = '';
-                const normalizedSavedKab = this.normalizeName(preselectedKab);
+                const normSavedKab = this.normalizeName(preselectedKab);
 
-                regencies.forEach(r => {
-                    const isSelected = normalizedSavedKab && (this.normalizeName(r.name) === normalizedSavedKab || r.name.toLowerCase() === preselectedKab.toLowerCase());
-                    if (isSelected) {
-                        matchedCode = r.code;
-                    }
-                    html += `<option value="${r.name}" data-code="${r.code}" ${isSelected ? 'selected' : ''}>${r.name}</option>`;
-                });
-
-                if (preselectedKab && !matchedCode) {
-                    html += `<option value="${preselectedKab}" data-code="" selected>${preselectedKab} (Tersimpan)</option>`;
+                if (regencies && regencies.length > 0) {
+                    regencies.forEach(r => {
+                        const isSelected = normSavedKab && (this.normalizeName(r.name) === normSavedKab || r.name.toLowerCase() === preselectedKab.toLowerCase());
+                        if (isSelected) {
+                            matchedCode = r.code;
+                        }
+                        const opt = new Option(r.name, r.name, false, isSelected);
+                        opt.setAttribute('data-code', r.code);
+                        $kab.append(opt);
+                    });
                 }
 
-                $('#select_kabupaten').html(html).prop('disabled', false).trigger('change.select2');
+                if (preselectedKab && !matchedCode) {
+                    const customOpt = new Option(`${preselectedKab} (Tersimpan)`, preselectedKab, false, true);
+                    customOpt.setAttribute('data-code', '');
+                    $kab.append(customOpt);
+                }
+
+                $kab.prop('disabled', false).trigger('change.select2');
 
                 if (matchedCode) {
                     await this.loadDistricts(matchedCode, this.savedKec);
@@ -807,26 +921,38 @@
             this.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
 
             try {
-                const districts = await this.fetchJson(`districts/${regCode}`, `districts/${regCode}.json`);
+                const districts = await this.fetchJson(`districts/${regCode}`, `districts/${regCode}.json`, []);
                 this.districtsData = districts;
 
-                let html = '<option value="" data-code="">-- Pilih Kecamatan --</option>';
+                const $kec = $('#select_kecamatan');
+                $kec.empty();
+
+                const defaultOpt = new Option('-- Pilih Kecamatan --', '', true, !preselectedKec);
+                defaultOpt.setAttribute('data-code', '');
+                $kec.append(defaultOpt);
+
                 let matchedCode = '';
-                const normalizedSavedKec = this.normalizeName(preselectedKec);
+                const normSavedKec = this.normalizeName(preselectedKec);
 
-                districts.forEach(d => {
-                    const isSelected = normalizedSavedKec && (this.normalizeName(d.name) === normalizedSavedKec || d.name.toLowerCase() === preselectedKec.toLowerCase());
-                    if (isSelected) {
-                        matchedCode = d.code;
-                    }
-                    html += `<option value="${d.name}" data-code="${d.code}" ${isSelected ? 'selected' : ''}>${d.name}</option>`;
-                });
-
-                if (preselectedKec && !matchedCode) {
-                    html += `<option value="${preselectedKec}" data-code="" selected>${preselectedKec} (Tersimpan)</option>`;
+                if (districts && districts.length > 0) {
+                    districts.forEach(d => {
+                        const isSelected = normSavedKec && (this.normalizeName(d.name) === normSavedKec || d.name.toLowerCase() === preselectedKec.toLowerCase());
+                        if (isSelected) {
+                            matchedCode = d.code;
+                        }
+                        const opt = new Option(d.name, d.name, false, isSelected);
+                        opt.setAttribute('data-code', d.code);
+                        $kec.append(opt);
+                    });
                 }
 
-                $('#select_kecamatan').html(html).prop('disabled', false).trigger('change.select2');
+                if (preselectedKec && !matchedCode) {
+                    const customOpt = new Option(`${preselectedKec} (Tersimpan)`, preselectedKec, false, true);
+                    customOpt.setAttribute('data-code', '');
+                    $kec.append(customOpt);
+                }
+
+                $kec.prop('disabled', false).trigger('change.select2');
 
                 if (matchedCode) {
                     await this.loadVillages(matchedCode, this.savedKel);
@@ -845,26 +971,38 @@
             this.resetSelect('#select_kelurahan', 'Memuat Kelurahan/Desa...', true);
 
             try {
-                const villages = await this.fetchJson(`villages/${distCode}`, `villages/${distCode}.json`);
+                const villages = await this.fetchJson(`villages/${distCode}`, `villages/${distCode}.json`, []);
                 this.villagesData = villages;
 
-                let html = '<option value="" data-code="">-- Pilih Kelurahan / Desa --</option>';
+                const $kel = $('#select_kelurahan');
+                $kel.empty();
+
+                const defaultOpt = new Option('-- Pilih Kelurahan / Desa --', '', true, !preselectedKel);
+                defaultOpt.setAttribute('data-code', '');
+                $kel.append(defaultOpt);
+
                 let matchedCode = '';
-                const normalizedSavedKel = this.normalizeName(preselectedKel);
+                const normSavedKel = this.normalizeName(preselectedKel);
 
-                villages.forEach(v => {
-                    const isSelected = normalizedSavedKel && (this.normalizeName(v.name) === normalizedSavedKel || v.name.toLowerCase() === preselectedKel.toLowerCase());
-                    if (isSelected) {
-                        matchedCode = v.code;
-                    }
-                    html += `<option value="${v.name}" data-code="${v.code}" ${isSelected ? 'selected' : ''}>${v.name}</option>`;
-                });
-
-                if (preselectedKel && !matchedCode) {
-                    html += `<option value="${preselectedKel}" data-code="" selected>${preselectedKel} (Tersimpan)</option>`;
+                if (villages && villages.length > 0) {
+                    villages.forEach(v => {
+                        const isSelected = normSavedKel && (this.normalizeName(v.name) === normSavedKel || v.name.toLowerCase() === preselectedKel.toLowerCase());
+                        if (isSelected) {
+                            matchedCode = v.code;
+                        }
+                        const opt = new Option(v.name, v.name, false, isSelected);
+                        opt.setAttribute('data-code', v.code);
+                        $kel.append(opt);
+                    });
                 }
 
-                $('#select_kelurahan').html(html).prop('disabled', false).trigger('change.select2');
+                if (preselectedKel && !matchedCode) {
+                    const customOpt = new Option(`${preselectedKel} (Tersimpan)`, preselectedKel, false, true);
+                    customOpt.setAttribute('data-code', '');
+                    $kel.append(customOpt);
+                }
+
+                $kel.prop('disabled', false).trigger('change.select2');
 
             } catch (err) {
                 console.error('Gagal memuat villages:', err);

@@ -384,12 +384,18 @@
                         <!-- Jam Sesi -->
                         <div class="col-md-6 form-group mb-3">
                             <label class="font-w600 text-dark mb-1" style="font-size: 13px;">
-                                <i class="fa-regular fa-clock text-primary mr-1"></i> Sesi Waktu
+                                <i class="fa-regular fa-clock text-primary mr-1"></i> Sesi Waktu Terapi <small class="text-muted font-w400">(Rabu, 30-45 mnt)</small>
                             </label>
                             <select name="jam_sesi" id="approveJamSesi" class="form-control ot-input-modern font-w600">
-                                <option value="Sesi Pagi I (08:00 - 10:00 WIB)">Sesi Pagi I (08:00 - 10:00 WIB)</option>
-                                <option value="Sesi Pagi II (10:00 - 12:00 WIB)">Sesi Pagi II (10:00 - 12:00 WIB)</option>
-                                <option value="Sesi Siang (13:00 - 15:00 WIB)">Sesi Siang (13:00 - 15:00 WIB)</option>
+                                <option value="">--Pilih Slot Sesi Waktu--</option>
+                                <option value="Sesi 1 (08.00 - 08.45 WIB)">Sesi 1 (08.00 - 08.45 WIB)</option>
+                                <option value="Sesi 2 (08.45 - 09.30 WIB)">Sesi 2 (08.45 - 09.30 WIB)</option>
+                                <option value="Sesi 3 (09.30 - 10.15 WIB)">Sesi 3 (09.30 - 10.15 WIB)</option>
+                                <option value="Sesi 4 (10.15 - 11.00 WIB)">Sesi 4 (10.15 - 11.00 WIB)</option>
+                                <option value="Sesi 5 (11.00 - 11.45 WIB)">Sesi 5 (11.00 - 11.45 WIB)</option>
+                                <option value="Sesi 6 (11.45 - 12.30 WIB)">Sesi 6 (11.45 - 12.30 WIB)</option>
+                                <option value="Sesi 7 (12.30 - 13.00 WIB)">Sesi 7 (12.30 - 13.00 WIB)</option>
+                                <option value="Sesi Khusus / Fleksibel">Sesi Khusus / Fleksibel</option>
                             </select>
                         </div>
                     </div>
@@ -764,7 +770,7 @@
                         
                         html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-shapes text-primary mr-1"></i> Layanan Terapi:</span> <strong class="text-primary font-w700" style="font-size: 13.5px;">' + (d.layanan_terapi || '-') + '</strong></div>';
                         
-                        html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-clock text-primary mr-1"></i> Rencana Kunjungan:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + res.tgl_rencana_formatted + ' (' + (d.jam_rencana_kunjungan || 'Sesi Pagi') + ')</strong></div>';
+                        html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-clock text-primary mr-1"></i> Rencana Kunjungan:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + res.tgl_rencana_formatted + ' (' + (d.jam_rencana_kunjungan || 'Sesi 1 (08.00 - 08.45 WIB)') + ')</strong></div>';
                         
                         html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-hospital-user text-primary mr-1"></i> Pilihan UPT:</span> <strong class="text-primary font-w700" style="font-size: 13.5px;">' + (d.upt_lokasi || '-') + '</strong></div>';
                         

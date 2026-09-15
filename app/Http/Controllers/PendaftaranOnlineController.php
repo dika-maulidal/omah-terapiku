@@ -130,7 +130,7 @@ class PendaftaranOnlineController extends Controller
             'no_hp' => $request->no_hp,
             'layanan_terapi' => $request->layanan_terapi,
             'tgl_rencana_kunjungan' => $request->tgl_rencana_kunjungan,
-            'jam_rencana_kunjungan' => $request->jam_rencana_kunjungan ?: 'Sesi Pagi (08:00 - 10:00 WIB)',
+            'jam_rencana_kunjungan' => $request->jam_rencana_kunjungan ?: 'Sesi 1 (08.00 - 08.45 WIB)',
             'jenis_disabilitas' => $disabilitas,
             'alat_bantu' => $alat,
             'keluhan_utama' => $request->keluhan_utama,
@@ -499,7 +499,7 @@ class PendaftaranOnlineController extends Controller
                     'no_hp' => $pendaftaran->no_hp ?: '-',
                     'layanan_terapi' => $pendaftaran->layanan_terapi ?: 'Layanan Terapi Terpadu',
                     'tgl_rencana' => $pendaftaran->tgl_rencana_kunjungan ? Carbon::parse($pendaftaran->tgl_rencana_kunjungan)->isoFormat('D MMMM Y') : '-',
-                    'jam_rencana' => $pendaftaran->jam_rencana_kunjungan ?: 'Sesi Pagi (08:00 - 10:00 WIB)',
+                    'jam_rencana' => $pendaftaran->jam_rencana_kunjungan ?: 'Sesi 1 (08.00 - 08.45 WIB)',
                     'tgl_daftar' => $pendaftaran->created_at->isoFormat('D MMMM Y, HH:mm'),
                     'status' => $pendaftaran->status,
                     'status_badge' => $pendaftaran->status_badge,
@@ -549,7 +549,7 @@ class PendaftaranOnlineController extends Controller
                     'no_hp' => $pendaftaran->no_hp ?: '-',
                     'layanan_terapi' => $pendaftaran->layanan_terapi ?: 'Layanan Terapi Terpadu',
                     'tgl_rencana' => $pendaftaran->tgl_rencana_kunjungan ? Carbon::parse($pendaftaran->tgl_rencana_kunjungan)->isoFormat('D MMMM Y') : '-',
-                    'jam_rencana' => $pendaftaran->jam_rencana_kunjungan ?: 'Sesi Pagi (08:00 - 10:00 WIB)',
+                    'jam_rencana' => $pendaftaran->jam_rencana_kunjungan ?: 'Sesi 1 (08.00 - 08.45 WIB)',
                     'tgl_daftar' => $pendaftaran->created_at->isoFormat('D MMMM Y, HH:mm'),
                     'status' => $pendaftaran->status,
                     'status_badge' => $pendaftaran->status_badge,
@@ -646,7 +646,7 @@ class PendaftaranOnlineController extends Controller
             'pasien_id' => $pasien->id,
             'layanan_terapi' => $request->layanan_terapi,
             'tgl_rencana' => $request->tgl_rencana,
-            'jam_sesi' => $request->jam_sesi ?: 'Sesi Pagi (08:00 - 10:00 WIB)',
+            'jam_sesi' => $request->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)',
             'keluhan_catatan' => $request->keluhan_catatan,
             'status' => 'menunggu',
             'upt_lokasi' => $request->upt_lokasi ?: ($pasien->upt_lokasi ?: 'UPT RSBN Malang'),
@@ -959,7 +959,7 @@ class PendaftaranOnlineController extends Controller
 
             $layanan = $request->layanan_terapi ?: ($pendaftaran->layanan_terapi ?: 'Layanan Terapi Terpadu');
             $tglSesi = $request->tgl_sesi ?: ($pendaftaran->tgl_rencana_kunjungan ?: date('Y-m-d'));
-            $jamSesi = $request->jam_sesi ?: ($pendaftaran->jam_rencana_kunjungan ?: 'Sesi Pagi (08:00 - 10:00 WIB)');
+            $jamSesi = $request->jam_sesi ?: ($pendaftaran->jam_rencana_kunjungan ?: 'Sesi 1 (08.00 - 08.45 WIB)');
 
             // Generate No. Registrasi Rekam Medis unik
             $noRekam = "REG#" . date('Ymd') . $pasien->id;
@@ -1264,7 +1264,7 @@ class PendaftaranOnlineController extends Controller
                 'upt_lokasi' => $request->upt_lokasi ?: ($booking->pasien ? $booking->pasien->upt_lokasi : 'UPT RSBN Malang'),
                 'tgl_rekam' => $request->tgl_rekam,
                 'layanan_terapi' => $booking->layanan_terapi,
-                'sesi_waktu' => $request->jam_sesi ?: ($booking->jam_sesi ?: '08:00 - 10:00 WIB'),
+                'sesi_waktu' => $request->jam_sesi ?: ($booking->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)'),
                 'keluhan' => $booking->keluhan_catatan ?: 'Sesi terapi terjadwal via Booking Online',
                 'status' => 1, // Status 1: Antrean
                 'cara_bayar' => 'Gratis',
@@ -1279,7 +1279,7 @@ class PendaftaranOnlineController extends Controller
             $booking->update([
                 'status' => 'disetujui',
                 'dokter_id' => $request->dokter_id,
-                'jam_sesi' => $request->jam_sesi ?: '08:00 - 10:00 WIB',
+                'jam_sesi' => $request->jam_sesi ?: ($booking->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)'),
                 'upt_lokasi' => $request->upt_lokasi ?: $rekam->upt_lokasi,
                 'rekam_id' => $rekam->id,
                 'catatan_petugas' => $request->input('catatan_petugas', 'Jadwal sesi terapi telah dikonfirmasi oleh petugas.'),

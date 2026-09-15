@@ -348,12 +348,18 @@
                         <!-- Jam Sesi -->
                         <div class="col-md-6 form-group mb-0">
                             <label class="font-w600 text-dark mb-1" style="font-size: 13px;">
-                                <i class="fa-regular fa-clock text-primary mr-1"></i> Jam Sesi Terapi
+                                <i class="fa-regular fa-clock text-primary mr-1"></i> Jam Sesi Terapi <small class="text-muted font-w400">(Rabu, 30-45 mnt)</small>
                             </label>
-                            <select name="jam_sesi" class="form-control ot-input-modern font-w600">
-                                <option value="Sesi Pagi I (08:00 - 10:00 WIB)">Sesi Pagi I (08:00 - 10:00 WIB)</option>
-                                <option value="Sesi Pagi II (10:00 - 12:00 WIB)">Sesi Pagi II (10:00 - 12:00 WIB)</option>
-                                <option value="Sesi Siang (13:00 - 15:00 WIB)">Sesi Siang (13:00 - 15:00 WIB)</option>
+                            <select name="jam_sesi" id="bkgModalJamSesi" class="form-control ot-input-modern font-w600">
+                                <option value="">--Pilih Slot Sesi Waktu--</option>
+                                <option value="Sesi 1 (08.00 - 08.45 WIB)">Sesi 1 (08.00 - 08.45 WIB)</option>
+                                <option value="Sesi 2 (08.45 - 09.30 WIB)">Sesi 2 (08.45 - 09.30 WIB)</option>
+                                <option value="Sesi 3 (09.30 - 10.15 WIB)">Sesi 3 (09.30 - 10.15 WIB)</option>
+                                <option value="Sesi 4 (10.15 - 11.00 WIB)">Sesi 4 (10.15 - 11.00 WIB)</option>
+                                <option value="Sesi 5 (11.00 - 11.45 WIB)">Sesi 5 (11.00 - 11.45 WIB)</option>
+                                <option value="Sesi 6 (11.45 - 12.30 WIB)">Sesi 6 (11.45 - 12.30 WIB)</option>
+                                <option value="Sesi 7 (12.30 - 13.00 WIB)">Sesi 7 (12.30 - 13.00 WIB)</option>
+                                <option value="Sesi Khusus / Fleksibel">Sesi Khusus / Fleksibel</option>
                             </select>
                         </div>
                     </div>
@@ -591,11 +597,15 @@
             var nama = $(this).data('nama');
             var layanan = $(this).data('layanan');
             var tgl = $(this).data('tgl');
+            var jam = $(this).data('jam');
             var upt = $(this).data('upt');
 
             $('#bkgModalPasien').text(nama);
             $('#bkgModalLayanan').text(layanan || 'Layanan Terapi Terpadu');
             $('#bkgModalTgl').val(tgl);
+            if (jam) {
+                $('#bkgModalJamSesi').val(jam);
+            }
             if (upt) {
                 $('#bkgModalUpt').val(upt);
             }

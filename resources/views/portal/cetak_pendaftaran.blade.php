@@ -488,7 +488,7 @@
                 <td style="font-weight: bold;">Rencana Tgl. Kunjungan</td>
                 <td style="font-weight: bold;">: {{ $pendaftaran->tgl_rencana_kunjungan ? $safeFormatDate($pendaftaran->tgl_rencana_kunjungan) : '-' }}</td>
                 <td style="font-weight: bold;">Preferensi Sesi Waktu</td>
-                <td>: {{ $pendaftaran->jam_rencana_kunjungan ?: 'Sesi Pagi (08:00 - 10:00 WIB)' }}</td>
+                <td>: {{ $pendaftaran->jam_rencana_kunjungan ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}</td>
             </tr>
             <tr>
                 <td style="font-weight: bold;">Keluhan / Anamnesa Awal</td>

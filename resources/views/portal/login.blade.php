@@ -58,8 +58,6 @@
 
         body {
             background-color: var(--ot-bg);
-            background-image: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.05) 0px, transparent 50%),
-                              radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.04) 0px, transparent 50%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -67,15 +65,15 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Top Navbar */
+        /* Top Navbar (Soft Light Blue Theme - Matching UPT Modal Header) */
         .portal-navbar {
             width: 100%;
-            background: #ffffff;
-            border-bottom: 1px solid var(--ot-border);
+            background: #f0f7ff;
+            border-bottom: 1.5px solid #bfdbfe;
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.06);
         }
 
         .navbar-container {
@@ -92,35 +90,41 @@
             align-items: center;
             gap: 12px;
             text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .brand-link:hover {
+            opacity: 0.92;
         }
 
         .brand-logo {
-            height: 40px;
+            height: 38px;
             width: auto;
             object-fit: contain;
         }
 
-        .brand-text {
+        .brand-text-wrap {
             display: flex;
             flex-direction: column;
+            line-height: 1.22;
         }
 
         .brand-title {
-            font-size: 17px;
+            font-size: 15.5px;
             font-weight: 800;
-            color: var(--ot-navy);
-            line-height: 1.15;
-            letter-spacing: -0.3px;
+            color: #1e40af;
+            letter-spacing: -0.2px;
         }
 
         .brand-subtitle {
             font-size: 11px;
             font-weight: 600;
-            color: var(--ot-text-muted);
-            letter-spacing: 0.2px;
+            color: #2563eb;
+            letter-spacing: 0.1px;
         }
 
-        .navbar-actions {
+        /* Desktop & Mobile Actions */
+        .navbar-actions-desktop {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -131,8 +135,8 @@
             align-items: center;
             gap: 6px;
             background: #ffffff;
-            border: 1px solid var(--ot-border);
-            color: #475569;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
             font-size: 12.5px;
             font-weight: 600;
             cursor: pointer;
@@ -140,14 +144,16 @@
             border-radius: 8px;
             transition: all 0.2s ease;
             text-decoration: none;
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.05);
         }
 
         .btn-nav-help:hover {
-            color: var(--ot-royal);
-            background: var(--ot-soft-blue);
-            border-color: #bfdbfe;
+            background: #e0f2fe;
+            border-color: #93c5fd;
+            color: #1d4ed8;
         }
 
+        /* Login Petugas with Royal Blue Button Style */
         .btn-nav-staff {
             display: inline-flex;
             align-items: center;
@@ -158,116 +164,268 @@
             text-decoration: none;
             padding: 7px 16px;
             border-radius: 8px;
-            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
-            border: none;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+            background: #2563eb;
+            border: 1px solid #2563eb;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
             transition: all 0.2s ease;
         }
 
         .btn-nav-staff:hover {
-            background: linear-gradient(135deg, #172554 0%, #1e40af 100%);
+            background: #1d4ed8;
+            border-color: #1d4ed8;
             color: #ffffff;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
         }
 
-        /* Main Container */
-        .portal-main {
-            flex: 1;
+        /* Mobile Hamburger Toggle Button */
+        .nav-toggle-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: #ffffff;
+            border: 1.5px solid #bfdbfe;
+            color: #1e40af;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.05);
+        }
+
+        .nav-toggle-btn:hover,
+        .nav-toggle-btn:focus {
+            background: #e0f2fe;
+            color: #1d4ed8;
+            border-color: #93c5fd;
+            outline: none;
+        }
+
+        /* Mobile Menu Dropdown Panel */
+        .navbar-mobile-menu {
+            display: none;
             width: 100%;
+            background: #f0f7ff;
+            border-top: 1px solid #bfdbfe;
+            border-bottom: 1.5px solid #bfdbfe;
+            box-shadow: 0 12px 24px rgba(30, 64, 175, 0.1);
+            animation: mobileMenuSlideDown 0.22s ease forwards;
+        }
+
+        .navbar-mobile-menu.active {
+            display: block;
+        }
+
+        @keyframes mobileMenuSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mobile-menu-inner {
             max-width: 1140px;
             margin: 0 auto;
-            padding: 24px 24px 48px 24px;
+            padding: 14px 16px 18px 16px;
+        }
+
+        .mobile-menu-actions {
             display: flex;
             flex-direction: column;
+            gap: 8px;
         }
 
-        /* Hero Section */
-        .hero-section {
-            display: grid;
-            grid-template-columns: 1.18fr 0.82fr;
+        .btn-mobile-staff {
+            display: flex;
             align-items: center;
-            gap: 32px;
-            margin-bottom: 26px;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #eff6ff;
-            color: var(--ot-royal);
-            border: 1px solid #bfdbfe;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            justify-content: center;
+            width: 100%;
+            height: 42px;
+            background: #2563eb;
+            color: #ffffff !important;
+            font-size: 13.5px;
             font-weight: 700;
-            margin-bottom: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .btn-mobile-staff:hover {
+            background: #1d4ed8;
+            color: #ffffff !important;
+        }
+
+        .btn-mobile-help {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 40px;
+            background: #ffffff;
+            border: 1.5px solid #bfdbfe;
+            color: #1e40af;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-mobile-help:hover {
+            background: #e0f2fe;
+            color: #1d4ed8;
+            border-color: #93c5fd;
+        }
+
+        .mobile-menu-divider {
+            height: 1px;
+            background: #dbeafe;
+            margin: 12px 0 10px 0;
+        }
+
+        .mobile-menu-nav-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .mobile-menu-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .mobile-tab-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            background: #ffffff;
+            border: 1px solid #dbeafe;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            width: 100%;
+        }
+
+        .mobile-tab-item:hover,
+        .mobile-tab-item:active {
+            background: #eff6ff;
+            border-color: #93c5fd;
+        }
+
+        .mobile-tab-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .mobile-tab-label {
+            font-size: 13px;
+            color: #1e40af;
+            font-weight: 700;
+        }
+
+        /* Hero Banner Section */
+        .hero-banner-section {
+            position: relative;
+            width: 100%;
+            background-color: #0f2444;
+            background-image: url("{{ asset('images/hero-image.svg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 56px 24px 108px 24px;
+            text-align: center;
+        }
+
+        .hero-banner-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(15, 33, 64, 0.82) 0%, rgba(15, 33, 64, 0.90) 100%);
+            z-index: 1;
+        }
+
+        .hero-banner-content {
+            position: relative;
+            z-index: 2;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        .hero-tagline {
+            display: block;
+            color: #93c5fd;
+            font-size: 13.5px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
 
         .hero-title-main {
-            font-size: 27px;
+            font-size: 30px;
             font-weight: 800;
-            color: var(--ot-navy);
+            color: #ffffff;
             line-height: 1.25;
             letter-spacing: -0.4px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .hero-desc {
             font-size: 13.5px;
             line-height: 1.65;
-            color: #475569;
-            max-width: 620px;
-            margin-bottom: 14px;
+            color: #e2e8f0;
+            max-width: 740px;
+            margin: 0 auto;
         }
 
-        .hero-feature-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 12px;
+        .hero-desc strong {
+            color: #ffffff;
+            font-weight: 700;
         }
 
-        .feature-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #334155;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            padding: 4px 10px;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-        }
-
-        .hero-visual {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hero-image-trans {
+        /* Main Container - Floating Card Overlapping Hero Banner */
+        .portal-main {
+            flex: 1;
             width: 100%;
-            max-width: 320px;
-            height: auto;
-            border: none;
-            background: transparent;
-            filter: drop-shadow(0 14px 28px rgba(37, 99, 235, 0.12));
-            transition: transform 0.3s ease;
-        }
-
-        .hero-image-trans:hover {
-            transform: translateY(-4px) scale(1.02);
+            max-width: 1140px;
+            margin: -65px auto 0 auto;
+            padding: 0 24px 48px 24px;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Main Portal Card (DESIGN.md Spec) */
         .portal-card {
             background: #ffffff;
-            border: 1px solid var(--ot-border);
-            border-radius: 14px;
-            box-shadow: 0 4px 20px rgba(46, 75, 130, 0.05);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
             width: 100%;
             overflow: hidden;
         }
@@ -546,29 +704,36 @@
             color: #1d4ed8;
         }
 
+        .submit-action-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+        }
+
         .btn-submit {
-            height: 42px;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            height: 46px;
+            background: #2563eb;
             color: #ffffff;
             border: none;
-            border-radius: 8px;
-            padding: 0 22px;
-            font-size: 13px;
+            border-radius: 9px;
+            padding: 0 26px;
+            font-size: 13.5px;
             font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 7px;
+            gap: 8px;
             transition: all 0.2s ease;
             box-shadow: 0 3px 10px rgba(37, 99, 235, 0.22);
-            white-space: nowrap;
+            text-decoration: none;
         }
 
         .btn-submit:hover {
-            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            background: #1d4ed8;
             box-shadow: 0 5px 14px rgba(37, 99, 235, 0.3);
             transform: translateY(-1px);
+            color: #ffffff;
         }
 
         /* Modern Check Pill Cards */
@@ -791,6 +956,14 @@
         }
 
         @media (max-width: 768px) {
+            .navbar-actions-desktop {
+                display: none !important;
+            }
+
+            .nav-toggle-btn {
+                display: inline-flex;
+            }
+
             .portal-navbar {
                 padding: 0;
             }
@@ -800,46 +973,29 @@
             }
 
             .brand-logo {
-                height: 36px;
+                height: 34px;
             }
 
-            .brand-title {
-                font-size: 15.5px;
+            .brand-logo-text {
+                height: 22px;
             }
 
-            .brand-subtitle {
-                font-size: 10.5px;
-            }
-
-            .hero-section {
-                grid-template-columns: 1fr;
-                gap: 14px;
-                text-align: center;
-                margin-bottom: 20px;
-            }
-
-            .hero-desc {
-                margin: 0 auto 12px auto;
-                font-size: 13px;
-            }
-
-            .hero-feature-pills {
-                justify-content: center;
+            .hero-banner-section {
+                padding: 42px 18px 85px 18px;
             }
 
             .hero-title-main {
-                font-size: 22px;
+                font-size: 24px;
                 line-height: 1.3;
             }
 
-            .hero-visual {
-                display: flex;
-                margin-top: 6px;
+            .hero-desc {
+                font-size: 13px;
             }
 
-            .hero-image-trans {
-                max-width: 220px;
-                margin: 0 auto;
+            .portal-main {
+                margin-top: -55px;
+                padding: 0 16px 36px 16px;
             }
 
             .portal-tabs-nav {
@@ -859,10 +1015,23 @@
                 gap: 14px;
             }
 
-            .btn-submit {
-                width: 100%;
-                height: 44px;
-                justify-content: center;
+            .submit-action-wrapper {
+                justify-content: stretch !important;
+                width: 100% !important;
+            }
+
+            .btn-submit,
+            .submit-action-wrapper .btn-submit,
+            .btn-submit-daftar {
+                width: 100% !important;
+                height: auto !important;
+                min-height: 46px !important;
+                padding: 12px 18px !important;
+                font-size: 13.5px !important;
+                white-space: normal !important;
+                text-align: center !important;
+                line-height: 1.35 !important;
+                justify-content: center !important;
             }
 
             .search-form-card {
@@ -910,11 +1079,11 @@
             }
 
             .brand-title {
-                font-size: 14.5px;
+                font-size: 13.5px;
             }
 
             .brand-subtitle {
-                display: none;
+                font-size: 10px;
             }
 
             .btn-nav-help {
@@ -927,8 +1096,21 @@
                 font-size: 11.5px;
             }
 
+            .hero-banner-section {
+                padding: 34px 14px 75px 14px;
+            }
+
+            .hero-tagline {
+                font-size: 13px;
+            }
+
             .hero-title-main {
-                font-size: 19px;
+                font-size: 20px;
+            }
+
+            .portal-main {
+                margin-top: -45px;
+                padding: 0 12px 28px 12px;
             }
 
             .tab-content-panel {
@@ -950,34 +1132,45 @@
             }
         }
 
+        @media (max-width: 420px) {
+            .brand-subtitle {
+                display: none;
+            }
+        }
+
         @media (max-width: 380px) {
             .tab-btn {
                 padding: 9px 12px;
                 font-size: 11.5px;
             }
 
+            .brand-logo {
+                height: 26px;
+            }
+
             .brand-title {
-                font-size: 13.5px;
+                font-size: 12.5px;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Top Navbar -->
+    <!-- Top Navbar (Soft Light Blue Theme) -->
     <header class="portal-navbar">
         <div class="navbar-container">
-            <a href="{{ route('portal.index') }}" class="brand-link">
+            <a href="{{ route('portal.index') }}" class="brand-link" title="Portal Pasien Omah Terapi-KU">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo Omah Terapiku" class="brand-logo">
-                <div class="brand-text">
+                <div class="brand-text-wrap">
                     <span class="brand-title">Omah Terapi-KU</span>
                     <span class="brand-subtitle">Dinas Sosial Provinsi Jawa Timur</span>
                 </div>
             </a>
 
-            <div class="navbar-actions">
-                <button type="button" class="btn-nav-help" id="btnHelp" title="Petunjuk Akses">
-                    <i class="fa-regular fa-circle-question" style="color: var(--ot-royal);"></i>
+            <!-- Desktop Actions -->
+            <div class="navbar-actions-desktop">
+                <button type="button" class="btn-nav-help btn-help-trigger" title="Petunjuk Akses">
+                    <i class="fa-regular fa-circle-question" style="color: #2563eb;"></i>
                     <span>Bantuan</span>
                 </button>
                 <a href="{{ route('login') }}" class="btn-nav-staff" title="Masuk Petugas / Terapis">
@@ -985,24 +1178,61 @@
                     <span>Login Petugas</span>
                 </a>
             </div>
+
+            <!-- Mobile Hamburger Toggle Button -->
+            <button type="button" class="nav-toggle-btn" id="navToggleBtn" aria-label="Buka Menu Navigasi" aria-expanded="false">
+                <i class="fa-solid fa-bars" id="navToggleIcon"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div class="navbar-mobile-menu" id="navbarMobileMenu">
+            <div class="mobile-menu-inner">
+                <div class="mobile-menu-actions">
+                    <a href="{{ route('login') }}" class="btn-mobile-staff">
+                        <i class="fa-solid fa-user-shield mr-2"></i>
+                        <span>Login Petugas / Terapis</span>
+                    </a>
+                    <button type="button" class="btn-mobile-help btn-help-trigger">
+                        <i class="fa-regular fa-circle-question mr-2" style="color: #2563eb;"></i>
+                        <span>Bantuan & Petunjuk Akses</span>
+                    </button>
+                </div>
+
+                <div class="mobile-menu-divider"></div>
+
+                <div class="mobile-menu-nav-title">Menu Layanan Portal</div>
+                <div class="mobile-menu-tabs">
+                    <button type="button" class="mobile-tab-item" data-target-tab="tab-cek-rm">
+                        <div class="mobile-tab-icon"><i class="fa-solid fa-file-waveform"></i></div>
+                        <span class="mobile-tab-label">Cek Rekam Medis</span>
+                    </button>
+                    <button type="button" class="mobile-tab-item" data-target-tab="tab-daftar-baru">
+                        <div class="mobile-tab-icon"><i class="fa-solid fa-user-plus"></i></div>
+                        <span class="mobile-tab-label">Pendaftaran Pasien Baru</span>
+                    </button>
+                    <button type="button" class="mobile-tab-item" data-target-tab="tab-lacak">
+                        <div class="mobile-tab-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                        <span class="mobile-tab-label">Lacak Status Pendaftaran</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="portal-main">
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <div class="hero-text">
-                <h1 class="hero-title-main">Akses Rekam Medis & Pendaftaran Online</h1>
-                <p class="hero-desc mb-0">
-                    Selamat datang di Portal Pasien Resmi <strong>Omah Terapi-KU</strong> &ndash; Dinas Sosial Provinsi Jawa Timur. Layanan mandiri terpadu untuk kemudahan akses riwayat rekam medis, pemantauan intervensi terapi SOAP, evaluasi asesmen Denver II & GMFM, pendaftaran penerima manfaat baru, serta pelacakan status verifikasi berkas dan jadwal terapis secara transparan.
-                </p>
-            </div>
+    <!-- Hero Banner Section (Like login.png) -->
+    <section class="hero-banner-section">
+        <div class="hero-banner-content">
+            <span class="hero-tagline">Pelayanan Terpadu Disabilitas & Tumbuh Kembang Anak</span>
+            <h1 class="hero-title-main">Akses Rekam Medis & Pendaftaran Online</h1>
+            <p class="hero-desc">
+                Selamat datang di Portal Pasien Resmi <strong>Omah Terapi-KU</strong> &ndash; Dinas Sosial Provinsi Jawa Timur. Layanan mandiri terpadu untuk kemudahan akses riwayat rekam medis, pemantauan intervensi terapi SOAP, evaluasi asesmen Denver II & GMFM, pendaftaran penerima manfaat baru, serta pelacakan status verifikasi berkas dan jadwal terapis secara transparan.
+            </p>
+        </div>
+    </section>
 
-            <div class="hero-visual">
-                <img src="{{ asset('images/portal-hero-trans.png') }}" alt="Ilustrasi Terapis Medis Omah Terapi-KU" class="hero-image-trans">
-            </div>
-        </section>
+    <!-- Main Container (Floating Card Overlapping Hero Banner) -->
+    <main class="portal-main">
 
         <!-- Main Multi-Tab Card -->
         <div class="portal-card">
@@ -1453,11 +1683,22 @@
                         </div>
 
                         <div class="col-md-3 mb-3">
-                            <label class="form-label font-w600 text-dark">Sesi Waktu <span class="text-danger">*</span></label>
+                            <label class="form-label font-w600 text-dark">
+                                Sesi Waktu <span class="text-danger">*</span> <small class="text-muted font-w400">(Rabu, 30-45 mnt)</small>
+                            </label>
+                            @php
+                                $currJam = old('jam_rencana_kunjungan', 'Sesi 1 (08.00 - 08.45 WIB)');
+                            @endphp
                             <select name="jam_rencana_kunjungan" class="form-control" required>
-                                <option value="Sesi Pagi I (08:00 - 10:00 WIB)" {{ old('jam_rencana_kunjungan') == 'Sesi Pagi I (08:00 - 10:00 WIB)' ? 'selected' : '' }}>Sesi Pagi I (08:00 - 10:00 WIB)</option>
-                                <option value="Sesi Pagi II (10:00 - 12:00 WIB)" {{ old('jam_rencana_kunjungan') == 'Sesi Pagi II (10:00 - 12:00 WIB)' ? 'selected' : '' }}>Sesi Pagi II (10:00 - 12:00 WIB)</option>
-                                <option value="Sesi Siang (13:00 - 15:00 WIB)" {{ old('jam_rencana_kunjungan') == 'Sesi Siang (13:00 - 15:00 WIB)' ? 'selected' : '' }}>Sesi Siang (13:00 - 15:00 WIB)</option>
+                                <option value="">--Pilih Slot Sesi Waktu--</option>
+                                <option value="Sesi 1 (08.00 - 08.45 WIB)" {{ $currJam == 'Sesi 1 (08.00 - 08.45 WIB)' ? 'selected' : '' }}>Sesi 1 (08.00 - 08.45 WIB)</option>
+                                <option value="Sesi 2 (08.45 - 09.30 WIB)" {{ $currJam == 'Sesi 2 (08.45 - 09.30 WIB)' ? 'selected' : '' }}>Sesi 2 (08.45 - 09.30 WIB)</option>
+                                <option value="Sesi 3 (09.30 - 10.15 WIB)" {{ $currJam == 'Sesi 3 (09.30 - 10.15 WIB)' ? 'selected' : '' }}>Sesi 3 (09.30 - 10.15 WIB)</option>
+                                <option value="Sesi 4 (10.15 - 11.00 WIB)" {{ $currJam == 'Sesi 4 (10.15 - 11.00 WIB)' ? 'selected' : '' }}>Sesi 4 (10.15 - 11.00 WIB)</option>
+                                <option value="Sesi 5 (11.00 - 11.45 WIB)" {{ $currJam == 'Sesi 5 (11.00 - 11.45 WIB)' ? 'selected' : '' }}>Sesi 5 (11.00 - 11.45 WIB)</option>
+                                <option value="Sesi 6 (11.45 - 12.30 WIB)" {{ $currJam == 'Sesi 6 (11.45 - 12.30 WIB)' ? 'selected' : '' }}>Sesi 6 (11.45 - 12.30 WIB)</option>
+                                <option value="Sesi 7 (12.30 - 13.00 WIB)" {{ $currJam == 'Sesi 7 (12.30 - 13.00 WIB)' ? 'selected' : '' }}>Sesi 7 (12.30 - 13.00 WIB)</option>
+                                <option value="Sesi Khusus / Fleksibel" {{ $currJam == 'Sesi Khusus / Fleksibel' ? 'selected' : '' }}>Sesi Khusus / Fleksibel</option>
                             </select>
                             @error('jam_rencana_kunjungan')
                                 <div class="invalid-feedback d-block" style="color: #ef4444; font-size: 11.5px; margin-top: 4px;">{{ $message }}</div>
@@ -1505,8 +1746,8 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="d-flex justify-content-end mt-4 pt-3" style="border-top: 1px solid #edf2f7;">
-                        <button type="submit" class="btn-submit" style="padding: 0 32px; height: 46px; font-size: 13.5px; border-radius: 9px;">
+                    <div class="submit-action-wrapper mt-4 pt-3" style="border-top: 1px solid #edf2f7;">
+                        <button type="submit" class="btn-submit btn-submit-daftar" id="btnSubmitDaftar">
                             <i class="fa-solid fa-paper-plane mr-2"></i>
                             <span>Kirim Pendaftaran & Dapatkan Kode Registrasi</span>
                         </button>
@@ -1721,16 +1962,59 @@
                 });
             }
 
-            // Help Modal Handlers
-            var btnHelp = document.getElementById('btnHelp');
+            // Navbar Mobile Menu Toggle Handlers
+            var navToggleBtn = document.getElementById('navToggleBtn');
+            var navbarMobileMenu = document.getElementById('navbarMobileMenu');
+            var navToggleIcon = document.getElementById('navToggleIcon');
+
+            if (navToggleBtn && navbarMobileMenu) {
+                navToggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var isOpen = navbarMobileMenu.classList.toggle('active');
+                    navToggleBtn.setAttribute('aria-expanded', isOpen);
+                    if (navToggleIcon) {
+                        navToggleIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+                    }
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (navbarMobileMenu.classList.contains('active') && !navbarMobileMenu.contains(e.target) && !navToggleBtn.contains(e.target)) {
+                        navbarMobileMenu.classList.remove('active');
+                        navToggleBtn.setAttribute('aria-expanded', 'false');
+                        if (navToggleIcon) navToggleIcon.className = 'fa-solid fa-bars';
+                    }
+                });
+
+                // Mobile Tab Items Navigation
+                $('.mobile-tab-item').on('click', function() {
+                    var targetTab = $(this).data('target-tab');
+                    if (targetTab) {
+                        $('.tab-btn[data-tab="' + targetTab + '"]').click();
+                        navbarMobileMenu.classList.remove('active');
+                        navToggleBtn.setAttribute('aria-expanded', 'false');
+                        if (navToggleIcon) navToggleIcon.className = 'fa-solid fa-bars';
+                        var cardEl = document.querySelector('.portal-card');
+                        if (cardEl) {
+                            cardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                });
+            }
+
+            // Help Modal Handlers (Desktop & Mobile triggers)
             var helpModal = document.getElementById('helpModal');
             var btnCloseHelp = document.getElementById('btnCloseHelp');
 
-            if (btnHelp && helpModal) {
-                btnHelp.addEventListener('click', function() {
-                    helpModal.classList.add('active');
-                });
-            }
+            $(document).on('click', '.btn-help-trigger', function() {
+                if (helpModal) helpModal.classList.add('active');
+                if (navbarMobileMenu) {
+                    navbarMobileMenu.classList.remove('active');
+                    if (navToggleBtn) navToggleBtn.setAttribute('aria-expanded', 'false');
+                    if (navToggleIcon) navToggleIcon.className = 'fa-solid fa-bars';
+                }
+            });
+
             if (btnCloseHelp && helpModal) {
                 btnCloseHelp.addEventListener('click', function() {
                     helpModal.classList.remove('active');
@@ -1919,7 +2203,7 @@
                                 html += '    <div><span class="text-muted">NIK:</span> <strong class="text-dark d-block">' + p.nik + '</strong></div>';
                                 html += '    <div><span class="text-muted">No. HP / Telepon:</span> <strong class="text-dark d-block">' + (p.no_hp || '-') + '</strong></div>';
                                 html += '    <div><span class="text-muted">Layanan:</span> <strong class="text-primary d-block font-w700">' + (p.layanan_terapi || 'Layanan Terpadu') + '</strong></div>';
-                                html += '    <div><span class="text-muted">Rencana Kunjungan:</span> <strong class="text-dark d-block">' + (p.tgl_rencana || '-') + ' (' + (p.jam_rencana || 'Sesi Pagi') + ')</strong></div>';
+                                html += '    <div><span class="text-muted">Rencana Kunjungan:</span> <strong class="text-dark d-block">' + (p.tgl_rencana || '-') + ' (' + (p.jam_rencana || 'Sesi 1 (08.00 - 08.45 WIB)') + ')</strong></div>';
                                 html += '    <div><span class="text-muted">Lokasi UPT:</span> <strong class="text-dark d-block">' + p.upt_lokasi + '</strong></div>';
                                 html += '  </div>';
 
@@ -1973,7 +2257,7 @@
                                 html += '    <div><span class="text-muted">Pasien:</span> <strong class="text-dark d-block">' + b.nama_pasien + ' (' + b.no_rm + ')</strong></div>';
                                 html += '    <div><span class="text-muted">No. HP / Kontak:</span> <strong class="text-dark d-block">' + (b.no_hp || '-') + '</strong></div>';
                                 html += '    <div><span class="text-muted">Layanan:</span> <strong class="text-primary d-block font-w700">' + b.layanan + '</strong></div>';
-                                html += '    <div><span class="text-muted">Jadwal:</span> <strong class="text-dark d-block">' + b.tgl_rencana + ' (' + (b.jam_sesi || 'Sesi Pagi') + ')</strong></div>';
+                                html += '    <div><span class="text-muted">Jadwal:</span> <strong class="text-dark d-block">' + b.tgl_rencana + ' (' + (b.jam_sesi || 'Sesi 1 (08.00 - 08.45 WIB)') + ')</strong></div>';
                                 html += '    <div><span class="text-muted">Terapis:</span> <strong class="text-dark d-block">' + b.terapis + '</strong></div>';
                                 html += '  </div>';
                                 html += '</div>';
@@ -2024,21 +2308,105 @@
             regenciesData: [],
             districtsData: [],
             villagesData: [],
+            isInitializing: false,
+
+            fallbackProvinces: [
+                { code: "35", name: "JAWA TIMUR" },
+                { code: "31", name: "DKI JAKARTA" },
+                { code: "32", name: "JAWA BARAT" },
+                { code: "33", name: "JAWA TENGAH" },
+                { code: "34", name: "DAERAH ISTIMEWA YOGYAKARTA" },
+                { code: "36", name: "BANTEN" },
+                { code: "51", name: "BALI" },
+                { code: "52", name: "NUSA TENGGARA BARAT" },
+                { code: "53", name: "NUSA TENGGARA TIMUR" },
+                { code: "11", name: "ACEH" },
+                { code: "12", name: "SUMATERA UTARA" },
+                { code: "13", name: "SUMATERA BARAT" },
+                { code: "14", name: "RIAU" },
+                { code: "15", name: "JAMBI" },
+                { code: "16", name: "SUMATERA SELATAN" },
+                { code: "17", name: "BENGKULU" },
+                { code: "18", name: "LAMPUNG" },
+                { code: "19", name: "KEPULAUAN BANGKA BELITUNG" },
+                { code: "21", name: "KEPULAUAN RIAU" },
+                { code: "61", name: "KALIMANTAN BARAT" },
+                { code: "62", name: "KALIMANTAN TENGAH" },
+                { code: "63", name: "KALIMANTAN SELATAN" },
+                { code: "64", name: "KALIMANTAN TIMUR" },
+                { code: "65", name: "KALIMANTAN UTARA" },
+                { code: "71", name: "SULAWESI UTARA" },
+                { code: "72", name: "SULAWESI TENGAH" },
+                { code: "73", name: "SULAWESI SELATAN" },
+                { code: "74", name: "SULAWESI TENGGARA" },
+                { code: "75", name: "GORONTALO" },
+                { code: "76", name: "SULAWESI BARAT" },
+                { code: "81", name: "MALUKU" },
+                { code: "82", name: "MALUKU UTARA" },
+                { code: "91", name: "PAPUA" },
+                { code: "92", name: "PAPUA BARAT" },
+                { code: "93", name: "PAPUA SELATAN" },
+                { code: "94", name: "PAPUA TENGAH" },
+                { code: "95", name: "PAPUA PEGUNUNGAN" },
+                { code: "96", name: "PAPUA BARAT DAYA" }
+            ],
+
+            fallbackJatimRegencies: [
+                { code: "35.01", name: "KABUPATEN PACITAN" },
+                { code: "35.02", name: "KABUPATEN PONOROGO" },
+                { code: "35.03", name: "KABUPATEN TRENGGALEK" },
+                { code: "35.04", name: "KABUPATEN TULUNGAGUNG" },
+                { code: "35.05", name: "KABUPATEN BLITAR" },
+                { code: "35.06", name: "KABUPATEN KEDIRI" },
+                { code: "35.07", name: "KABUPATEN MALANG" },
+                { code: "35.08", name: "KABUPATEN LUMAJANG" },
+                { code: "35.09", name: "KABUPATEN JEMBER" },
+                { code: "35.10", name: "KABUPATEN BANYUWANGI" },
+                { code: "35.11", name: "KABUPATEN BONDOWOSO" },
+                { code: "35.12", name: "KABUPATEN SITUBONDO" },
+                { code: "35.13", name: "KABUPATEN PROBOLINGGO" },
+                { code: "35.14", name: "KABUPATEN PASURUAN" },
+                { code: "35.15", name: "KABUPATEN SIDOARJO" },
+                { code: "35.16", name: "KABUPATEN MOJOKERTO" },
+                { code: "35.17", name: "KABUPATEN JOMBANG" },
+                { code: "35.18", name: "KABUPATEN NGANJUK" },
+                { code: "35.19", name: "KABUPATEN MADIUN" },
+                { code: "35.20", name: "KABUPATEN MAGETAN" },
+                { code: "35.21", name: "KABUPATEN NGAWI" },
+                { code: "35.22", name: "KABUPATEN BOJONEGORO" },
+                { code: "35.23", name: "KABUPATEN TUBAN" },
+                { code: "35.24", name: "KABUPATEN LAMONGAN" },
+                { code: "35.25", name: "KABUPATEN GRESIK" },
+                { code: "35.26", name: "KABUPATEN BANGKALAN" },
+                { code: "35.27", name: "KABUPATEN SAMPANG" },
+                { code: "35.28", name: "KABUPATEN PAMEKASAN" },
+                { code: "35.29", name: "KABUPATEN SUMENEP" },
+                { code: "35.71", name: "KOTA KEDIRI" },
+                { code: "35.72", name: "KOTA BLITAR" },
+                { code: "35.73", name: "KOTA MALANG" },
+                { code: "35.74", name: "KOTA PROBOLINGGO" },
+                { code: "35.75", name: "KOTA PASURUAN" },
+                { code: "35.76", name: "KOTA MOJOKERTO" },
+                { code: "35.77", name: "KOTA MADIUN" },
+                { code: "35.78", name: "KOTA SURABAYA" },
+                { code: "35.79", name: "KOTA BATU" }
+            ],
 
             async init() {
                 this.initSelect2();
                 this.bindEvents();
+                this.isInitializing = true;
                 await this.loadProvinces();
+                this.isInitializing = false;
             },
 
             initSelect2() {
                 $('.select2-wilayah').each(function() {
                     const $this = $(this);
                     if ($this.hasClass('select2-hidden-accessible')) {
-                        return;
+                        $this.select2('destroy');
                     }
                     $this.select2({
-                        dropdownParent: $this.closest('.col-wilayah'),
                         width: '100%',
                         language: {
                             noResults: function() { return 'Tidak ada data ditemukan'; },
@@ -2048,20 +2416,37 @@
                 });
             },
 
+            normalizeName(str) {
+                if (!str) return '';
+                return str.toString().toLowerCase()
+                    .replace(/^(kabupaten|kab\.|kota|kecamatan|kec\.|kelurahan|kel\.|desa|ds\.)\s+/i, '')
+                    .replace(/[^a-z0-9]/g, '')
+                    .trim();
+            },
+
+            getSelectedCode(selectElement, dataList) {
+                if (!selectElement || selectElement.selectedIndex < 0) return '';
+                const opt = selectElement.options[selectElement.selectedIndex];
+                if (!opt) return '';
+                let code = opt.getAttribute('data-code') || '';
+                if (!code && dataList && dataList.length > 0) {
+                    const val = opt.value;
+                    const normVal = this.normalizeName(val);
+                    const found = dataList.find(d => this.normalizeName(d.name) === normVal || d.name === val);
+                    if (found) code = found.code;
+                }
+                return code;
+            },
+
             bindEvents() {
                 const self = this;
 
                 // Ganti Provinsi -> Muat Kabupaten
-                $('#select_provinsi').on('change', function() {
-                    let provCode = $(this).find(':selected').data('code') || $(this).find('option:selected').attr('data-code');
-                    if (!provCode && self.provincesData && self.provincesData.length > 0) {
-                        const provName = $(this).val();
-                        const found = self.provincesData.find(p => p.name === provName);
-                        if (found) provCode = found.code;
-                    }
-
+                $('#select_provinsi').on('change', async function() {
+                    if (self.isInitializing) return;
+                    const provCode = self.getSelectedCode(this, self.provincesData);
                     if (provCode) {
-                        self.loadRegencies(provCode);
+                        await self.loadRegencies(provCode);
                     } else {
                         self.resetSelect('#select_kabupaten', '-- Pilih Kabupaten / Kota --', true);
                         self.resetSelect('#select_kecamatan', '-- Pilih Kab/Kota Dahulu --', true);
@@ -2070,16 +2455,11 @@
                 });
 
                 // Ganti Kabupaten -> Muat Kecamatan
-                $('#select_kabupaten').on('change', function() {
-                    let regCode = $(this).find(':selected').data('code') || $(this).find('option:selected').attr('data-code');
-                    if (!regCode && self.regenciesData && self.regenciesData.length > 0) {
-                        const regName = $(this).val();
-                        const found = self.regenciesData.find(r => r.name === regName);
-                        if (found) regCode = found.code;
-                    }
-
+                $('#select_kabupaten').on('change', async function() {
+                    if (self.isInitializing) return;
+                    const regCode = self.getSelectedCode(this, self.regenciesData);
                     if (regCode) {
-                        self.loadDistricts(regCode);
+                        await self.loadDistricts(regCode);
                     } else {
                         self.resetSelect('#select_kecamatan', '-- Pilih Kab/Kota Dahulu --', true);
                         self.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
@@ -2087,16 +2467,11 @@
                 });
 
                 // Ganti Kecamatan -> Muat Kelurahan
-                $('#select_kecamatan').on('change', function() {
-                    let distCode = $(this).find(':selected').data('code') || $(this).find('option:selected').attr('data-code');
-                    if (!distCode && self.districtsData && self.districtsData.length > 0) {
-                        const distName = $(this).val();
-                        const found = self.districtsData.find(d => d.name === distName);
-                        if (found) distCode = found.code;
-                    }
-
+                $('#select_kecamatan').on('change', async function() {
+                    if (self.isInitializing) return;
+                    const distCode = self.getSelectedCode(this, self.districtsData);
                     if (distCode) {
-                        self.loadVillages(distCode);
+                        await self.loadVillages(distCode);
                     } else {
                         self.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
                     }
@@ -2105,7 +2480,10 @@
 
             resetSelect(selector, placeholder, disable = true) {
                 const $el = $(selector);
-                $el.html(`<option value="" data-code="">${placeholder}</option>`);
+                $el.empty();
+                const opt = new Option(placeholder, '', true, true);
+                opt.setAttribute('data-code', '');
+                $el.append(opt);
                 $el.prop('disabled', disable).trigger('change.select2');
             },
 
@@ -2118,68 +2496,72 @@
                 }
             },
 
-            normalizeName(str) {
-                if (!str) return '';
-                return str.toLowerCase()
-                    .replace(/^(kabupaten|kab\.|kota|kecamatan|kec\.|kelurahan|kel\.|desa|ds\.)\s+/i, '')
-                    .trim();
-            },
-
-            async fetchJson(endpoint, directEndpoint) {
+            async fetchJson(endpoint, directEndpoint, fallbackData = []) {
+                // Tier 1: Laravel Proxy
                 try {
                     const res = await fetch(`${this.proxyUrl}/${endpoint}`);
                     if (res.ok) {
                         const json = await res.json();
-                        if (json.data && json.data.length > 0) {
+                        if (json && json.data && json.data.length > 0) {
                             return json.data;
                         }
                     }
                 } catch (e) {
-                    console.warn(`Proxy fetch failed for ${endpoint}, trying direct...`, e);
+                    console.warn(`Proxy fetch failed for ${endpoint}, trying fallback...`, e);
                 }
 
-                // Fallback direct
+                // Tier 2: Direct Wilayah.id API
                 try {
                     const resDirect = await fetch(`${this.directUrl}/${directEndpoint}`);
                     if (resDirect.ok) {
                         const jsonDirect = await resDirect.json();
-                        return jsonDirect.data || [];
+                        if (jsonDirect && jsonDirect.data && jsonDirect.data.length > 0) {
+                            return jsonDirect.data;
+                        }
                     }
                 } catch (err) {
-                    console.error(`Direct fetch failed for ${directEndpoint}:`, err);
+                    console.warn(`Direct fetch failed for ${directEndpoint}:`, err);
                 }
-                return [];
+
+                // Tier 3: Static Embedded Fallback
+                return fallbackData;
             },
 
             async loadProvinces() {
                 this.showLoading('provinsi', true);
                 try {
-                    const provinces = await this.fetchJson('provinces', 'provinces.json');
+                    let provinces = await this.fetchJson('provinces', 'provinces.json', this.fallbackProvinces);
+                    if (!provinces || provinces.length === 0) {
+                        provinces = this.fallbackProvinces;
+                    }
                     this.provincesData = provinces;
 
-                    let html = '<option value="" data-code="">-- Pilih Provinsi --</option>';
+                    const $prov = $('#select_provinsi');
+                    $prov.empty();
+
+                    const defaultOpt = new Option('-- Pilih Provinsi --', '', false, false);
+                    defaultOpt.setAttribute('data-code', '');
+                    $prov.append(defaultOpt);
+
                     let defaultProvCode = '35'; // Default Jawa Timur
+                    let targetProvCode = defaultProvCode;
 
                     provinces.forEach(p => {
-                        html += `<option value="${p.name}" data-code="${p.code}">${p.name}</option>`;
+                        const isSelected = (p.code === targetProvCode || this.normalizeName(p.name) === 'jawatimur');
+                        const opt = new Option(p.name, p.name, false, isSelected);
+                        opt.setAttribute('data-code', p.code);
+                        $prov.append(opt);
                     });
-                    $('#select_provinsi').html(html).prop('disabled', false);
 
-                    // Auto-select Provinsi (Default: Jawa Timur)
-                    let targetProvCode = defaultProvCode;
-                    $('#select_provinsi option').each(function() {
-                        if ($(this).data('code') == targetProvCode || $(this).attr('data-code') == targetProvCode) {
-                            $(this).prop('selected', true);
-                        }
-                    });
-                    $('#select_provinsi').trigger('change.select2');
+                    $prov.prop('disabled', false).trigger('change.select2');
 
                     // Load Regencies for selected province
                     await this.loadRegencies(targetProvCode, this.savedKab);
 
                 } catch (err) {
-                    console.error('Gagal memuat provinsi dari Wilayah.id:', err);
-                    $('#select_provinsi').html('<option value="">Gagal memuat data API</option>').trigger('change.select2');
+                    console.error('Gagal memuat provinsi:', err);
+                    const $prov = $('#select_provinsi');
+                    $prov.empty().append(new Option('Gagal memuat data API', '', true, true)).trigger('change.select2');
                 } finally {
                     this.showLoading('provinsi', false);
                 }
@@ -2192,26 +2574,42 @@
                 this.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
 
                 try {
-                    const regencies = await this.fetchJson(`regencies/${provCode}`, `regencies/${provCode}.json`);
+                    const fallback = (provCode === '35') ? this.fallbackJatimRegencies : [];
+                    let regencies = await this.fetchJson(`regencies/${provCode}`, `regencies/${provCode}.json`, fallback);
+                    if ((!regencies || regencies.length === 0) && provCode === '35') {
+                        regencies = this.fallbackJatimRegencies;
+                    }
                     this.regenciesData = regencies;
 
-                    let html = '<option value="" data-code="">-- Pilih Kabupaten / Kota --</option>';
+                    const $kab = $('#select_kabupaten');
+                    $kab.empty();
+
+                    const defaultOpt = new Option('-- Pilih Kabupaten / Kota --', '', true, !preselectedKab);
+                    defaultOpt.setAttribute('data-code', '');
+                    $kab.append(defaultOpt);
+
                     let matchedCode = '';
-                    const normalizedSavedKab = this.normalizeName(preselectedKab);
+                    const normSavedKab = this.normalizeName(preselectedKab);
 
-                    regencies.forEach(r => {
-                        const isSelected = normalizedSavedKab && (this.normalizeName(r.name) === normalizedSavedKab || r.name.toLowerCase() === preselectedKab.toLowerCase());
-                        if (isSelected) {
-                            matchedCode = r.code;
-                        }
-                        html += `<option value="${r.name}" data-code="${r.code}" ${isSelected ? 'selected' : ''}>${r.name}</option>`;
-                    });
-
-                    if (preselectedKab && !matchedCode) {
-                        html += `<option value="${preselectedKab}" data-code="" selected>${preselectedKab} (Tersimpan)</option>`;
+                    if (regencies && regencies.length > 0) {
+                        regencies.forEach(r => {
+                            const isSelected = normSavedKab && (this.normalizeName(r.name) === normSavedKab || r.name.toLowerCase() === preselectedKab.toLowerCase());
+                            if (isSelected) {
+                                matchedCode = r.code;
+                            }
+                            const opt = new Option(r.name, r.name, false, isSelected);
+                            opt.setAttribute('data-code', r.code);
+                            $kab.append(opt);
+                        });
                     }
 
-                    $('#select_kabupaten').html(html).prop('disabled', false).trigger('change.select2');
+                    if (preselectedKab && !matchedCode) {
+                        const customOpt = new Option(`${preselectedKab} (Tersimpan)`, preselectedKab, false, true);
+                        customOpt.setAttribute('data-code', '');
+                        $kab.append(customOpt);
+                    }
+
+                    $kab.prop('disabled', false).trigger('change.select2');
 
                     if (matchedCode) {
                         await this.loadDistricts(matchedCode, this.savedKec);
@@ -2231,26 +2629,38 @@
                 this.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
 
                 try {
-                    const districts = await this.fetchJson(`districts/${regCode}`, `districts/${regCode}.json`);
+                    const districts = await this.fetchJson(`districts/${regCode}`, `districts/${regCode}.json`, []);
                     this.districtsData = districts;
 
-                    let html = '<option value="" data-code="">-- Pilih Kecamatan --</option>';
+                    const $kec = $('#select_kecamatan');
+                    $kec.empty();
+
+                    const defaultOpt = new Option('-- Pilih Kecamatan --', '', true, !preselectedKec);
+                    defaultOpt.setAttribute('data-code', '');
+                    $kec.append(defaultOpt);
+
                     let matchedCode = '';
-                    const normalizedSavedKec = this.normalizeName(preselectedKec);
+                    const normSavedKec = this.normalizeName(preselectedKec);
 
-                    districts.forEach(d => {
-                        const isSelected = normalizedSavedKec && (this.normalizeName(d.name) === normalizedSavedKec || d.name.toLowerCase() === preselectedKec.toLowerCase());
-                        if (isSelected) {
-                            matchedCode = d.code;
-                        }
-                        html += `<option value="${d.name}" data-code="${d.code}" ${isSelected ? 'selected' : ''}>${d.name}</option>`;
-                    });
-
-                    if (preselectedKec && !matchedCode) {
-                        html += `<option value="${preselectedKec}" data-code="" selected>${preselectedKec} (Tersimpan)</option>`;
+                    if (districts && districts.length > 0) {
+                        districts.forEach(d => {
+                            const isSelected = normSavedKec && (this.normalizeName(d.name) === normSavedKec || d.name.toLowerCase() === preselectedKec.toLowerCase());
+                            if (isSelected) {
+                                matchedCode = d.code;
+                            }
+                            const opt = new Option(d.name, d.name, false, isSelected);
+                            opt.setAttribute('data-code', d.code);
+                            $kec.append(opt);
+                        });
                     }
 
-                    $('#select_kecamatan').html(html).prop('disabled', false).trigger('change.select2');
+                    if (preselectedKec && !matchedCode) {
+                        const customOpt = new Option(`${preselectedKec} (Tersimpan)`, preselectedKec, false, true);
+                        customOpt.setAttribute('data-code', '');
+                        $kec.append(customOpt);
+                    }
+
+                    $kec.prop('disabled', false).trigger('change.select2');
 
                     if (matchedCode) {
                         await this.loadVillages(matchedCode, this.savedKel);
@@ -2269,26 +2679,38 @@
                 this.resetSelect('#select_kelurahan', 'Memuat Kelurahan/Desa...', true);
 
                 try {
-                    const villages = await this.fetchJson(`villages/${distCode}`, `villages/${distCode}.json`);
+                    const villages = await this.fetchJson(`villages/${distCode}`, `villages/${distCode}.json`, []);
                     this.villagesData = villages;
 
-                    let html = '<option value="" data-code="">-- Pilih Kelurahan / Desa --</option>';
+                    const $kel = $('#select_kelurahan');
+                    $kel.empty();
+
+                    const defaultOpt = new Option('-- Pilih Kelurahan / Desa --', '', true, !preselectedKel);
+                    defaultOpt.setAttribute('data-code', '');
+                    $kel.append(defaultOpt);
+
                     let matchedCode = '';
-                    const normalizedSavedKel = this.normalizeName(preselectedKel);
+                    const normSavedKel = this.normalizeName(preselectedKel);
 
-                    villages.forEach(v => {
-                        const isSelected = normalizedSavedKel && (this.normalizeName(v.name) === normalizedSavedKel || v.name.toLowerCase() === preselectedKel.toLowerCase());
-                        if (isSelected) {
-                            matchedCode = v.code;
-                        }
-                        html += `<option value="${v.name}" data-code="${v.code}" ${isSelected ? 'selected' : ''}>${v.name}</option>`;
-                    });
-
-                    if (preselectedKel && !matchedCode) {
-                        html += `<option value="${preselectedKel}" data-code="" selected>${preselectedKel} (Tersimpan)</option>`;
+                    if (villages && villages.length > 0) {
+                        villages.forEach(v => {
+                            const isSelected = normSavedKel && (this.normalizeName(v.name) === normSavedKel || v.name.toLowerCase() === preselectedKel.toLowerCase());
+                            if (isSelected) {
+                                matchedCode = v.code;
+                            }
+                            const opt = new Option(v.name, v.name, false, isSelected);
+                            opt.setAttribute('data-code', v.code);
+                            $kel.append(opt);
+                        });
                     }
 
-                    $('#select_kelurahan').html(html).prop('disabled', false).trigger('change.select2');
+                    if (preselectedKel && !matchedCode) {
+                        const customOpt = new Option(`${preselectedKel} (Tersimpan)`, preselectedKel, false, true);
+                        customOpt.setAttribute('data-code', '');
+                        $kel.append(customOpt);
+                    }
+
+                    $kel.prop('disabled', false).trigger('change.select2');
 
                 } catch (err) {
                     console.error('Gagal memuat villages:', err);

@@ -79,7 +79,7 @@
                                     <i class="fa-solid fa-user-doctor text-primary mr-1"></i>{{ $row->dokter->nama }}
                                 </strong>
                                 <small class="text-muted d-block font-w500" style="font-size: 11px;">
-                                    <i class="fa-regular fa-clock mr-1 text-primary"></i>{{ $row->jam_sesi ?: '08:00 WIB' }}
+                                    <i class="fa-regular fa-clock mr-1 text-primary"></i>{{ $row->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}
                                 </small>
                             @else
                                 <span class="badge badge-light text-muted font-w500" style="font-size: 11px; padding: 3px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
@@ -104,6 +104,7 @@
                                         data-nama="{{ $row->pasien ? $row->pasien->nama : '-' }}" 
                                         data-layanan="{{ $row->layanan_terapi }}" 
                                         data-tgl="{{ $row->tgl_rencana }}"
+                                        data-jam="{{ $row->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}"
                                         data-upt="{{ $row->upt_lokasi ?: ($row->pasien ? $row->pasien->upt_lokasi : '') }}"
                                         title="Konfirmasi Jadwal & Buat Sesi Rekam" 
                                         style="width: 28px; height: 28px; padding: 0; border-radius: 8px; background: #10b981; color: #ffffff; border: none;">

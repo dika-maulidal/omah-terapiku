@@ -334,12 +334,21 @@
                     <!-- Preferensi Jam Sesi -->
                     <div class="form-group mb-3">
                         <label class="font-w700 text-dark mb-1" style="font-size: 12.5px;">
-                            <i class="fa-regular fa-clock text-primary mr-1"></i> Preferensi Waktu Sesi Kedatangan <span class="text-danger">*</span>
+                            <i class="fa-regular fa-clock text-primary mr-1"></i> Preferensi Jadwal Sesi Terapi <span class="text-danger">*</span> <small class="text-muted font-w400">(Rabu, 30-45 mnt)</small>
                         </label>
+                        @php
+                            $currJam = old('jam_sesi', 'Sesi 1 (08.00 - 08.45 WIB)');
+                        @endphp
                         <select name="jam_sesi" class="form-control form-control-booking" required style="height: 42px;">
-                            <option value="Sesi Pagi (08:00 - 10:00 WIB)" selected>Sesi Pagi (08:00 - 10:00 WIB)</option>
-                            <option value="Sesi Siang I (10:00 - 12:00 WIB)">Sesi Siang I (10:00 - 12:00 WIB)</option>
-                            <option value="Sesi Siang II (13:00 - 15:00 WIB)">Sesi Siang II (13:00 - 15:00 WIB)</option>
+                            <option value="">--Pilih Slot Sesi Waktu--</option>
+                            <option value="Sesi 1 (08.00 - 08.45 WIB)" {{ $currJam == 'Sesi 1 (08.00 - 08.45 WIB)' ? 'selected' : '' }}>Sesi 1 (08.00 - 08.45 WIB)</option>
+                            <option value="Sesi 2 (08.45 - 09.30 WIB)" {{ $currJam == 'Sesi 2 (08.45 - 09.30 WIB)' ? 'selected' : '' }}>Sesi 2 (08.45 - 09.30 WIB)</option>
+                            <option value="Sesi 3 (09.30 - 10.15 WIB)" {{ $currJam == 'Sesi 3 (09.30 - 10.15 WIB)' ? 'selected' : '' }}>Sesi 3 (09.30 - 10.15 WIB)</option>
+                            <option value="Sesi 4 (10.15 - 11.00 WIB)" {{ $currJam == 'Sesi 4 (10.15 - 11.00 WIB)' ? 'selected' : '' }}>Sesi 4 (10.15 - 11.00 WIB)</option>
+                            <option value="Sesi 5 (11.00 - 11.45 WIB)" {{ $currJam == 'Sesi 5 (11.00 - 11.45 WIB)' ? 'selected' : '' }}>Sesi 5 (11.00 - 11.45 WIB)</option>
+                            <option value="Sesi 6 (11.45 - 12.30 WIB)" {{ $currJam == 'Sesi 6 (11.45 - 12.30 WIB)' ? 'selected' : '' }}>Sesi 6 (11.45 - 12.30 WIB)</option>
+                            <option value="Sesi 7 (12.30 - 13.00 WIB)" {{ $currJam == 'Sesi 7 (12.30 - 13.00 WIB)' ? 'selected' : '' }}>Sesi 7 (12.30 - 13.00 WIB)</option>
+                            <option value="Sesi Khusus / Fleksibel" {{ $currJam == 'Sesi Khusus / Fleksibel' ? 'selected' : '' }}>Sesi Khusus / Fleksibel</option>
                         </select>
                     </div>
 
@@ -434,7 +443,7 @@
                                                 <i class="fa-regular fa-calendar mr-1"></i> {{ $booking->tgl_rencana ? \Carbon\Carbon::parse($booking->tgl_rencana)->isoFormat('dddd, D MMMM Y') : '-' }}
                                             </strong>
                                             <div class="text-muted font-w500" style="font-size: 11.5px;">
-                                                <i class="fa-regular fa-clock mr-1"></i> {{ $booking->jam_sesi ?: 'Sesi Pagi (08:00 - 10:00 WIB)' }}
+                                                <i class="fa-regular fa-clock mr-1"></i> {{ $booking->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}
                                             </div>
                                         </div>
                                     </div>
@@ -522,7 +531,7 @@
                                                 <div class="col-sm-6 mb-1">
                                                     <strong>Waktu &amp; Lokasi:</strong><br>
                                                     <span class="text-dark">
-                                                        {{ $booking->jam_sesi ?: 'Sesi Pagi (08:00 - 10:00 WIB)' }} &bull; {{ $booking->upt_lokasi ?: 'UPT RSBN Malang' }}
+                                                        {{ $booking->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)' }} &bull; {{ $booking->upt_lokasi ?: 'UPT RSBN Malang' }}
                                                     </span>
                                                 </div>
                                             </div>
