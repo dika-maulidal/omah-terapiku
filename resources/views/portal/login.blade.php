@@ -896,6 +896,296 @@
             color: var(--ot-navy);
         }
 
+        /* =========================================================================
+           SIGNATURE SUCCESS MODAL (MATCHES UPT & DETAIL SESI THEME)
+           ========================================================================= */
+        .ot-success-modal-box {
+            background: #ffffff;
+            border-radius: 16px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22), 0 4px 18px rgba(37, 99, 235, 0.08);
+            position: relative;
+            border: 1.5px solid #bfdbfe;
+            overflow: hidden;
+            animation: otModalPop 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            text-align: left;
+        }
+
+        @keyframes otModalPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.92) translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .ot-success-modal-header {
+            background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%);
+            border-bottom: 1.5px solid #bfdbfe;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ot-success-modal-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            background: #ecfdf5;
+            color: #059669;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #a7f3d0;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.15);
+            flex-shrink: 0;
+        }
+
+        .ot-success-modal-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1e40af;
+            margin: 0 0 2px 0;
+            line-height: 1.25;
+            letter-spacing: -0.2px;
+        }
+
+        .ot-success-modal-subtitle {
+            font-size: 12px;
+            font-weight: 500;
+            color: #64748b;
+            display: block;
+            line-height: 1.35;
+        }
+
+        .ot-modal-close-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .ot-modal-close-btn:hover {
+            background: #fee2e2;
+            border-color: #fca5a5;
+            color: #dc2626;
+            transform: scale(1.05);
+        }
+
+        .ot-success-modal-body {
+            padding: 20px 22px 22px 22px;
+            background: #ffffff;
+        }
+
+        /* Ticket / Code Card with Distinct Custom Copy Cursor */
+        .ot-code-card {
+            background: #f8fafc;
+            border: 1.5px dashed #3b82f6;
+            border-radius: 12px;
+            padding: 15px 16px;
+            margin-bottom: 16px;
+            transition: all 0.22s ease;
+            position: relative;
+            text-align: left;
+        }
+
+        /* Distinct Custom Copy Cursor on code box and copy elements */
+        .copy-trigger-box,
+        .btn-copy-action,
+        .ot-code-number,
+        .ot-code-value-wrap {
+            cursor: copy !important;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%232563eb' stroke='%23ffffff' stroke-width='1.5'%3E%3Cpath d='M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z'/%3E%3C/svg%3E") 4 4, copy !important;
+        }
+
+        .ot-code-card:hover {
+            background: #f0f7ff;
+            border-color: #2563eb;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .ot-code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .badge-success-subtle {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-copy-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #ffffff;
+            border: 1.5px solid #bfdbfe;
+            color: #2563eb;
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 4px 11px;
+            border-radius: 7px;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.08);
+            transition: all 0.18s ease;
+        }
+
+        .btn-copy-action:hover {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #1d4ed8;
+            box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .btn-copy-action.copied {
+            background: #ecfdf5 !important;
+            color: #059669 !important;
+            border-color: #a7f3d0 !important;
+        }
+
+        .ot-code-value-wrap {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            padding: 8px 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ot-code-label {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.4px;
+        }
+
+        .ot-code-number {
+            font-size: 19px;
+            font-weight: 800;
+            color: #1e40af;
+            letter-spacing: 0.8px;
+            font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+            transition: color 0.15s ease;
+        }
+
+        .ot-code-number:hover {
+            color: #2563eb;
+        }
+
+        .ot-code-meta-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 9px;
+            margin-bottom: 9px;
+        }
+
+        .ot-meta-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12.5px;
+        }
+
+        .ot-meta-label {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .ot-meta-value {
+            color: #1e293b;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .ot-code-hint {
+            font-size: 11.5px;
+            color: #64748b;
+            line-height: 1.45;
+            background: rgba(37, 99, 235, 0.05);
+            padding: 7px 10px;
+            border-radius: 6px;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .ot-success-modal-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-modal-print {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 42px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff !important;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-modal-print:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.32);
+            transform: translateY(-1px);
+        }
+
+        .btn-modal-close-action {
+            height: 42px;
+            padding: 0 20px;
+            background: #ffffff;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 1.5px solid #cbd5e1;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-modal-close-action:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+            color: #1e293b;
+        }
+
         /* Select2 Custom Styles */
         .select2-container--default .select2-selection--single {
             height: 42px;
@@ -1863,42 +2153,73 @@
         </div>
     </footer>
 
-    <!-- Modal Sukses Pendaftaran Baru -->
+    <!-- Modal Sukses Pendaftaran Baru (Signature UPT / Sesi Modal Theme) -->
     @if(Session::has('pendaftaran_success'))
-        <div class="modal-overlay active" id="modalSuccessPendaftaran">
-            <div class="modal-box text-center p-4" style="max-width: 480px;">
-                <div style="width: 52px; height: 52px; border-radius: 50%; background: #ecfdf5; color: #059669; font-size: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto; border: 1px solid #a7f3d0;">
-                    <i class="fa-solid fa-circle-check"></i>
+        <div class="modal-overlay active" id="modalSuccessPendaftaran" style="display: flex;">
+            <div class="ot-success-modal-box">
+                <!-- Modal Header (Nuansa UPT & Detail Sesi) -->
+                <div class="ot-success-modal-header">
+                    <div class="d-flex align-items-center" style="gap: 14px;">
+                        <div class="ot-success-modal-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="ot-success-modal-title">Pendaftaran Berhasil Terkirim!</h4>
+                            <span class="ot-success-modal-subtitle">Data registrasi penerima manfaat baru telah tersimpan di sistem</span>
+                        </div>
+                    </div>
+                    <button type="button" class="ot-modal-close-btn" onclick="document.getElementById('modalSuccessPendaftaran').remove()" title="Tutup">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
-                <h3 style="font-size: 17px; font-weight: 800; color: var(--ot-navy); margin-bottom: 2px;">Pendaftaran Berhasil Terkirim!</h3>
-                <p style="font-size: 12.5px; color: #64748b; margin-bottom: 12px;">
-                    Data registrasi penerima manfaat baru telah tersimpan di sistem Omah Terapi-KU.
-                </p>
 
-                <div style="background: #eff6ff; border: 1px dashed #2563eb; border-radius: 9px; padding: 12px; margin-bottom: 14px; text-align: left;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Kode Registrasi:</span>
-                        <button type="button" class="btn btn-xs btn-light font-w700" onclick="copyKodeReg()" style="font-size: 11px; border: 1px solid #cbd5e1; border-radius: 5px; padding: 2px 7px;">
-                            <i class="fa-regular fa-copy mr-1"></i> Salin
+                <!-- Modal Body -->
+                <div class="ot-success-modal-body">
+                    <!-- Ticket / Code Box (With Distinct Custom Copy Cursor & Interaction) -->
+                    <div class="ot-code-card copy-trigger-box" onclick="copyKodeReg('{{ Session::get('kode_pendaftaran') }}')" title="Klik untuk menyalin Kode Registrasi">
+                        <div class="ot-code-header">
+                            <span class="ot-code-label">KODE REGISTRASI RESMI</span>
+                            <button type="button" class="btn-copy-action" id="btnCopyKodeReg" onclick="event.stopPropagation(); copyKodeReg('{{ Session::get('kode_pendaftaran') }}')">
+                                <i class="fa-regular fa-copy mr-1" id="copyIcon"></i>
+                                <span id="copyBtnText">Salin Kode</span>
+                            </button>
+                        </div>
+
+                        <!-- Big Code Display with Copy Cursor -->
+                        <div class="ot-code-value-wrap">
+                            <div class="ot-code-number" id="copyCodeText">{{ Session::get('kode_pendaftaran') }}</div>
+                        </div>
+
+                        <div class="ot-code-meta-grid">
+                            <div class="ot-meta-item">
+                                <span class="ot-meta-label"><i class="fa-solid fa-user mr-1 text-primary"></i> Nama Pasien:</span>
+                                <span class="ot-meta-value">{{ Session::get('nama_pasien') }}</span>
+                            </div>
+                            <div class="ot-meta-item">
+                                <span class="ot-meta-label"><i class="fa-solid fa-hand-holding-medical mr-1 text-info"></i> Layanan Terapi:</span>
+                                <span class="ot-meta-value">{{ Session::get('layanan_terapi') ?: 'Layanan Terpadu' }}</span>
+                            </div>
+                            <div class="ot-meta-item">
+                                <span class="ot-meta-label"><i class="fa-regular fa-calendar-check mr-1 text-success"></i> Rencana Jadwal:</span>
+                                <span class="ot-meta-value">{{ Session::get('tgl_rencana') }} {{ Session::get('jam_rencana') ? '('.Session::get('jam_rencana').')' : '' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="ot-code-hint">
+                            <i class="fa-solid fa-circle-info mr-1 text-primary"></i> Simpan atau salin kode ini untuk melacak status verifikasi berkas di menu <strong>Lacak Status</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Modal Actions -->
+                    <div class="ot-success-modal-actions">
+                        <a href="{{ Session::get('cetak_url') ?: (Session::has('kode_pendaftaran') ? route('portal.pendaftaran.cetak', Session::get('kode_pendaftaran')) : '#') }}" target="_blank" class="btn-modal-print" title="Cetak Surat Bukti Pendaftaran">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Cetak Bukti Registrasi (PDF)</span>
+                        </a>
+                        <button type="button" class="btn-modal-close-action" onclick="document.getElementById('modalSuccessPendaftaran').remove()">
+                            Tutup
                         </button>
                     </div>
-                    <div style="font-size: 18px; font-weight: 800; color: #1e40af; letter-spacing: 0.5px; margin-bottom: 8px;" id="copyCodeText">
-                        {{ Session::get('kode_pendaftaran') }}
-                    </div>
-                    <div style="font-size: 12px; color: #334155; border-top: 1px dashed #bfdbfe; padding-top: 6px; line-height: 1.5;">
-                        <div><strong>Pasien:</strong> {{ Session::get('nama_pasien') }}</div>
-                        <div><strong>Layanan:</strong> {{ Session::get('layanan_terapi') ?: 'Layanan Terpadu' }}</div>
-                        <div><strong>Jadwal:</strong> {{ Session::get('tgl_rencana') }} ({{ Session::get('jam_rencana') }})</div>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-center justify-content-center flex-wrap" style="gap: 8px; margin-bottom: 8px;">
-                    <a href="{{ Session::get('cetak_url') ?: (Session::has('kode_pendaftaran') ? route('portal.pendaftaran.cetak', Session::get('kode_pendaftaran')) : '#') }}" target="_blank" class="btn btn-primary font-w700" style="border-radius: 7px; padding: 8px 16px; font-size: 12.5px; flex: 1; min-width: 170px; text-decoration: none;">
-                        <i class="fa-solid fa-print mr-1"></i> Cetak Bukti (PDF)
-                    </a>
-                    <button type="button" class="btn btn-light font-w600" onclick="document.getElementById('modalSuccessPendaftaran').classList.remove('active')" style="border: 1px solid #cbd5e1; border-radius: 7px; padding: 8px 16px; font-size: 12.5px;">
-                        Tutup
-                    </button>
                 </div>
             </div>
         </div>
@@ -2067,19 +2388,58 @@
             }
         });
 
-        // Copy Kode Registrasi
-        function copyKodeReg() {
-            var el = document.getElementById('copyCodeText');
-            if (!el) return;
-            var text = el.innerText.trim();
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(text).then(function() {
-                    if (typeof toastr !== 'undefined') {
-                        toastr.success('Kode Registrasi berhasil disalin!', 'Tersalin', {timeOut: 2000});
-                    } else {
-                        alert('Kode Registrasi berhasil disalin: ' + text);
-                    }
+        // Copy Kode Registrasi with Interactive Feedback & Distinct Cursor Experience
+        function copyKodeReg(code) {
+            if (!code || typeof code !== 'string') {
+                var el = document.getElementById('copyCodeText');
+                code = el ? el.innerText.trim() : '';
+            }
+            if (!code) return;
+
+            var btn = document.getElementById('btnCopyKodeReg');
+            var icon = document.getElementById('copyIcon');
+            var btnText = document.getElementById('copyBtnText');
+
+            function showFeedback() {
+                if (btn) {
+                    btn.classList.add('copied');
+                    if (icon) icon.className = 'fa-solid fa-check mr-1';
+                    if (btnText) btnText.innerText = 'Tersalin!';
+                    setTimeout(function() {
+                        btn.classList.remove('copied');
+                        if (icon) icon.className = 'fa-regular fa-copy mr-1';
+                        if (btnText) btnText.innerText = 'Salin Kode';
+                    }, 2500);
+                }
+                if (typeof toastr !== 'undefined') {
+                    toastr.success('Kode Registrasi ' + code + ' berhasil disalin ke clipboard!', 'Tersalin', {timeOut: 2500});
+                }
+            }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(code).then(showFeedback).catch(function() {
+                    fallbackClipboard(code);
+                    showFeedback();
                 });
+            } else {
+                fallbackClipboard(code);
+                showFeedback();
+            }
+
+            function fallbackClipboard(text) {
+                var textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.opacity = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                } catch (err) {
+                    console.error('Fallback copy error', err);
+                }
+                document.body.removeChild(textArea);
             }
         }
 
@@ -2254,7 +2614,9 @@
                                     html += '      <div><span class="text-muted">Jadwal Sesi I:</span> <strong class="text-dark d-block"><i class="fa-regular fa-calendar-check mr-1"></i>' + (p.tgl_sesi_disetujui || p.tgl_rencana) + ' (' + (p.jam_sesi_disetujui || p.jam_rencana) + ')</strong></div>';
                                     html += '    </div>';
                                     if (p.catatan) {
-                                        html += '    <div class="mt-2 pt-2" style="border-top: 1px dashed #a7f3d0; font-size: 12px; color: #065f46;"><strong>Catatan Petugas:</strong> ' + p.catatan + '</div>';
+                                        html += '    <div class="mt-2.5 p-2.5 rounded" style="background: #ffffff; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 12.5px; color: #065f46; line-height: 1.5; box-shadow: 0 1px 3px rgba(16, 185, 129, 0.08);">';
+                                        html += '      <strong class="d-block mb-1 text-success font-w700" style="font-size: 12px;"><i class="fa-solid fa-clipboard-check mr-1"></i> Catatan Persetujuan Petugas:</strong> ' + p.catatan;
+                                        html += '    </div>';
                                     }
                                     html += '    <div class="mt-2.5 d-flex align-items-center flex-wrap" style="gap: 6px;">';
                                     html += '      <button type="button" onclick="loginWithRm(\'' + p.no_rm + '\')" class="btn btn-sm btn-primary font-w700" style="border-radius: 6px; padding: 5px 12px; font-size: 12px;"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Buka Rekam Medis</button>';
@@ -2262,8 +2624,12 @@
                                     html += '    </div>';
                                     html += '  </div>';
                                 } else if (p.status === 'ditolak') {
-                                    html += '  <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px; color: #dc2626; font-size: 12px;">';
-                                    html += '    <strong><i class="fa-solid fa-circle-xmark mr-1"></i> Catatan Penolakan:</strong> ' + (p.catatan || 'Berkas/persyaratan belum memenuhi kriteria.');
+                                    html += '  <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px;">';
+                                    html += '    <div style="font-size: 13px; font-weight: 700; color: #dc2626; margin-bottom: 8px;"><i class="fa-solid fa-circle-xmark mr-1"></i> Pendaftaran Belum Dapat Disetujui (Ditolak)</div>';
+                                    html += '    <div style="background: #ffffff; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; font-size: 12.5px; color: #991b1b; line-height: 1.5; box-shadow: 0 1px 3px rgba(220, 38, 38, 0.08);">';
+                                    html += '      <strong class="d-block mb-1 text-danger font-w700" style="font-size: 12px;"><i class="fa-solid fa-comment-slash mr-1"></i> Alasan Penolakan dari Petugas:</strong> ' + (p.catatan || 'Berkas atau persyaratan belum memenuhi kriteria layanan.');
+                                    html += '    </div>';
+                                    html += '    <div class="mt-2 text-muted" style="font-size: 11.5px;"><i class="fa-solid fa-circle-info text-danger mr-1"></i> Silakan periksa kelengkapan berkas atau hubungi narahubung UPT terkait untuk informasi pendaftaran ulang.</div>';
                                     html += '  </div>';
                                 } else {
                                     html += '  <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px; color: #1e40af; font-size: 12px; line-height: 1.4;">';

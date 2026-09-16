@@ -245,7 +245,7 @@
                             <i class="fa-regular fa-bell-slash"></i>
                         </div>
                         <p class="fs-12 mb-0 font-w600 text-secondary">Tidak ada notifikasi baru</p>
-                        <small class="text-muted" style="font-size: 11px;">Notifikasi penugasan pasien akan muncul di sini</small>
+                        <small class="text-muted" style="font-size: 11px;">Notifikasi penugasan atau antrean baru akan muncul di sini</small>
                     </li>
                 `);
                 return;
@@ -253,16 +253,33 @@
 
             var html = '';
             items.forEach(function(notif) {
+                var iconClass = 'fa-solid fa-user-doctor';
+                var iconBoxStyle = 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;';
+                var badgeHtml = `<span class="badge badge-primary light font-w600" style="font-size: 10px; padding: 1px 6px;">${notif.layanan_terapi}</span>`;
+                var btnStyle = 'background: #2563eb; border-color: #2563eb; color: #ffffff;';
+
+                if (notif.tipe === 'pendaftaran_baru') {
+                    iconClass = 'fa-solid fa-user-plus';
+                    iconBoxStyle = 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;';
+                    badgeHtml = '<span class="badge font-w600" style="font-size: 10px; padding: 1px 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa-solid fa-user-plus mr-1"></i>Pasien Baru</span>';
+                    btnStyle = 'background: #059669; border-color: #059669; color: #ffffff;';
+                } else if (notif.tipe === 'booking_baru') {
+                    iconClass = 'fa-solid fa-calendar-plus';
+                    iconBoxStyle = 'background: #fffbeb; color: #d97706; border: 1px solid #fde68a;';
+                    badgeHtml = '<span class="badge font-w600" style="font-size: 10px; padding: 1px 6px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa-solid fa-calendar mr-1"></i>Booking</span>';
+                    btnStyle = 'background: #d97706; border-color: #d97706; color: #ffffff;';
+                }
+
                 html += `
                     <li class="p-2 mb-1 notif-item" style="border-radius: 8px; border-bottom: 1px solid #f1f5f9; background: #ffffff; transition: background 0.2s ease;">
                         <div class="d-flex align-items-start">
-                            <div class="mr-2.5 mt-1" style="width: 32px; height: 32px; border-radius: 8px; background: #eff6ff; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 14px; flex-shrink: 0; border: 1px solid #bfdbfe;">
-                                <i class="fa-solid fa-user-doctor"></i>
+                            <div class="mr-2.5 mt-1" style="width: 32px; height: 32px; border-radius: 8px; ${iconBoxStyle} display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">
+                                <i class="${iconClass}"></i>
                             </div>
                             <div class="media-body" style="font-size: 12px;">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
                                     <strong class="text-dark font-w700" style="font-size: 12.5px;">${notif.nama_pasien}</strong>
-                                    <span class="badge badge-primary light font-w600" style="font-size: 10px; padding: 1px 6px;">${notif.layanan_terapi}</span>
+                                    ${badgeHtml}
                                 </div>
                                 <p class="mb-1 text-secondary" style="font-size: 11.5px; line-height: 1.35; color: #475569 !important;">
                                     ${notif.message}
@@ -271,7 +288,7 @@
                                     <small class="text-muted font-w500" style="font-size: 10.5px;">
                                         <i class="fa-regular fa-clock mr-1"></i>${notif.created_at}
                                     </small>
-                                    <a href="${notif.read_url}" class="btn btn-primary btn-xs font-w600" style="padding: 2px 8px; font-size: 11px; border-radius: 5px; background: #2563eb;">
+                                    <a href="${notif.read_url}" class="btn btn-xs font-w600" style="padding: 2px 8px; font-size: 11px; border-radius: 5px; ${btnStyle}">
                                         <i class="fa-solid fa-arrow-right mr-1"></i> Buka
                                     </a>
                                 </div>
@@ -313,10 +330,19 @@
                             playNotificationChime();
                             if (typeof toastr !== 'undefined' && res.notifications && res.notifications.length > 0) {
                                 var latest = res.notifications[0];
+                                var toastrTitle = "🔔 Notifikasi Aktivitas Baru";
+                                if (latest.tipe === 'pendaftaran_baru') {
+                                    toastrTitle = "📋 Pendaftaran Pasien Baru";
+                                } else if (latest.tipe === 'booking_baru') {
+                                    toastrTitle = "📅 Permohonan Booking Sesi Baru";
+                                } else if (latest.tipe === 'penugasan' || latest.tipe === 'assignment') {
+                                    toastrTitle = "🩺 Pasien Baru Ditugaskan";
+                                }
+
                                 toastr.info(
-                                    `<div style="font-size:12.5px;"><strong>${latest.nama_pasien}</strong><br><small>${latest.message}</small></div>`,
-                                    "🔔 Pasien Baru Ditugaskan",
-                                    { timeOut: 7500, closeButton: true, escapeHtml: false }
+                                    `<div style="font-size:12.5px;"><strong>${latest.nama_pasien}</strong> <span style="font-size:11px; opacity:0.85;">(${latest.layanan_terapi})</span><br><small>${latest.message}</small></div>`,
+                                    toastrTitle,
+                                    { timeOut: 8500, closeButton: true, escapeHtml: false }
                                 );
                             }
                         }

@@ -161,6 +161,114 @@
         color: #1e40af;
         box-shadow: 0 1px 3px rgba(37, 99, 235, 0.1);
     }
+
+    /* Success Modal & Copy Cursor */
+    .ot-success-modal-box {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22), 0 4px 18px rgba(37, 99, 235, 0.08);
+        border: 1.5px solid #bfdbfe;
+        overflow: hidden;
+        text-align: left;
+    }
+    .ot-success-modal-header {
+        background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%);
+        border-bottom: 1.5px solid #bfdbfe;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .ot-success-modal-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
+        background: #ecfdf5;
+        color: #059669;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #a7f3d0;
+        box-shadow: 0 2px 6px rgba(5, 150, 105, 0.15);
+        flex-shrink: 0;
+    }
+    .ot-success-modal-title {
+        font-size: 16px;
+        font-weight: 800;
+        color: #1e40af;
+        margin: 0 0 2px 0;
+    }
+    .ot-success-modal-subtitle {
+        font-size: 12px;
+        font-weight: 500;
+        color: #64748b;
+    }
+    .ot-modal-close-btn {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+    }
+    .ot-modal-close-btn:hover {
+        background: #fee2e2;
+        border-color: #fca5a5;
+        color: #dc2626;
+    }
+    .ot-code-card {
+        background: #f8fafc;
+        border: 1.5px dashed #3b82f6;
+        border-radius: 12px;
+        padding: 15px 16px;
+        margin-bottom: 16px;
+        transition: all 0.22s ease;
+        text-align: left;
+    }
+    .copy-trigger-box,
+    .btn-copy-action,
+    .ot-code-number,
+    .copy-badge-btn {
+        cursor: copy !important;
+        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%232563eb' stroke='%23ffffff' stroke-width='1.5'%3E%3Cpath d='M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z'/%3E%3C/svg%3E") 4 4, copy !important;
+    }
+    .ot-code-card:hover {
+        background: #f0f7ff;
+        border-color: #2563eb;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+        transform: translateY(-1px);
+    }
+    .btn-copy-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #ffffff;
+        border: 1.5px solid #bfdbfe;
+        color: #2563eb;
+        font-size: 11.5px;
+        font-weight: 700;
+        padding: 4px 11px;
+        border-radius: 7px;
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.08);
+        transition: all 0.18s ease;
+    }
+    .btn-copy-action:hover {
+        background: #2563eb;
+        color: #ffffff;
+        border-color: #1d4ed8;
+    }
+    .btn-copy-action.copied {
+        background: #ecfdf5 !important;
+        color: #059669 !important;
+        border-color: #a7f3d0 !important;
+    }
 </style>
 @endsection
 
@@ -600,29 +708,55 @@
     </div>
 </div>
 
-<!-- Modal Success Booking Popup -->
+<!-- Modal Success Booking Popup (Matches UPT & Sesi Modal Theme) -->
 @if(Session::has('booking_success'))
-    <div class="modal fade show" id="modalSuccessBooking" tabindex="-1" role="dialog" style="display: block; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(3px);">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content text-center p-4" style="border-radius: 14px; border: none; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
-                <div style="width: 65px; height: 65px; border-radius: 50%; background: #ecfdf5; color: #059669; font-size: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px auto; border: 1px solid #a7f3d0;">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <h4 class="font-w800 text-dark mb-1" style="font-size: 18px;">Permohonan Booking Terkirim!</h4>
-                <p class="text-muted mb-3" style="font-size: 13px;">
-                    Reservasi jadwal sesi terapi Anda telah diterima dan langsung masuk ke daftar pelacakan status di bawah.
-                </p>
-                <div class="p-3 rounded mb-3" style="background: #eff6ff; border: 1px dashed #2563eb; font-size: 13px;">
-                    <span class="text-muted font-w600">Kode Booking Anda:</span>
-                    <div class="font-w800 text-primary mt-1 font-monospace" style="font-size: 22px; letter-spacing: 0.5px;">{{ Session::get('kode_booking') }}</div>
-                </div>
-                <div class="d-flex align-items-center justify-content-center flex-wrap" style="gap: 8px;">
-                    <a href="{{ route('portal.booking.cetak', Session::get('kode_booking')) }}" target="_blank" class="btn btn-primary font-w700" style="border-radius: 8px; padding: 10px 16px; font-size: 13px; flex: 1; min-width: 160px; text-decoration: none; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none;">
-                        <i class="fa-solid fa-print mr-1.5"></i> Cetak Bukti (PDF)
-                    </a>
-                    <button type="button" class="btn btn-light font-w600" onclick="document.getElementById('modalSuccessBooking').remove();" style="border-radius: 8px; padding: 10px 16px; font-size: 13px; border: 1px solid #cbd5e1;">
-                        Pantau Status
+    <div class="modal fade show" id="modalSuccessBooking" tabindex="-1" role="dialog" style="display: block; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px);">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 520px;">
+            <div class="modal-content ot-success-modal-box">
+                <!-- Modal Header -->
+                <div class="ot-success-modal-header">
+                    <div class="d-flex align-items-center" style="gap: 14px;">
+                        <div class="ot-success-modal-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="ot-success-modal-title">Permohonan Booking Terkirim!</h4>
+                            <span class="ot-success-modal-subtitle">Reservasi jadwal sesi terapi telah tersimpan di sistem</span>
+                        </div>
+                    </div>
+                    <button type="button" class="ot-modal-close-btn" onclick="document.getElementById('modalSuccessBooking').remove();" title="Tutup">
+                        <i class="fa-solid fa-xmark"></i>
                     </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-4" style="background: #ffffff;">
+                    <!-- Code Card with Custom Copy Cursor -->
+                    <div class="ot-code-card copy-trigger-box" onclick="copyKodeBooking('{{ Session::get('kode_booking') }}')" title="Klik untuk menyalin Kode Booking">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px;">KODE BOOKING RESMI</span>
+                            <button type="button" class="btn-copy-action" id="btnCopyKodeBookingModal" onclick="event.stopPropagation(); copyKodeBooking('{{ Session::get('kode_booking') }}')">
+                                <i class="fa-regular fa-copy mr-1"></i>
+                                <span>Salin Kode</span>
+                            </button>
+                        </div>
+                        <div class="p-2 px-3 rounded mb-2" style="background: #ffffff; border: 1px solid #e2e8f0;">
+                            <div class="ot-code-number" style="font-size: 20px; font-weight: 800; color: #1e40af;">{{ Session::get('kode_booking') }}</div>
+                        </div>
+                        <div style="font-size: 11.5px; color: #64748b; background: rgba(37, 99, 235, 0.05); padding: 7px 10px; border-radius: 6px; border-left: 3px solid #3b82f6;">
+                            <i class="fa-solid fa-circle-info mr-1 text-primary"></i> Kode booking ini dapat digunakan untuk memantau status persetujuan sesi terapi Anda.
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-center" style="gap: 10px;">
+                        <a href="{{ route('portal.booking.cetak', Session::get('kode_booking')) }}" target="_blank" class="btn btn-primary font-w700" style="flex: 1; height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; font-size: 13px; text-decoration: none; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none;">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Cetak Bukti (PDF)</span>
+                        </a>
+                        <button type="button" class="btn btn-light font-w600" onclick="document.getElementById('modalSuccessBooking').remove();" style="height: 42px; border-radius: 8px; padding: 0 20px; font-size: 13px; border: 1.5px solid #cbd5e1;">
+                            Pantau Status
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -633,26 +767,47 @@
 @section('script')
 <script>
     function copyKodeBooking(kode) {
+        if (!kode) return;
+
+        function showFeedback() {
+            var btnModal = document.getElementById('btnCopyKodeBookingModal');
+            if (btnModal) {
+                btnModal.classList.add('copied');
+                btnModal.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Tersalin!';
+                setTimeout(function() {
+                    btnModal.classList.remove('copied');
+                    btnModal.innerHTML = '<i class="fa-regular fa-copy mr-1"></i> Salin Kode';
+                }, 2500);
+            }
+            if (typeof toastr !== 'undefined') {
+                toastr.success('Kode Booking ' + kode + ' berhasil disalin ke clipboard!', 'Tersalin', {timeOut: 2500});
+            }
+        }
+
         if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(kode).then(function() {
-                if (typeof toastr !== 'undefined') {
-                    toastr.success('Kode Booking ' + kode + ' disalin!', 'Berhasil');
-                } else {
-                    alert('Kode booking disalin: ' + kode);
-                }
+            navigator.clipboard.writeText(kode).then(showFeedback).catch(function() {
+                fallbackCopy(kode);
+                showFeedback();
             });
         } else {
-            const textArea = document.createElement("textarea");
-            textArea.value = kode;
+            fallbackCopy(kode);
+            showFeedback();
+        }
+
+        function fallbackCopy(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
             document.body.appendChild(textArea);
+            textArea.focus();
             textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            if (typeof toastr !== 'undefined') {
-                toastr.success('Kode Booking ' + kode + ' disalin!', 'Berhasil');
-            } else {
-                alert('Kode booking disalin: ' + kode);
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('Fallback copy error', err);
             }
+            document.body.removeChild(textArea);
         }
     }
 

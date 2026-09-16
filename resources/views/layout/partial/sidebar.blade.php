@@ -23,15 +23,20 @@
             </li>
             @endif
 
-            @if (auth()->user()->role_display() == 'Admin' || auth()->user()->role_display() == 'Pendaftaran' || auth()->user()->role_display() == 'Dokter')
+            @if (auth()->user()->role_display() == 'Admin' || auth()->user()->role_display() == 'Pendaftaran')
+            @php
+                $pendingDaftar = \App\Models\PendaftaranPasien::where('status', 'menunggu')->count();
+                $pendingBooking = \App\Models\BookingSesi::where('status', 'menunggu')->count();
+                $totalPendingOnline = $pendingDaftar + $pendingBooking;
+            @endphp
             <li>
                 <a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
                     <i class="fa-solid fa-clipboard-user"></i>
                     <span class="nav-text">Pendaftaran Online</span>
+                    @if($totalPendingOnline > 0)
+                        <span class="badge badge-danger badge-xs ml-auto mr-3" style="font-size: 9.5px; border-radius: 10px; padding: 1px 6px;">{{ $totalPendingOnline }}</span>
+                    @endif
                 </a>
-                @php
-                    $pendingDaftar = \App\Models\PendaftaranPasien::where('status', 'menunggu')->count();
-                @endphp
                 <ul aria-expanded="false">
                     <li>
                         <a href="{{Route('pendaftaran.index')}}" class="{{ request()->routeIs('pendaftaran.*') ? 'mm-active' : '' }}">
@@ -44,6 +49,9 @@
                     <li>
                         <a href="{{Route('booking.index')}}" class="{{ request()->routeIs('booking.*') ? 'mm-active' : '' }}">
                             <i class="fa-solid fa-calendar-plus mr-2"></i>Antrean Booking Sesi
+                            @if($pendingBooking > 0)
+                                <span class="badge badge-warning badge-xs ml-1 text-white" style="font-size: 9.5px; border-radius: 10px; padding: 1px 5px; background: #d97706;">{{ $pendingBooking }}</span>
+                            @endif
                         </a>
                     </li>
                 </ul>

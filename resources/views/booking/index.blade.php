@@ -87,8 +87,17 @@
                     <i class="fa-solid fa-calendar-check"></i>
                 </div>
                 <div>
-                    <h3 class="font-w700 mb-1" style="color: #1e40af; font-weight: 700; font-size: 20px;">
-                        Persetujuan & Antrean Booking Sesi Terapi
+                    <h3 class="font-w700 mb-1 d-flex align-items-center flex-wrap" style="color: #1e40af; font-weight: 700; font-size: 20px; gap: 8px;">
+                        <span>Persetujuan & Antrean Booking Sesi Terapi</span>
+                        @if(isset($counts['menunggu']) && $counts['menunggu'] > 0)
+                            <span class="badge font-w700" id="headerBadgeMenungguBooking" style="font-size: 11.5px; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; border-radius: 8px; padding: 4px 10px; display: inline-flex; align-items: center;">
+                                <i class="fa-solid fa-hourglass-half mr-1"></i> <span id="headerCountMenungguBooking">{{ number_format($counts['menunggu']) }}</span> Menunggu ACC
+                            </span>
+                        @else
+                            <span class="badge font-w700" id="headerBadgeMenungguBooking" style="font-size: 11.5px; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; border-radius: 8px; padding: 4px 10px; display: none; align-items: center;">
+                                <i class="fa-solid fa-hourglass-half mr-1"></i> <span id="headerCountMenungguBooking">0</span> Menunggu ACC
+                            </span>
+                        @endif
                     </h3>
                     <ol class="breadcrumb mb-0" style="background: transparent; padding: 0; font-size: 12px;">
                         <li class="breadcrumb-item"><a href="{{Route('dashboard')}}" style="color: #2563eb;">Dashboard</a></li>
@@ -473,6 +482,13 @@
                         $('#statMenungguBooking').text(new Intl.NumberFormat('id-ID').format(res.counts.menunggu));
                         $('#statTerkonfirmasiBooking').text(new Intl.NumberFormat('id-ID').format(res.counts.disetujui));
                         $('#statDitolakBooking').text(new Intl.NumberFormat('id-ID').format(res.counts.ditolak));
+
+                        if (res.counts.menunggu > 0) {
+                            $('#headerCountMenungguBooking').text(new Intl.NumberFormat('id-ID').format(res.counts.menunggu));
+                            $('#headerBadgeMenungguBooking').css('display', 'inline-flex');
+                        } else {
+                            $('#headerBadgeMenungguBooking').hide();
+                        }
                     }
 
                     // Update export CSV URL

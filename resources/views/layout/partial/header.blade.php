@@ -35,7 +35,7 @@
                             <div class="dropdown-header px-3 py-2.5 d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-bottom: 1px solid #bfdbfe;">
                                 <div class="d-flex align-items-center">
                                     <i class="fa-solid fa-bell mr-2" style="color: #2563eb;"></i>
-                                    <h6 class="mb-0 font-w700" style="color: #1e40af !important; font-size: 13.5px;">Notifikasi Penugasan</h6>
+                                    <h6 class="mb-0 font-w700" style="color: #1e40af !important; font-size: 13.5px;">Notifikasi & Antrean</h6>
                                 </div>
                                 <button type="button" class="btn btn-xs btn-outline-primary btn-mark-all-read" onclick="markAllNotificationsRead(event)" style="font-size: 11px; padding: 2px 8px; border-radius: 6px; border-color: #93c5fd; background: #ffffff; color: #1d4ed8;" title="Tandai semua notifikasi telah dibaca">
                                     <i class="fa-solid fa-check-double mr-1"></i> Baca Semua
@@ -46,33 +46,52 @@
                                    @forelse (auth()->user()->unreadnotifications as $notif)
                                         @php
                                             $data = $notif->data;
+                                            $tipe = $data['tipe'] ?? 'penugasan';
                                             $namaPasien = $data['nama_pasien'] ?? 'Penerima Manfaat';
                                             $noRm = $data['no_rm'] ?? '-';
                                             $layanan = $data['layanan_terapi'] ?? 'Terapi';
                                             $sesi = $data['sesi_waktu'] ?? '';
-                                            $msg = $data['message'] ?? 'Ada pasien baru ditugaskan ke Anda.';
+                                            $msg = $data['message'] ?? 'Ada notifikasi aktivitas baru.';
                                             $createdAt = isset($data['created_at']) 
                                                 ? (\Carbon\Carbon::parse($data['created_at'])->format('d/m/Y H:i'))
                                                 : $notif->created_at->format('d/m/Y H:i');
+
+                                            // Styling icon & badge berdasarkan tipe
+                                            if ($tipe === 'pendaftaran_baru') {
+                                                $iconClass = 'fa-solid fa-user-plus';
+                                                $iconBoxStyle = 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;';
+                                                $badgeHtml = '<span class="badge font-w600" style="font-size: 10px; padding: 1px 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa-solid fa-user-plus mr-1"></i>Pasien Baru</span>';
+                                                $btnStyle = 'background: #059669; border-color: #059669; color: #ffffff;';
+                                            } elseif ($tipe === 'booking_baru') {
+                                                $iconClass = 'fa-solid fa-calendar-plus';
+                                                $iconBoxStyle = 'background: #fffbeb; color: #d97706; border: 1px solid #fde68a;';
+                                                $badgeHtml = '<span class="badge font-w600" style="font-size: 10px; padding: 1px 6px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa-solid fa-calendar mr-1"></i>Booking</span>';
+                                                $btnStyle = 'background: #d97706; border-color: #d97706; color: #ffffff;';
+                                            } else {
+                                                $iconClass = 'fa-solid fa-user-doctor';
+                                                $iconBoxStyle = 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;';
+                                                $badgeHtml = '<span class="badge badge-primary light font-w600" style="font-size: 10px; padding: 1px 6px;">' . e($layanan) . '</span>';
+                                                $btnStyle = 'background: #2563eb; border-color: #2563eb; color: #ffffff;';
+                                            }
                                         @endphp
                                         <li class="p-2 mb-1 notif-item" style="border-radius: 8px; border-bottom: 1px solid #f1f5f9; background: #ffffff; transition: background 0.2s ease;">
                                             <div class="d-flex align-items-start">
-                                                <div class="mr-2.5 mt-1" style="width: 32px; height: 32px; border-radius: 8px; background: #eff6ff; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 14px; flex-shrink: 0; border: 1px solid #bfdbfe;">
-                                                    <i class="fa-solid fa-user-doctor"></i>
+                                                <div class="mr-2.5 mt-1" style="width: 32px; height: 32px; border-radius: 8px; {{ $iconBoxStyle }} display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">
+                                                    <i class="{{ $iconClass }}"></i>
                                                 </div>
                                                 <div class="media-body" style="font-size: 12px;">
                                                     <div class="d-flex align-items-center justify-content-between mb-1">
                                                         <strong class="text-dark font-w700" style="font-size: 12.5px;">{{ $namaPasien }}</strong>
-                                                        <span class="badge badge-primary light font-w600" style="font-size: 10px; padding: 1px 6px;">{{ $layanan }}</span>
+                                                        {!! $badgeHtml !!}
                                                     </div>
                                                     <p class="mb-1 text-secondary" style="font-size: 11.5px; line-height: 1.35; color: #475569 !important;">
                                                         {{ $msg }}
                                                     </p>
                                                     <div class="d-flex align-items-center justify-content-between mt-1">
                                                         <small class="text-muted font-w500" style="font-size: 10.5px;">
-                                                            <i class="fa-regular fa-clock mr-1"></i>{{ $createdAt }}
+                                                             <i class="fa-regular fa-clock mr-1"></i>{{ $createdAt }}
                                                         </small>
-                                                        <a href="{{ route('notifications.read', $notif->id) }}" class="btn btn-primary btn-xs font-w600" style="padding: 2px 8px; font-size: 11px; border-radius: 5px; background: #2563eb;">
+                                                        <a href="{{ route('notifications.read', $notif->id) }}" class="btn btn-xs font-w600" style="padding: 2px 8px; font-size: 11px; border-radius: 5px; {{ $btnStyle }}">
                                                             <i class="fa-solid fa-arrow-right mr-1"></i> Buka
                                                         </a>
                                                     </div>
@@ -85,7 +104,7 @@
                                                 <i class="fa-regular fa-bell-slash"></i>
                                             </div>
                                             <p class="fs-12 mb-0 font-w600 text-secondary">Tidak ada notifikasi baru</p>
-                                            <small class="text-muted" style="font-size: 11px;">Notifikasi penugasan pasien akan muncul di sini</small>
+                                            <small class="text-muted" style="font-size: 11px;">Notifikasi penugasan atau antrean baru akan muncul di sini</small>
                                         </li>
                                    @endforelse
                                 </ul>

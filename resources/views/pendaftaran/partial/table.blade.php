@@ -94,9 +94,14 @@
                                         <i class="fa-solid fa-user-doctor mr-0.5"></i> {{ $row->terapis->nama }}
                                     </small>
                                 @endif
+                                @if($row->catatan_petugas && $row->catatan_petugas !== 'Pendaftaran disetujui. Terapis dan jadwal sesi terapi pertama telah ditetapkan.')
+                                    <small class="d-block text-muted font-w500 mt-0.5" style="font-size: 10.5px; max-width: 140px; margin: 0 auto; line-height: 1.25;" title="Catatan Persetujuan: {{ $row->catatan_petugas }}">
+                                        <i class="fa-solid fa-comment-dots mr-0.5 text-success"></i> {{ Str::limit($row->catatan_petugas, 28) }}
+                                    </small>
+                                @endif
                             @elseif($row->status === 'ditolak' && $row->catatan_petugas)
-                                <small class="d-block text-danger font-w500 mt-1" style="font-size: 10.5px; max-width: 140px; margin: 0 auto; line-height: 1.25;" title="{{ $row->catatan_petugas }}">
-                                    {{ Str::limit($row->catatan_petugas, 35) }}
+                                <small class="d-block text-danger font-w500 mt-1" style="font-size: 10.5px; max-width: 140px; margin: 0 auto; line-height: 1.25;" title="Alasan Penolakan: {{ $row->catatan_petugas }}">
+                                    <i class="fa-solid fa-circle-xmark mr-0.5"></i> {{ Str::limit($row->catatan_petugas, 35) }}
                                 </small>
                             @endif
                         </td>

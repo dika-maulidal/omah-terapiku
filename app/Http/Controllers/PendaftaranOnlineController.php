@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\StatusRekamUpdate;
 use App\Models\BookingSesi;
 use App\Models\Dokter;
 use App\Models\Pasien;
 use App\Models\PendaftaranPasien;
 use App\Models\Poli;
 use App\Models\Rekam;
+use App\Notifications\BookingBaruNotification;
+use App\Notifications\PendaftaranBaruNotification;
+use App\Notifications\RekamUpdateNotification;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Session;
 
 class PendaftaranOnlineController extends Controller
@@ -139,6 +146,9 @@ class PendaftaranOnlineController extends Controller
             'file_resume' => $fileResumeName,
             'status' => 'menunggu',
         ]);
+
+        // Kirim notifikasi realtime & in-app ke Petugas Pendaftaran & Admin
+        $this->notifyPetugasPendaftaranBaru($pendaftaran);
 
         // Berikan izin otorisasi cetak pada sesi pendaftar saat ini
         Session::put('portal_auth_reg_' . $kodePendaftaran, true);
@@ -652,6 +662,9 @@ class PendaftaranOnlineController extends Controller
             'upt_lokasi' => $request->upt_lokasi ?: ($pasien->upt_lokasi ?: 'UPT RSBN Malang'),
         ]);
 
+        // Kirim notifikasi realtime & in-app ke Petugas Pendaftaran & Admin
+        $this->notifyPetugasBookingBaru($booking);
+
         // Berikan izin otorisasi cetak pada sesi booking yang baru diajukan
         Session::put('portal_auth_bkg_' . $kodeBooking, true);
 
@@ -989,10 +1002,14 @@ class PendaftaranOnlineController extends Controller
                 'total_biaya' => 0,
             ]);
 
+            $catatanPetugas = $request->filled('catatan_petugas') 
+                ? trim($request->input('catatan_petugas')) 
+                : 'Pendaftaran disetujui. Terapis dan jadwal sesi terapi pertama telah ditetapkan.';
+
             // 3. Update status pendaftaran
             $pendaftaran->update([
                 'status' => 'disetujui',
-                'catatan_petugas' => $request->input('catatan_petugas', 'Pendaftaran disetujui. Terapis dan jadwal sesi terapi pertama telah ditetapkan.'),
+                'catatan_petugas' => $catatanPetugas,
                 'verified_by' => Auth::id(),
                 'verified_at' => now(),
                 'pasien_id' => $pasien->id,
@@ -1005,6 +1022,9 @@ class PendaftaranOnlineController extends Controller
 
             $terapis = Dokter::find($request->dokter_id);
             $terapisNama = $terapis ? $terapis->nama : 'Terapis';
+
+            // Kirim notifikasi ke terapis yang ditugaskan
+            $this->notifyTerapis($rekam, "Pasien baru {$pasien->nama} (No. RM: {$noRm}) telah disetujui dan ditugaskan ke Anda untuk sesi tanggal " . Carbon::parse($tglSesi)->isoFormat('D MMMM Y') . " ({$jamSesi}).");
 
             return redirect()->route('pendaftaran.index')
                 ->with('sukses', "Pendaftaran {$pendaftaran->nama} berhasil disetujui! No. RM: {$noRm}, Terapis: {$terapisNama}, Jadwal Sesi: " . Carbon::parse($tglSesi)->isoFormat('D MMMM Y') . " ({$jamSesi})");
@@ -1287,6 +1307,9 @@ class PendaftaranOnlineController extends Controller
                 'verified_at' => now(),
             ]);
 
+            // Kirim notifikasi ke terapis yang ditugaskan
+            $this->notifyTerapis($rekam, "Booking sesi terapi {$booking->pasien->nama} ({$booking->kode_booking}) telah disetujui dan ditugaskan ke Anda untuk tanggal " . Carbon::parse($rekam->tgl_rekam)->isoFormat('D MMMM Y') . " ({$rekam->sesi_waktu}).");
+
             return redirect()->route('booking.index')
                 ->with('sukses', "Booking sesi {$booking->pasien->nama} ({$booking->kode_booking}) berhasil disetujui & rekam sesi otomatis terbuat!");
         });
@@ -1312,5 +1335,88 @@ class PendaftaranOnlineController extends Controller
 
         return redirect()->route('booking.index')
             ->with('sukses', "Permohonan booking ({$booking->kode_booking}) telah ditolak dengan catatan: {$request->catatan_petugas}");
+    }
+
+    // =========================================================================
+    // NOTIFICATION HELPERS
+    // =========================================================================
+
+    /**
+     * Kirim notifikasi ke semua Petugas Pendaftaran & Admin aktif saat ada pendaftaran baru
+     */
+    private function notifyPetugasPendaftaranBaru($pendaftaran)
+    {
+        try {
+            $petugasUsers = User::whereIn('role', [1, 2])->where('status', 1)->get();
+            if ($petugasUsers->isNotEmpty()) {
+                $notif = new PendaftaranBaruNotification($pendaftaran);
+                Notification::send($petugasUsers, $notif);
+
+                $waktu = now()->format('d/m/Y H:i:s');
+                $link = route('pendaftaran.index');
+                foreach ($petugasUsers as $pUser) {
+                    try {
+                        event(new StatusRekamUpdate($pUser->id, $pendaftaran->kode_pendaftaran, $notif->message, $link, $waktu));
+                    } catch (\Throwable $e) {
+                        // ignore broadcast error
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            Log::error('Gagal mengirim notifikasi pendaftaran baru: ' . $th->getMessage());
+        }
+    }
+
+    /**
+     * Kirim notifikasi ke semua Petugas Pendaftaran & Admin aktif saat ada booking baru
+     */
+    private function notifyPetugasBookingBaru($booking)
+    {
+        try {
+            $petugasUsers = User::whereIn('role', [1, 2])->where('status', 1)->get();
+            if ($petugasUsers->isNotEmpty()) {
+                $notif = new BookingBaruNotification($booking);
+                Notification::send($petugasUsers, $notif);
+
+                $waktu = now()->format('d/m/Y H:i:s');
+                $link = route('booking.index');
+                foreach ($petugasUsers as $pUser) {
+                    try {
+                        event(new StatusRekamUpdate($pUser->id, $booking->kode_booking, $notif->message, $link, $waktu));
+                    } catch (\Throwable $e) {
+                        // ignore broadcast error
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            Log::error('Gagal mengirim notifikasi booking baru: ' . $th->getMessage());
+        }
+    }
+
+    /**
+     * Kirim notifikasi penugasan ke terapis terkait
+     */
+    private function notifyTerapis($rekam, $message, $tipe = 'penugasan')
+    {
+        try {
+            if ($rekam && $rekam->dokter_id) {
+                $dokter = Dokter::find($rekam->dokter_id);
+                if ($dokter && $dokter->user_id) {
+                    $user = User::find($dokter->user_id);
+                    if ($user) {
+                        Notification::send($user, new RekamUpdateNotification($rekam, $message, $tipe));
+                        try {
+                            $waktu = Carbon::parse($rekam->created_at ?? now())->format('d/m/Y H:i:s');
+                            $link = route('rekam.detail', $rekam->pasien_id);
+                            event(new StatusRekamUpdate($user->id, $rekam->no_rekam, $message, $link, $waktu));
+                        } catch (\Throwable $e) {
+                            // ignore broadcast error
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            Log::error('Gagal mengirim notifikasi ke terapis: ' . $th->getMessage());
+        }
     }
 }

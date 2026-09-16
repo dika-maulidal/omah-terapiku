@@ -119,7 +119,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penerima-manfaat/{id}/file', [PasienController::class, 'file'])->name('penerima-manfaat.file');
 
     // --- Role: Admin & Pendaftaran (Front-Office Management & Online Registration) ---
-    Route::group(['middleware' => 'role:Admin,Pendaftaran,Dokter'], function () {
+    Route::group(['middleware' => 'role:Admin,Pendaftaran'], function () {
         Route::get('/pendaftaran-online/export-csv', [PendaftaranOnlineController::class, 'exportCsvPasienBaru'])->name('pendaftaran.export-csv');
         Route::get('/pendaftaran-online', [PendaftaranOnlineController::class, 'indexPasienBaru'])->name('pendaftaran.index');
         Route::get('/pendaftaran-online/{id}/show', [PendaftaranOnlineController::class, 'showPasienBaru'])->name('pendaftaran.show');

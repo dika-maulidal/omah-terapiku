@@ -87,8 +87,17 @@
                     <i class="fa-solid fa-clipboard-user"></i>
                 </div>
                 <div>
-                    <h3 class="font-w700 mb-1" style="color: #1e40af; font-weight: 700; font-size: 20px;">
-                        Verifikasi Pendaftaran Penerima Manfaat Baru
+                    <h3 class="font-w700 mb-1 d-flex align-items-center flex-wrap" style="color: #1e40af; font-weight: 700; font-size: 20px; gap: 8px;">
+                        <span>Verifikasi Pendaftaran Penerima Manfaat Baru</span>
+                        @if(isset($counts['menunggu']) && $counts['menunggu'] > 0)
+                            <span class="badge font-w700" id="headerBadgeMenungguPendaftaran" style="font-size: 11.5px; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; border-radius: 8px; padding: 4px 10px; display: inline-flex; align-items: center;">
+                                <i class="fa-solid fa-hourglass-half mr-1"></i> <span id="headerCountMenungguPendaftaran">{{ number_format($counts['menunggu']) }}</span> Menunggu Verifikasi
+                            </span>
+                        @else
+                            <span class="badge font-w700" id="headerBadgeMenungguPendaftaran" style="font-size: 11.5px; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; border-radius: 8px; padding: 4px 10px; display: none; align-items: center;">
+                                <i class="fa-solid fa-hourglass-half mr-1"></i> <span id="headerCountMenungguPendaftaran">0</span> Menunggu Verifikasi
+                            </span>
+                        @endif
                     </h3>
                     <ol class="breadcrumb mb-0" style="background: transparent; padding: 0; font-size: 12px;">
                         <li class="breadcrumb-item"><a href="{{Route('dashboard')}}" style="color: #2563eb;">Dashboard</a></li>
@@ -613,6 +622,13 @@
                         $('#statMenungguVerifikasi').text(new Intl.NumberFormat('id-ID').format(res.counts.menunggu));
                         $('#statTelahDisetujui').text(new Intl.NumberFormat('id-ID').format(res.counts.disetujui));
                         $('#statDitolak').text(new Intl.NumberFormat('id-ID').format(res.counts.ditolak));
+
+                        if (res.counts.menunggu > 0) {
+                            $('#headerCountMenungguPendaftaran').text(new Intl.NumberFormat('id-ID').format(res.counts.menunggu));
+                            $('#headerBadgeMenungguPendaftaran').css('display', 'inline-flex');
+                        } else {
+                            $('#headerBadgeMenungguPendaftaran').hide();
+                        }
                     }
 
                     // Update export CSV URL
@@ -762,23 +778,33 @@
                         html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-venus-mars text-primary mr-1"></i> Jenis Kelamin:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + (d.jk || '-') + '</strong></div>';
                         
                         html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-calendar text-primary mr-1"></i> Tanggal Lahir:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + (d.tmp_lahir ? d.tmp_lahir + ', ' : '') + res.tgl_lahir_formatted + '</strong></div>';
+
+                        html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-person-praying text-primary mr-1"></i> Agama:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + (d.agama || '-') + '</strong></div>';
+
+                        html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-graduation-cap text-primary mr-1"></i> Pendidikan Terakhir:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + (d.pendidikan || '-') + '</strong></div>';
+                        
+                        var desilHtml = d.desil ? d.desil : 'Non-Desil / Umum';
+                        if (d.desil && ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4'].indexOf(d.desil) !== -1) {
+                            desilHtml = '<span class="badge badge-success light font-w800" style="font-size: 12px; padding: 4px 8px; border-radius: 6px;"><i class="fa-solid fa-check-circle mr-1"></i>' + d.desil + ' (Prioritas)</span>';
+                        } else if (d.desil) {
+                            desilHtml = '<span class="badge badge-warning light font-w700" style="font-size: 12px; padding: 4px 8px; border-radius: 6px;">' + d.desil + '</span>';
+                        }
+                        html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-layer-group text-primary mr-1"></i> Tingkat Desil:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + desilHtml + '</strong></div>';
+
+                        html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-wheelchair text-primary mr-1"></i> Ragam Disabilitas:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + (d.jenis_disabilitas || 'Tidak Ada') + '</strong></div>';
+
+                        html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-crutch text-primary mr-1"></i> Alat Bantu Mobilitas:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + (d.alat_bantu || 'Tidak Ada / Mandiri') + '</strong></div>';
                         
                         var waliText = (d.nama_wali || '-') + (d.no_hp ? ' (' + d.no_hp + ')' : '');
                         html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-circle-user text-primary mr-1"></i> Nama Wali / Kontak:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + waliText + '</strong></div>';
                         
                         html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-people-roof text-primary mr-1"></i> Hubungan Wali:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + (d.hubungan_wali || '-') + '</strong></div>';
                         
+                        html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-hospital-user text-primary mr-1"></i> Pilihan UPT:</span> <strong class="text-primary font-w700" style="font-size: 13.5px;">' + (d.upt_lokasi || '-') + '</strong></div>';
+
                         html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-shapes text-primary mr-1"></i> Layanan Terapi:</span> <strong class="text-primary font-w700" style="font-size: 13.5px;">' + (d.layanan_terapi || '-') + '</strong></div>';
                         
                         html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-clock text-primary mr-1"></i> Rencana Kunjungan:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + res.tgl_rencana_formatted + ' (' + (d.jam_rencana_kunjungan || 'Sesi 1 (08.00 - 08.45 WIB)') + ')</strong></div>';
-                        
-                        html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-hospital-user text-primary mr-1"></i> Pilihan UPT:</span> <strong class="text-primary font-w700" style="font-size: 13.5px;">' + (d.upt_lokasi || '-') + '</strong></div>';
-                        
-                        html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-wheelchair text-primary mr-1"></i> Ragam Disabilitas:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + (d.jenis_disabilitas || 'Tidak Ada') + '</strong></div>';
-                        
-                        if (d.desil) {
-                            html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-chart-simple text-primary mr-1"></i> Tingkat Desil:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + d.desil + '</strong></div>';
-                        }
                         
                         if (d.status === 'disetujui') {
                             html += '  <div style="background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 14px 18px;"><span class="text-success d-block font-w700 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-user-doctor mr-1"></i> Terapis Ditugaskan:</span> <strong class="text-success font-w800" style="font-size: 13.5px;">' + res.terapis_nama + '</strong></div>';
@@ -802,9 +828,23 @@
                         }
                         html += '</div>';
 
-                        if (d.keluhan_utama) {
-                            html += '<div class="mb-3 rounded" style="background: #eff6ff; border: 1.5px solid #bfdbfe; font-size: 13px; color: #1e40af; border-radius: 10px; padding: 14px 18px;">';
-                            html += '  <strong><i class="fa-solid fa-notes-medical mr-1"></i> Keluhan & Kebutuhan Terapi:</strong> ' + d.keluhan_utama;
+                        // Keluhan & Kebutuhan Terapi Pasien
+                        var keluhanVal = d.keluhan_utama ? d.keluhan_utama : '<span class="text-muted font-italic font-w500">Tidak ada catatan keluhan khusus yang dicantumkan.</span>';
+                        html += '<div class="mb-3 rounded" style="background: #eff6ff; border: 1.5px solid #bfdbfe; font-size: 13px; border-radius: 10px; padding: 14px 18px;">';
+                        html += '  <div class="font-w700 mb-1" style="color: #1e40af;"><i class="fa-solid fa-notes-medical mr-1 text-primary"></i> Keluhan & Kebutuhan Terapi:</div>';
+                        html += '  <div class="text-dark font-w600" style="line-height: 1.6; font-size: 13px;">' + keluhanVal + '</div>';
+                        html += '</div>';
+
+                        // Catatan Persetujuan / Penolakan Petugas
+                        if (d.status === 'disetujui' && d.catatan_petugas) {
+                            html += '<div class="mb-3 rounded" style="background: #ecfdf5; border: 1.5px solid #a7f3d0; font-size: 13px; border-radius: 10px; padding: 14px 18px;">';
+                            html += '  <div class="font-w700 mb-1" style="color: #047857;"><i class="fa-solid fa-clipboard-check mr-1 text-success"></i> Catatan Persetujuan Petugas:</div>';
+                            html += '  <div class="text-dark font-w600" style="line-height: 1.6; font-size: 13px;">' + d.catatan_petugas + '</div>';
+                            html += '</div>';
+                        } else if (d.status === 'ditolak' && d.catatan_petugas) {
+                            html += '<div class="mb-3 rounded" style="background: #fef2f2; border: 1.5px solid #fecaca; font-size: 13px; border-radius: 10px; padding: 14px 18px;">';
+                            html += '  <div class="font-w700 mb-1" style="color: #b91c1c;"><i class="fa-solid fa-circle-xmark mr-1 text-danger"></i> Alasan Penolakan:</div>';
+                            html += '  <div class="text-dark font-w600" style="line-height: 1.6; font-size: 13px;">' + d.catatan_petugas + '</div>';
                             html += '</div>';
                         }
 

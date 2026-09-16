@@ -453,6 +453,12 @@
                 <td>: {{ $pendaftaran->desil ?: 'Non-Desil / Umum' }}</td>
             </tr>
             <tr>
+                <td style="font-weight: bold;">Agama</td>
+                <td>: {{ $pendaftaran->agama ?: '-' }}</td>
+                <td style="font-weight: bold;">Pendidikan Terakhir</td>
+                <td>: {{ $pendaftaran->pendidikan ?: '-' }}</td>
+            </tr>
+            <tr>
                 <td style="font-weight: bold;">Ragam Disabilitas</td>
                 <td>: {{ $pendaftaran->jenis_disabilitas ?: 'Non-Disabilitas' }}</td>
                 <td style="font-weight: bold;">Alat Bantu Mobilitas</td>

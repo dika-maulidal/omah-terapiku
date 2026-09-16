@@ -544,7 +544,24 @@ class RekamController extends Controller
         $notification = auth()->user()->notifications()->where('id', $id)->first();
         if ($notification) {
             $notification->markAsRead();
-            $pasienId = $notification->data['id_pasien'] ?? null;
+            $data = $notification->data;
+
+            // 1. Direct Target URL jika ada
+            if (!empty($data['target_url'])) {
+                return redirect($data['target_url']);
+            }
+
+            // 2. Berdasarkan Tipe Notifikasi
+            $tipe = $data['tipe'] ?? '';
+            if ($tipe === 'pendaftaran_baru' || !empty($data['kode_pendaftaran']) || !empty($data['id_pendaftaran'])) {
+                return redirect()->route('pendaftaran.index');
+            }
+            if ($tipe === 'booking_baru' || !empty($data['kode_booking']) || !empty($data['id_booking'])) {
+                return redirect()->route('booking.index');
+            }
+
+            // 3. Penugasan / Rekam Medis Detail Pasien
+            $pasienId = $data['id_pasien'] ?? null;
             if ($pasienId) {
                 return redirect()->route('rekam.detail', $pasienId);
             }
@@ -565,23 +582,40 @@ class RekamController extends Controller
     {
         $user = auth()->user();
         $unread = $user->unreadNotifications;
-        $items = $unread->take(15)->map(function ($notif) {
+        $items = $unread->take(20)->map(function ($notif) {
             $createdAt = isset($notif->data['created_at']) 
                 ? (is_string($notif->data['created_at']) ? Carbon::parse($notif->data['created_at'])->format('d/m/Y H:i') : $notif->data['created_at'])
                 : $notif->created_at->format('d/m/Y H:i');
 
+            $data = $notif->data;
+            $tipe = $data['tipe'] ?? 'info';
+
+            // Tentukan target detail_url jika target_url tidak didefinisikan langsung
+            $detailUrl = $data['target_url'] ?? null;
+            if (!$detailUrl) {
+                if ($tipe === 'pendaftaran_baru' || !empty($data['kode_pendaftaran'])) {
+                    $detailUrl = route('pendaftaran.index');
+                } elseif ($tipe === 'booking_baru' || !empty($data['kode_booking'])) {
+                    $detailUrl = route('booking.index');
+                } elseif (!empty($data['id_pasien'])) {
+                    $detailUrl = route('rekam.detail', $data['id_pasien']);
+                } else {
+                    $detailUrl = route('dashboard');
+                }
+            }
+
             return [
                 'id' => $notif->id,
-                'no_rekam' => $notif->data['no_rekam'] ?? '-',
-                'nama_pasien' => $notif->data['nama_pasien'] ?? 'Pasien',
-                'no_rm' => $notif->data['no_rm'] ?? '-',
-                'layanan_terapi' => $notif->data['layanan_terapi'] ?? 'Terapi',
-                'sesi_waktu' => $notif->data['sesi_waktu'] ?? '-',
-                'message' => $notif->data['message'] ?? 'Ada penugasan pasien baru.',
-                'tipe' => $notif->data['tipe'] ?? 'info',
+                'no_rekam' => $data['no_rekam'] ?? ($data['kode_pendaftaran'] ?? ($data['kode_booking'] ?? '-')),
+                'nama_pasien' => $data['nama_pasien'] ?? 'Penerima Manfaat',
+                'no_rm' => $data['no_rm'] ?? '-',
+                'layanan_terapi' => $data['layanan_terapi'] ?? 'Terapi',
+                'sesi_waktu' => $data['sesi_waktu'] ?? '-',
+                'message' => $data['message'] ?? 'Ada notifikasi antrean baru.',
+                'tipe' => $tipe,
                 'created_at' => $createdAt,
                 'read_url' => route('notifications.read', $notif->id),
-                'detail_url' => isset($notif->data['id_pasien']) ? route('rekam.detail', $notif->data['id_pasien']) : route('rekam'),
+                'detail_url' => $detailUrl,
             ];
         });
 
