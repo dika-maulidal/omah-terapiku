@@ -373,7 +373,6 @@
                 <h5 class="card-title font-w700 mb-0" style="color: var(--ot-navy, #1e40af); font-size: 15.5px;">
                     <i class="fa-solid fa-calendar-plus text-primary mr-2"></i> Formulir Pengajuan Sesi Baru
                 </h5>
-                <span class="badge badge-primary light font-w700" style="font-size: 11px;">Reservasi Mandiri</span>
             </div>
             <div class="card-body p-3 p-md-4">
                 <form action="{{ route('portal.booking.store') }}" method="POST">
