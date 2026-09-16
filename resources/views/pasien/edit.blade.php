@@ -658,11 +658,10 @@
     }
 
     // =========================================================================
-    // INTEGRASI API WILAYAH.ID BERJENJANG DENGAN SELECT2 SEARCHABLE
+    // INTEGRASI API WILAYAH.ID BERJENJANG DENGAN SELECT2 SEARCHABLE (Wilayah.id via Proxy)
     // =========================================================================
     const WilayahManager = {
         proxyUrl: "{{ url('/api/wilayah') }}",
-        directUrl: 'https://wilayah.id/api',
         savedKab: "{{ old('kabupaten', $data->kabupaten ?? '') }}",
         savedKec: "{{ old('kecamatan', $data->kecamatan ?? '') }}",
         savedKel: "{{ old('kelurahan', $data->kelurahan ?? '') }}",
@@ -673,85 +672,44 @@
         isInitializing: false,
 
         fallbackProvinces: [
-            { code: "35", name: "JAWA TIMUR" },
-            { code: "31", name: "DKI JAKARTA" },
-            { code: "32", name: "JAWA BARAT" },
-            { code: "33", name: "JAWA TENGAH" },
-            { code: "34", name: "DAERAH ISTIMEWA YOGYAKARTA" },
-            { code: "36", name: "BANTEN" },
-            { code: "51", name: "BALI" },
-            { code: "52", name: "NUSA TENGGARA BARAT" },
-            { code: "53", name: "NUSA TENGGARA TIMUR" },
-            { code: "11", name: "ACEH" },
-            { code: "12", name: "SUMATERA UTARA" },
-            { code: "13", name: "SUMATERA BARAT" },
-            { code: "14", name: "RIAU" },
-            { code: "15", name: "JAMBI" },
-            { code: "16", name: "SUMATERA SELATAN" },
-            { code: "17", name: "BENGKULU" },
-            { code: "18", name: "LAMPUNG" },
-            { code: "19", name: "KEPULAUAN BANGKA BELITUNG" },
-            { code: "21", name: "KEPULAUAN RIAU" },
-            { code: "61", name: "KALIMANTAN BARAT" },
-            { code: "62", name: "KALIMANTAN TENGAH" },
-            { code: "63", name: "KALIMANTAN SELATAN" },
-            { code: "64", name: "KALIMANTAN TIMUR" },
-            { code: "65", name: "KALIMANTAN UTARA" },
-            { code: "71", name: "SULAWESI UTARA" },
-            { code: "72", name: "SULAWESI TENGAH" },
-            { code: "73", name: "SULAWESI SELATAN" },
-            { code: "74", name: "SULAWESI TENGGARA" },
-            { code: "75", name: "GORONTALO" },
-            { code: "76", name: "SULAWESI BARAT" },
-            { code: "81", name: "MALUKU" },
-            { code: "82", name: "MALUKU UTARA" },
-            { code: "91", name: "PAPUA" },
-            { code: "92", name: "PAPUA BARAT" },
-            { code: "93", name: "PAPUA SELATAN" },
-            { code: "94", name: "PAPUA TENGAH" },
-            { code: "95", name: "PAPUA PEGUNUNGAN" },
-            { code: "96", name: "PAPUA BARAT DAYA" }
-        ],
-
-        fallbackJatimRegencies: [
-            { code: "35.01", name: "KABUPATEN PACITAN" },
-            { code: "35.02", name: "KABUPATEN PONOROGO" },
-            { code: "35.03", name: "KABUPATEN TRENGGALEK" },
-            { code: "35.04", name: "KABUPATEN TULUNGAGUNG" },
-            { code: "35.05", name: "KABUPATEN BLITAR" },
-            { code: "35.06", name: "KABUPATEN KEDIRI" },
-            { code: "35.07", name: "KABUPATEN MALANG" },
-            { code: "35.08", name: "KABUPATEN LUMAJANG" },
-            { code: "35.09", name: "KABUPATEN JEMBER" },
-            { code: "35.10", name: "KABUPATEN BANYUWANGI" },
-            { code: "35.11", name: "KABUPATEN BONDOWOSO" },
-            { code: "35.12", name: "KABUPATEN SITUBONDO" },
-            { code: "35.13", name: "KABUPATEN PROBOLINGGO" },
-            { code: "35.14", name: "KABUPATEN PASURUAN" },
-            { code: "35.15", name: "KABUPATEN SIDOARJO" },
-            { code: "35.16", name: "KABUPATEN MOJOKERTO" },
-            { code: "35.17", name: "KABUPATEN JOMBANG" },
-            { code: "35.18", name: "KABUPATEN NGANJUK" },
-            { code: "35.19", name: "KABUPATEN MADIUN" },
-            { code: "35.20", name: "KABUPATEN MAGETAN" },
-            { code: "35.21", name: "KABUPATEN NGAWI" },
-            { code: "35.22", name: "KABUPATEN BOJONEGORO" },
-            { code: "35.23", name: "KABUPATEN TUBAN" },
-            { code: "35.24", name: "KABUPATEN LAMONGAN" },
-            { code: "35.25", name: "KABUPATEN GRESIK" },
-            { code: "35.26", name: "KABUPATEN BANGKALAN" },
-            { code: "35.27", name: "KABUPATEN SAMPANG" },
-            { code: "35.28", name: "KABUPATEN PAMEKASAN" },
-            { code: "35.29", name: "KABUPATEN SUMENEP" },
-            { code: "35.71", name: "KOTA KEDIRI" },
-            { code: "35.72", name: "KOTA BLITAR" },
-            { code: "35.73", name: "KOTA MALANG" },
-            { code: "35.74", name: "KOTA PROBOLINGGO" },
-            { code: "35.75", name: "KOTA PASURUAN" },
-            { code: "35.76", name: "KOTA MOJOKERTO" },
-            { code: "35.77", name: "KOTA MADIUN" },
-            { code: "35.78", name: "KOTA SURABAYA" },
-            { code: "35.79", name: "KOTA BATU" }
+            { code: "11", name: "Aceh" },
+            { code: "12", name: "Sumatera Utara" },
+            { code: "13", name: "Sumatera Barat" },
+            { code: "14", name: "Riau" },
+            { code: "15", name: "Jambi" },
+            { code: "16", name: "Sumatera Selatan" },
+            { code: "17", name: "Bengkulu" },
+            { code: "18", name: "Lampung" },
+            { code: "19", name: "Kepulauan Bangka Belitung" },
+            { code: "21", name: "Kepulauan Riau" },
+            { code: "31", name: "DKI Jakarta" },
+            { code: "32", name: "Jawa Barat" },
+            { code: "33", name: "Jawa Tengah" },
+            { code: "34", name: "Daerah Istimewa Yogyakarta" },
+            { code: "35", name: "Jawa Timur" },
+            { code: "36", name: "Banten" },
+            { code: "51", name: "Bali" },
+            { code: "52", name: "Nusa Tenggara Barat" },
+            { code: "53", name: "Nusa Tenggara Timur" },
+            { code: "61", name: "Kalimantan Barat" },
+            { code: "62", name: "Kalimantan Tengah" },
+            { code: "63", name: "Kalimantan Selatan" },
+            { code: "64", name: "Kalimantan Timur" },
+            { code: "65", name: "Kalimantan Utara" },
+            { code: "71", name: "Sulawesi Utara" },
+            { code: "72", name: "Sulawesi Tengah" },
+            { code: "73", name: "Sulawesi Selatan" },
+            { code: "74", name: "Sulawesi Tenggara" },
+            { code: "75", name: "Gorontalo" },
+            { code: "76", name: "Sulawesi Barat" },
+            { code: "81", name: "Maluku" },
+            { code: "82", name: "Maluku Utara" },
+            { code: "91", name: "Papua" },
+            { code: "92", name: "Papua Barat" },
+            { code: "93", name: "Papua Selatan" },
+            { code: "94", name: "Papua Tengah" },
+            { code: "95", name: "Papua Pegunungan" },
+            { code: "96", name: "Papua Barat Daya" }
         ],
 
         async init() {
@@ -787,15 +745,23 @@
         },
 
         getSelectedCode(selectElement, dataList) {
-            if (!selectElement || selectElement.selectedIndex < 0) return '';
-            const opt = selectElement.options[selectElement.selectedIndex];
-            if (!opt) return '';
-            let code = opt.getAttribute('data-code') || '';
+            if (!selectElement) return '';
+            const $selected = $(selectElement).find('option:selected');
+            let code = $selected.attr('data-code') || $selected.data('code') || '';
+            if (!code && selectElement.selectedIndex >= 0) {
+                const opt = selectElement.options[selectElement.selectedIndex];
+                if (opt) code = opt.getAttribute('data-code') || '';
+            }
             if (!code && dataList && dataList.length > 0) {
-                const val = opt.value;
-                const normVal = this.normalizeName(val);
-                const found = dataList.find(d => this.normalizeName(d.name) === normVal || d.name === val);
-                if (found) code = found.code;
+                const val = $(selectElement).val();
+                if (val) {
+                    const normVal = this.normalizeName(val);
+                    const found = dataList.find(d => 
+                        this.normalizeName(d.name) === normVal || 
+                        (d.name && d.name.toLowerCase() === val.toLowerCase())
+                    );
+                    if (found) code = found.code;
+                }
             }
             return code;
         },
@@ -858,41 +824,27 @@
             }
         },
 
-        async fetchJson(endpoint, directEndpoint, fallbackData = []) {
-            // Tier 1: Laravel Proxy
+        async fetchJson(endpoint, fallbackData = []) {
             try {
-                const res = await fetch(`${this.proxyUrl}/${endpoint}`);
+                const res = await fetch(`${this.proxyUrl}/${endpoint}`, {
+                    headers: { 'Accept': 'application/json' }
+                });
                 if (res.ok) {
                     const json = await res.json();
-                    if (json && json.data && json.data.length > 0) {
+                    if (json && json.data && Array.isArray(json.data) && json.data.length > 0) {
                         return json.data;
                     }
                 }
             } catch (e) {
-                console.warn(`Proxy fetch failed for ${endpoint}, trying fallback...`, e);
+                console.warn(`Wilayah API fetch failed for ${endpoint}:`, e);
             }
-
-            // Tier 2: Direct Wilayah.id API
-            try {
-                const resDirect = await fetch(`${this.directUrl}/${directEndpoint}`);
-                if (resDirect.ok) {
-                    const jsonDirect = await resDirect.json();
-                    if (jsonDirect && jsonDirect.data && jsonDirect.data.length > 0) {
-                        return jsonDirect.data;
-                    }
-                }
-            } catch (err) {
-                console.warn(`Direct fetch failed for ${directEndpoint}:`, err);
-            }
-
-            // Tier 3: Static Embedded Fallback
-            return fallbackData;
+            return fallbackData || [];
         },
 
         async loadProvinces() {
             this.showLoading('provinsi', true);
             try {
-                let provinces = await this.fetchJson('provinces', 'provinces.json', this.fallbackProvinces);
+                let provinces = await this.fetchJson('provinces', this.fallbackProvinces);
                 if (!provinces || provinces.length === 0) {
                     provinces = this.fallbackProvinces;
                 }
@@ -906,10 +858,13 @@
                 $prov.append(defaultOpt);
 
                 let defaultProvCode = '35'; // Default Jawa Timur
-                let targetProvCode = defaultProvCode;
+                let matchedProvCode = '';
 
                 provinces.forEach(p => {
-                    const isSelected = (p.code === targetProvCode || this.normalizeName(p.name) === 'jawatimur');
+                    const isSelected = (p.code === defaultProvCode || this.normalizeName(p.name) === 'jawatimur');
+                    if (isSelected) {
+                        matchedProvCode = p.code;
+                    }
                     const opt = new Option(p.name, p.name, false, isSelected);
                     opt.setAttribute('data-code', p.code);
                     $prov.append(opt);
@@ -917,8 +872,11 @@
 
                 $prov.prop('disabled', false).trigger('change.select2');
 
-                // Load Regencies for selected province
-                await this.loadRegencies(targetProvCode, this.savedKab);
+                if (matchedProvCode) {
+                    await this.loadRegencies(matchedProvCode, this.savedKab);
+                } else {
+                    this.resetSelect('#select_kabupaten', '-- Pilih Kabupaten / Kota --', false);
+                }
 
             } catch (err) {
                 console.error('Gagal memuat provinsi:', err);
@@ -936,11 +894,7 @@
             this.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
 
             try {
-                const fallback = (provCode === '35') ? this.fallbackJatimRegencies : [];
-                let regencies = await this.fetchJson(`regencies/${provCode}`, `regencies/${provCode}.json`, fallback);
-                if ((!regencies || regencies.length === 0) && provCode === '35') {
-                    regencies = this.fallbackJatimRegencies;
-                }
+                let regencies = await this.fetchJson(`regencies/${provCode}`, []);
                 this.regenciesData = regencies;
 
                 const $kab = $('#select_kabupaten');
@@ -955,7 +909,10 @@
 
                 if (regencies && regencies.length > 0) {
                     regencies.forEach(r => {
-                        const isSelected = normSavedKab && (this.normalizeName(r.name) === normSavedKab || r.name.toLowerCase() === preselectedKab.toLowerCase());
+                        const isSelected = normSavedKab && (
+                            this.normalizeName(r.name) === normSavedKab || 
+                            r.name.toLowerCase() === preselectedKab.toLowerCase()
+                        );
                         if (isSelected) {
                             matchedCode = r.code;
                         }
@@ -991,7 +948,7 @@
             this.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
 
             try {
-                const districts = await this.fetchJson(`districts/${regCode}`, `districts/${regCode}.json`, []);
+                const districts = await this.fetchJson(`districts/${regCode}`, []);
                 this.districtsData = districts;
 
                 const $kec = $('#select_kecamatan');
@@ -1006,7 +963,10 @@
 
                 if (districts && districts.length > 0) {
                     districts.forEach(d => {
-                        const isSelected = normSavedKec && (this.normalizeName(d.name) === normSavedKec || d.name.toLowerCase() === preselectedKec.toLowerCase());
+                        const isSelected = normSavedKec && (
+                            this.normalizeName(d.name) === normSavedKec || 
+                            d.name.toLowerCase() === preselectedKec.toLowerCase()
+                        );
                         if (isSelected) {
                             matchedCode = d.code;
                         }
@@ -1041,7 +1001,7 @@
             this.resetSelect('#select_kelurahan', 'Memuat Kelurahan/Desa...', true);
 
             try {
-                const villages = await this.fetchJson(`villages/${distCode}`, `villages/${distCode}.json`, []);
+                const villages = await this.fetchJson(`villages/${distCode}`, []);
                 this.villagesData = villages;
 
                 const $kel = $('#select_kelurahan');
@@ -1056,7 +1016,10 @@
 
                 if (villages && villages.length > 0) {
                     villages.forEach(v => {
-                        const isSelected = normSavedKel && (this.normalizeName(v.name) === normSavedKel || v.name.toLowerCase() === preselectedKel.toLowerCase());
+                        const isSelected = normSavedKel && (
+                            this.normalizeName(v.name) === normSavedKel || 
+                            v.name.toLowerCase() === preselectedKel.toLowerCase()
+                        );
                         if (isSelected) {
                             matchedCode = v.code;
                         }

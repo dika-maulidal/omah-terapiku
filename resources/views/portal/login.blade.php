@@ -65,21 +65,22 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Top Navbar (Soft Light Blue Theme - Matching UPT Modal Header) */
+        /* Top Navbar (Brand Blue Theme - Matching Dashboard Sidebar & Nav-Header) */
         .portal-navbar {
             width: 100%;
-            background: #f0f7ff;
-            border-bottom: 1.5px solid #bfdbfe;
+            background: linear-gradient(180deg, #3574b5 0%, #295d96 100%);
+            background-color: #3168a5;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.06);
+            box-shadow: 0 4px 20px rgba(41, 93, 150, 0.18);
         }
 
         .navbar-container {
             max-width: 1140px;
             margin: 0 auto;
-            padding: 12px 24px;
+            padding: 10px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -94,33 +95,26 @@
         }
 
         .brand-link:hover {
-            opacity: 0.92;
+            opacity: 0.95;
         }
 
-        .brand-logo {
-            height: 38px;
+        .brand-link .logo-abbr {
+            max-height: 48px;
+            max-width: 54px;
             width: auto;
             object-fit: contain;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25));
+            flex-shrink: 0;
+            transition: all 0.25s ease;
         }
 
-        .brand-text-wrap {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.22;
-        }
-
-        .brand-title {
-            font-size: 15.5px;
-            font-weight: 800;
-            color: #1e40af;
-            letter-spacing: -0.2px;
-        }
-
-        .brand-subtitle {
-            font-size: 11px;
-            font-weight: 600;
-            color: #2563eb;
-            letter-spacing: 0.1px;
+        .brand-link .brand-title {
+            max-height: 40px;
+            max-width: 175px;
+            width: auto;
+            object-fit: contain;
+            display: inline-block;
+            transition: all 0.25s ease;
         }
 
         /* Desktop & Mobile Actions */
@@ -134,48 +128,56 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: #ffffff;
-            border: 1px solid #bfdbfe;
-            color: #1e40af;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            color: #ffffff;
             font-size: 12.5px;
             font-weight: 600;
             cursor: pointer;
-            padding: 7px 14px;
+            padding: 7px 15px;
             border-radius: 8px;
             transition: all 0.2s ease;
             text-decoration: none;
-            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.05);
+            backdrop-filter: blur(4px);
         }
 
         .btn-nav-help:hover {
-            background: #e0f2fe;
-            border-color: #93c5fd;
-            color: #1d4ed8;
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.45);
+            color: #ffffff;
+            transform: translateY(-1px);
         }
 
-        /* Login Petugas with Royal Blue Button Style */
+        .btn-nav-help i {
+            color: #ffffff !important;
+        }
+
+        /* Login Petugas with Crisp White Contrast Button Style */
         .btn-nav-staff {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             font-size: 12.5px;
             font-weight: 700;
-            color: #ffffff;
+            color: #2D4B7A;
             text-decoration: none;
             padding: 7px 16px;
             border-radius: 8px;
-            background: #2563eb;
-            border: 1px solid #2563eb;
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+            background: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
             transition: all 0.2s ease;
         }
 
         .btn-nav-staff:hover {
-            background: #1d4ed8;
-            border-color: #1d4ed8;
-            color: #ffffff;
+            background: #f8fafc;
+            color: #1e3a8a;
             transform: translateY(-1px);
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+        }
+
+        .btn-nav-staff i {
+            color: #2D4B7A;
         }
 
         /* Mobile Hamburger Toggle Button */
@@ -186,20 +188,19 @@
             width: 38px;
             height: 38px;
             border-radius: 8px;
-            background: #ffffff;
-            border: 1.5px solid #bfdbfe;
-            color: #1e40af;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
             font-size: 16px;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.05);
         }
 
         .nav-toggle-btn:hover,
         .nav-toggle-btn:focus {
-            background: #e0f2fe;
-            color: #1d4ed8;
-            border-color: #93c5fd;
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #ffffff;
             outline: none;
         }
 
@@ -207,10 +208,10 @@
         .navbar-mobile-menu {
             display: none;
             width: 100%;
-            background: #f0f7ff;
-            border-top: 1px solid #bfdbfe;
-            border-bottom: 1.5px solid #bfdbfe;
-            box-shadow: 0 12px 24px rgba(30, 64, 175, 0.1);
+            background: linear-gradient(180deg, #2e66a0 0%, #225184 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 12px 24px rgba(26, 60, 99, 0.25);
             animation: mobileMenuSlideDown 0.22s ease forwards;
         }
 
@@ -247,19 +248,19 @@
             justify-content: center;
             width: 100%;
             height: 42px;
-            background: #2563eb;
-            color: #ffffff !important;
+            background: #ffffff;
+            color: #2D4B7A !important;
             font-size: 13.5px;
             font-weight: 700;
             border-radius: 8px;
             text-decoration: none;
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             transition: all 0.2s ease;
         }
 
         .btn-mobile-staff:hover {
-            background: #1d4ed8;
-            color: #ffffff !important;
+            background: #f8fafc;
+            color: #1e3a8a !important;
         }
 
         .btn-mobile-help {
@@ -268,9 +269,9 @@
             justify-content: center;
             width: 100%;
             height: 40px;
-            background: #ffffff;
-            border: 1.5px solid #bfdbfe;
-            color: #1e40af;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #ffffff;
             font-size: 13px;
             font-weight: 600;
             border-radius: 8px;
@@ -279,21 +280,20 @@
         }
 
         .btn-mobile-help:hover {
-            background: #e0f2fe;
-            color: #1d4ed8;
-            border-color: #93c5fd;
+            background: rgba(255, 255, 255, 0.22);
+            color: #ffffff;
         }
 
         .mobile-menu-divider {
             height: 1px;
-            background: #dbeafe;
+            background: rgba(255, 255, 255, 0.15);
             margin: 12px 0 10px 0;
         }
 
         .mobile-menu-nav-title {
             font-size: 11px;
             font-weight: 700;
-            color: #64748b;
+            color: rgba(255, 255, 255, 0.75);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
@@ -310,8 +310,8 @@
             align-items: center;
             gap: 10px;
             padding: 9px 12px;
-            background: #ffffff;
-            border: 1px solid #dbeafe;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 8px;
             text-align: left;
             cursor: pointer;
@@ -321,17 +321,17 @@
 
         .mobile-tab-item:hover,
         .mobile-tab-item:active {
-            background: #eff6ff;
-            border-color: #93c5fd;
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .mobile-tab-icon {
             width: 30px;
             height: 30px;
             border-radius: 7px;
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            color: #2563eb;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -341,37 +341,61 @@
 
         .mobile-tab-label {
             font-size: 13px;
-            color: #1e40af;
+            color: #ffffff;
             font-weight: 700;
         }
 
-        /* Hero Banner Section */
+        /* Hero Banner Section with object-fit: cover */
         .hero-banner-section {
             position: relative;
             width: 100%;
+            min-height: 360px;
             background-color: #0f2444;
-            background-image: url("{{ asset('images/hero-image.svg') }}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            padding: 56px 24px 108px 24px;
+            padding: 60px 24px 120px 24px;
             text-align: center;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .hero-banner-section::before {
-            content: "";
+        .hero-bg-wrapper {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(180deg, rgba(15, 33, 64, 0.82) 0%, rgba(15, 33, 64, 0.90) 100%);
+            width: 100%;
+            height: 100%;
             z-index: 1;
+            overflow: hidden;
+        }
+
+        .hero-bg-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center bottom;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(15, 33, 64, 0.78) 0%, rgba(20, 45, 82, 0.88) 100%);
+            z-index: 2;
         }
 
         .hero-banner-content {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             max-width: 820px;
             margin: 0 auto;
         }
@@ -972,12 +996,14 @@
                 padding: 10px 16px;
             }
 
-            .brand-logo {
-                height: 34px;
+            .brand-link .logo-abbr {
+                max-height: 40px;
+                max-width: 44px;
             }
 
-            .brand-logo-text {
-                height: 22px;
+            .brand-link .brand-title {
+                max-height: 32px;
+                max-width: 140px;
             }
 
             .hero-banner-section {
@@ -1074,16 +1100,14 @@
                 padding: 8px 12px;
             }
 
-            .brand-logo {
-                height: 32px;
+            .brand-link .logo-abbr {
+                max-height: 38px;
+                max-width: 42px;
             }
 
-            .brand-title {
-                font-size: 13.5px;
-            }
-
-            .brand-subtitle {
-                font-size: 10px;
+            .brand-link .brand-title {
+                max-height: 30px;
+                max-width: 130px;
             }
 
             .btn-nav-help {
@@ -1097,7 +1121,8 @@
             }
 
             .hero-banner-section {
-                padding: 34px 14px 75px 14px;
+                padding: 40px 14px 85px 14px;
+                min-height: 300px;
             }
 
             .hero-tagline {
@@ -1133,8 +1158,18 @@
         }
 
         @media (max-width: 420px) {
-            .brand-subtitle {
-                display: none;
+            .brand-link {
+                gap: 8px;
+            }
+
+            .brand-link .logo-abbr {
+                max-height: 36px;
+                max-width: 40px;
+            }
+
+            .brand-link .brand-title {
+                max-height: 28px;
+                max-width: 125px;
             }
         }
 
@@ -1144,27 +1179,26 @@
                 font-size: 11.5px;
             }
 
-            .brand-logo {
-                height: 26px;
+            .brand-link .logo-abbr {
+                max-height: 32px;
+                max-width: 36px;
             }
 
-            .brand-title {
-                font-size: 12.5px;
+            .brand-link .brand-title {
+                max-height: 24px;
+                max-width: 110px;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Top Navbar (Soft Light Blue Theme) -->
+    <!-- Top Navbar (Matching Dashboard Sidebar & Nav-Header Theme) -->
     <header class="portal-navbar">
         <div class="navbar-container">
             <a href="{{ route('portal.index') }}" class="brand-link" title="Portal Pasien Omah Terapi-KU">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo Omah Terapiku" class="brand-logo">
-                <div class="brand-text-wrap">
-                    <span class="brand-title">Omah Terapi-KU</span>
-                    <span class="brand-subtitle">Dinas Sosial Provinsi Jawa Timur</span>
-                </div>
+                <img class="logo-abbr" src="{{ asset('images/header.png') }}" alt="Logo Omah Terapi-KU">
+                <img class="brand-title" src="{{ asset('images/logo-text.png') }}" alt="Omah Terapi-KU">
             </a>
 
             <!-- Desktop Actions -->
@@ -1220,8 +1254,12 @@
         </div>
     </header>
 
-    <!-- Hero Banner Section (Like login.png) -->
+    <!-- Hero Banner Section (Like login.png with object-fit: cover) -->
     <section class="hero-banner-section">
+        <div class="hero-bg-wrapper">
+            <img src="{{ asset('images/hero-image.svg') }}" alt="Ilustrasi Pelayanan Terpadu Omah Terapi-KU" class="hero-bg-img">
+            <div class="hero-overlay"></div>
+        </div>
         <div class="hero-banner-content">
             <span class="hero-tagline">Pelayanan Terpadu Disabilitas & Tumbuh Kembang Anak</span>
             <h1 class="hero-title-main">Akses Rekam Medis & Pendaftaran Online</h1>
@@ -2296,11 +2334,10 @@
         });
 
         // =========================================================================
-        // WILAYAH API BERJENJANG MANAGER
+        // WILAYAH API BERJENJANG MANAGER (Wilayah.id via Proxy)
         // =========================================================================
         const WilayahManager = {
             proxyUrl: "{{ url('/api/wilayah') }}",
-            directUrl: 'https://wilayah.id/api',
             savedKab: "{{ old('kabupaten') }}",
             savedKec: "{{ old('kecamatan') }}",
             savedKel: "{{ old('kelurahan') }}",
@@ -2311,85 +2348,44 @@
             isInitializing: false,
 
             fallbackProvinces: [
-                { code: "35", name: "JAWA TIMUR" },
-                { code: "31", name: "DKI JAKARTA" },
-                { code: "32", name: "JAWA BARAT" },
-                { code: "33", name: "JAWA TENGAH" },
-                { code: "34", name: "DAERAH ISTIMEWA YOGYAKARTA" },
-                { code: "36", name: "BANTEN" },
-                { code: "51", name: "BALI" },
-                { code: "52", name: "NUSA TENGGARA BARAT" },
-                { code: "53", name: "NUSA TENGGARA TIMUR" },
-                { code: "11", name: "ACEH" },
-                { code: "12", name: "SUMATERA UTARA" },
-                { code: "13", name: "SUMATERA BARAT" },
-                { code: "14", name: "RIAU" },
-                { code: "15", name: "JAMBI" },
-                { code: "16", name: "SUMATERA SELATAN" },
-                { code: "17", name: "BENGKULU" },
-                { code: "18", name: "LAMPUNG" },
-                { code: "19", name: "KEPULAUAN BANGKA BELITUNG" },
-                { code: "21", name: "KEPULAUAN RIAU" },
-                { code: "61", name: "KALIMANTAN BARAT" },
-                { code: "62", name: "KALIMANTAN TENGAH" },
-                { code: "63", name: "KALIMANTAN SELATAN" },
-                { code: "64", name: "KALIMANTAN TIMUR" },
-                { code: "65", name: "KALIMANTAN UTARA" },
-                { code: "71", name: "SULAWESI UTARA" },
-                { code: "72", name: "SULAWESI TENGAH" },
-                { code: "73", name: "SULAWESI SELATAN" },
-                { code: "74", name: "SULAWESI TENGGARA" },
-                { code: "75", name: "GORONTALO" },
-                { code: "76", name: "SULAWESI BARAT" },
-                { code: "81", name: "MALUKU" },
-                { code: "82", name: "MALUKU UTARA" },
-                { code: "91", name: "PAPUA" },
-                { code: "92", name: "PAPUA BARAT" },
-                { code: "93", name: "PAPUA SELATAN" },
-                { code: "94", name: "PAPUA TENGAH" },
-                { code: "95", name: "PAPUA PEGUNUNGAN" },
-                { code: "96", name: "PAPUA BARAT DAYA" }
-            ],
-
-            fallbackJatimRegencies: [
-                { code: "35.01", name: "KABUPATEN PACITAN" },
-                { code: "35.02", name: "KABUPATEN PONOROGO" },
-                { code: "35.03", name: "KABUPATEN TRENGGALEK" },
-                { code: "35.04", name: "KABUPATEN TULUNGAGUNG" },
-                { code: "35.05", name: "KABUPATEN BLITAR" },
-                { code: "35.06", name: "KABUPATEN KEDIRI" },
-                { code: "35.07", name: "KABUPATEN MALANG" },
-                { code: "35.08", name: "KABUPATEN LUMAJANG" },
-                { code: "35.09", name: "KABUPATEN JEMBER" },
-                { code: "35.10", name: "KABUPATEN BANYUWANGI" },
-                { code: "35.11", name: "KABUPATEN BONDOWOSO" },
-                { code: "35.12", name: "KABUPATEN SITUBONDO" },
-                { code: "35.13", name: "KABUPATEN PROBOLINGGO" },
-                { code: "35.14", name: "KABUPATEN PASURUAN" },
-                { code: "35.15", name: "KABUPATEN SIDOARJO" },
-                { code: "35.16", name: "KABUPATEN MOJOKERTO" },
-                { code: "35.17", name: "KABUPATEN JOMBANG" },
-                { code: "35.18", name: "KABUPATEN NGANJUK" },
-                { code: "35.19", name: "KABUPATEN MADIUN" },
-                { code: "35.20", name: "KABUPATEN MAGETAN" },
-                { code: "35.21", name: "KABUPATEN NGAWI" },
-                { code: "35.22", name: "KABUPATEN BOJONEGORO" },
-                { code: "35.23", name: "KABUPATEN TUBAN" },
-                { code: "35.24", name: "KABUPATEN LAMONGAN" },
-                { code: "35.25", name: "KABUPATEN GRESIK" },
-                { code: "35.26", name: "KABUPATEN BANGKALAN" },
-                { code: "35.27", name: "KABUPATEN SAMPANG" },
-                { code: "35.28", name: "KABUPATEN PAMEKASAN" },
-                { code: "35.29", name: "KABUPATEN SUMENEP" },
-                { code: "35.71", name: "KOTA KEDIRI" },
-                { code: "35.72", name: "KOTA BLITAR" },
-                { code: "35.73", name: "KOTA MALANG" },
-                { code: "35.74", name: "KOTA PROBOLINGGO" },
-                { code: "35.75", name: "KOTA PASURUAN" },
-                { code: "35.76", name: "KOTA MOJOKERTO" },
-                { code: "35.77", name: "KOTA MADIUN" },
-                { code: "35.78", name: "KOTA SURABAYA" },
-                { code: "35.79", name: "KOTA BATU" }
+                { code: "11", name: "Aceh" },
+                { code: "12", name: "Sumatera Utara" },
+                { code: "13", name: "Sumatera Barat" },
+                { code: "14", name: "Riau" },
+                { code: "15", name: "Jambi" },
+                { code: "16", name: "Sumatera Selatan" },
+                { code: "17", name: "Bengkulu" },
+                { code: "18", name: "Lampung" },
+                { code: "19", name: "Kepulauan Bangka Belitung" },
+                { code: "21", name: "Kepulauan Riau" },
+                { code: "31", name: "DKI Jakarta" },
+                { code: "32", name: "Jawa Barat" },
+                { code: "33", name: "Jawa Tengah" },
+                { code: "34", name: "Daerah Istimewa Yogyakarta" },
+                { code: "35", name: "Jawa Timur" },
+                { code: "36", name: "Banten" },
+                { code: "51", name: "Bali" },
+                { code: "52", name: "Nusa Tenggara Barat" },
+                { code: "53", name: "Nusa Tenggara Timur" },
+                { code: "61", name: "Kalimantan Barat" },
+                { code: "62", name: "Kalimantan Tengah" },
+                { code: "63", name: "Kalimantan Selatan" },
+                { code: "64", name: "Kalimantan Timur" },
+                { code: "65", name: "Kalimantan Utara" },
+                { code: "71", name: "Sulawesi Utara" },
+                { code: "72", name: "Sulawesi Tengah" },
+                { code: "73", name: "Sulawesi Selatan" },
+                { code: "74", name: "Sulawesi Tenggara" },
+                { code: "75", name: "Gorontalo" },
+                { code: "76", name: "Sulawesi Barat" },
+                { code: "81", name: "Maluku" },
+                { code: "82", name: "Maluku Utara" },
+                { code: "91", name: "Papua" },
+                { code: "92", name: "Papua Barat" },
+                { code: "93", name: "Papua Selatan" },
+                { code: "94", name: "Papua Tengah" },
+                { code: "95", name: "Papua Pegunungan" },
+                { code: "96", name: "Papua Barat Daya" }
             ],
 
             async init() {
@@ -2425,15 +2421,23 @@
             },
 
             getSelectedCode(selectElement, dataList) {
-                if (!selectElement || selectElement.selectedIndex < 0) return '';
-                const opt = selectElement.options[selectElement.selectedIndex];
-                if (!opt) return '';
-                let code = opt.getAttribute('data-code') || '';
+                if (!selectElement) return '';
+                const $selected = $(selectElement).find('option:selected');
+                let code = $selected.attr('data-code') || $selected.data('code') || '';
+                if (!code && selectElement.selectedIndex >= 0) {
+                    const opt = selectElement.options[selectElement.selectedIndex];
+                    if (opt) code = opt.getAttribute('data-code') || '';
+                }
                 if (!code && dataList && dataList.length > 0) {
-                    const val = opt.value;
-                    const normVal = this.normalizeName(val);
-                    const found = dataList.find(d => this.normalizeName(d.name) === normVal || d.name === val);
-                    if (found) code = found.code;
+                    const val = $(selectElement).val();
+                    if (val) {
+                        const normVal = this.normalizeName(val);
+                        const found = dataList.find(d => 
+                            this.normalizeName(d.name) === normVal || 
+                            (d.name && d.name.toLowerCase() === val.toLowerCase())
+                        );
+                        if (found) code = found.code;
+                    }
                 }
                 return code;
             },
@@ -2496,41 +2500,27 @@
                 }
             },
 
-            async fetchJson(endpoint, directEndpoint, fallbackData = []) {
-                // Tier 1: Laravel Proxy
+            async fetchJson(endpoint, fallbackData = []) {
                 try {
-                    const res = await fetch(`${this.proxyUrl}/${endpoint}`);
+                    const res = await fetch(`${this.proxyUrl}/${endpoint}`, {
+                        headers: { 'Accept': 'application/json' }
+                    });
                     if (res.ok) {
                         const json = await res.json();
-                        if (json && json.data && json.data.length > 0) {
+                        if (json && json.data && Array.isArray(json.data) && json.data.length > 0) {
                             return json.data;
                         }
                     }
                 } catch (e) {
-                    console.warn(`Proxy fetch failed for ${endpoint}, trying fallback...`, e);
+                    console.warn(`Wilayah API fetch failed for ${endpoint}:`, e);
                 }
-
-                // Tier 2: Direct Wilayah.id API
-                try {
-                    const resDirect = await fetch(`${this.directUrl}/${directEndpoint}`);
-                    if (resDirect.ok) {
-                        const jsonDirect = await resDirect.json();
-                        if (jsonDirect && jsonDirect.data && jsonDirect.data.length > 0) {
-                            return jsonDirect.data;
-                        }
-                    }
-                } catch (err) {
-                    console.warn(`Direct fetch failed for ${directEndpoint}:`, err);
-                }
-
-                // Tier 3: Static Embedded Fallback
-                return fallbackData;
+                return fallbackData || [];
             },
 
             async loadProvinces() {
                 this.showLoading('provinsi', true);
                 try {
-                    let provinces = await this.fetchJson('provinces', 'provinces.json', this.fallbackProvinces);
+                    let provinces = await this.fetchJson('provinces', this.fallbackProvinces);
                     if (!provinces || provinces.length === 0) {
                         provinces = this.fallbackProvinces;
                     }
@@ -2544,10 +2534,13 @@
                     $prov.append(defaultOpt);
 
                     let defaultProvCode = '35'; // Default Jawa Timur
-                    let targetProvCode = defaultProvCode;
+                    let matchedProvCode = '';
 
                     provinces.forEach(p => {
-                        const isSelected = (p.code === targetProvCode || this.normalizeName(p.name) === 'jawatimur');
+                        const isSelected = (p.code === defaultProvCode || this.normalizeName(p.name) === 'jawatimur');
+                        if (isSelected) {
+                            matchedProvCode = p.code;
+                        }
                         const opt = new Option(p.name, p.name, false, isSelected);
                         opt.setAttribute('data-code', p.code);
                         $prov.append(opt);
@@ -2555,8 +2548,11 @@
 
                     $prov.prop('disabled', false).trigger('change.select2');
 
-                    // Load Regencies for selected province
-                    await this.loadRegencies(targetProvCode, this.savedKab);
+                    if (matchedProvCode) {
+                        await this.loadRegencies(matchedProvCode, this.savedKab);
+                    } else {
+                        this.resetSelect('#select_kabupaten', '-- Pilih Kabupaten / Kota --', false);
+                    }
 
                 } catch (err) {
                     console.error('Gagal memuat provinsi:', err);
@@ -2574,11 +2570,7 @@
                 this.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
 
                 try {
-                    const fallback = (provCode === '35') ? this.fallbackJatimRegencies : [];
-                    let regencies = await this.fetchJson(`regencies/${provCode}`, `regencies/${provCode}.json`, fallback);
-                    if ((!regencies || regencies.length === 0) && provCode === '35') {
-                        regencies = this.fallbackJatimRegencies;
-                    }
+                    let regencies = await this.fetchJson(`regencies/${provCode}`, []);
                     this.regenciesData = regencies;
 
                     const $kab = $('#select_kabupaten');
@@ -2593,7 +2585,10 @@
 
                     if (regencies && regencies.length > 0) {
                         regencies.forEach(r => {
-                            const isSelected = normSavedKab && (this.normalizeName(r.name) === normSavedKab || r.name.toLowerCase() === preselectedKab.toLowerCase());
+                            const isSelected = normSavedKab && (
+                                this.normalizeName(r.name) === normSavedKab || 
+                                r.name.toLowerCase() === preselectedKab.toLowerCase()
+                            );
                             if (isSelected) {
                                 matchedCode = r.code;
                             }
@@ -2629,7 +2624,7 @@
                 this.resetSelect('#select_kelurahan', '-- Pilih Kecamatan Dahulu --', true);
 
                 try {
-                    const districts = await this.fetchJson(`districts/${regCode}`, `districts/${regCode}.json`, []);
+                    const districts = await this.fetchJson(`districts/${regCode}`, []);
                     this.districtsData = districts;
 
                     const $kec = $('#select_kecamatan');
@@ -2644,7 +2639,10 @@
 
                     if (districts && districts.length > 0) {
                         districts.forEach(d => {
-                            const isSelected = normSavedKec && (this.normalizeName(d.name) === normSavedKec || d.name.toLowerCase() === preselectedKec.toLowerCase());
+                            const isSelected = normSavedKec && (
+                                this.normalizeName(d.name) === normSavedKec || 
+                                d.name.toLowerCase() === preselectedKec.toLowerCase()
+                            );
                             if (isSelected) {
                                 matchedCode = d.code;
                             }
@@ -2679,7 +2677,7 @@
                 this.resetSelect('#select_kelurahan', 'Memuat Kelurahan/Desa...', true);
 
                 try {
-                    const villages = await this.fetchJson(`villages/${distCode}`, `villages/${distCode}.json`, []);
+                    const villages = await this.fetchJson(`villages/${distCode}`, []);
                     this.villagesData = villages;
 
                     const $kel = $('#select_kelurahan');
@@ -2694,7 +2692,10 @@
 
                     if (villages && villages.length > 0) {
                         villages.forEach(v => {
-                            const isSelected = normSavedKel && (this.normalizeName(v.name) === normSavedKel || v.name.toLowerCase() === preselectedKel.toLowerCase());
+                            const isSelected = normSavedKel && (
+                                this.normalizeName(v.name) === normSavedKel || 
+                                v.name.toLowerCase() === preselectedKel.toLowerCase()
+                            );
                             if (isSelected) {
                                 matchedCode = v.code;
                             }

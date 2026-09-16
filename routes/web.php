@@ -60,6 +60,12 @@ Route::get('test', function () {
     return "Event has been sent!";
 });
 
+// Public API Wilayah Endpoints (Matching API.md)
+Route::get('/api/wilayah/provinces', [WilayahController::class, 'provinces'])->name('web.api.wilayah.provinces');
+Route::get('/api/wilayah/regencies/{provCode}', [WilayahController::class, 'regencies'])->name('web.api.wilayah.regencies')->where('provCode', '[0-9\.]+');
+Route::get('/api/wilayah/districts/{regCode}', [WilayahController::class, 'districts'])->name('web.api.wilayah.districts')->where('regCode', '[0-9\.]+');
+Route::get('/api/wilayah/villages/{distCode}', [WilayahController::class, 'villages'])->name('web.api.wilayah.villages')->where('distCode', '[0-9\.]+');
+
 Route::get('/loaddata', [RekamPemeriksaanController::class, 'insertToTableNew'])->name('loaddata');
 
 // Authenticated Routes
