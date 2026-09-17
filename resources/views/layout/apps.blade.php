@@ -402,9 +402,12 @@
             }
         }
 
-        $(document).on('click', '.btn-logout, a.text-logout, a[href="{{ Route('logout') }}"], a[href$="/logout"]', function(e) {
+        $(document).on('click', '.btn-logout, a.text-logout, a[href="{{ Route('logout') }}"], a[href$="/logout"], a[data-url="{{ Route('logout') }}"]', function(e) {
             e.preventDefault();
-            var targetUrl = $(this).attr('href') || "{{ Route('logout') }}";
+            var targetUrl = $(this).data('url') || $(this).attr('href');
+            if (!targetUrl || targetUrl === 'javascript:void(0)') {
+                targetUrl = "{{ Route('logout') }}";
+            }
             handleLogoutConfirm(targetUrl);
         });
 	</script>

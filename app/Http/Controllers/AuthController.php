@@ -46,8 +46,13 @@ class AuthController extends Controller
         return redirect()->route('login')->with('gagal', 'Mohon periksa Nama/Username dan password dengan benar')->withInput();
     }
 
-    public function logout()
+    public function logout(Request $request = null)
     {
+        // Abaikan request jika berasal dari prefetch browser (instant.page hover)
+        if (request()->header('Sec-Purpose') === 'prefetch' || request()->header('Purpose') === 'prefetch' || request()->header('X-Purpose') === 'preview' || request()->header('X-Moz') === 'prefetch') {
+            return response('', 204);
+        }
+
     	Auth::logout();
     	return redirect()->route('login')->with('sukses', 'Anda telah berhasil keluar dari sistem.');
     }

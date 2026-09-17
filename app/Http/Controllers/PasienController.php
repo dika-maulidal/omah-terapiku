@@ -14,7 +14,22 @@ class PasienController extends Controller
 {
     public function json(Request $request)
     {
-        return DataTables::of(Pasien::query()->whereNull('deleted_at'))
+        $query = Pasien::query()->whereNull('deleted_at');
+
+        return DataTables::of($query)
+            ->order(function ($query) use ($request) {
+                if ($request->has('order') && count($request->get('order')) > 0) {
+                    $orderColIdx = $request->input('order.0.column');
+                    $orderDir = $request->input('order.0.dir', 'desc');
+                    $columns = $request->input('columns');
+                    $colName = $columns[$orderColIdx]['data'] ?? null;
+                    if ($colName && in_array($colName, ['no_rm', 'nama', 'tgl_lahir', 'no_hp', 'no_bpjs', 'created_at', 'id'])) {
+                        $query->orderBy($colName, $orderDir);
+                        return;
+                    }
+                }
+                $query->orderBy('id', 'desc');
+            })
             ->editColumn('cara_bayar', function () {
                 return 'Gratis, tidak dipungut biaya';
             })
@@ -28,7 +43,8 @@ class PasienController extends Controller
             ->editColumn('tgl_lahir', function($data) {
                 if (!$data->tgl_lahir) return '<span class="text-muted">-</span>';
                 $usia = \Carbon\Carbon::parse($data->tgl_lahir)->age;
-                return '<span style="font-size: 12px; font-weight: 600; color: #334155;">'.$data->tgl_lahir.'</span><small class="text-muted d-block" style="font-size: 11px;">('.$usia.' Thn &bull; '.$data->kategori_usia.')</small>';
+                $formattedTgl = \Carbon\Carbon::parse($data->tgl_lahir)->isoFormat('D MMM Y');
+                return '<span style="font-size: 12px; font-weight: 600; color: #334155;">'.$formattedTgl.'</span><small class="text-muted d-block" style="font-size: 11px;">('.$usia.' Thn &bull; '.$data->kategori_usia.')</small>';
             })
             ->editColumn('no_hp', function($data) {
                 $hp = $data->no_hp ?: '-';

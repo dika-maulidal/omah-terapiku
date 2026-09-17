@@ -29,7 +29,7 @@
                                 <h6 class="mb-0 text-primary font-w600" style="color: #2e4b82 !important;">{{ session('portal_pasien_nama', 'Penerima Manfaat') }}</h6>
                                 <span class="fs-12 text-muted">No. RM: {{ session('portal_pasien_no_rm', '-') }}</span>
                             </div>
-                            <a href="{{ route('portal.logout') }}" class="dropdown-item ai-icon btn-logout text-danger">
+                            <a href="javascript:void(0)" data-url="{{ route('portal.logout') }}" data-no-instant class="dropdown-item ai-icon btn-logout text-danger">
                                 <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                                 <span class="ml-2 font-w600">Keluar Portal</span>
                             </a>

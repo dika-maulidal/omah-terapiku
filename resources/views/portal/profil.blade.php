@@ -34,6 +34,27 @@
         background: #ffffff;
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.06);
     }
+    .ot-stat-card.profile-stat-card {
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        margin-bottom: 0 !important;
+    }
+    .ot-stat-card.profile-stat-card .ot-stat-content {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: auto;
+    }
+    .ot-stat-card.profile-stat-card .ot-stat-text-wrap {
+        flex: 1;
+        min-width: 0;
+    }
+    .ot-stat-card.profile-stat-card .ot-stat-footer {
+        margin-top: 12px;
+    }
 </style>
 @endsection
 
@@ -60,13 +81,13 @@
         </div>
     </div>
 
-    <!-- Quick Stat Summary Row (ot-stat-card standard) -->
-    <div class="col-xl-3 col-sm-6">
-        <div class="ot-stat-card ot-navy">
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
+    <!-- Quick Stat Summary Row (ot-stat-card standard - Harmonious Equal Height) -->
+    <div class="col-xl-3 col-sm-6 mb-4">
+        <div class="ot-stat-card ot-navy profile-stat-card">
+            <div class="ot-stat-content">
+                <div class="ot-stat-text-wrap">
                     <p class="ot-stat-title">Total Sesi Terapi</p>
-                    <h2 class="ot-stat-number">{{ $pasien->rekams->count() }} Sesi</h2>
+                    <h2 class="ot-stat-number" style="font-size: 22px;">{{ $pasien->rekams->count() }} Sesi</h2>
                 </div>
                 <div class="ot-stat-icon-wrap">
                     <i class="fa-solid fa-stethoscope"></i>
@@ -78,12 +99,12 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-sm-6">
-        <div class="ot-stat-card ot-cyan">
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
+    <div class="col-xl-3 col-sm-6 mb-4">
+        <div class="ot-stat-card ot-cyan profile-stat-card">
+            <div class="ot-stat-content">
+                <div class="ot-stat-text-wrap">
                     <p class="ot-stat-title">Usia Pasien</p>
-                    <h2 class="ot-stat-number">
+                    <h2 class="ot-stat-number" style="font-size: 22px;">
                         {{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->diffInYears(\Carbon\Carbon::now()) . ' Tahun' : '-' }}
                     </h2>
                 </div>
@@ -97,12 +118,12 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-sm-6">
-        <div class="ot-stat-card ot-green">
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
+    <div class="col-xl-3 col-sm-6 mb-4">
+        <div class="ot-stat-card ot-green profile-stat-card">
+            <div class="ot-stat-content">
+                <div class="ot-stat-text-wrap">
                     <p class="ot-stat-title">Disabilitas / Kondisi</p>
-                    <h2 class="ot-stat-number" style="font-size: 18px; line-height: 1.25; margin-top: 4px;">
+                    <h2 class="ot-stat-number" style="font-size: 15.5px; line-height: 1.35; margin-top: 2px;">
                         {{ $pasien->jenis_disabilitas ?: 'Tidak tercatat' }}
                     </h2>
                 </div>
@@ -116,12 +137,12 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-sm-6">
-        <div class="ot-stat-card ot-yellow">
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
+    <div class="col-xl-3 col-sm-6 mb-4">
+        <div class="ot-stat-card ot-yellow profile-stat-card">
+            <div class="ot-stat-content">
+                <div class="ot-stat-text-wrap">
                     <p class="ot-stat-title">Lokasi Pelayanan</p>
-                    <h2 class="ot-stat-number" style="font-size: 18px; line-height: 1.25; margin-top: 4px;">
+                    <h2 class="ot-stat-number" style="font-size: 15px; line-height: 1.35; margin-top: 2px;" title="{{ $pasien->upt_lokasi ?: 'Omah Terapi-KU' }}">
                         {{ $pasien->upt_lokasi ?: 'Omah Terapi-KU' }}
                     </h2>
                 </div>

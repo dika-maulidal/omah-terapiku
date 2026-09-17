@@ -154,7 +154,7 @@
                 <div class="d-flex justify-content-between py-2" style="border-bottom: 1px dashed #edf2f7; font-size: 13px;">
                     <span class="text-muted"><i class="fa-solid fa-calendar mr-2 text-primary"></i>TTL / Usia</span>
                     <span class="font-w600 text-right" style="color: #334155;">
-                        {{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $pasien->tgl_lahir ?: '-' }} 
+                        {{ $pasien->tmp_lahir ? $pasien->tmp_lahir . ', ' : '' }}{{ $pasien->tgl_lahir ? \Carbon\Carbon::parse($pasien->tgl_lahir)->isoFormat('D MMMM Y') : '-' }} 
                         <small class="text-muted font-w600">({{ $usia }})</small>
                     </span>
                 </div>
@@ -280,6 +280,9 @@
                                         data-title="Kartu Keluarga (KK)" 
                                         data-url="{{ $pasien->getFileKk() }}" 
                                         data-filename="{{ $pasien->file_kk }}" 
+                                        data-patient="{{ $pasien->nama }}"
+                                        data-rm="{{ $pasien->no_rm }}"
+                                        data-nik="{{ $pasien->nik ?: '-' }}"
                                         style="border-radius: 6px; font-size: 11.5px; padding: 5px 12px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: none;">
                                         <i class="fa-solid fa-id-card mr-1"></i> Lihat KK
                                     </button>
@@ -295,6 +298,9 @@
                                         data-title="Resume Berobat / Rujukan Medis" 
                                         data-url="{{ $pasien->getFileResume() }}" 
                                         data-filename="{{ $pasien->file_resume }}" 
+                                        data-patient="{{ $pasien->nama }}"
+                                        data-rm="{{ $pasien->no_rm }}"
+                                        data-nik="{{ $pasien->nik ?: '-' }}"
                                         style="border-radius: 6px; font-size: 11.5px; padding: 5px 12px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; border: none !important;">
                                         <i class="fa-solid fa-file-medical mr-1"></i> Resume Berobat
                                     </button>
@@ -967,56 +973,59 @@
     </div>
 </div>
 
-<!-- Modal Preview Berkas Pendukung (KK, Resume & Dokumen Medis) -->
-<div class="modal fade" id="modalPreviewBerkas" tabindex="-1" role="dialog" aria-hidden="true" style="backdrop-filter: blur(4px);">
-    <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 880px;" role="document">
-        <div class="modal-content" style="border-radius: 14px; border: none; box-shadow: 0 12px 40px rgba(15, 23, 42, 0.28); overflow: hidden;">
+<!-- ========================================================================= -->
+<!-- MODAL PREVIEW BERKAS PENDUKUNG (KK, RESUME & DOKUMEN MEDIS)                -->
+<!-- ========================================================================= -->
+<div class="modal fade" id="modalPreviewBerkas" tabindex="-1" role="dialog" aria-hidden="true" style="backdrop-filter: blur(4px); z-index: 1065;">
+    <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 880px; z-index: 1066;" role="document">
+        <div class="modal-content" style="border-radius: 14px; border: 1px solid #bfdbfe; box-shadow: 0 16px 45px rgba(15, 23, 42, 0.25); overflow: hidden;">
             
-            <!-- Modal Header -->
-            <div class="modal-header d-flex justify-content-between align-items-center py-3 px-4" style="background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%); color: #ffffff;">
+            <!-- Modal Header (Sesuai DESIGN.md - Clean Medical Royal Blue & Ocean Navy) -->
+            <div class="modal-header d-flex justify-content-between align-items-center py-3 px-4" style="background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%); border-bottom: 1.5px solid #bfdbfe;">
                 <div class="d-flex align-items-center">
-                    <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; border-radius: 10px; background: rgba(255, 255, 255, 0.16); color: #ffffff; font-size: 18px; flex-shrink: 0; backdrop-filter: blur(4px);">
+                    <div class="mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border-radius: 10px; background: #ffffff; color: #2563eb; font-size: 19px; flex-shrink: 0; border: 1.5px solid #bfdbfe; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);">
                         <i id="previewDocIcon" class="fa-solid fa-file-lines"></i>
                     </div>
                     <div>
-                        <h5 class="modal-title font-w700 text-white mb-0" id="previewDocTitle" style="font-size: 16px;">Preview Berkas</h5>
-                        <small class="text-white-50" style="font-size: 11.5px;">
-                            <span id="previewDocPatient">{{ $pasien->nama }}</span> &bull; RM# {{ $pasien->no_rm }} &bull; NIK: {{ $pasien->nik ?: '-' }}
-                        </small>
+                        <h5 class="modal-title font-w700 mb-0" id="previewDocTitle" style="color: #1e40af !important; font-size: 16px; line-height: 1.2;">Preview Berkas</h5>
                     </div>
                 </div>
 
-                <!-- Controls & Actions -->
+                <!-- Controls & Actions Toolbar -->
                 <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
-                    <!-- Zoom Controls (for images) -->
-                    <div class="btn-group btn-group-sm" id="previewZoomControls" style="background: rgba(255, 255, 255, 0.16); border-radius: 6px; padding: 2px;">
-                        <button type="button" class="btn btn-xs text-white" id="btnPreviewZoomOut" title="Perkecil (-)" style="border: none; padding: 4px 8px;">
+                    <!-- Zoom & Rotate Controls (for images) -->
+                    <div class="btn-group btn-group-sm" id="previewZoomControls" style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 3px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: inline-flex; align-items: center; gap: 2px;">
+                        <button type="button" class="btn btn-xs" id="btnPreviewZoomOut" title="Perkecil (-)" style="border: none; background: transparent; color: #1e40af; width: 28px; height: 28px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.15s;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb';" onmouseout="this.style.background='transparent'; this.style.color='#1e40af';">
                             <i class="fa-solid fa-magnifying-glass-minus"></i>
                         </button>
-                        <button type="button" class="btn btn-xs text-white font-w600" id="btnPreviewZoomReset" title="Reset Ukuran (100%)" style="border: none; padding: 4px 8px; font-size: 11px;">
+                        <button type="button" class="btn btn-xs font-w700" id="btnPreviewZoomReset" title="Reset Ukuran (100%)" style="border: 1px solid #bfdbfe; background: #eff6ff; color: #1e40af; padding: 3px 8px; font-size: 11px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-width: 46px; transition: all 0.15s;" onmouseover="this.style.background='#dbeafe'; this.style.borderColor='#93c5fd';" onmouseout="this.style.background='#eff6ff'; this.style.borderColor='#bfdbfe';">
                             100%
                         </button>
-                        <button type="button" class="btn btn-xs text-white" id="btnPreviewZoomIn" title="Perbesar (+)" style="border: none; padding: 4px 8px;">
+                        <button type="button" class="btn btn-xs" id="btnPreviewZoomIn" title="Perbesar (+)" style="border: none; background: transparent; color: #1e40af; width: 28px; height: 28px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.15s;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb';" onmouseout="this.style.background='transparent'; this.style.color='#1e40af';">
                             <i class="fa-solid fa-magnifying-glass-plus"></i>
                         </button>
-                        <button type="button" class="btn btn-xs text-white" id="btnPreviewRotate" title="Putar Gambar (90°)" style="border: none; padding: 4px 8px;">
+                        <div style="width: 1px; height: 18px; background: #e2e8f0; margin: 0 2px;"></div>
+                        <button type="button" class="btn btn-xs font-w600" id="btnPreviewRotate" title="Putar Gambar (90°)" style="border: 1px solid #bfdbfe; background: #eff6ff; color: #2563eb; width: 28px; height: 28px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.15s;" onmouseover="this.style.background='#2563eb'; this.style.color='#ffffff'; this.style.borderColor='#2563eb';" onmouseout="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';">
                             <i class="fa-solid fa-rotate-right"></i>
                         </button>
                     </div>
 
                     <!-- Open in New Tab -->
-                    <a href="#" target="_blank" id="btnPreviewNewTab" class="btn btn-xs btn-light font-w600 shadow-sm" title="Buka di Tab Baru" style="border-radius: 6px; padding: 5px 10px; font-size: 11.5px;">
-                        <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Buka Tab
+                    <a href="#" target="_blank" id="btnPreviewNewTab" class="btn btn-xs font-w600 shadow-sm d-inline-flex align-items-center" title="Buka di Tab Baru" style="border-radius: 8px; padding: 6px 12px; font-size: 12px; background: #ffffff; color: #334155; border: 1.5px solid #cbd5e1; transition: all 0.2s;" onmouseover="this.style.background='#f8fafc'; this.style.borderColor='#94a3b8';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#cbd5e1';">
+                        <i class="fa-solid fa-arrow-up-right-from-square mr-1 text-primary"></i> Buka Tab
                     </a>
 
                     <!-- Download Button -->
-                    <a href="#" download id="btnPreviewDownload" class="btn btn-xs btn-success font-w600 text-white shadow-sm" title="Download Berkas" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: #10b981 !important; border: none !important;">
+                    <a href="#" download id="btnPreviewDownload" class="btn btn-xs font-w700 text-white shadow-sm d-inline-flex align-items-center" title="Download Berkas" style="border-radius: 8px; padding: 6px 14px; font-size: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; border: none !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);">
                         <i class="fa-solid fa-download mr-1"></i> Unduh
                     </a>
 
-                    <!-- Close Button -->
-                    <button type="button" class="close text-white ml-2" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; text-shadow: none; font-size: 24px; line-height: 1;">
-                        <span aria-hidden="true">&times;</span>
+                    <!-- Vertical Separator Before Close Button -->
+                    <div style="width: 1.5px; height: 26px; background: #cbd5e1; margin: 0 4px;"></div>
+
+                    <!-- Separated Distinct Close Button -->
+                    <button type="button" class="btn btn-xs font-w600 d-inline-flex align-items-center justify-content-center" data-dismiss="modal" aria-label="Close" title="Tutup Preview" style="width: 34px; height: 34px; border-radius: 8px; border: 1.5px solid #cbd5e1; background: #ffffff; color: #64748b; padding: 0; margin: 0 !important; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2'; this.style.color='#dc2626'; this.style.borderColor='#fca5a5';" onmouseout="this.style.background='#ffffff'; this.style.color='#64748b'; this.style.borderColor='#cbd5e1';">
+                        <i class="fa-solid fa-xmark" style="font-size: 15px;"></i>
                     </button>
                 </div>
             </div>
@@ -1024,13 +1033,23 @@
             <!-- Modal Body (Viewer Canvas) -->
             <div class="modal-body p-0" style="background: #0f172a; min-height: 480px; max-height: 72vh; overflow: auto; position: relative; display: flex; align-items: center; justify-content: center;">
                 
+                <!-- Loading Indicator Overlay for PDF & Image Rendering -->
+                <div id="previewLoadingIndicator" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #0f172a; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ffffff; gap: 14px;">
+                    <div class="spinner-border text-primary" role="status" style="width: 2.8rem; height: 2.8rem; border-width: 3px;">
+                        <span class="sr-only">Memuat...</span>
+                    </div>
+                    <div style="font-size: 13px; font-weight: 600; color: #cbd5e1; letter-spacing: 0.3px;">
+                        <i class="fa-solid fa-circle-notch fa-spin text-primary mr-1"></i> <span id="previewLoadingText">Memuat dokumen...</span>
+                    </div>
+                </div>
+
                 <!-- Image View Surface -->
-                <div id="previewImageWrapper" style="width: 100%; height: 100%; min-height: 480px; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 24px; user-select: none;">
-                    <img id="previewImageElement" src="" alt="Berkas Preview" style="max-width: 100%; max-height: 65vh; object-fit: contain; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: transform 0.2s ease-out; transform-origin: center center;" />
+                <div id="previewImageWrapper" style="width: 100%; height: 100%; min-height: 480px; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 24px; user-select: none; cursor: grab;">
+                    <img id="previewImageElement" src="" alt="Berkas Preview" style="max-width: 100%; max-height: 65vh; object-fit: contain; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: transform 0.2s ease-out; transform-origin: center center;" />
                 </div>
 
                 <!-- PDF / Iframe View Surface -->
-                <div id="previewPdfWrapper" style="width: 100%; height: 68vh; display: none;">
+                <div id="previewPdfWrapper" style="width: 100%; height: 68vh; display: none; position: relative; width: 100%;">
                     <iframe id="previewPdfElement" src="" style="width: 100%; height: 100%; border: none; background: #ffffff;"></iframe>
                 </div>
             </div>
@@ -1043,11 +1062,13 @@
                         <span id="previewDocFileName" class="font-w600 text-dark">-</span>
                     </div>
                     <div class="d-none d-md-block">
-                        <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Dokumen Rekam Medis Rahasia
+                        <span class="badge badge-light border text-muted font-w600" style="font-size: 11px; padding: 4px 8px; border-radius: 5px;">
+                            <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Dokumen Rekam Medis Rahasia
+                        </span>
                     </div>
                 </div>
                 <div class="d-flex align-items-center" style="gap: 8px;">
-                    <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 16px; font-size: 12px;">
+                    <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 6px 18px; font-size: 12.5px; color: #475569;">
                         Tutup
                     </button>
                 </div>
@@ -1243,7 +1264,7 @@
         // O: Objektif
         $("#modalSoapPemeriksaan").html(pemeriksaan);
         if (filepemeriksaan) {
-            $("#modalSoapFilePemeriksaanContainer").html('<button type="button" class="btn btn-xs btn-outline-info font-w600 btn-open-preview-berkas" data-type="pemeriksaan" data-title="Dokumen / Foto Pemeriksaan Objektif (' + tanggal + ')" data-url="' + filepemeriksaan + '" data-filename="Pemeriksaan-' + tanggal + '" style="border-radius: 6px; font-size: 11.5px;"><i class="fa-solid fa-image mr-1"></i> Foto Pemeriksaan</button>');
+            $("#modalSoapFilePemeriksaanContainer").html('<button type="button" class="btn btn-xs font-w700 text-white shadow-sm btn-open-preview-berkas" data-type="pemeriksaan" data-title="Foto Pemeriksaan Objektif (' + tanggal + ')" data-url="' + filepemeriksaan + '" data-filename="Pemeriksaan-' + tanggal + '" data-patient="{{ $pasien->nama }}" data-rm="{{ $pasien->no_rm }}" data-nik="{{ $pasien->nik ?: '-' }}" style="border-radius: 6px; font-size: 11.5px; padding: 4px 10px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important; border: none !important; box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);"><i class="fa-solid fa-image mr-1"></i> Foto Pemeriksaan</button>');
         } else {
             $("#modalSoapFilePemeriksaanContainer").empty();
         }
@@ -1282,7 +1303,7 @@
         }
 
         if (filetindakan) {
-            $("#modalSoapFileTindakanContainer").html('<button type="button" class="btn btn-xs btn-outline-success font-w600 btn-open-preview-berkas" data-type="tindakan" data-title="Dokumen / Foto Tindakan Terapi (' + tanggal + ')" data-url="' + filetindakan + '" data-filename="Tindakan-' + tanggal + '" style="border-radius: 6px; font-size: 11.5px;"><i class="fa-solid fa-image mr-1"></i> Foto Tindakan</button>');
+            $("#modalSoapFileTindakanContainer").html('<button type="button" class="btn btn-xs font-w700 text-white shadow-sm btn-open-preview-berkas" data-type="tindakan" data-title="Foto Tindakan Terapi (' + tanggal + ')" data-url="' + filetindakan + '" data-filename="Tindakan-' + tanggal + '" data-patient="{{ $pasien->nama }}" data-rm="{{ $pasien->no_rm }}" data-nik="{{ $pasien->nik ?: '-' }}" style="border-radius: 6px; font-size: 11.5px; padding: 4px 10px; background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; border: none !important; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);"><i class="fa-solid fa-image mr-1"></i> Foto Tindakan</button>');
         } else {
             $("#modalSoapFileTindakanContainer").empty();
         }
@@ -1380,22 +1401,44 @@
 
         if (docType === 'kk') {
             $('#previewDocIcon').attr('class', 'fa-solid fa-id-card');
+        } else if (docType === 'pemeriksaan' || docType === 'tindakan') {
+            $('#previewDocIcon').attr('class', 'fa-solid fa-image');
         } else {
             $('#previewDocIcon').attr('class', 'fa-solid fa-file-medical');
         }
 
         var isPdf = docUrl && (docUrl.toLowerCase().indexOf('.pdf') !== -1 || docFileName.toLowerCase().indexOf('.pdf') !== -1);
 
+        $('#previewLoadingIndicator').show();
+
         if (isPdf) {
+            $('#previewLoadingText').text('Memuat dokumen PDF...');
             $('#previewZoomControls').hide();
             $('#previewImageWrapper').hide();
             $('#previewPdfWrapper').show();
+
+            $('#previewPdfElement').off('load').on('load', function() {
+                $('#previewLoadingIndicator').fadeOut(200);
+            });
             $('#previewPdfElement').attr('src', docUrl);
+
+            setTimeout(function() {
+                $('#previewLoadingIndicator').fadeOut(200);
+            }, 1500);
         } else {
+            $('#previewLoadingText').text('Memuat gambar berkas...');
             $('#previewZoomControls').show();
             $('#previewPdfWrapper').hide();
             $('#previewImageWrapper').show();
+
+            $('#previewImageElement').off('load').on('load', function() {
+                $('#previewLoadingIndicator').fadeOut(200);
+            });
             $('#previewImageElement').attr('src', docUrl);
+
+            setTimeout(function() {
+                $('#previewLoadingIndicator').fadeOut(200);
+            }, 1200);
         }
 
         $('#modalPreviewBerkas').modal('show');
@@ -1403,15 +1446,15 @@
 
     // Zoom Controls
     $('#btnPreviewZoomIn').on('click', function() {
-        if (currentZoom < 3) {
-            currentZoom = Math.min(3, currentZoom + 0.25);
+        if (currentZoom < 4) {
+            currentZoom = Math.min(4, Math.round((currentZoom + 0.25) * 100) / 100);
             updateImageTransform();
         }
     });
 
     $('#btnPreviewZoomOut').on('click', function() {
-        if (currentZoom > 0.5) {
-            currentZoom = Math.max(0.5, currentZoom - 0.25);
+        if (currentZoom > 0.4) {
+            currentZoom = Math.max(0.4, Math.round((currentZoom - 0.25) * 100) / 100);
             updateImageTransform();
         }
     });
@@ -1425,6 +1468,36 @@
     $('#btnPreviewRotate').on('click', function() {
         currentRotation = (currentRotation + 90) % 360;
         updateImageTransform();
+    });
+
+    // Mouse Wheel Zoom on image canvas
+    $('#previewImageWrapper').on('wheel', function(e) {
+        e.preventDefault();
+        if (e.originalEvent.deltaY < 0) {
+            if (currentZoom < 4) {
+                currentZoom = Math.min(4, Math.round((currentZoom + 0.15) * 100) / 100);
+                updateImageTransform();
+            }
+        } else {
+            if (currentZoom > 0.4) {
+                currentZoom = Math.max(0.4, Math.round((currentZoom - 0.15) * 100) / 100);
+                updateImageTransform();
+            }
+        }
+    });
+
+    // Double click to reset zoom
+    $('#previewImageWrapper').on('dblclick', function(e) {
+        currentZoom = 1;
+        currentRotation = 0;
+        updateImageTransform();
+    });
+
+    // Re-add modal-open class to body when closing preview modal if detail SOAP modal is still open
+    $('#modalPreviewBerkas').on('hidden.bs.modal', function () {
+        if ($('#modalDetailSOAP').hasClass('show')) {
+            $('body').addClass('modal-open');
+        }
     });
 </script>
 @endsection

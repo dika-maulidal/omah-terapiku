@@ -495,6 +495,7 @@
             select: false,
             pageLength: 5,
             lengthChange: false,
+            order: [],
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "Ketik untuk mencari...",
@@ -509,7 +510,7 @@
             },
             ajax: "{{ route('penerima-manfaat.json') }}",
             columns: [
-                {data: 'action', name: 'action'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
                 {data: 'no_rm', name: 'no_rm'},
                 {data: 'nama', name: 'nama'},
                 {data: 'tgl_lahir', name: 'tgl_lahir'},

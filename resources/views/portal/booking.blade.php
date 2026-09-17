@@ -279,7 +279,7 @@
         <div class="card shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
             <div class="card-body p-3 p-md-4">
                 <div class="d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="mr-auto mb-2 mb-md-0">
+                    <div class="mr-auto mb-0">
                         <div class="d-flex align-items-center">
                             <div class="mr-3 rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: #eff6ff; color: #2563eb; font-size: 20px; border: 1px solid #bfdbfe; border-radius: 10px;">
                                 <i class="fa-solid fa-calendar-check"></i>
@@ -292,17 +292,6 @@
                                     Ajukan reservasi jadwal kunjungan terapi mandiri &amp; pantau konfirmasi terapis secara langsung di portal.
                                 </p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center flex-wrap mt-2 mt-md-0" style="gap: 8px;">
-                        <div class="d-inline-flex align-items-center" style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 6px 12px; font-size: 12.5px; box-shadow: 0 1px 2px rgba(37, 99, 235, 0.04);">
-                            <i class="fa-solid fa-id-card-clip mr-2" style="color: #2563eb; font-size: 13px;"></i>
-                            <span class="mr-1 font-w600" style="color: #64748b;">No. RM:</span>
-                            <strong class="font-w800" style="color: #1e40af; font-size: 13px; letter-spacing: 0.3px;">{{ $pasien->no_rm }}</strong>
-                        </div>
-                        <div class="d-inline-flex align-items-center" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; font-size: 12.5px; font-weight: 600; color: #334155;">
-                            <i class="fa-solid fa-user mr-2" style="color: #2563eb; font-size: 13px;"></i>
-                            <span>{{ $pasien->nama }}</span>
                         </div>
                     </div>
                 </div>
@@ -378,20 +367,6 @@
                 <form action="{{ route('portal.booking.store') }}" method="POST">
                     {{ csrf_field() }}
 
-                    <!-- Info Chip Penerima Manfaat -->
-                    <div class="p-3 rounded mb-3" style="background: #f8fafc; border: 1px solid #e2e8f0; font-size: 12.5px;">
-                        <div class="d-flex align-items-center justify-content-between mb-1.5">
-                            <span class="text-muted font-w600">Penerima Manfaat:</span>
-                            <span class="badge font-w700" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                                No. RM: {{ $pasien->no_rm }}
-                            </span>
-                        </div>
-                        <div class="font-w700 text-dark" style="font-size: 14px;">{{ $pasien->nama }}</div>
-                        <div class="text-muted mt-1" style="font-size: 12px;">
-                            <i class="fa-solid fa-phone mr-1 text-primary"></i> {{ $pasien->no_hp ?: '-' }} &bull; 
-                            <i class="fa-solid fa-location-dot mr-1 text-primary"></i> {{ $pasien->upt_lokasi ?: 'UPT RSBN Malang' }}
-                        </div>
-                    </div>
 
                     <!-- Lokasi UPT Pelayanan -->
                     <div class="form-group mb-3">
@@ -468,11 +443,8 @@
                     </div>
 
                     <!-- Ketentuan Info Box -->
-                    <div class="p-2.5 rounded mb-3 d-flex align-items-start" style="background: #eff6ff; border: 1px dashed #bfdbfe; font-size: 12px; gap: 8px;">
-                        <i class="fa-solid fa-shield-halved text-primary mt-0.5" style="font-size: 14px;"></i>
-                        <span style="color: #1e40af; line-height: 1.4;">
-                            Permohonan Anda akan ditinjau oleh petugas medis &amp; terapis. Harap hadir <strong>15 menit sebelum waktu sesi</strong> yang disetujui.
-                        </span>
+                    <div class="rounded mb-3" style="background: #eff6ff; border: 1px dashed #bfdbfe; font-size: 12.5px; padding: 14px 18px; color: #1e40af; line-height: 1.5;">
+                        Permohonan Anda akan ditinjau oleh petugas medis &amp; terapis. Harap hadir <strong>15 menit sebelum waktu sesi</strong> yang disetujui.
                     </div>
 
                     <!-- Submit Button -->
@@ -492,7 +464,6 @@
                     <h5 class="card-title font-w700 mb-0" style="color: var(--ot-navy, #1e40af); font-size: 15.5px;">
                         <i class="fa-solid fa-timeline text-primary mr-2"></i> Live Tracking &amp; Riwayat Booking
                     </h5>
-                    <small class="text-muted" style="font-size: 11.5px;">Status realtime persetujuan sesi &amp; penugasan terapis</small>
                 </div>
                 <!-- Filter Pills -->
                 <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">

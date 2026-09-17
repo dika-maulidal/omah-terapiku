@@ -299,6 +299,11 @@ class PatientPortalController extends Controller
             ->where('pasien_id', $pasien->id)
             ->findOrFail($rekamId);
 
+        $hasSoap = !empty($rekam->pemeriksaan) || !empty($rekam->tindakan) || !empty($rekam->diagnosa) || ($rekam->status >= 2) || ($rekam->assessment);
+        if (!$hasSoap) {
+            return redirect()->route('portal.dokumen')->with('gagal', 'Catatan sesi terapi (SOAP) belum diisi oleh terapis.');
+        }
+
         $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
         $assessment = $rekam->assessment;
 
@@ -319,6 +324,11 @@ class PatientPortalController extends Controller
             ->where('pasien_id', $pasien->id)
             ->findOrFail($rekamId);
 
+        $hasHp = !empty($rekam->latihan_rumahan) || ($rekam->assessment && (!empty($rekam->assessment->rencana_latihan_terapi) || !empty($rekam->assessment->rencana_dosis_frekuensi)));
+        if (!$hasHp) {
+            return redirect()->route('portal.dokumen')->with('gagal', 'Panduan latihan di rumah (Home Program) belum disusun oleh terapis untuk sesi ini.');
+        }
+
         $upt = Poli::where('nama', $rekam->upt_lokasi)->orWhere('nama', $rekam->poli)->first();
 
         return view('rekam.print-home-program', compact('rekam', 'pasien', 'upt'));
@@ -329,6 +339,11 @@ class PatientPortalController extends Controller
      */
     public function logout()
     {
+        // Abaikan request jika berasal dari prefetch browser (instant.page hover)
+        if (request()->header('Sec-Purpose') === 'prefetch' || request()->header('Purpose') === 'prefetch' || request()->header('X-Purpose') === 'preview' || request()->header('X-Moz') === 'prefetch') {
+            return response('', 204);
+        }
+
         session()->forget([
             'portal_pasien_id',
             'portal_pasien_no_rm',

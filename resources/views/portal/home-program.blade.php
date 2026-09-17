@@ -110,8 +110,15 @@
         </div>
     </div>
 
-    @if(isset($selectedRekam) && $selectedRekam)
-        <!-- Info Banner Sesi Aktif (Nuansa Evaluasi Nyeri & GMFM) -->
+    @php
+        $hasLatihanRumahan = isset($selectedRekam) && $selectedRekam && !empty($selectedRekam->latihan_rumahan);
+        $hasTindakan = isset($selectedRekam) && $selectedRekam && (!empty($selectedRekam->tindakan) || $selectedRekam->getFileTindakan());
+        $hasAssessmentPlan = $latestAssessment && (!empty($latestAssessment->rencana_dosis_frekuensi) || !empty($latestAssessment->rencana_dosis_durasi) || !empty($latestAssessment->rencana_latihan_terapi) || !empty($latestAssessment->rencana_edukasi_konseling));
+        $hasHomeProgramData = isset($selectedRekam) && $selectedRekam && ($hasLatihanRumahan || $hasTindakan || $hasAssessmentPlan);
+    @endphp
+
+    @if($hasHomeProgramData)
+        <!-- Info Banner Sesi Aktif -->
         <div class="col-12 mb-4">
             <div class="card shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
                 <div class="card-body p-3 p-md-4">
@@ -153,7 +160,7 @@
                                 </span>
                                 @if($selectedRekam->poli || $selectedRekam->upt_lokasi)
                                     <span class="badge px-3 py-2 font-w700" style="font-size: 12px; border-radius: 6px; background: #f8fafc; color: #475569; border: 1px solid #e2e8f0;">
-                                        <i class="fa-solid fa-location-dot text-primary mr-1"></i> {{ $selectedRekam->poli ?: $selectedRekam->upt_lokasi }}
+                                        <i class="fa-solid fa-hospital text-primary mr-1"></i> {{ $selectedRekam->poli ?: $selectedRekam->upt_lokasi }}
                                     </span>
                                 @endif
                             </div>
@@ -163,7 +170,7 @@
             </div>
         </div>
 
-        <!-- 1. Hero Card: Instruksi Latihan Rumahan & Edukasi Keluarga (Plan Latihan Rumahan) -->
+        <!-- 1. Hero Card: Instruksi Latihan Mandiri di Rumah (Home Program) -->
         <div class="col-12 mb-4">
             <div class="card shadow-sm program-hero-card">
                 <div class="card-header bg-white" style="border-bottom: 1px solid #f1f5f9; padding: 16px 20px;">
@@ -190,14 +197,8 @@
                             </div>
                         </div>
                     @else
-                        <div class="text-center p-4 rounded mb-3" style="background: #f8fafc; border: 1.5px dashed #cbd5e1;">
-                            <div class="d-inline-flex align-items-center justify-content-center mb-2 rounded-circle" style="width: 48px; height: 48px; background: #eff6ff; color: #2563eb; font-size: 20px;">
-                                <i class="fa-regular fa-clipboard"></i>
-                            </div>
-                            <h6 class="font-w700 text-dark mb-1">Belum Ada Rincian Latihan Khusus Tertulis</h6>
-                            <p class="text-muted mb-0" style="font-size: 13px; max-width: 520px; margin: 0 auto;">
-                                Lanjutkan latihan stimulasi rutin, peregangan lembut, serta menjaga pola posisi berbaring dan duduk yang baik sesuai arahan lisan terapis pada sesi ini.
-                            </p>
+                        <div class="p-3 rounded mb-3" style="background: #f8fafc; border: 1px dashed #cbd5e1; font-size: 13px; color: #64748b;">
+                            <i class="fa-solid fa-circle-info text-primary mr-1"></i> Latihan stimulasi fisik dan gerakan mandiri di rumah diarahkan secara langsung oleh terapis selama sesi berlangsung.
                         </div>
                     @endif
 
@@ -223,12 +224,13 @@
             </div>
         </div>
 
-        <!-- 2. Rencana Tindakan & Intervensi Klinis di Klinik -->
-        <div class="col-lg-6 col-md-12 mb-4">
+        <!-- 2. Rencana Tindakan & Intervensi Klinis di Klinik (Jika Ada) -->
+        @if(!empty($selectedRekam->tindakan) || !empty($selectedRekam->keluhan))
+        <div class="{{ $hasAssessmentPlan ? 'col-lg-6' : 'col-12' }} col-md-12 mb-4">
             <div class="card shadow-sm h-100 program-card">
                 <div class="card-header bg-white" style="border-bottom: 1px solid #f1f5f9; padding: 16px 20px;">
                     <h4 class="card-title font-w700 mb-0" style="color: var(--ot-navy, #1e40af); font-size: 16px;">
-                        <i class="fa-solid fa-hand-holding-medical text-primary mr-2"></i> Rencana Tindakan &amp; Intervensi di Klinik
+                        <i class="fa-solid fa-hand-holding-medical text-primary mr-2"></i> Tindakan Klinis di Klinik
                     </h4>
                 </div>
                 <div class="card-body p-4">
@@ -239,14 +241,12 @@
                             </strong>
                             <div class="text-dark" style="font-size: 13px; line-height: 1.65; white-space: pre-line;">{!! e($selectedRekam->tindakan) !!}</div>
                         </div>
-                    @else
-                        <p class="text-muted" style="font-size: 13px;">Intervensi dan tindakan fisik rutin sesuai kebutuhan klinis pasien.</p>
                     @endif
 
                     @if(!empty($selectedRekam->keluhan))
                         <div class="mt-3 p-3 rounded" style="background: #fffbeb; border: 1px solid #fde68a; font-size: 12.5px;">
                             <strong class="text-warning d-block mb-1" style="color: #b45309 !important;">
-                                <i class="fa-solid fa-circle-exclamation mr-1"></i> Keluhan &amp; Catatan Awal Sesi:
+                                <i class="fa-solid fa-circle-exclamation mr-1"></i> Keluhan &amp; Fokus Sesi:
                             </strong>
                             <span class="text-dark">{{ $selectedRekam->keluhan }}</span>
                         </div>
@@ -254,22 +254,24 @@
                 </div>
             </div>
         </div>
+        @endif
 
-        <!-- 3. Dosis & Rekomendasi Terapi (Jika Ada Asesmen) -->
-        <div class="col-lg-6 col-md-12 mb-4">
+        <!-- 3. Dosis & Rekomendasi Terapi (Hanya Jika Ada Asesmen Terisi) -->
+        @if($hasAssessmentPlan)
+        <div class="{{ (!empty($selectedRekam->tindakan) || !empty($selectedRekam->keluhan)) ? 'col-lg-6' : 'col-12' }} col-md-12 mb-4">
             <div class="card shadow-sm h-100 program-card">
                 <div class="card-header bg-white" style="border-bottom: 1px solid #f1f5f9; padding: 16px 20px;">
                     <h4 class="card-title font-w700 mb-0" style="color: var(--ot-navy, #1e40af); font-size: 16px;">
-                        <i class="fa-solid fa-stopwatch text-primary mr-2"></i> Anjuran Dosis &amp; Jadwal Terapi
+                        <i class="fa-solid fa-stopwatch text-primary mr-2"></i> Anjuran Dosis &amp; Sasaran Terapi
                     </h4>
                 </div>
                 <div class="card-body p-4">
                     @php
-                        $rawFrekuensi = $latestAssessment && $latestAssessment->rencana_dosis_frekuensi ? trim($latestAssessment->rencana_dosis_frekuensi) : '2x / Minggu';
-                        $displayFrekuensi = is_numeric($rawFrekuensi) ? $rawFrekuensi . 'x / Minggu' : $rawFrekuensi;
+                        $rawFrekuensi = $latestAssessment->rencana_dosis_frekuensi ? trim($latestAssessment->rencana_dosis_frekuensi) : null;
+                        $displayFrekuensi = $rawFrekuensi ? (is_numeric($rawFrekuensi) ? $rawFrekuensi . 'x / Minggu' : $rawFrekuensi) : '-';
 
-                        $rawDurasi = $latestAssessment && $latestAssessment->rencana_dosis_durasi ? trim($latestAssessment->rencana_dosis_durasi) : '45–60 Menit';
-                        $displayDurasi = is_numeric($rawDurasi) ? $rawDurasi . ' Menit' : $rawDurasi;
+                        $rawDurasi = $latestAssessment->rencana_dosis_durasi ? trim($latestAssessment->rencana_dosis_durasi) : null;
+                        $displayDurasi = $rawDurasi ? (is_numeric($rawDurasi) ? $rawDurasi . ' Menit' : $rawDurasi) : '-';
                     @endphp
 
                     <div class="dosis-grid mb-3">
@@ -301,11 +303,11 @@
                             <div class="font-w800 my-1 text-center" style="font-size: 16.5px; color: #059669; line-height: 1.3;">
                                 1–2x Sehari
                             </div>
-                            <small class="text-muted font-w500" style="font-size: 11px;">15–30 Menit / Sesi</small>
+                            <small class="text-muted font-w500" style="font-size: 11px;">Sesuai Panduan</small>
                         </div>
                     </div>
 
-                    @if($latestAssessment && (!empty($latestAssessment->rencana_latihan_terapi) || !empty($latestAssessment->rencana_edukasi_konseling)))
+                    @if(!empty($latestAssessment->rencana_latihan_terapi) || !empty($latestAssessment->rencana_edukasi_konseling))
                         <div class="p-3 rounded" style="background: #ffffff; border: 1px solid #e2e8f0; font-size: 12.5px;">
                             <div class="d-flex align-items-center mb-2.5" style="gap: 8px;">
                                 <i class="fa-solid fa-bullseye text-primary" style="font-size: 14px;"></i>
@@ -334,27 +336,22 @@
                                 </div>
                             @endif
                         </div>
-                    @else
-                        <div class="p-3 rounded d-flex align-items-start" style="background: #ffffff; border: 1px solid #e2e8f0; font-size: 12.5px; gap: 10px;">
-                            <i class="fa-solid fa-circle-info text-primary mt-0.5" style="font-size: 14px; flex-shrink: 0;"></i>
-                            <span class="text-dark" style="line-height: 1.5;">Lakukan latihan secara santai dan bertahap. Jangan memaksakan gerakan jika anak terlihat lelah atau rewel.</span>
-                        </div>
                     @endif
                 </div>
             </div>
         </div>
-
-
+        @endif
 
     @else
+        <!-- Empty State Card (Konsisten dengan Evaluasi Nyeri, Skala Denver II, dan GMFM) -->
         <div class="col-12">
             <div class="card shadow-sm text-center p-5" style="border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 18px rgba(46, 75, 130, 0.05);">
                 <div class="d-inline-flex align-items-center justify-content-center mb-3 rounded-circle" style="width: 72px; height: 72px; background: #ecfdf5; color: #059669; font-size: 32px; border: 1px solid #a7f3d0; margin: 0 auto;">
                     <i class="fa-solid fa-house-chimney-medical"></i>
                 </div>
-                <h4 class="text-dark font-w700 mb-1">Belum Ada Sesi Terapi</h4>
-                <p class="text-muted" style="max-width: 460px; margin: 0 auto; font-size: 13.5px;">
-                    Program latihan mandiri di rumah (Home Program) akan ditampilkan setelah terapis menyusun instruksi latihan pada sesi terapi pasien.
+                <h4 class="text-dark font-w700 mb-1">Belum Ada Program Terapi Mandiri di Rumah</h4>
+                <p class="text-muted" style="max-width: 480px; margin: 0 auto; font-size: 13.5px; line-height: 1.6;">
+                    Program latihan mandiri di rumah (Home Program), anjuran frekuensi sesi, dan panduan stimulasi fisik anak akan disusun dan diberikan oleh terapis setelah sesi terapi atau asesmen klinis dilaksanakan.
                 </p>
             </div>
         </div>

@@ -111,17 +111,15 @@
             
             <li class="nav-label">Akun & Sistem</li>
             
-            @if (auth()->user()->role_display() == 'Admin')
             <li>
                 <a href="{{Route('setting.index')}}" class="ai-icon" aria-expanded="false">
                     <i class="fa-solid fa-sliders"></i>
                     <span class="nav-text">Pengaturan</span>
                 </a>
             </li>
-            @endif
 
             <li>
-                <a href="{{Route('logout')}}" class="ai-icon text-logout btn-logout" aria-expanded="false">
+                <a href="javascript:void(0)" data-url="{{Route('logout')}}" data-no-instant class="ai-icon text-logout btn-logout" aria-expanded="false">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     <span class="nav-text">Logout</span>
                 </a>

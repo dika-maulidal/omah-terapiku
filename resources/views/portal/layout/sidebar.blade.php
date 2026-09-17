@@ -77,7 +77,7 @@
             <li class="nav-label">Sesi</li>
 
             <li>
-                <a href="{{ route('portal.logout') }}" class="ai-icon text-danger" aria-expanded="false">
+                <a href="javascript:void(0)" data-url="{{ route('portal.logout') }}" data-no-instant class="ai-icon text-danger btn-logout" aria-expanded="false">
                     <i class="fa-solid fa-arrow-right-from-bracket text-danger"></i>
                     <span class="nav-text text-danger font-w600">Keluar Portal</span>
                 </a>

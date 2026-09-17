@@ -36,7 +36,9 @@
                                 <small class="text-muted d-block mt-1" style="font-size: 11.5px;"><i class="fa-solid fa-user-group mr-1" style="color: #94a3b8;"></i>Wali: {{$row->nama_wali}}</small>
                             @endif
                         </td>
-                        <td style="vertical-align: middle; color: #334155;">{{$row->tmp_lahir}}, {{$row->tgl_lahir}}</td>
+                        <td style="vertical-align: middle; color: #334155;">
+                            {{ $row->tmp_lahir ? $row->tmp_lahir . ', ' : '' }}{{ $row->tgl_lahir ? \Carbon\Carbon::parse($row->tgl_lahir)->isoFormat('D MMM Y') : '-' }}
+                        </td>
                         <td style="vertical-align: middle; color: #334155;">{{$row->alamat_lengkap}}</td>
                         <td style="vertical-align: middle; text-align: center;">
                             <span class="badge badge-light font-w600" style="font-size: 11px; background: #f1f5f9; color: #475569;">

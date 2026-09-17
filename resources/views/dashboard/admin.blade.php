@@ -756,7 +756,7 @@
                     <div style="position: relative; height: 170px; display: flex; align-items: center; justify-content: center;">
                         <canvas id="chartStatusAntrian"></canvas>
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
-                            <span class="font-w700 d-block" style="font-size: 19px; line-height: 1.1; color: #1e40af;">{{ number_format(array_sum($statusAntrian)) }}</span>
+                            <span class="font-w700 d-block" style="font-size: 19px; line-height: 1.1; color: #1e40af;">{{ number_format($statusAntrian['total'] ?? 0) }}</span>
                             <small class="text-muted font-w600" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px;">Total</small>
                         </div>
                     </div>

@@ -270,9 +270,12 @@
             }
         }
 
-        $(document).on('click', '.btn-logout, a[href="{{ route('portal.logout') }}"]', function(e) {
+        $(document).on('click', '.btn-logout, a[href="{{ route('portal.logout') }}"], a[data-url="{{ route('portal.logout') }}"]', function(e) {
             e.preventDefault();
-            var targetUrl = $(this).attr('href') || "{{ route('portal.logout') }}";
+            var targetUrl = $(this).data('url') || $(this).attr('href');
+            if (!targetUrl || targetUrl === 'javascript:void(0)') {
+                targetUrl = "{{ route('portal.logout') }}";
+            }
             handlePortalLogout(targetUrl);
         });
     </script>

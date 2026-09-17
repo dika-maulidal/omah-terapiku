@@ -466,18 +466,27 @@
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                                 @if ($data->file_kk)
-                                    <div class="mt-2">
-                                        @if (Str::endsWith(strtolower($data->file_kk), ['.jpg', '.jpeg', '.png']))
-                                            <a href="{{$data->getFileKk()}}" target="_blank">
-                                                <img height="90px" class="img-thumbnail" src="{{$data->getFileKk()}}" alt="File KK" style="border-radius: 8px;">
-                                            </a>
-                                        @else
-                                            <a href="{{$data->getFileKk()}}" target="_blank" class="btn btn-xs btn-info shadow-sm" style="font-size: 12px; border-radius: 6px;">
-                                                <i class="fa-solid fa-file mr-1"></i> Lihat Berkas KK
-                                            </a>
-                                        @endif
-                                        <small class="text-muted d-block mt-1" style="font-size: 11.5px;">Upload file baru jika ingin mengganti berkas KK</small>
+                                    <div class="mt-2.5 p-2 rounded d-flex align-items-center justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                        <div class="d-flex align-items-center">
+                                            @if (Str::endsWith(strtolower($data->file_kk), ['.jpg', '.jpeg', '.png']))
+                                                <a href="{{$data->getFileKk()}}" target="_blank" class="mr-2">
+                                                    <img height="48px" class="img-thumbnail" src="{{$data->getFileKk()}}" alt="File KK" style="border-radius: 6px; object-fit: cover;">
+                                                </a>
+                                            @else
+                                                <div class="mr-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border-radius: 8px; background: #eff6ff; color: #2563eb; font-size: 18px; border: 1px solid #bfdbfe;">
+                                                    <i class="fa-solid fa-file-lines"></i>
+                                                </div>
+                                            @endif
+                                            <div>
+                                                <span class="font-w700 text-dark d-block" style="font-size: 12px;">Berkas KK Tersimpan</span>
+                                                <small class="text-muted" style="font-size: 11px;">{{ Str::limit($data->file_kk, 24) }}</small>
+                                            </div>
+                                        </div>
+                                        <a href="{{$data->getFileKk()}}" target="_blank" class="btn btn-xs font-w600" style="font-size: 11.5px; border-radius: 6px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 4px 10px;">
+                                            <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Buka
+                                        </a>
                                     </div>
+                                    <small class="text-muted d-block mt-1" style="font-size: 11px;"><i class="fa-solid fa-info-circle mr-1"></i>Pilih file baru di atas jika ingin mengganti berkas KK</small>
                                 @endif
                             </div>
 
@@ -489,18 +498,27 @@
                                     <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                                 @enderror
                                 @if ($data->file_resume)
-                                    <div class="mt-2">
-                                        @if (Str::endsWith(strtolower($data->file_resume), ['.jpg', '.jpeg', '.png']))
-                                            <a href="{{$data->getFileResume()}}" target="_blank">
-                                                <img height="90px" class="img-thumbnail" src="{{$data->getFileResume()}}" alt="Surat Resume" style="border-radius: 8px;">
-                                            </a>
-                                        @else
-                                            <a href="{{$data->getFileResume()}}" target="_blank" class="btn btn-xs btn-info shadow-sm" style="font-size: 12px; border-radius: 6px;">
-                                                <i class="fa-solid fa-file mr-1"></i> Lihat Berkas Resume
-                                            </a>
-                                        @endif
-                                        <small class="text-muted d-block mt-1" style="font-size: 11.5px;">Upload file baru jika ingin mengganti berkas resume</small>
+                                    <div class="mt-2.5 p-2 rounded d-flex align-items-center justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                        <div class="d-flex align-items-center">
+                                            @if (Str::endsWith(strtolower($data->file_resume), ['.jpg', '.jpeg', '.png']))
+                                                <a href="{{$data->getFileResume()}}" target="_blank" class="mr-2">
+                                                    <img height="48px" class="img-thumbnail" src="{{$data->getFileResume()}}" alt="Surat Resume" style="border-radius: 6px; object-fit: cover;">
+                                                </a>
+                                            @else
+                                                <div class="mr-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border-radius: 8px; background: #eff6ff; color: #2563eb; font-size: 18px; border: 1px solid #bfdbfe;">
+                                                    <i class="fa-solid fa-file-medical"></i>
+                                                </div>
+                                            @endif
+                                            <div>
+                                                <span class="font-w700 text-dark d-block" style="font-size: 12px;">Berkas Resume Tersimpan</span>
+                                                <small class="text-muted" style="font-size: 11px;">{{ Str::limit($data->file_resume, 24) }}</small>
+                                            </div>
+                                        </div>
+                                        <a href="{{$data->getFileResume()}}" target="_blank" class="btn btn-xs font-w600" style="font-size: 11.5px; border-radius: 6px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 4px 10px;">
+                                            <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Buka
+                                        </a>
                                     </div>
+                                    <small class="text-muted d-block mt-1" style="font-size: 11px;"><i class="fa-solid fa-info-circle mr-1"></i>Pilih file baru di atas jika ingin mengganti berkas resume</small>
                                 @endif
                             </div>
                         </div>

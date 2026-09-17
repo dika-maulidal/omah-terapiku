@@ -7,7 +7,7 @@
                 <th style="padding: 12px 14px; width: 140px; vertical-align: middle;">Kode & Waktu</th>
                 <th style="padding: 12px 14px; min-width: 230px; vertical-align: middle;">Nama Penerima Manfaat</th>
                 <th style="padding: 12px 14px; min-width: 200px; vertical-align: middle;">Lokasi UPT & Layanan</th>
-                <th style="padding: 12px 14px; min-width: 180px; vertical-align: middle;">Terapis & Jam Sesi</th>
+                <th style="padding: 12px 14px; min-width: 190px; vertical-align: middle;">Terapis & Jadwal Sesi</th>
                 <th style="padding: 12px 14px; width: 150px; text-align: center; vertical-align: middle;">Status Booking</th>
                 <th style="padding: 12px 14px; width: 130px; text-align: center; vertical-align: middle; position: sticky; right: 0; background: #f8fafc; z-index: 2; box-shadow: -3px 0 8px rgba(0,0,0,0.04);">Aksi</th>
             </tr>
@@ -69,23 +69,23 @@
                                     <i class="fa-solid fa-hand-holding-medical mr-1"></i>{{ $row->layanan_terapi ?: 'Layanan Terapi' }}
                                 </span>
                             </div>
-                            <div class="mt-1 font-w500" style="font-size: 11px; color: #64748b;">
-                                <i class="fa-regular fa-calendar-check mr-1" style="color: #2563eb;"></i>{{ $row->tgl_rencana ? \Carbon\Carbon::parse($row->tgl_rencana)->isoFormat('D MMMM Y') : '-' }}
-                            </div>
                         </td>
                         <td style="padding: 12px 14px; vertical-align: middle;">
                             @if($row->dokter)
                                 <strong class="text-dark d-block font-w700" style="font-size: 12.5px;">
                                     <i class="fa-solid fa-user-doctor text-primary mr-1"></i>{{ $row->dokter->nama }}
                                 </strong>
-                                <small class="text-muted d-block font-w500" style="font-size: 11px;">
-                                    <i class="fa-regular fa-clock mr-1 text-primary"></i>{{ $row->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}
-                                </small>
                             @else
-                                <span class="badge badge-light text-muted font-w500" style="font-size: 11px; padding: 3px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                                <span class="badge badge-light text-muted font-w500 mb-1 d-inline-block" style="font-size: 10.5px; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0;">
                                     Belum Ditugaskan
                                 </span>
                             @endif
+                            <div class="mt-0.5 font-w600 text-dark" style="font-size: 11.5px;">
+                                <i class="fa-regular fa-calendar-check mr-1 text-primary"></i>{{ $row->tgl_rencana ? \Carbon\Carbon::parse($row->tgl_rencana)->isoFormat('D MMMM Y') : '-' }}
+                            </div>
+                            <div class="text-muted font-w500" style="font-size: 11px;">
+                                <i class="fa-regular fa-clock mr-1" style="color: #94a3b8;"></i>{{ $row->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}
+                            </div>
                         </td>
                         <td style="padding: 12px 14px; vertical-align: middle; text-align: center;">
                             {!! $row->status_badge !!}

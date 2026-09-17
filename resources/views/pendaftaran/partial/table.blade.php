@@ -1,13 +1,14 @@
 <!-- Tabel Data Antrean Verifikasi Pendaftaran Penerima Manfaat Baru -->
 <div class="table-responsive card-table" style="border: 1px solid #edf2f7; border-radius: 10px; overflow-x: auto !important; width: 100%;">
-    <table class="table table-hover mb-0" style="font-size: 13px; min-width: 1100px; width: 100%;">
+    <table class="table table-hover mb-0" style="font-size: 13px; min-width: 1200px; width: 100%;">
         <thead>
             <tr style="background: #f8fafc; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #475569; border-bottom: 2px solid #e2e8f0;">
                 <th style="padding: 12px 14px; width: 50px; text-align: center; vertical-align: middle;">#</th>
                 <th style="padding: 12px 14px; width: 140px; vertical-align: middle;">Kode & Tanggal</th>
-                <th style="padding: 12px 14px; min-width: 220px; vertical-align: middle;">Nama Penerima Manfaat</th>
-                <th style="padding: 12px 14px; min-width: 180px; vertical-align: middle;">Orang Tua / Wali</th>
-                <th style="padding: 12px 14px; min-width: 200px; vertical-align: middle;">Lokasi UPT & Layanan</th>
+                <th style="padding: 12px 14px; min-width: 200px; vertical-align: middle;">Nama Penerima Manfaat</th>
+                <th style="padding: 12px 14px; min-width: 170px; vertical-align: middle;">Orang Tua / Wali</th>
+                <th style="padding: 12px 14px; min-width: 180px; vertical-align: middle;">Lokasi UPT & Layanan</th>
+                <th style="padding: 12px 14px; min-width: 170px; vertical-align: middle;">Rencana Kunjungan</th>
                 <th style="padding: 12px 14px; width: 160px; text-align: center; vertical-align: middle;">Status Verifikasi</th>
                 <th style="padding: 12px 14px; width: 130px; text-align: center; vertical-align: middle; position: sticky; right: 0; background: #f8fafc; z-index: 2; box-shadow: -3px 0 8px rgba(0,0,0,0.04);">Aksi</th>
             </tr>
@@ -31,10 +32,11 @@
                             <strong class="text-dark d-block font-w700" style="font-size: 13.5px;">
                                 {{ $row->nama }}
                             </strong>
-                            <div class="d-flex align-items-center flex-wrap mt-0.5" style="gap: 4px; font-size: 11px; color: #64748b;">
+                            <div class="d-flex align-items-center flex-wrap mt-0.5" style="gap: 6px; font-size: 11px; color: #64748b;">
                                 <span><i class="fa-solid fa-venus-mars mr-1 text-primary"></i>{{ $row->jk ?: '-' }}</span>
                                 @if($row->nik)
-                                    <span>&bull; <i class="fa-solid fa-id-badge mr-0.5 text-primary"></i>NIK: {{ $row->nik }}</span>
+                                    <span class="text-muted" style="opacity: 0.5;">&bull;</span>
+                                    <span><i class="fa-solid fa-id-badge text-primary" style="margin-right: 5px;"></i>NIK: {{ $row->nik }}</span>
                                 @endif
                             </div>
                             @if($row->tgl_lahir)
@@ -74,9 +76,13 @@
                                     <i class="fa-solid fa-hand-holding-medical mr-1"></i>{{ $row->layanan_terapi ?: 'Terapi Terpadu' }}
                                 </span>
                             </div>
-                            <div class="mt-1 font-w500" style="font-size: 11px; color: #64748b;">
-                                <i class="fa-regular fa-calendar-check mr-1" style="color: #2563eb;"></i>{{ $row->tgl_rencana_kunjungan ? \Carbon\Carbon::parse($row->tgl_rencana_kunjungan)->isoFormat('D MMM Y') : '-' }}
-                                <span class="d-block text-muted">{{ $row->jam_rencana_kunjungan ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}</span>
+                        </td>
+                        <td style="padding: 12px 14px; vertical-align: middle;">
+                            <div class="font-w700 text-dark" style="font-size: 12.5px;">
+                                <i class="fa-regular fa-calendar-check mr-1 text-primary"></i>{{ $row->tgl_rencana_kunjungan ? \Carbon\Carbon::parse($row->tgl_rencana_kunjungan)->isoFormat('D MMM Y') : '-' }}
+                            </div>
+                            <div class="mt-0.5 text-muted font-w500" style="font-size: 11px;">
+                                <i class="fa-regular fa-clock mr-1" style="color: #94a3b8;"></i>{{ $row->jam_rencana_kunjungan ?: 'Sesi 1 (08.00 - 08.45 WIB)' }}
                             </div>
                         </td>
                         <td style="padding: 12px 14px; vertical-align: middle; text-align: center;">
@@ -137,7 +143,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td colspan="7" class="text-center py-5 text-muted">
+                    <td colspan="8" class="text-center py-5 text-muted">
                         <i class="fa-solid fa-user-clock fs-24 mb-2 d-block" style="opacity: 0.5;"></i>
                         <p class="mb-0 fs-13 font-w500">Tidak ada data pendaftaran penerima manfaat yang sesuai dengan filter.</p>
                     </td>

@@ -100,26 +100,53 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge font-w600" style="font-size: 11.5px; padding: 5px 10px; border-radius: 6px; background: #f8fafc; color: #334155; border: 1px solid #e2e8f0;">
-                                                <i class="fa-solid fa-location-dot text-primary mr-1"></i>
-                                                {{ $rekam->poli ?: ($rekam->upt_lokasi ?: 'Klinik Omah Terapi-KU') }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="text-dark font-w500" style="font-size: 12.5px; line-height: 1.5;">
-                                                {{ $rekam->keluhan ?: 'Pemeriksaan rutin / sesi terapi terjadwal' }}
+                                            <div class="font-w700 text-dark" style="font-size: 13px;">
+                                                <i class="fa-solid fa-hand-holding-medical text-primary mr-1.5"></i>
+                                                {{ $rekam->layanan_terapi ?: 'Layanan Terapi Terpadu' }}
+                                            </div>
+                                            <div class="mt-1">
+                                                <span class="badge font-w600" style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background: #f8fafc; color: #334155; border: 1px solid #e2e8f0;">
+                                                    <i class="fa-solid fa-hospital text-primary mr-1"></i>
+                                                    {{ $rekam->poli ?: ($rekam->upt_lokasi ?: 'Balai PRS PMKS Sidoarjo') }}
+                                                </span>
                                             </div>
                                         </td>
+                                        <td>
+                                            @if($rekam->status == 1 && empty($rekam->tindakan) && empty($rekam->pemeriksaan) && empty($rekam->diagnosa))
+                                                <span class="badge font-w600 mb-1 d-inline-block" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; font-size: 11px; padding: 3px 8px; border-radius: 5px;">
+                                                    <i class="fa-solid fa-clock mr-1"></i> Menunggu Pelayanan
+                                                </span>
+                                                <div class="text-muted" style="font-size: 12px; line-height: 1.4;">
+                                                    {{ $rekam->keluhan ?: 'Pendaftaran baru / Antrean sesi' }}
+                                                </div>
+                                            @else
+                                                <div class="text-dark font-w600" style="font-size: 12.5px; line-height: 1.4;">
+                                                    {{ $rekam->diagnosa ?: ($rekam->tindakan ?: 'Sesi Terapi Selesai Dilaksanakan') }}
+                                                </div>
+                                                @if($rekam->keluhan)
+                                                    <small class="text-muted d-block mt-0.5" style="font-size: 11.5px;">Keluhan: {{ $rekam->keluhan }}</small>
+                                                @endif
+                                            @endif
+                                        </td>
                                         <td class="text-center">
+                                            @php
+                                                $hasSoap = !empty($rekam->pemeriksaan) || !empty($rekam->tindakan) || !empty($rekam->diagnosa) || ($rekam->status >= 2) || !empty($rekam->assessment);
+                                            @endphp
                                             <div class="d-inline-flex" style="gap: 5px;">
                                                 @if($rekam->assessment)
                                                     <a href="{{ route('portal.assessment.print', $rekam->id) }}" target="_blank" class="btn btn-xs btn-primary font-w700" style="border-radius: 6px; padding: 4px 9px;" title="Cetak Hasil Asesmen">
                                                         <i class="fa-solid fa-file-waveform mr-1"></i> Asesmen
                                                     </a>
                                                 @endif
-                                                <a href="{{ route('portal.soap.print', $rekam->id) }}" target="_blank" class="btn btn-xs btn-outline-primary font-w600" style="border-radius: 6px; padding: 4px 9px;" title="Cetak Catatan Sesi Terapi">
-                                                    <i class="fa-solid fa-file-lines mr-1"></i> Catatan Sesi
-                                                </a>
+                                                @if($hasSoap)
+                                                    <a href="{{ route('portal.soap.print', $rekam->id) }}" target="_blank" class="btn btn-xs btn-outline-primary font-w600" style="border-radius: 6px; padding: 4px 9px;" title="Cetak Catatan Sesi Terapi">
+                                                        <i class="fa-solid fa-file-lines mr-1"></i> Catatan Sesi
+                                                    </a>
+                                                @else
+                                                    <button type="button" class="btn btn-xs btn-light font-w600 text-muted disabled" style="border-radius: 6px; padding: 4px 9px; border: 1px solid #e2e8f0; cursor: not-allowed;" disabled title="Catatan sesi (SOAP) belum diisi oleh terapis">
+                                                        <i class="fa-solid fa-clock mr-1"></i> Belum Ada
+                                                    </button>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
