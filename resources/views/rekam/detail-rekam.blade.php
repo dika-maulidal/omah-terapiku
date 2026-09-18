@@ -246,7 +246,7 @@
                     <div class="col-md-6">
                         <div class="p-3 mb-3" style="background: #f8fafc; border-radius: 8px; border: 1px solid #edf2f7;">
                             <span class="text-muted d-block mb-1" style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">
-                                <i class="fa fa-wheelchair mr-1 text-primary"></i> Disabilitas & Alat Bantu
+                                <i class="fa-solid fa-wheelchair mr-1 text-primary"></i> Disabilitas & Alat Bantu
                             </span>
                             <div class="font-w600" style="font-size: 13px; color: #1e293b;">
                                 @if ($pasien->jenis_disabilitas && $pasien->jenis_disabilitas != 'Tidak Ada')
@@ -262,7 +262,7 @@
 
                         <div class="p-3 mb-3" style="background: #f8fafc; border-radius: 8px; border: 1px solid #edf2f7;">
                             <span class="text-muted d-block mb-1" style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">
-                                <i class="fa fa-address-card-o mr-1 text-primary"></i> No. BPJS / KIS
+                                <i class="fa-solid fa-address-card-o mr-1 text-primary"></i> No. BPJS / KIS
                             </span>
                             <div class="font-w600" style="font-size: 13px; color: #1e293b;">
                                 {{ $pasien->no_bpjs ?: '-' }}
@@ -271,7 +271,7 @@
 
                         <div class="p-3 mb-0" style="background: #f8fafc; border-radius: 8px; border: 1px solid #edf2f7;">
                             <span class="text-muted d-block mb-1" style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">
-                                <i class="fa fa-folder-open-o mr-1 text-primary"></i> Berkas Pendukung
+                                <i class="fa-solid fa-folder-open-o mr-1 text-primary"></i> Berkas Pendukung
                             </span>
                             <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
                                 @if ($pasien->file_kk != null)

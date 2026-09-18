@@ -71,6 +71,15 @@
     p {
         margin: 0;
     }
+    .notif-item {
+        transition: all 0.18s ease-in-out;
+    }
+    .notif-item:hover {
+        background: #ffffff !important;
+        border-color: #93c5fd !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.09) !important;
+        transform: translateY(-1px);
+    }
     </style>
     @yield('header')
     @yield('style')
@@ -231,16 +240,16 @@
             var $list = $('#notificationTimelineList');
 
             if (unreadCount > 0) {
-                $countBadge.removeClass('d-none');
+                $countBadge.removeClass('d-none').css('display', 'inline-flex');
                 $countText.text(unreadCount);
             } else {
-                $countBadge.addClass('d-none');
+                $countBadge.addClass('d-none').css('display', 'none');
                 $countText.text('0');
             }
 
             if (!items || items.length === 0) {
                 $list.html(`
-                    <li class="text-center py-4 text-muted empty-notif-state">
+                    <li class="text-center py-4 text-muted empty-notif-state" style="background: #ffffff; border-radius: 10px; border: 1px dashed #cbd5e1; padding: 24px 16px;">
                         <div class="mb-2" style="width: 44px; height: 44px; border-radius: 50%; background: #f1f5f9; display: inline-flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 18px;">
                             <i class="fa-regular fa-bell-slash"></i>
                         </div>
@@ -255,41 +264,43 @@
             items.forEach(function(notif) {
                 var iconClass = 'fa-solid fa-user-doctor';
                 var iconBoxStyle = 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;';
-                var badgeHtml = `<span class="badge badge-primary light font-w600" style="font-size: 10px; padding: 1px 6px;">${notif.layanan_terapi}</span>`;
+                var badgeHtml = `<span class="badge badge-primary light font-w700" style="font-size: 10px; padding: 2px 7px; border-radius: 5px;">${notif.layanan_terapi}</span>`;
                 var btnStyle = 'background: #2563eb; border-color: #2563eb; color: #ffffff;';
 
                 if (notif.tipe === 'pendaftaran_baru') {
                     iconClass = 'fa-solid fa-user-plus';
                     iconBoxStyle = 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;';
-                    badgeHtml = '<span class="badge font-w600" style="font-size: 10px; padding: 1px 6px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa-solid fa-user-plus mr-1"></i>Pasien Baru</span>';
+                    badgeHtml = '<span class="badge font-w700" style="font-size: 10px; padding: 2px 7px; border-radius: 5px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;"><i class="fa-solid fa-user-plus mr-1"></i>Pasien Baru</span>';
                     btnStyle = 'background: #059669; border-color: #059669; color: #ffffff;';
                 } else if (notif.tipe === 'booking_baru') {
                     iconClass = 'fa-solid fa-calendar-plus';
                     iconBoxStyle = 'background: #fffbeb; color: #d97706; border: 1px solid #fde68a;';
-                    badgeHtml = '<span class="badge font-w600" style="font-size: 10px; padding: 1px 6px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa-solid fa-calendar mr-1"></i>Booking</span>';
+                    badgeHtml = '<span class="badge font-w700" style="font-size: 10px; padding: 2px 7px; border-radius: 5px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a;"><i class="fa-solid fa-calendar mr-1"></i>Booking</span>';
                     btnStyle = 'background: #d97706; border-color: #d97706; color: #ffffff;';
                 }
 
                 html += `
-                    <li class="p-2 mb-1 notif-item" style="border-radius: 8px; border-bottom: 1px solid #f1f5f9; background: #ffffff; transition: background 0.2s ease;">
+                    <li class="notif-item" style="padding: 12px 14px; margin: 0; border-radius: 10px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.03); transition: all 0.2s ease;">
                         <div class="d-flex align-items-start">
-                            <div class="mr-2.5 mt-1" style="width: 32px; height: 32px; border-radius: 8px; ${iconBoxStyle} display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">
+                            <div class="notif-icon-box mr-3 mt-1" style="width: 38px; height: 38px; border-radius: 10px; ${iconBoxStyle} display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; margin-right: 14px;">
                                 <i class="${iconClass}"></i>
                             </div>
-                            <div class="media-body" style="font-size: 12px;">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <strong class="text-dark font-w700" style="font-size: 12.5px;">${notif.nama_pasien}</strong>
+                            <div class="media-body" style="font-size: 12px; min-width: 0;">
+                                <div class="d-flex align-items-center justify-content-between mb-1" style="gap: 8px;">
+                                    <strong class="text-dark font-w700" style="font-size: 13px; color: #1e293b !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${notif.nama_pasien}</strong>
                                     ${badgeHtml}
                                 </div>
-                                <p class="mb-1 text-secondary" style="font-size: 11.5px; line-height: 1.35; color: #475569 !important;">
+                                <p class="text-secondary" style="font-size: 11.5px; line-height: 1.5; color: #475569 !important; margin: 0 0 9px 0 !important;">
                                     ${notif.message}
                                 </p>
-                                <div class="d-flex align-items-center justify-content-between mt-1">
-                                    <small class="text-muted font-w500" style="font-size: 10.5px;">
-                                        <i class="fa-regular fa-clock mr-1"></i>${notif.created_at}
+                                <div class="d-flex align-items-center justify-content-between pt-1" style="border-top: 1px dashed #e2e8f0;">
+                                    <small class="text-muted font-w500" style="font-size: 10.5px; display: inline-flex; align-items: center; gap: 4px;">
+                                        <i class="fa-regular fa-clock text-muted"></i>
+                                        <span>${notif.created_at}</span>
                                     </small>
-                                    <a href="${notif.read_url}" class="btn btn-xs font-w600" style="padding: 2px 8px; font-size: 11px; border-radius: 5px; ${btnStyle}">
-                                        <i class="fa-solid fa-arrow-right mr-1"></i> Buka
+                                    <a href="${notif.read_url}" class="btn btn-xs font-w600" style="padding: 3px 10px; font-size: 11px; border-radius: 6px; ${btnStyle} display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.06);">
+                                        <span>Buka</span>
+                                        <i class="fa-solid fa-arrow-right" style="font-size: 10px;"></i>
                                     </a>
                                 </div>
                             </div>
@@ -333,17 +344,26 @@
                                 var toastrTitle = "🔔 Notifikasi Aktivitas Baru";
                                 if (latest.tipe === 'pendaftaran_baru') {
                                     toastrTitle = "📋 Pendaftaran Pasien Baru";
+                                    toastr.success(
+                                        `<div style="font-size:12.5px;"><strong>${latest.nama_pasien}</strong> <span style="font-size:11px; opacity:0.85;">(${latest.layanan_terapi})</span><br><small style="line-height:1.4; display:inline-block; margin-top:3px;">${latest.message}</small></div>`,
+                                        toastrTitle,
+                                        { timeOut: 8500, closeButton: true, escapeHtml: false }
+                                    );
                                 } else if (latest.tipe === 'booking_baru') {
                                     toastrTitle = "📅 Permohonan Booking Sesi Baru";
-                                } else if (latest.tipe === 'penugasan' || latest.tipe === 'assignment') {
+                                    toastr.success(
+                                        `<div style="font-size:12.5px;"><strong>${latest.nama_pasien}</strong> <span style="font-size:11px; opacity:0.85;">(${latest.layanan_terapi})</span><br><small style="line-height:1.4; display:inline-block; margin-top:3px;">${latest.message}</small></div>`,
+                                        toastrTitle,
+                                        { timeOut: 8500, closeButton: true, escapeHtml: false }
+                                    );
+                                } else {
                                     toastrTitle = "🩺 Pasien Baru Ditugaskan";
+                                    toastr.info(
+                                        `<div style="font-size:12.5px;"><strong>${latest.nama_pasien}</strong> <span style="font-size:11px; opacity:0.85;">(${latest.layanan_terapi})</span><br><small style="line-height:1.4; display:inline-block; margin-top:3px;">${latest.message}</small></div>`,
+                                        toastrTitle,
+                                        { timeOut: 8500, closeButton: true, escapeHtml: false }
+                                    );
                                 }
-
-                                toastr.info(
-                                    `<div style="font-size:12.5px;"><strong>${latest.nama_pasien}</strong> <span style="font-size:11px; opacity:0.85;">(${latest.layanan_terapi})</span><br><small>${latest.message}</small></div>`,
-                                    toastrTitle,
-                                    { timeOut: 8500, closeButton: true, escapeHtml: false }
-                                );
                             }
                         }
                         lastUnreadCount = res.unread_count;

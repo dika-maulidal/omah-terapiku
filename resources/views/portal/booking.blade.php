@@ -162,18 +162,18 @@
         box-shadow: 0 1px 3px rgba(37, 99, 235, 0.1);
     }
 
-    /* Success Modal & Copy Cursor */
+    /* Success Modal & Copy Cursor (Emerald Green Theme) */
     .ot-success-modal-box {
         background: #ffffff;
         border-radius: 16px;
-        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22), 0 4px 18px rgba(37, 99, 235, 0.08);
-        border: 1.5px solid #bfdbfe;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22), 0 4px 18px rgba(16, 185, 129, 0.12);
+        border: 1.5px solid #a7f3d0;
         overflow: hidden;
         text-align: left;
     }
     .ot-success-modal-header {
-        background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%);
-        border-bottom: 1.5px solid #bfdbfe;
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        border-bottom: 1.5px solid #a7f3d0;
         padding: 16px 20px;
         display: flex;
         align-items: center;
@@ -183,26 +183,26 @@
         width: 44px;
         height: 44px;
         border-radius: 11px;
-        background: #ecfdf5;
+        background: #ffffff;
         color: #059669;
         font-size: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid #a7f3d0;
+        border: 1.5px solid #a7f3d0;
         box-shadow: 0 2px 6px rgba(5, 150, 105, 0.15);
         flex-shrink: 0;
     }
     .ot-success-modal-title {
         font-size: 16px;
         font-weight: 800;
-        color: #1e40af;
+        color: #065f46;
         margin: 0 0 2px 0;
     }
     .ot-success-modal-subtitle {
         font-size: 12px;
         font-weight: 500;
-        color: #64748b;
+        color: #047857;
     }
     .ot-modal-close-btn {
         background: #ffffff;
@@ -224,8 +224,8 @@
         color: #dc2626;
     }
     .ot-code-card {
-        background: #f8fafc;
-        border: 1.5px dashed #3b82f6;
+        background: #f0fdf4;
+        border: 1.5px dashed #10b981;
         border-radius: 12px;
         padding: 15px 16px;
         margin-bottom: 16px;
@@ -237,12 +237,12 @@
     .ot-code-number,
     .copy-badge-btn {
         cursor: copy !important;
-        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%232563eb' stroke='%23ffffff' stroke-width='1.5'%3E%3Cpath d='M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z'/%3E%3C/svg%3E") 4 4, copy !important;
+        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23059669' stroke='%23ffffff' stroke-width='1.5'%3E%3Cpath d='M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z'/%3E%3C/svg%3E") 4 4, copy !important;
     }
     .ot-code-card:hover {
-        background: #f0f7ff;
-        border-color: #2563eb;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+        background: #ecfdf5;
+        border-color: #059669;
+        box-shadow: 0 4px 14px rgba(5, 150, 105, 0.15);
         transform: translateY(-1px);
     }
     .btn-copy-action {
@@ -250,19 +250,21 @@
         align-items: center;
         gap: 5px;
         background: #ffffff;
-        border: 1.5px solid #bfdbfe;
-        color: #2563eb;
+        border: 1.5px solid #a7f3d0;
+        color: #059669;
         font-size: 11.5px;
         font-weight: 700;
         padding: 4px 11px;
         border-radius: 7px;
-        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.08);
+        box-shadow: 0 2px 4px rgba(5, 150, 105, 0.08);
         transition: all 0.18s ease;
     }
     .btn-copy-action:hover {
-        background: #2563eb;
+        background: #059669;
         color: #ffffff;
-        border-color: #1d4ed8;
+        border-color: #047857;
+        box-shadow: 0 3px 8px rgba(5, 150, 105, 0.25);
+        transform: translateY(-1px);
     }
     .btn-copy-action.copied {
         background: #ecfdf5 !important;
@@ -594,58 +596,69 @@
 
                                     <!-- Status Details Callout Box -->
                                     @if($booking->status === 'disetujui')
-                                        <div class="p-3 rounded mb-2" style="background: #ecfdf5; border: 1px solid #a7f3d0; font-size: 12.5px;">
-                                            <div class="d-flex align-items-center mb-1.5" style="color: #065f46; font-weight: 700;">
-                                                <i class="fa-solid fa-circle-check mr-2 text-success"></i> Jadwal Sesi Terapi Telah Dikonfirmasi &amp; Terdaftar
+                                        <div class="rounded mb-3" style="background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 12px; padding: 20px 22px; margin-top: 14px;">
+                                            <div class="d-flex align-items-center mb-2.5" style="color: #065f46; font-weight: 800; font-size: 13.5px;">
+                                                <i class="fa-solid fa-circle-check mr-2 text-success" style="font-size: 16px;"></i> Jadwal Sesi Terapi Telah Dikonfirmasi &amp; Terdaftar
                                             </div>
-                                            <div class="row" style="font-size: 12px; color: #047857;">
-                                                <div class="col-sm-6 mb-1">
-                                                    <strong>Terapis Penanggung Jawab:</strong><br>
-                                                    <span class="font-w700 text-dark">
+                                            <div class="row" style="font-size: 13px; color: #047857; line-height: 1.5;">
+                                                <div class="col-sm-6 mb-2">
+                                                    <span class="text-muted d-block font-w500" style="font-size: 12px;">Terapis Penanggung Jawab:</span>
+                                                    <span class="font-w700 text-dark d-block">
                                                         <i class="fa-solid fa-user-doctor text-success mr-1"></i>
                                                         {{ $booking->dokter ? $booking->dokter->nama : 'Terapis Medis Omah Terapi-KU' }}
                                                     </span>
                                                 </div>
-                                                <div class="col-sm-6 mb-1">
-                                                    <strong>Waktu &amp; Lokasi:</strong><br>
-                                                    <span class="text-dark">
+                                                <div class="col-sm-6 mb-2">
+                                                    <span class="text-muted d-block font-w500" style="font-size: 12px;">Waktu &amp; Lokasi:</span>
+                                                    <span class="text-dark font-w600 d-block">
+                                                        <i class="fa-regular fa-calendar-check mr-1 text-primary"></i>
                                                         {{ $booking->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)' }} &bull; {{ $booking->upt_lokasi ?: 'UPT RSBN Malang' }}
                                                     </span>
                                                 </div>
                                             </div>
                                             @if($booking->catatan_petugas)
-                                                <div class="mt-2 pt-2 border-top" style="border-color: #a7f3d0 !important; font-size: 11.5px; color: #065f46;">
-                                                    <strong>Catatan Petugas:</strong> {{ $booking->catatan_petugas }}
+                                                <div style="background: #ffffff; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 16px 20px; margin-top: 14px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);">
+                                                    <div style="font-size: 13px; font-weight: 700; color: #047857; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                                                        <i class="fa-solid fa-clipboard-check text-success" style="font-size: 15px;"></i> Catatan Persetujuan Petugas:
+                                                    </div>
+                                                    <div style="font-size: 13px; color: #065f46; line-height: 1.65; font-weight: 500;">
+                                                        {{ $booking->catatan_petugas }}
+                                                    </div>
                                                 </div>
                                             @endif
                                         </div>
                                     @elseif($booking->status === 'ditolak')
-                                        <div class="p-3 rounded mb-2" style="background: #fef2f2; border: 1px solid #fecaca; font-size: 12.5px;">
-                                            <div class="d-flex align-items-center mb-1" style="color: #991b1b; font-weight: 700;">
-                                                <i class="fa-solid fa-circle-xmark mr-2 text-danger"></i> Permohonan Jadwal Belum Dapat Disetujui
+                                        <div class="rounded mb-3" style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 12px; padding: 20px 22px; margin-top: 14px;">
+                                            <div class="d-flex align-items-center mb-2" style="color: #dc2626; font-weight: 800; font-size: 13.5px;">
+                                                <i class="fa-solid fa-circle-xmark mr-2 text-danger" style="font-size: 16px;"></i> Permohonan Jadwal Belum Dapat Disetujui
                                             </div>
-                                            <div style="font-size: 12px; color: #b91c1c;">
-                                                <strong>Alasan / Catatan Petugas:</strong> {{ $booking->catatan_petugas ?: 'Jadwal pada sesi tersebut sedang penuh, silakan pilih tanggal/sesi lainnya.' }}
+                                            <div style="background: #ffffff; border: 1.5px solid #fecaca; border-radius: 10px; padding: 16px 20px; margin-top: 12px; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);">
+                                                <div style="font-size: 13px; font-weight: 700; color: #b91c1c; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                                                    <i class="fa-solid fa-comment-slash text-danger" style="font-size: 15px;"></i> Alasan / Catatan Petugas:
+                                                </div>
+                                                <div style="font-size: 13px; color: #991b1b; line-height: 1.65; font-weight: 500;">
+                                                    {{ $booking->catatan_petugas ?: 'Jadwal pada sesi tersebut sedang penuh atau terapis berhalangan, silakan pilih tanggal/sesi lainnya.' }}
+                                                </div>
                                             </div>
                                         </div>
                                     @elseif($booking->status === 'selesai')
-                                        <div class="p-3 rounded mb-2" style="background: #eff6ff; border: 1px solid #bfdbfe; font-size: 12.5px;">
-                                            <div class="d-flex align-items-center justify-content-between">
+                                        <div class="rounded mb-3" style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 18px 22px; font-size: 13px; margin-top: 14px;">
+                                            <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 12px;">
                                                 <div>
                                                     <div style="color: #1e40af; font-weight: 700;">
                                                         <i class="fa-solid fa-clipboard-check mr-1.5 text-primary"></i> Sesi Terapi Telah Selesai Dilaksanakan
                                                     </div>
-                                                    <small class="text-muted" style="font-size: 11.5px;">
+                                                    <small class="text-muted d-block mt-0.5" style="font-size: 12px;">
                                                         Terapis: {{ $booking->dokter ? $booking->dokter->nama : 'Terapis Medis' }} &bull; Catatan rekam medis SOAP telah diarsipkan.
                                                     </small>
                                                 </div>
-                                                <a href="{{ route('portal.riwayat') }}" class="btn btn-xs btn-primary font-w600" style="border-radius: 6px; padding: 5px 10px;">
+                                                <a href="{{ route('portal.riwayat') }}" class="btn btn-xs btn-primary font-w600" style="border-radius: 8px; padding: 6px 14px;">
                                                     Lihat Riwayat Sesi <i class="fa-solid fa-chevron-right ml-1"></i>
                                                 </a>
                                             </div>
                                         </div>
                                     @else
-                                        <div class="p-2.5 rounded mb-2" style="background: #fffbeb; border: 1px dashed #fde68a; font-size: 12px; color: #92400e;">
+                                        <div class="rounded mb-3" style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 18px 22px; font-size: 12.5px; color: #92400e; line-height: 1.5; margin-top: 14px;">
                                             <i class="fa-solid fa-hourglass-half mr-1.5 text-warning"></i>
                                             Permohonan sesi sedang berada dalam <strong>antrean verifikasi jadwal terapis</strong>. Mohon tunggu konfirmasi dari pihak klinik/UPT.
                                         </div>
@@ -653,8 +666,9 @@
 
                                     <!-- Catatan Keluhan Pasien Jika Ada -->
                                     @if($booking->keluhan_catatan)
-                                        <div class="text-muted mt-2 pt-2 border-top" style="font-size: 11.5px; border-color: #f1f5f9 !important;">
-                                            <span class="font-w600">Catatan/Keluhan Pasien:</span> "{{ $booking->keluhan_catatan }}"
+                                        <div class="text-muted mt-3 pt-3 border-top" style="font-size: 12.5px; border-color: #e2e8f0 !important; line-height: 1.6; background: #f8fafc; border-radius: 8px; padding: 12px 16px;">
+                                            <span class="font-w700 text-dark d-block mb-0.5"><i class="fa-solid fa-notes-medical text-primary mr-1"></i> Catatan/Keluhan dari Pasien:</span>
+                                            <span class="font-italic">"{{ $booking->keluhan_catatan }}"</span>
                                         </div>
                                     @endif
                                 </div>
@@ -704,26 +718,26 @@
                     <!-- Code Card with Custom Copy Cursor -->
                     <div class="ot-code-card copy-trigger-box" onclick="copyKodeBooking('{{ Session::get('kode_booking') }}')" title="Klik untuk menyalin Kode Booking">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px;">KODE BOOKING RESMI</span>
+                            <span style="font-size: 10.5px; font-weight: 700; color: #047857; text-transform: uppercase; letter-spacing: 0.4px;">KODE BOOKING RESMI</span>
                             <button type="button" class="btn-copy-action" id="btnCopyKodeBookingModal" onclick="event.stopPropagation(); copyKodeBooking('{{ Session::get('kode_booking') }}')">
                                 <i class="fa-regular fa-copy mr-1"></i>
                                 <span>Salin Kode</span>
                             </button>
                         </div>
-                        <div class="p-2 px-3 rounded mb-2" style="background: #ffffff; border: 1px solid #e2e8f0;">
-                            <div class="ot-code-number" style="font-size: 20px; font-weight: 800; color: #1e40af;">{{ Session::get('kode_booking') }}</div>
+                        <div class="p-2 px-3 rounded mb-2" style="background: #ffffff; border: 1px solid #d1fae5;">
+                            <div class="ot-code-number" style="font-size: 20px; font-weight: 800; color: #065f46;">{{ Session::get('kode_booking') }}</div>
                         </div>
-                        <div style="font-size: 11.5px; color: #64748b; background: rgba(37, 99, 235, 0.05); padding: 7px 10px; border-radius: 6px; border-left: 3px solid #3b82f6;">
-                            <i class="fa-solid fa-circle-info mr-1 text-primary"></i> Kode booking ini dapat digunakan untuk memantau status persetujuan sesi terapi Anda.
+                        <div style="font-size: 11.5px; color: #065f46; background: rgba(16, 185, 129, 0.08); padding: 7px 10px; border-radius: 6px; border-left: 3px solid #10b981;">
+                            <i class="fa-solid fa-circle-check mr-1 text-success"></i> Kode booking ini dapat digunakan untuk memantau status persetujuan sesi terapi Anda.
                         </div>
                     </div>
 
                     <div class="d-flex align-items-center justify-content-center" style="gap: 10px;">
-                        <a href="{{ route('portal.booking.cetak', Session::get('kode_booking')) }}" target="_blank" class="btn btn-primary font-w700" style="flex: 1; height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; font-size: 13px; text-decoration: none; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none;">
+                        <a href="{{ route('portal.booking.cetak', Session::get('kode_booking')) }}" target="_blank" class="btn font-w700" style="flex: 1; height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; font-size: 13px; text-decoration: none; background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #ffffff !important; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); border: none;">
                             <i class="fa-solid fa-print"></i>
                             <span>Cetak Bukti (PDF)</span>
                         </a>
-                        <button type="button" class="btn btn-light font-w600" onclick="document.getElementById('modalSuccessBooking').remove();" style="height: 42px; border-radius: 8px; padding: 0 20px; font-size: 13px; border: 1.5px solid #cbd5e1;">
+                        <button type="button" class="btn btn-light font-w600" onclick="document.getElementById('modalSuccessBooking').remove();" style="height: 42px; border-radius: 8px; padding: 0 20px; font-size: 13px; border: 1.5px solid #cbd5e1; color: #475569;">
                             Pantau Status
                         </button>
                     </div>

@@ -372,6 +372,14 @@
                             </select>
                         </div>
                     </div>
+
+                    <!-- Catatan Persetujuan Petugas (Opsional) -->
+                    <div class="form-group mb-0 mt-3">
+                        <label class="font-w600 text-dark mb-1" style="font-size: 13px;">
+                            <i class="fa-solid fa-comment-dots text-success mr-1"></i> Catatan Persetujuan Petugas <small class="text-muted font-w400">(Opsional / Muncul di Lacak Status Pasien)</small>:
+                        </label>
+                        <input type="text" name="catatan_petugas" class="form-control ot-input-modern" placeholder="Contoh: Jadwal telah dikonfirmasi, harap hadir 15 menit sebelum sesi.">
+                    </div>
                 </div>
                 <div class="modal-footer py-2.5 px-4" style="background: #ffffff; border-top: 1px solid #e2e8f0;">
                     <button type="button" class="btn btn-sm btn-light font-w600" data-dismiss="modal" style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 7px 16px;">Batal</button>

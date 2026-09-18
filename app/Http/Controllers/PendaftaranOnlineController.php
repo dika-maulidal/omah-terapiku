@@ -615,6 +615,7 @@ class PendaftaranOnlineController extends Controller
                     'status_badge' => $booking->status_badge,
                     'terapis' => $booking->dokter ? $booking->dokter->nama : 'Belum Ditugaskan',
                     'jam_sesi' => $booking->jam_sesi ?: 'Sesuai Antrean Kedatangan',
+                    'upt_lokasi' => $booking->upt_lokasi ?: ($booking->pasien ? $booking->pasien->upt_lokasi : 'UPT RSBN Malang'),
                     'catatan' => $booking->catatan_petugas,
                     'cetak_token' => $bkgToken,
                     'cetak_url' => route('portal.booking.cetak', ['kode' => $booking->kode_booking, 'token' => $bkgToken]),

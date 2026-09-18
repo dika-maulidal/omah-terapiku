@@ -345,85 +345,72 @@
             font-weight: 700;
         }
 
-        /* Hero Banner Section with object-fit: cover */
+        /* =========================================================================
+           HERO BANNER SECTION (SIGNATURE OCEAN NAVY & CLEAN 2-COLUMN LAYOUT)
+           ========================================================================= */
         .hero-banner-section {
             position: relative;
             width: 100%;
-            min-height: 360px;
-            background-color: #0f2444;
-            padding: 60px 24px 120px 24px;
-            text-align: center;
+            min-height: 400px;
+            background-color: #2D4B7A;
+            background: #2D4B7A;
+            padding: 48px 24px 135px 24px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .hero-bg-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .hero-bg-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center bottom;
-            display: block;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, rgba(15, 33, 64, 0.78) 0%, rgba(20, 45, 82, 0.88) 100%);
-            z-index: 2;
-        }
-
-        .hero-banner-content {
+        /* Hero Container (2-Column Grid) */
+        .hero-banner-container {
             position: relative;
             z-index: 3;
-            max-width: 820px;
+            max-width: 1140px;
+            width: 100%;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.25fr 0.95fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        /* Left Column: Typography */
+        .hero-text-col {
+            text-align: left;
         }
 
         .hero-tagline {
-            display: block;
-            color: #93c5fd;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #7dd3fc;
             font-size: 13.5px;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
+            letter-spacing: 0.3px;
+            margin-bottom: 12px;
+        }
+
+        .hero-tagline i {
+            color: #38bdf8;
+            font-size: 14px;
         }
 
         .hero-title-main {
-            font-size: 30px;
+            font-size: 32px;
             font-weight: 800;
             color: #ffffff;
-            line-height: 1.25;
-            letter-spacing: -0.4px;
-            margin-bottom: 12px;
+            line-height: 1.24;
+            letter-spacing: -0.5px;
+            margin-bottom: 14px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
         }
 
         .hero-desc {
             font-size: 13.5px;
-            line-height: 1.65;
+            line-height: 1.68;
             color: #e2e8f0;
-            max-width: 740px;
-            margin: 0 auto;
+            margin-bottom: 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .hero-desc strong {
@@ -431,17 +418,121 @@
             font-weight: 700;
         }
 
+        /* Right Column: Hero Visual Illustration (Static, No Animation) */
+        .hero-visual-col {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+
+        .hero-illustration-img {
+            max-width: 100%;
+            max-height: 290px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.28));
+            display: block;
+        }
+
         /* Main Container - Floating Card Overlapping Hero Banner */
         .portal-main {
             flex: 1;
             width: 100%;
             max-width: 1140px;
-            margin: -65px auto 0 auto;
+            margin: -75px auto 0 auto;
             padding: 0 24px 48px 24px;
             position: relative;
             z-index: 10;
             display: flex;
             flex-direction: column;
+        }
+
+        @media (max-width: 991px) {
+            .hero-banner-section {
+                padding: 38px 20px 105px 20px;
+                min-height: auto;
+            }
+            .hero-banner-container {
+                grid-template-columns: 1fr;
+                gap: 22px;
+                text-align: center;
+            }
+            .hero-text-col {
+                text-align: center;
+            }
+            .hero-tagline {
+                justify-content: center;
+            }
+            .hero-title-main {
+                font-size: 26px;
+            }
+            .hero-illustration-img {
+                max-height: 220px;
+            }
+            .portal-main {
+                margin-top: -55px;
+                padding: 0 16px 36px 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-grid-rm {
+                grid-template-columns: 1fr !important;
+                gap: 14px !important;
+            }
+            .search-form-card {
+                padding: 20px 16px !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-banner-section {
+                padding: 26px 16px 85px 16px;
+            }
+            .hero-banner-container {
+                gap: 16px;
+            }
+            .hero-tagline {
+                font-size: 11.5px;
+                gap: 6px;
+                margin-bottom: 8px;
+            }
+            .hero-title-main {
+                font-size: 20px;
+                line-height: 1.3;
+                margin-bottom: 8px;
+            }
+            .hero-desc {
+                font-size: 12px;
+                line-height: 1.55;
+            }
+            .hero-illustration-img {
+                max-height: 160px;
+            }
+            .portal-main {
+                margin-top: -45px;
+                padding: 0 12px 28px 12px;
+            }
+            .tab-content-panel {
+                padding: 20px 14px 26px 14px !important;
+            }
+            .portal-tabs-nav {
+                padding: 4px;
+                gap: 4px;
+            }
+            .tab-btn {
+                padding: 9px 10px;
+                font-size: 12px;
+                gap: 5px;
+            }
         }
 
         /* Main Portal Card (DESIGN.md Spec) */
@@ -806,11 +897,11 @@
         /* Tracking Result Box */
         .track-result-box {
             background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 18px 20px;
-            margin-top: 16px;
-            box-shadow: 0 2px 10px rgba(46, 75, 130, 0.04);
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 24px 26px;
+            margin-top: 18px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
         }
 
         /* Footer */
@@ -897,16 +988,16 @@
         }
 
         /* =========================================================================
-           SIGNATURE SUCCESS MODAL (MATCHES UPT & DETAIL SESI THEME)
+           SIGNATURE SUCCESS MODAL (CLEAN EMERALD SUCCESS THEME)
            ========================================================================= */
         .ot-success-modal-box {
             background: #ffffff;
             border-radius: 16px;
             max-width: 520px;
             width: 100%;
-            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22), 0 4px 18px rgba(37, 99, 235, 0.08);
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22), 0 4px 18px rgba(16, 185, 129, 0.12);
             position: relative;
-            border: 1.5px solid #bfdbfe;
+            border: 1.5px solid #a7f3d0;
             overflow: hidden;
             animation: otModalPop 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             text-align: left;
@@ -924,8 +1015,8 @@
         }
 
         .ot-success-modal-header {
-            background: linear-gradient(135deg, #f0f7ff 0%, #eff6ff 100%);
-            border-bottom: 1.5px solid #bfdbfe;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-bottom: 1.5px solid #a7f3d0;
             padding: 16px 20px;
             display: flex;
             align-items: center;
@@ -936,13 +1027,13 @@
             width: 44px;
             height: 44px;
             border-radius: 11px;
-            background: #ecfdf5;
+            background: #ffffff;
             color: #059669;
             font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid #a7f3d0;
+            border: 1.5px solid #a7f3d0;
             box-shadow: 0 2px 6px rgba(5, 150, 105, 0.15);
             flex-shrink: 0;
         }
@@ -950,7 +1041,7 @@
         .ot-success-modal-title {
             font-size: 16px;
             font-weight: 800;
-            color: #1e40af;
+            color: #065f46;
             margin: 0 0 2px 0;
             line-height: 1.25;
             letter-spacing: -0.2px;
@@ -959,7 +1050,7 @@
         .ot-success-modal-subtitle {
             font-size: 12px;
             font-weight: 500;
-            color: #64748b;
+            color: #047857;
             display: block;
             line-height: 1.35;
         }
@@ -994,8 +1085,8 @@
 
         /* Ticket / Code Card with Distinct Custom Copy Cursor */
         .ot-code-card {
-            background: #f8fafc;
-            border: 1.5px dashed #3b82f6;
+            background: #f0fdf4;
+            border: 1.5px dashed #10b981;
             border-radius: 12px;
             padding: 15px 16px;
             margin-bottom: 16px;
@@ -1010,13 +1101,13 @@
         .ot-code-number,
         .ot-code-value-wrap {
             cursor: copy !important;
-            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%232563eb' stroke='%23ffffff' stroke-width='1.5'%3E%3Cpath d='M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z'/%3E%3C/svg%3E") 4 4, copy !important;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23059669' stroke='%23ffffff' stroke-width='1.5'%3E%3Cpath d='M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z'/%3E%3C/svg%3E") 4 4, copy !important;
         }
 
         .ot-code-card:hover {
-            background: #f0f7ff;
-            border-color: #2563eb;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+            background: #ecfdf5;
+            border-color: #059669;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.15);
             transform: translateY(-1px);
         }
 
@@ -1044,21 +1135,21 @@
             align-items: center;
             gap: 5px;
             background: #ffffff;
-            border: 1.5px solid #bfdbfe;
-            color: #2563eb;
+            border: 1.5px solid #a7f3d0;
+            color: #059669;
             font-size: 11.5px;
             font-weight: 700;
             padding: 4px 11px;
             border-radius: 7px;
-            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.08);
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.08);
             transition: all 0.18s ease;
         }
 
         .btn-copy-action:hover {
-            background: #2563eb;
+            background: #059669;
             color: #ffffff;
-            border-color: #1d4ed8;
-            box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+            border-color: #047857;
+            box-shadow: 0 3px 8px rgba(5, 150, 105, 0.25);
             transform: translateY(-1px);
         }
 
@@ -1070,7 +1161,7 @@
 
         .ot-code-value-wrap {
             background: #ffffff;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #d1fae5;
             border-radius: 9px;
             padding: 8px 14px;
             margin-bottom: 10px;
@@ -1082,28 +1173,28 @@
         .ot-code-label {
             font-size: 10.5px;
             font-weight: 700;
-            color: #64748b;
+            color: #047857;
             letter-spacing: 0.4px;
         }
 
         .ot-code-number {
             font-size: 19px;
             font-weight: 800;
-            color: #1e40af;
+            color: #065f46;
             letter-spacing: 0.8px;
             font-family: 'Plus Jakarta Sans', monospace, sans-serif;
             transition: color 0.15s ease;
         }
 
         .ot-code-number:hover {
-            color: #2563eb;
+            color: #059669;
         }
 
         .ot-code-meta-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 6px;
-            border-top: 1px dashed #cbd5e1;
+            border-top: 1px dashed #a7f3d0;
             padding-top: 9px;
             margin-bottom: 9px;
         }
@@ -1128,12 +1219,12 @@
 
         .ot-code-hint {
             font-size: 11.5px;
-            color: #64748b;
+            color: #065f46;
             line-height: 1.45;
-            background: rgba(37, 99, 235, 0.05);
+            background: rgba(16, 185, 129, 0.08);
             padding: 7px 10px;
             border-radius: 6px;
-            border-left: 3px solid #3b82f6;
+            border-left: 3px solid #10b981;
         }
 
         .ot-success-modal-actions {
@@ -1150,20 +1241,20 @@
             justify-content: center;
             gap: 8px;
             height: 42px;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: #ffffff !important;
             font-size: 13px;
             font-weight: 700;
             border-radius: 8px;
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
             transition: all 0.2s ease;
             border: none;
         }
 
         .btn-modal-print:hover {
-            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.32);
+            background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
+            box-shadow: 0 6px 16px rgba(5, 150, 105, 0.35);
             transform: translateY(-1px);
         }
 
@@ -1411,16 +1502,27 @@
             }
 
             .hero-banner-section {
-                padding: 40px 14px 85px 14px;
-                min-height: 300px;
+                padding: 36px 14px 90px 14px;
+                min-height: auto;
             }
 
-            .hero-tagline {
-                font-size: 13px;
+            .hero-tagline-badge {
+                font-size: 11.5px;
+                padding: 5px 12px;
             }
 
             .hero-title-main {
-                font-size: 20px;
+                font-size: 21px;
+                line-height: 1.28;
+            }
+
+            .hero-desc {
+                font-size: 12.5px;
+                line-height: 1.6;
+            }
+
+            .hero-illustration-img {
+                max-height: 195px;
             }
 
             .portal-main {
@@ -1544,18 +1646,29 @@
         </div>
     </header>
 
-    <!-- Hero Banner Section (Like login.png with object-fit: cover) -->
+    <!-- Hero Banner Section (Clean Solid Brand Color & 2-Column Layout) -->
     <section class="hero-banner-section">
-        <div class="hero-bg-wrapper">
-            <img src="{{ asset('images/hero-image.svg') }}" alt="Ilustrasi Pelayanan Terpadu Omah Terapi-KU" class="hero-bg-img">
-            <div class="hero-overlay"></div>
-        </div>
-        <div class="hero-banner-content">
-            <span class="hero-tagline">Pelayanan Terpadu Disabilitas & Tumbuh Kembang Anak</span>
-            <h1 class="hero-title-main">Akses Rekam Medis & Pendaftaran Online</h1>
-            <p class="hero-desc">
-                Selamat datang di Portal Pasien Resmi <strong>Omah Terapi-KU</strong> &ndash; Dinas Sosial Provinsi Jawa Timur. Layanan mandiri terpadu untuk kemudahan akses riwayat rekam medis, pemantauan intervensi terapi SOAP, evaluasi asesmen Denver II & GMFM, pendaftaran penerima manfaat baru, serta pelacakan status verifikasi berkas dan jadwal terapis secara transparan.
-            </p>
+        <div class="hero-banner-container">
+            <!-- Left Column: Typography -->
+            <div class="hero-text-col">
+                <div class="hero-tagline">
+                    <i class="fa-solid fa-hands-holding-child"></i>
+                    <span>Pelayanan Terpadu Disabilitas &amp; Tumbuh Kembang Anak</span>
+                </div>
+                <h1 class="hero-title-main">
+                    Akses Rekam Medis &amp; Pendaftaran Online
+                </h1>
+                <p class="hero-desc">
+                    Selamat datang di Portal Pasien Resmi <strong>Omah Terapi-KU</strong> &ndash; Dinas Sosial Provinsi Jawa Timur. Layanan mandiri terpadu untuk kemudahan akses riwayat rekam medis, pemantauan intervensi terapi SOAP, evaluasi asesmen Denver II &amp; GMFM, pendaftaran penerima manfaat baru, serta pelacakan status verifikasi berkas dan jadwal terapis secara transparan.
+                </p>
+            </div>
+
+            <!-- Right Column: Static Hero Image Illustration -->
+            <div class="hero-visual-col">
+                <div class="hero-image-wrapper">
+                    <img src="{{ asset('images/hero-image.png') }}" alt="Ilustrasi Pelayanan Terpadu Omah Terapi-KU" class="hero-illustration-img">
+                </div>
+            </div>
         </div>
     </section>
 
@@ -2192,11 +2305,11 @@
 
                         <div class="ot-code-meta-grid">
                             <div class="ot-meta-item">
-                                <span class="ot-meta-label"><i class="fa-solid fa-user mr-1 text-primary"></i> Nama Pasien:</span>
+                                <span class="ot-meta-label"><i class="fa-solid fa-user mr-1 text-success"></i> Nama Pasien:</span>
                                 <span class="ot-meta-value">{{ Session::get('nama_pasien') }}</span>
                             </div>
                             <div class="ot-meta-item">
-                                <span class="ot-meta-label"><i class="fa-solid fa-hand-holding-medical mr-1 text-info"></i> Layanan Terapi:</span>
+                                <span class="ot-meta-label"><i class="fa-solid fa-hand-holding-medical mr-1 text-success"></i> Layanan Terapi:</span>
                                 <span class="ot-meta-value">{{ Session::get('layanan_terapi') ?: 'Layanan Terpadu' }}</span>
                             </div>
                             <div class="ot-meta-item">
@@ -2206,7 +2319,7 @@
                         </div>
 
                         <div class="ot-code-hint">
-                            <i class="fa-solid fa-circle-info mr-1 text-primary"></i> Simpan atau salin kode ini untuk melacak status verifikasi berkas di menu <strong>Lacak Status</strong>.
+                            <i class="fa-solid fa-circle-check mr-1 text-success"></i> Simpan atau salin kode ini untuk melacak status verifikasi berkas di menu <strong>Lacak Status</strong>.
                         </div>
                     </div>
 
@@ -2553,28 +2666,28 @@
                             if (res.pasien) {
                                 var pas = res.pasien;
                                 html += '<div class="track-result-box mb-3">';
-                                html += '  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">';
+                                html += '  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; border-bottom: 1.5px solid #f1f5f9; padding-bottom: 14px;">';
                                 html += '    <div>';
-                                html += '      <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;"><i class="fa-solid fa-hospital-user text-primary mr-1"></i> Profil Penerima Manfaat Terdaftar</span>';
-                                html += '      <h4 style="font-size: 16px; font-weight: 800; color: #1e40af; margin: 2px 0;">' + pas.no_rm + ' &bull; ' + pas.nama + '</h4>';
+                                html += '      <span style="font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-hospital-user text-primary mr-1"></i> Profil Penerima Manfaat Terdaftar</span>';
+                                html += '      <h4 style="font-size: 17px; font-weight: 800; color: #1e40af; margin: 4px 0 0 0;">' + pas.no_rm + ' &bull; ' + pas.nama + '</h4>';
                                 html += '    </div>';
-                                html += '    <div class="d-flex align-items-center" style="gap: 6px;">';
+                                html += '    <div class="d-flex align-items-center" style="gap: 8px;">';
                                 html += '      ' + (pas.status_text || '');
-                                html += '      <button type="button" onclick="loginWithRm(\'' + pas.no_rm + '\')" class="btn btn-sm btn-primary font-w700" style="border-radius: 6px; padding: 4px 12px; font-size: 12px;"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Masuk Portal</button>';
+                                html += '      <button type="button" onclick="loginWithRm(\'' + pas.no_rm + '\')" class="btn btn-sm btn-primary font-w700" style="border-radius: 8px; padding: 6px 14px; font-size: 12.5px;"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Masuk Portal</button>';
                                 html += '    </div>';
                                 html += '  </div>';
 
-                                html += '  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 12.5px; margin-bottom: 6px;">';
-                                html += '    <div><span class="text-muted">Nama Lengkap:</span> <strong class="text-dark d-block">' + pas.nama + '</strong></div>';
+                                html += '  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; font-size: 13px; line-height: 1.5;">';
+                                html += '    <div><span class="text-muted">Nama Lengkap:</span> <strong class="text-dark d-block font-w700">' + pas.nama + '</strong></div>';
                                 html += '    <div><span class="text-muted">NIK:</span> <strong class="text-dark d-block">' + pas.nik + '</strong></div>';
                                 html += '    <div><span class="text-muted">No. HP / Kontak:</span> <strong class="text-dark d-block">' + pas.no_hp + '</strong></div>';
                                 html += '    <div><span class="text-muted">Lokasi UPT:</span> <strong class="text-dark d-block">' + pas.upt_lokasi + '</strong></div>';
                                 html += '    <div><span class="text-muted">Riwayat Pelayanan:</span> <strong class="text-primary d-block font-w700">' + pas.total_sesi + ' Sesi Selesai</strong></div>';
                                 if (pas.sesi_terakhir) {
-                                    html += '    <div><span class="text-muted">Kunjungan Terakhir:</span> <strong class="text-dark d-block"><i class="fa-regular fa-calendar-check text-success mr-1"></i>' + pas.sesi_terakhir + '</strong></div>';
+                                    html += '    <div><span class="text-muted">Kunjungan Terakhir:</span> <strong class="text-dark d-block font-w600"><i class="fa-regular fa-calendar-check text-success mr-1"></i>' + pas.sesi_terakhir + '</strong></div>';
                                 }
                                 if (pas.terapis_terakhir) {
-                                    html += '    <div><span class="text-muted">Terapis Terakhir:</span> <strong class="text-dark d-block"><i class="fa-solid fa-user-doctor text-info mr-1"></i>' + pas.terapis_terakhir + '</strong></div>';
+                                    html += '    <div><span class="text-muted">Terapis Terakhir:</span> <strong class="text-dark d-block font-w600"><i class="fa-solid fa-user-doctor text-info mr-1"></i>' + pas.terapis_terakhir + '</strong></div>';
                                 }
                                 html += '  </div>';
                                 html += '</div>';
@@ -2584,86 +2697,146 @@
                             if (res.pendaftaran) {
                                 var p = res.pendaftaran;
                                 var regCetakUrl = p.cetak_url || ('/portal/pendaftaran/' + p.kode + '/cetak');
-                                html += '<div class="track-result-box">';
-                                html += '  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">';
+                                html += '<div class="track-result-box mb-3">';
+                                html += '  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; border-bottom: 1.5px solid #f1f5f9; padding-bottom: 14px;">';
                                 html += '    <div>';
-                                html += '      <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Pendaftaran Pasien Baru</span>';
-                                html += '      <h4 style="font-size: 15px; font-weight: 800; color: #1e40af; margin: 2px 0;">' + p.kode + '</h4>';
+                                html += '      <span style="font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-id-card-clip text-primary mr-1"></i> Pendaftaran Pasien Baru</span>';
+                                html += '      <h4 style="font-size: 17px; font-weight: 800; color: #1e40af; margin: 4px 0 0 0;">' + p.kode + '</h4>';
                                 html += '    </div>';
-                                html += '    <div class="d-flex align-items-center" style="gap: 6px;">';
+                                html += '    <div>';
                                 html += '      ' + p.status_badge;
-                                html += '      <a href="' + regCetakUrl + '" target="_blank" class="btn btn-sm btn-outline-primary font-w700" style="border-radius: 6px; padding: 3px 8px; font-size: 11px;" title="Cetak Bukti"><i class="fa-solid fa-print mr-1"></i> Cetak</a>';
                                 html += '    </div>';
                                 html += '  </div>';
 
-                                html += '  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 12.5px; margin-bottom: 14px;">';
-                                html += '    <div><span class="text-muted">Nama Pasien:</span> <strong class="text-dark d-block">' + p.nama + '</strong></div>';
-                                html += '    <div><span class="text-muted">NIK:</span> <strong class="text-dark d-block">' + p.nik + '</strong></div>';
+                                html += '  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; font-size: 13px; line-height: 1.5; margin-bottom: 16px;">';
+                                html += '    <div><span class="text-muted">Nama Pasien:</span> <strong class="text-dark d-block font-w700">' + p.nama + '</strong></div>';
+                                html += '    <div><span class="text-muted">NIK Pasien:</span> <strong class="text-dark d-block">' + p.nik + '</strong></div>';
                                 html += '    <div><span class="text-muted">No. HP / Telepon:</span> <strong class="text-dark d-block">' + (p.no_hp || '-') + '</strong></div>';
-                                html += '    <div><span class="text-muted">Layanan:</span> <strong class="text-primary d-block font-w700">' + (p.layanan_terapi || 'Layanan Terpadu') + '</strong></div>';
-                                html += '    <div><span class="text-muted">Rencana Kunjungan:</span> <strong class="text-dark d-block">' + (p.tgl_rencana || '-') + ' (' + (p.jam_rencana || 'Sesi 1 (08.00 - 08.45 WIB)') + ')</strong></div>';
+                                html += '    <div><span class="text-muted">Layanan Pilihan:</span> <strong class="text-primary d-block font-w700">' + (p.layanan_terapi || 'Layanan Terpadu') + '</strong></div>';
+                                html += '    <div><span class="text-muted">Rencana Kunjungan:</span> <strong class="text-dark d-block"><i class="fa-regular fa-calendar mr-1 text-primary"></i>' + (p.tgl_rencana || '-') + ' (' + (p.jam_rencana || 'Sesi 1 (08.00 - 08.45 WIB)') + ')</strong></div>';
                                 html += '    <div><span class="text-muted">Lokasi UPT:</span> <strong class="text-dark d-block">' + p.upt_lokasi + '</strong></div>';
                                 html += '  </div>';
 
                                 if (p.status === 'disetujui' && p.no_rm) {
-                                    html += '  <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 12px; margin-bottom: 12px;">';
-                                    html += '    <div style="font-size: 12.5px; font-weight: 700; color: #059669;"><i class="fa-solid fa-circle-check mr-1"></i> Pendaftaran Telah Disetujui!</div>';
-                                    html += '    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 8px; font-size: 12.5px;">';
-                                    html += '      <div><span class="text-muted">No. Rekam Medis:</span> <strong class="text-primary d-block" style="font-size: 15px;">' + p.no_rm + '</strong></div>';
-                                    html += '      <div><span class="text-muted">Terapis:</span> <strong class="text-success d-block font-w700"><i class="fa-solid fa-user-doctor mr-1"></i>' + (p.terapis_nama || 'Petugas Terapis') + '</strong></div>';
-                                    html += '      <div><span class="text-muted">Jadwal Sesi I:</span> <strong class="text-dark d-block"><i class="fa-regular fa-calendar-check mr-1"></i>' + (p.tgl_sesi_disetujui || p.tgl_rencana) + ' (' + (p.jam_sesi_disetujui || p.jam_rencana) + ')</strong></div>';
+                                    html += '  <div style="background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 12px; padding: 20px 22px; margin-top: 14px; margin-bottom: 12px;">';
+                                    html += '    <div style="font-size: 13.5px; font-weight: 800; color: #059669; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check text-success" style="font-size: 16px;"></i> Pendaftaran Telah Disetujui & Diterbitkan No. RM!</div>';
+                                    html += '    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 12px; font-size: 13px; line-height: 1.5;">';
+                                    html += '      <div><span class="text-muted">No. Rekam Medis (No. RM):</span> <strong class="text-primary d-block font-w800" style="font-size: 16px;">' + p.no_rm + '</strong></div>';
+                                    html += '      <div><span class="text-muted">Terapis Penanggung Jawab:</span> <strong class="text-success d-block font-w700"><i class="fa-solid fa-user-doctor mr-1 text-success"></i>' + (p.terapis_nama || 'Petugas Terapis Omah Terapi-KU') + '</strong></div>';
+                                    html += '      <div><span class="text-muted">Jadwal Sesi I Disetujui:</span> <strong class="text-dark d-block font-w700"><i class="fa-regular fa-calendar-check mr-1 text-primary"></i>' + (p.tgl_sesi_disetujui || p.tgl_rencana) + ' (' + (p.jam_sesi_disetujui || p.jam_rencana) + ')</strong></div>';
                                     html += '    </div>';
-                                    if (p.catatan) {
-                                        html += '    <div class="mt-2.5 p-2.5 rounded" style="background: #ffffff; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 12.5px; color: #065f46; line-height: 1.5; box-shadow: 0 1px 3px rgba(16, 185, 129, 0.08);">';
-                                        html += '      <strong class="d-block mb-1 text-success font-w700" style="font-size: 12px;"><i class="fa-solid fa-clipboard-check mr-1"></i> Catatan Persetujuan Petugas:</strong> ' + p.catatan;
-                                        html += '    </div>';
-                                    }
-                                    html += '    <div class="mt-2.5 d-flex align-items-center flex-wrap" style="gap: 6px;">';
-                                    html += '      <button type="button" onclick="loginWithRm(\'' + p.no_rm + '\')" class="btn btn-sm btn-primary font-w700" style="border-radius: 6px; padding: 5px 12px; font-size: 12px;"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Buka Rekam Medis</button>';
-                                    html += '      <a href="' + regCetakUrl + '" target="_blank" class="btn btn-sm btn-outline-success font-w700" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px;"><i class="fa-solid fa-print mr-1"></i> Cetak Bukti</a>';
+                                    html += '    <div style="background: #ffffff; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 16px 20px; margin-top: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);">';
+                                    html += '      <div style="font-size: 13.5px; font-weight: 700; color: #047857; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">';
+                                    html += '        <i class="fa-solid fa-clipboard-check text-success" style="font-size: 15px;"></i> Catatan Persetujuan Petugas:';
+                                    html += '      </div>';
+                                    html += '      <div style="font-size: 13px; color: #065f46; line-height: 1.65; font-weight: 500;">';
+                                    html += '        ' + (p.catatan ? p.catatan : 'Pendaftaran disetujui. Terapis dan jadwal sesi terapi pertama telah ditetapkan. Harap hadir 15 menit sebelum waktu sesi.');
+                                    html += '      </div>';
+                                    html += '    </div>';
+                                    html += '    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">';
+                                    html += '      <button type="button" onclick="loginWithRm(\'' + p.no_rm + '\')" class="btn btn-sm btn-primary font-w700" style="border-radius: 8px; padding: 6px 16px; font-size: 12.5px;"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Buka Rekam Medis</button>';
+                                    html += '      <a href="' + regCetakUrl + '" target="_blank" class="btn btn-sm btn-outline-success font-w700" style="border-radius: 8px; padding: 6px 16px; font-size: 12px; background: #ffffff;"><i class="fa-solid fa-print mr-1"></i> Cetak Bukti Registrasi</a>';
                                     html += '    </div>';
                                     html += '  </div>';
                                 } else if (p.status === 'ditolak') {
-                                    html += '  <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px;">';
-                                    html += '    <div style="font-size: 13px; font-weight: 700; color: #dc2626; margin-bottom: 8px;"><i class="fa-solid fa-circle-xmark mr-1"></i> Pendaftaran Belum Dapat Disetujui (Ditolak)</div>';
-                                    html += '    <div style="background: #ffffff; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; font-size: 12.5px; color: #991b1b; line-height: 1.5; box-shadow: 0 1px 3px rgba(220, 38, 38, 0.08);">';
-                                    html += '      <strong class="d-block mb-1 text-danger font-w700" style="font-size: 12px;"><i class="fa-solid fa-comment-slash mr-1"></i> Alasan Penolakan dari Petugas:</strong> ' + (p.catatan || 'Berkas atau persyaratan belum memenuhi kriteria layanan.');
+                                    html += '  <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 12px; padding: 20px 22px; margin-top: 14px; margin-bottom: 12px;">';
+                                    html += '    <div style="font-size: 13.5px; font-weight: 800; color: #dc2626; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-xmark text-danger" style="font-size: 16px;"></i> Pendaftaran Belum Dapat Disetujui (Ditolak)</div>';
+                                    html += '    <div style="background: #ffffff; border: 1.5px solid #fecaca; border-radius: 10px; padding: 16px 20px; margin-top: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);">';
+                                    html += '      <div style="font-size: 13.5px; font-weight: 700; color: #b91c1c; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">';
+                                    html += '        <i class="fa-solid fa-comment-slash text-danger" style="font-size: 15px;"></i> Alasan Penolakan dari Petugas:';
+                                    html += '      </div>';
+                                    html += '      <div style="font-size: 13px; color: #991b1b; line-height: 1.65; font-weight: 500;">';
+                                    html += '        ' + (p.catatan || 'Berkas atau persyaratan belum memenuhi kriteria layanan.');
+                                    html += '      </div>';
                                     html += '    </div>';
-                                    html += '    <div class="mt-2 text-muted" style="font-size: 11.5px;"><i class="fa-solid fa-circle-info text-danger mr-1"></i> Silakan periksa kelengkapan berkas atau hubungi narahubung UPT terkait untuk informasi pendaftaran ulang.</div>';
+                                    html += '    <div class="text-muted" style="font-size: 12px; line-height: 1.5;"><i class="fa-solid fa-circle-info text-danger mr-1"></i> Silakan periksa kelengkapan berkas atau hubungi narahubung UPT terkait untuk informasi pendaftaran ulang.</div>';
                                     html += '  </div>';
                                 } else {
-                                    html += '  <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px; color: #1e40af; font-size: 12px; line-height: 1.4;">';
-                                    html += '    <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 6px;">';
-                                    html += '      <div><i class="fa-solid fa-hourglass-half mr-1"></i> <strong>Menunggu Verifikasi:</strong> Sedang dalam antrean verifikasi berkas & penugasan terapis.</div>';
-                                    html += '      <a href="' + regCetakUrl + '" target="_blank" class="btn btn-xs btn-outline-primary font-w700" style="border-radius: 5px; padding: 3px 8px; font-size: 11px;"><i class="fa-solid fa-print mr-1"></i> Cetak Bukti</a>';
+                                    html += '  <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 18px 22px; color: #1e40af; font-size: 12.5px; line-height: 1.5; margin-top: 14px;">';
+                                    html += '    <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 10px;">';
+                                    html += '      <div><i class="fa-solid fa-hourglass-half mr-1.5 text-primary"></i> <strong>Menunggu Verifikasi:</strong> Berkas pendaftaran sedang dalam antrean verifikasi petugas & penugasan terapis.</div>';
+                                    html += '      <a href="' + regCetakUrl + '" target="_blank" class="btn btn-xs btn-outline-primary font-w700" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: #ffffff;"><i class="fa-solid fa-print mr-1"></i> Cetak Bukti</a>';
                                     html += '    </div>';
                                     html += '  </div>';
                                 }
                                 html += '</div>';
                             }
 
+                            // 3. Data Permohonan Booking Sesi Online
                             if (res.booking) {
                                 var b = res.booking;
                                 var bkgCetakUrl = b.cetak_url || ('/portal/booking/' + b.kode + '/cetak');
-                                html += '<div class="track-result-box" style="margin-top: 14px;">';
-                                html += '  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">';
+                                html += '<div class="track-result-box mb-3">';
+                                html += '  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; border-bottom: 1.5px solid #f1f5f9; padding-bottom: 14px;">';
                                 html += '    <div>';
-                                html += '      <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Permohonan Booking Sesi</span>';
-                                html += '      <h4 style="font-size: 15px; font-weight: 800; color: #1e40af; margin: 2px 0;">' + b.kode + '</h4>';
+                                html += '      <span style="font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-calendar-check text-primary mr-1"></i> Permohonan Booking Sesi Terapi</span>';
+                                html += '      <h4 style="font-size: 17px; font-weight: 800; color: #1e40af; margin: 4px 0 0 0;">' + b.kode + '</h4>';
                                 html += '    </div>';
-                                html += '    <div class="d-flex align-items-center" style="gap: 6px;">';
+                                html += '    <div>';
                                 html += '      ' + b.status_badge;
-                                html += '      <a href="' + bkgCetakUrl + '" target="_blank" class="btn btn-sm btn-outline-primary font-w700" style="border-radius: 6px; padding: 3px 8px; font-size: 11px;" title="Cetak Bukti Booking"><i class="fa-solid fa-print mr-1"></i> Cetak</a>';
                                 html += '    </div>';
                                 html += '  </div>';
 
-                                html += '  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 12.5px;">';
-                                html += '    <div><span class="text-muted">Pasien:</span> <strong class="text-dark d-block">' + b.nama_pasien + ' (' + b.no_rm + ')</strong></div>';
-                                html += '    <div><span class="text-muted">No. HP / Kontak:</span> <strong class="text-dark d-block">' + (b.no_hp || '-') + '</strong></div>';
-                                html += '    <div><span class="text-muted">Layanan:</span> <strong class="text-primary d-block font-w700">' + b.layanan + '</strong></div>';
-                                html += '    <div><span class="text-muted">Jadwal:</span> <strong class="text-dark d-block">' + b.tgl_rencana + ' (' + (b.jam_sesi || 'Sesi 1 (08.00 - 08.45 WIB)') + ')</strong></div>';
-                                html += '    <div><span class="text-muted">Terapis:</span> <strong class="text-dark d-block">' + b.terapis + '</strong></div>';
+                                html += '  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; font-size: 13px; line-height: 1.5; margin-bottom: 16px;">';
+                                html += '    <div><span class="text-muted">Nama Pasien:</span> <strong class="text-dark d-block font-w700">' + b.nama_pasien + ' (' + b.no_rm + ')</strong></div>';
+                                html += '    <div><span class="text-muted">No. HP / Telepon:</span> <strong class="text-dark d-block">' + (b.no_hp || '-') + '</strong></div>';
+                                html += '    <div><span class="text-muted">Layanan Terapi:</span> <strong class="text-primary d-block font-w700">' + b.layanan + '</strong></div>';
+                                html += '    <div><span class="text-muted">Rencana Jadwal:</span> <strong class="text-dark d-block"><i class="fa-regular fa-calendar mr-1 text-primary"></i>' + b.tgl_rencana + ' (' + (b.jam_sesi || 'Sesi 1 (08.00 - 08.45 WIB)') + ')</strong></div>';
+                                html += '    <div><span class="text-muted">Lokasi UPT:</span> <strong class="text-dark d-block">' + (b.upt_lokasi || 'UPT RSBN Malang') + '</strong></div>';
+                                html += '    <div><span class="text-muted">Terapis Penanggung Jawab:</span> <strong class="text-dark d-block"><i class="fa-solid fa-user-doctor text-info mr-1"></i>' + b.terapis + '</strong></div>';
                                 html += '  </div>';
+
+                                if (b.status === 'disetujui') {
+                                    html += '  <div style="background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 12px; padding: 20px 22px; margin-top: 14px; margin-bottom: 12px;">';
+                                    html += '    <div style="font-size: 13.5px; font-weight: 800; color: #059669; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check text-success" style="font-size: 16px;"></i> Permohonan Booking Sesi Telah Disetujui & Dikonfirmasi!</div>';
+                                    html += '    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 12px; font-size: 13px; line-height: 1.5;">';
+                                    html += '      <div><span class="text-muted">Terapis Penanggung Jawab:</span> <strong class="text-success d-block font-w700"><i class="fa-solid fa-user-doctor mr-1 text-success"></i>' + b.terapis + '</strong></div>';
+                                    html += '      <div><span class="text-muted">Jadwal Sesi Terapi:</span> <strong class="text-dark d-block font-w700"><i class="fa-regular fa-calendar-check mr-1 text-primary"></i>' + b.tgl_rencana + ' (' + (b.jam_sesi || 'Sesi 1 (08.00 - 08.45 WIB)') + ')</strong></div>';
+                                    html += '      <div><span class="text-muted">Lokasi UPT:</span> <strong class="text-dark d-block font-w700">' + (b.upt_lokasi || 'UPT RSBN Malang') + '</strong></div>';
+                                    html += '    </div>';
+                                    html += '    <div style="background: #ffffff; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 16px 20px; margin-top: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);">';
+                                    html += '      <div style="font-size: 13.5px; font-weight: 700; color: #047857; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">';
+                                    html += '        <i class="fa-solid fa-clipboard-check text-success" style="font-size: 15px;"></i> Catatan Persetujuan Petugas:';
+                                    html += '      </div>';
+                                    html += '      <div style="font-size: 13px; color: #065f46; line-height: 1.65; font-weight: 500;">';
+                                    html += '        ' + (b.catatan ? b.catatan : 'Jadwal sesi terapi telah disetujui & dikonfirmasi oleh petugas. Harap hadir 15 menit sebelum sesi dimulai.');
+                                    html += '      </div>';
+                                    html += '    </div>';
+                                    html += '    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">';
+                                    if (b.no_rm && b.no_rm !== '-') {
+                                        html += '      <button type="button" onclick="loginWithRm(\'' + b.no_rm + '\')" class="btn btn-sm btn-primary font-w700" style="border-radius: 8px; padding: 6px 16px; font-size: 12.5px;"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Buka Rekam Medis</button>';
+                                    }
+                                    html += '      <a href="' + bkgCetakUrl + '" target="_blank" class="btn btn-sm btn-outline-success font-w700" style="border-radius: 8px; padding: 6px 16px; font-size: 12px; background: #ffffff;"><i class="fa-solid fa-print mr-1"></i> Cetak Bukti Booking</a>';
+                                    html += '    </div>';
+                                    html += '  </div>';
+                                } else if (b.status === 'ditolak') {
+                                    html += '  <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 12px; padding: 20px 22px; margin-top: 14px; margin-bottom: 12px;">';
+                                    html += '    <div style="font-size: 13.5px; font-weight: 800; color: #dc2626; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-xmark text-danger" style="font-size: 16px;"></i> Permohonan Jadwal Belum Dapat Disetujui (Ditolak)</div>';
+                                    html += '    <div style="background: #ffffff; border: 1.5px solid #fecaca; border-radius: 10px; padding: 16px 20px; margin-top: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);">';
+                                    html += '      <div style="font-size: 13.5px; font-weight: 700; color: #b91c1c; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">';
+                                    html += '        <i class="fa-solid fa-comment-slash text-danger" style="font-size: 15px;"></i> Alasan Penolakan dari Petugas:';
+                                    html += '      </div>';
+                                    html += '      <div style="font-size: 13px; color: #991b1b; line-height: 1.65; font-weight: 500;">';
+                                    html += '        ' + (b.catatan || 'Jadwal pada sesi tersebut sedang penuh atau terapis berhalangan. Silakan ajukan jadwal di tanggal lainnya.');
+                                    html += '      </div>';
+                                    html += '    </div>';
+                                    html += '    <div class="text-muted" style="font-size: 12px; line-height: 1.5;"><i class="fa-solid fa-circle-info text-danger mr-1"></i> Silakan ajukan permohonan booking pada hari atau jam sesi alternatif melalui portal.</div>';
+                                    html += '  </div>';
+                                } else if (b.status === 'selesai') {
+                                    html += '  <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 18px 22px; color: #1e40af; font-size: 12.5px; line-height: 1.5; margin-top: 14px;">';
+                                    html += '    <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 10px;">';
+                                    html += '      <div><i class="fa-solid fa-circle-check mr-1.5 text-primary"></i> <strong>Sesi Selesai:</strong> Sesi terapi telah selesai dilaksanakan dan catatan SOAP telah diarsipkan.</div>';
+                                    html += '      <a href="' + bkgCetakUrl + '" target="_blank" class="btn btn-xs btn-outline-primary font-w700" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: #ffffff;"><i class="fa-solid fa-print mr-1"></i> Cetak Bukti</a>';
+                                    html += '    </div>';
+                                    html += '  </div>';
+                                } else {
+                                    html += '  <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 18px 22px; color: #92400e; font-size: 12.5px; line-height: 1.5; margin-top: 14px;">';
+                                    html += '    <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 10px;">';
+                                    html += '      <div><i class="fa-solid fa-hourglass-half mr-1.5 text-warning"></i> <strong>Menunggu Konfirmasi:</strong> Permohonan sesi terapi sedang dalam antrean verifikasi jadwal terapis.</div>';
+                                    html += '      <a href="' + bkgCetakUrl + '" target="_blank" class="btn btn-xs btn-outline-warning font-w700" style="border-radius: 6px; padding: 5px 12px; font-size: 11.5px; background: #ffffff; color: #92400e; border-color: #fde68a;"><i class="fa-solid fa-print mr-1"></i> Cetak Bukti</a>';
+                                    html += '    </div>';
+                                    html += '  </div>';
+                                }
                                 html += '</div>';
                             }
 

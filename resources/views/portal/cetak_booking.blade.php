@@ -512,8 +512,8 @@
                 <tr>
                     <td style="font-weight: bold;">Status Pelaksanaan</td>
                     <td style="font-weight: bold;">: {{ $booking->status === 'selesai' ? 'SELESAI DILAKSANAKAN' : 'TERKONFIRMASI / SIAP HADIR' }}</td>
-                    <td style="font-weight: bold;">Catatan Petugas</td>
-                    <td>: {{ $booking->catatan_petugas ?: '-' }}</td>
+                    <td style="font-weight: bold;">Catatan Persetujuan Petugas</td>
+                    <td>: {{ $booking->catatan_petugas ?: 'Jadwal sesi terapi telah disetujui & dikonfirmasi oleh petugas.' }}</td>
                 </tr>
             </tbody>
         </table>

@@ -521,8 +521,8 @@
                 <tr>
                     <td style="font-weight: bold;">Jadwal Sesi I Disetujui</td>
                     <td style="font-weight: bold;">: {{ $pendaftaran->tgl_sesi_disetujui ? $safeFormatDate($pendaftaran->tgl_sesi_disetujui) : $safeFormatDate($pendaftaran->tgl_rencana_kunjungan) }} ({{ $pendaftaran->jam_sesi_disetujui ?: $pendaftaran->jam_rencana_kunjungan }})</td>
-                    <td style="font-weight: bold;">Catatan Verifikator</td>
-                    <td>: {{ $pendaftaran->catatan_petugas ?: '-' }}</td>
+                    <td style="font-weight: bold;">Catatan Persetujuan Petugas</td>
+                    <td>: {{ $pendaftaran->catatan_petugas ?: 'Pendaftaran disetujui. Terapis dan jadwal sesi terapi pertama telah ditetapkan.' }}</td>
                 </tr>
             </tbody>
         </table>
