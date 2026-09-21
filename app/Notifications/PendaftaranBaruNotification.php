@@ -44,8 +44,8 @@ class PendaftaranBaruNotification extends Notification
     public function toArray($notifiable)
     {
         $createdAt = ($this->pendaftaran && $this->pendaftaran->created_at)
-            ? (is_string($this->pendaftaran->created_at) ? $this->pendaftaran->created_at : $this->pendaftaran->created_at->format('Y-m-d H:i:s'))
-            : now()->format('Y-m-d H:i:s');
+            ? (is_string($this->pendaftaran->created_at) ? \Carbon\Carbon::parse($this->pendaftaran->created_at)->timezone('Asia/Jakarta')->format('Y-m-d H:i:s') : $this->pendaftaran->created_at->timezone('Asia/Jakarta')->format('Y-m-d H:i:s'))
+            : now('Asia/Jakarta')->format('Y-m-d H:i:s');
 
         return [
             'id_pendaftaran' => $this->pendaftaran ? $this->pendaftaran->id : null,

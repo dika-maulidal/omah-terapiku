@@ -584,8 +584,8 @@ class RekamController extends Controller
         $unread = $user->unreadNotifications;
         $items = $unread->take(20)->map(function ($notif) {
             $createdAt = isset($notif->data['created_at']) 
-                ? (is_string($notif->data['created_at']) ? Carbon::parse($notif->data['created_at'])->format('d/m/Y H:i') : $notif->data['created_at'])
-                : $notif->created_at->format('d/m/Y H:i');
+                ? (is_string($notif->data['created_at']) ? Carbon::parse($notif->data['created_at'])->timezone('Asia/Jakarta')->format('d/m/Y H:i') : $notif->data['created_at'])
+                : $notif->created_at->timezone('Asia/Jakarta')->format('d/m/Y H:i');
 
             $data = $notif->data;
             $tipe = $data['tipe'] ?? 'info';

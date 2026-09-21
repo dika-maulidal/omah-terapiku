@@ -359,8 +359,11 @@
                         </div>
                     </div>
 
-                    <div class="p-2.5 rounded mb-3" style="background: #f8fafc; border: 1px solid #e2e8f0; font-size: 12px; color: #475569; line-height: 1.5; border-radius: 8px;">
-                        <i class="fa-solid fa-circle-info mr-1 text-primary"></i> <strong>Sistem otomatis:</strong> Menerbitkan <strong>No. RM resmi</strong> ke master data & membuat <strong>Sesi Rekam Medis Pertama</strong> pada terapis terpilih.
+                    <div class="mb-3" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 16px; font-size: 12.5px; color: #475569; line-height: 1.55; border-radius: 10px; display: flex; align-items: flex-start; gap: 10px;">
+                        <i class="fa-solid fa-circle-info text-primary mt-1" style="font-size: 14px; flex-shrink: 0;"></i>
+                        <div>
+                            <strong style="color: #1e293b;">Sistem otomatis:</strong> Menerbitkan <strong style="color: #1e40af;">No. RM resmi</strong> ke master data &amp; membuat <strong style="color: #1e40af;">Sesi Rekam Medis Pertama</strong> pada terapis terpilih.
+                        </div>
                     </div>
 
                     <!-- Pilih Terapis (Filtered by UPT) -->

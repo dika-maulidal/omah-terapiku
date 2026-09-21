@@ -44,8 +44,8 @@ class RekamUpdateNotification extends Notification
     {
         $pasien = $this->rekams ? $this->rekams->pasien : null;
         $createdAt = ($this->rekams && $this->rekams->created_at)
-            ? (is_string($this->rekams->created_at) ? $this->rekams->created_at : $this->rekams->created_at->format('Y-m-d H:i:s'))
-            : now()->format('Y-m-d H:i:s');
+            ? (is_string($this->rekams->created_at) ? \Carbon\Carbon::parse($this->rekams->created_at)->timezone('Asia/Jakarta')->format('Y-m-d H:i:s') : $this->rekams->created_at->timezone('Asia/Jakarta')->format('Y-m-d H:i:s'))
+            : now('Asia/Jakarta')->format('Y-m-d H:i:s');
 
         return [
             'id_rekam' => $this->rekams ? $this->rekams->id : null,

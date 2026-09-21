@@ -46,8 +46,8 @@ class BookingBaruNotification extends Notification
     {
         $pasien = $this->booking ? $this->booking->pasien : null;
         $createdAt = ($this->booking && $this->booking->created_at)
-            ? (is_string($this->booking->created_at) ? $this->booking->created_at : $this->booking->created_at->format('Y-m-d H:i:s'))
-            : now()->format('Y-m-d H:i:s');
+            ? (is_string($this->booking->created_at) ? \Carbon\Carbon::parse($this->booking->created_at)->timezone('Asia/Jakarta')->format('Y-m-d H:i:s') : $this->booking->created_at->timezone('Asia/Jakarta')->format('Y-m-d H:i:s'))
+            : now('Asia/Jakarta')->format('Y-m-d H:i:s');
 
         return [
             'id_booking' => $this->booking ? $this->booking->id : null,

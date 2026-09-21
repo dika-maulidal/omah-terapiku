@@ -45,8 +45,8 @@
                                             $sesi = $data['sesi_waktu'] ?? '';
                                             $msg = $data['message'] ?? 'Ada notifikasi aktivitas baru.';
                                             $createdAt = isset($data['created_at']) 
-                                                ? (\Carbon\Carbon::parse($data['created_at'])->format('d/m/Y H:i'))
-                                                : $notif->created_at->format('d/m/Y H:i');
+                                                ? (\Carbon\Carbon::parse($data['created_at'])->timezone('Asia/Jakarta')->format('d/m/Y H:i'))
+                                                : $notif->created_at->timezone('Asia/Jakarta')->format('d/m/Y H:i');
 
                                             // Styling icon & badge berdasarkan tipe
                                             if ($tipe === 'pendaftaran_baru') {
