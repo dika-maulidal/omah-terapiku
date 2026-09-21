@@ -1,724 +1,728 @@
 <!-- =========================================================================
      AI ASISTEN KLINIS & TERAPI (OMAH TERAPI-KU x GOOGLE GEMINI)
-     Standar Desain & Nuansa Warna Sesuai DESIGN.md (Royal Blue & Ocean Navy)
+     Floating Chatbot Widget — Flat Solid Colors (No Gradients) & Clean Medical Theme
      ========================================================================= -->
 <style>
 /* -------------------------------------------------------------------------
-   Backdrop & Drawer Container (Theme: Royal Blue & Ocean Navy)
+   Floating Action Trigger Button (Bottom Right)
+   Theme: Solid Ocean Navy (#1e40af) & Royal Blue (#2563eb)
    ------------------------------------------------------------------------- */
-.ai-assistant-backdrop {
+.ai-floating-launcher {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(15, 23, 42, 0.6);
-    z-index: 1050;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-}
-.ai-assistant-backdrop.show {
-    display: block;
-    opacity: 1;
-}
-
-.ai-assistant-drawer {
-    position: fixed;
-    top: 0;
-    right: -490px;
-    width: 470px;
-    max-width: 95vw;
-    height: 100vh;
-    background: #ffffff;
-    z-index: 1060;
-    box-shadow: -8px 0 32px rgba(45, 75, 122, 0.18);
+    bottom: 24px;
+    right: 24px;
+    z-index: 1040;
     display: flex;
-    flex-direction: column;
-    transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none !important;
+    outline: none;
+    background: transparent;
+    border: none;
+    padding: 0;
     font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif !important;
-    border-left: 1px solid #E2E8F0;
-}
-.ai-assistant-drawer.open {
-    right: 0;
 }
 
-/* -------------------------------------------------------------------------
-   Header (Soft Blue Light - Clean & Elegant as per DESIGN.md)
-   ------------------------------------------------------------------------- */
-.ai-drawer-header {
-    background: #edf3fc;
-    color: #1e293b;
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(45, 75, 122, 0.05);
-    border-bottom: 1px solid #cbd5e1;
-}
-.ai-header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.ai-avatar-wrap {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    background: #dbeafe;
-    border: 1.5px solid #bfdbfe;
-    border-radius: 10px;
+.ai-launcher-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #1e40af;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.45);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 19px;
-    color: #2563eb;
-    box-shadow: 0 1px 4px rgba(37, 99, 235, 0.1);
+    font-size: 22px;
+    box-shadow: 0 8px 24px rgba(30, 64, 175, 0.38), 0 2px 6px rgba(45, 75, 122, 0.1);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    cursor: pointer;
 }
-.ai-status-dot {
+
+.ai-launcher-btn:hover {
+    transform: scale(1.08) translateY(-2px);
+    background: #1e3a8a;
+    box-shadow: 0 12px 30px rgba(30, 64, 175, 0.5), 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.ai-launcher-btn:active {
+    transform: scale(0.95);
+}
+
+.ai-launcher-pulse {
     position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 11px;
-    height: 11px;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    border: 2px solid #2563eb;
+    opacity: 0.65;
+    animation: aiPulseNavy 2.4s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+    pointer-events: none;
+}
+
+@keyframes aiPulseNavy {
+    0% { transform: scale(0.95); opacity: 0.85; }
+    50% { transform: scale(1.22); opacity: 0; }
+    100% { transform: scale(1.25); opacity: 0; }
+}
+
+.ai-launcher-badge {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 14px;
+    height: 14px;
+    background: #10b981;
+    border: 2.5px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ai-launcher-label {
+    background: #ffffff;
+    color: #1e40af;
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(45, 75, 122, 0.12), 0 0 0 1px #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+    letter-spacing: 0.1px;
+}
+
+.ai-floating-launcher:hover .ai-launcher-label {
+    color: #2563eb;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2);
+}
+
+/* -------------------------------------------------------------------------
+   Floating Chat Window Widget (Card Popup — Solid Theme)
+   ------------------------------------------------------------------------- */
+.ai-floating-widget {
+    position: fixed;
+    bottom: 92px;
+    right: 24px;
+    width: 395px;
+    max-width: calc(100vw - 32px);
+    height: 595px;
+    max-height: calc(100vh - 110px);
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 16px 48px rgba(45, 75, 122, 0.18), 0 4px 16px rgba(45, 75, 122, 0.08), 0 0 0 1px #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1050;
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif !important;
+    transform-origin: bottom right;
+    transform: scale(0.92) translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+.ai-floating-widget.active {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* -------------------------------------------------------------------------
+   Header (Solid Ocean Navy — #1e40af)
+   ------------------------------------------------------------------------- */
+.ai-widget-header {
+    background: #1e40af;
+    color: #ffffff;
+    padding: 13px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.2);
+    flex-shrink: 0;
+    border-bottom: 1px solid #1e3a8a;
+}
+
+.ai-head-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ai-head-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-size: 19px;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+.ai-head-avatar .ai-head-status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
     background: #10b981;
     border: 2px solid #ffffff;
     border-radius: 50%;
 }
-.ai-header-title h5 {
-    color: #1e40af !important;
+
+.ai-head-info h5 {
     font-size: 15px;
     font-weight: 700;
+    color: #ffffff !important;
     margin: 0;
-    line-height: 1.25;
-    letter-spacing: 0.2px;
+    line-height: 1.2;
+    letter-spacing: 0.1px;
 }
-.ai-header-title span {
-    font-size: 11.5px;
-    color: #64748b;
+
+.ai-head-info span {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.88);
     font-weight: 500;
     display: block;
     margin-top: 1px;
 }
-.ai-header-actions {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.ai-header-btn {
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    color: #475569;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 13px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-}
-.ai-header-btn:hover {
-    background: #e2e8f0;
-    color: #1e293b;
-    border-color: #94a3b8;
-    transform: scale(1.05);
-}
 
-/* -------------------------------------------------------------------------
-   Chat Body & Ambient Surface
-   ------------------------------------------------------------------------- */
-.ai-drawer-body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
-    background: #F1F5F9;
-    background-image: radial-gradient(circle at 95% 5%, rgba(56, 165, 219, 0.05) 0%, transparent 45%),
-                      radial-gradient(circle at 5% 90%, rgba(45, 75, 122, 0.04) 0%, transparent 45%);
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    scroll-behavior: smooth;
-}
-
-/* -------------------------------------------------------------------------
-   Welcome Card & Quick Prompt Chips (DESIGN.md Aligned)
-   ------------------------------------------------------------------------- */
-.ai-welcome-box {
-    background: #ffffff;
-    border: 1px solid #E2E8F0;
-    border-top: 3.5px solid #2563eb;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 4px 18px rgba(45, 75, 122, 0.05);
-}
-.ai-welcome-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #1e40af;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-.ai-welcome-desc {
-    font-size: 12.5px;
-    color: #475569;
-    line-height: 1.5;
-    margin-bottom: 12px;
-}
-.ai-pill-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 9px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-right: 4px;
-    margin-bottom: 5px;
-    transition: transform 0.15s ease;
-}
-.ai-pill-badge.fisio { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-.ai-pill-badge.okupasi { background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; }
-.ai-pill-badge.wicara { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
-.ai-pill-badge.sensori { background: #fefce8; color: #a16207; border: 1px solid #fef08a; }
-.ai-pill-badge.home { background: #f0fdfa; color: #0f766e; border: 1px solid #99f6e4; }
-
-.ai-quick-prompts-title {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #64748b;
-    margin-top: 6px;
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
+.ai-head-actions {
     display: flex;
     align-items: center;
     gap: 5px;
 }
-.ai-prompt-chip {
+
+.ai-head-btn {
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
     display: flex;
     align-items: center;
-    width: 100%;
-    text-align: left;
-    background: #ffffff;
-    border: 1px solid #E2E8F0;
-    color: #1e293b;
-    padding: 8.5px 12px;
-    border-radius: 9px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 6px;
+    justify-content: center;
     cursor: pointer;
-    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    line-height: 1.35;
-    box-shadow: 0 1px 3px rgba(45, 75, 122, 0.03);
+    font-size: 12px;
+    transition: all 0.2s ease;
+    padding: 0;
 }
-.ai-prompt-chip i {
-    flex-shrink: 0;
-    font-size: 13px;
+
+.ai-head-btn:hover {
+    background: rgba(255, 255, 255, 0.32);
+    color: #ffffff;
+    transform: scale(1.06);
 }
-.ai-prompt-chip:hover {
-    background: #eff6ff;
-    border-color: #2563eb;
-    color: #1e40af;
-    transform: translateX(4px);
-    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.12);
+
+.ai-head-btn.btn-close-widget {
+    font-size: 15px;
 }
 
 /* -------------------------------------------------------------------------
-   Chat Messages & Bubbles
+   Chat Body (Solid Clean Surface)
    ------------------------------------------------------------------------- */
-.ai-chat-item {
+.ai-widget-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 15px;
+    background: #f8fafc;
     display: flex;
-    gap: 9px;
-    max-width: 92%;
-    animation: fadeInBubble 0.25s ease forwards;
+    flex-direction: column;
+    gap: 11px;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
 }
-@keyframes fadeInBubble {
+
+.ai-widget-body::-webkit-scrollbar {
+    width: 5px;
+}
+.ai-widget-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+/* Date / Time Timestamp Header (Centered) */
+.ai-timestamp-divider {
+    text-align: center;
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+    margin: 2px 0 6px 0;
+    user-select: none;
+}
+
+/* Assistant Message Bubble */
+.ai-msg-group {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    animation: aiFadeIn 0.25s ease forwards;
+}
+
+@keyframes aiFadeIn {
     from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.ai-chat-item.user {
-    align-self: flex-end;
-    flex-direction: row-reverse;
-}
-.ai-chat-item.assistant {
-    align-self: flex-start;
-}
-
-.ai-chat-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 9px;
+.ai-msg-mini-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13.5px;
     flex-shrink: 0;
-}
-.ai-chat-item.assistant .ai-chat-avatar {
-    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
-    color: #ffffff;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
-}
-.ai-chat-item.user .ai-chat-avatar {
-    background: #e2e8f0;
-    color: #1e40af;
+    margin-top: 2px;
+    box-shadow: 0 2px 5px rgba(37, 99, 235, 0.25);
 }
 
-.ai-chat-content {
-    padding: 11px 14px;
+.ai-msg-bubble-assistant {
+    background: #ffffff;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
+    padding: 11px 13px;
     font-size: 12.5px;
     line-height: 1.55;
+    box-shadow: 0 1px 3px rgba(45, 75, 122, 0.04);
+    max-width: 90%;
     word-break: break-word;
     position: relative;
 }
-.ai-chat-item.user .ai-chat-content {
-    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
-    color: #ffffff;
-    border-bottom-right-radius: 2px;
-    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.2);
-    font-weight: 500;
+
+.ai-msg-bubble-assistant strong {
+    color: #1e40af;
+    font-weight: 700;
 }
-.ai-chat-item.assistant .ai-chat-content {
+
+/* Suggestion Chips Container (Solid Royal Blue Rounded Pills) */
+.ai-quick-chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6.5px;
+    margin: 4px 0 4px 0;
+    animation: aiFadeIn 0.3s ease forwards;
+}
+
+.ai-quick-pill {
+    background: #2563eb;
+    color: #ffffff;
+    border: 1px solid #1d4ed8;
+    border-radius: 20px;
+    padding: 6.5px 12.5px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-align: left;
+    line-height: 1.3;
+}
+
+.ai-quick-pill:hover {
+    background: #1d4ed8;
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.32);
+    color: #ffffff;
+}
+
+.ai-quick-pill:active {
+    transform: scale(0.97);
+}
+
+/* User Message Bubble (Solid Royal Blue) */
+.ai-msg-group.user {
+    justify-content: flex-end;
+}
+
+.ai-msg-bubble-user {
+    background: #2563eb;
+    color: #ffffff;
+    border-radius: 14px;
+    border-bottom-right-radius: 3px;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    font-weight: 500;
+    line-height: 1.5;
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
+    max-width: 85%;
+    word-break: break-word;
+}
+
+/* Dynamic Assistant Output with Markdown */
+.ai-msg-bubble-dynamic {
     background: #ffffff;
     color: #1e293b;
-    border: 1px solid #E2E8F0;
+    border: 1px solid #e2e8f0;
     border-left: 3.5px solid #2563eb;
-    border-bottom-left-radius: 2px;
-    box-shadow: 0 3px 12px rgba(45, 75, 122, 0.05);
+    border-radius: 12px;
+    border-bottom-left-radius: 3px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    max-width: 90%;
+    word-break: break-word;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(45, 75, 122, 0.05);
 }
 
-/* Markdown Rendering inside Assistant Chat */
-.ai-rendered-markdown h1, 
-.ai-rendered-markdown h2, 
-.ai-rendered-markdown h3, 
-.ai-rendered-markdown h4 {
-    font-size: 13px;
-    font-weight: 700;
-    margin-top: 10px;
-    margin-bottom: 4px;
-    color: #1e40af;
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 3px;
-}
-.ai-rendered-markdown h1:first-child,
-.ai-rendered-markdown h2:first-child,
-.ai-rendered-markdown h3:first-child {
-    margin-top: 0;
-}
-.ai-rendered-markdown p {
-    margin-bottom: 6px;
-    color: #334155;
-}
-.ai-rendered-markdown p:last-child {
-    margin-bottom: 0;
-}
-.ai-rendered-markdown ul, 
-.ai-rendered-markdown ol {
-    margin-left: 18px;
-    margin-bottom: 6px;
-    padding-left: 0;
-}
-.ai-rendered-markdown li {
-    margin-bottom: 3.5px;
-    color: #334155;
-}
-.ai-rendered-markdown strong {
-    color: #0f172a;
-    font-weight: 700;
-}
-.ai-rendered-markdown hr {
-    margin: 8px 0;
-    border: 0;
-    border-top: 1px solid #e2e8f0;
-}
-.ai-rendered-markdown blockquote {
-    border-left: 3px solid #2563eb;
-    background: #eff6ff;
-    padding: 6px 10px;
-    border-radius: 0 6px 6px 0;
-    margin: 6px 0;
-    color: #1e40af;
-    font-size: 12px;
-}
-
-/* Copy Action Button */
-.ai-btn-copy {
+.ai-btn-copy-bubble {
     position: absolute;
     top: 6px;
     right: 6px;
-    background: #f8fafc;
-    border: 1px solid #E2E8F0;
-    color: #1e40af;
-    border-radius: 6px;
-    padding: 2px 7px;
-    font-size: 10.5px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    border-radius: 5px;
+    padding: 2px 6px;
+    font-size: 10px;
     font-weight: 600;
     cursor: pointer;
     opacity: 0;
-    transition: all 0.2s ease;
-}
-.ai-chat-item.assistant:hover .ai-btn-copy {
-    opacity: 1;
-}
-.ai-btn-copy:hover {
-    background: #eff6ff;
-    border-color: #bfdbfe;
-    color: #1d4ed8;
+    transition: opacity 0.2s ease;
 }
 
-/* -------------------------------------------------------------------------
-   Typing Indicator Animation
-   ------------------------------------------------------------------------- */
-.ai-typing-indicator {
-    display: none;
-    align-self: flex-start;
-    gap: 9px;
+.ai-msg-bubble-dynamic:hover .ai-btn-copy-bubble {
+    opacity: 1;
 }
-.ai-typing-indicator.active {
+
+.ai-btn-copy-bubble:hover {
+    background: #dbeafe;
+    border-color: #93c5fd;
+}
+
+/* Markdown Rendering inside Bubble */
+.ai-markdown-content h1,
+.ai-markdown-content h2,
+.ai-markdown-content h3,
+.ai-markdown-content h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e40af;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 2px;
+}
+.ai-markdown-content h1:first-child,
+.ai-markdown-content h2:first-child,
+.ai-markdown-content h3:first-child {
+    margin-top: 0;
+}
+.ai-markdown-content p {
+    margin-bottom: 6px;
+    color: #334155;
+}
+.ai-markdown-content p:last-child {
+    margin-bottom: 0;
+}
+.ai-markdown-content ul,
+.ai-markdown-content ol {
+    margin-left: 16px;
+    margin-bottom: 6px;
+    padding-left: 0;
+}
+.ai-markdown-content li {
+    margin-bottom: 3px;
+    color: #334155;
+}
+.ai-markdown-content strong {
+    color: #0f172a;
+    font-weight: 700;
+}
+.ai-markdown-content blockquote {
+    border-left: 3px solid #2563eb;
+    background: #eff6ff;
+    padding: 5px 9px;
+    border-radius: 0 5px 5px 0;
+    margin: 6px 0;
+    color: #1e40af;
+    font-size: 11.5px;
+}
+
+/* Typing Indicator Animation */
+.ai-typing-wrap {
+    display: none;
+    gap: 8px;
+    align-items: flex-start;
+}
+.ai-typing-wrap.active {
     display: flex;
 }
-.ai-typing-bubble {
-    background: #ffffff;
-    border: 1px solid #E2E8F0;
-    border-left: 3.5px solid #2563eb;
-    padding: 10px 14px;
+.ai-typing-box {
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
     border-radius: 12px;
-    border-bottom-left-radius: 2px;
+    padding: 9px 12px;
     display: flex;
     align-items: center;
-    gap: 5px;
-    box-shadow: 0 2px 8px rgba(45, 75, 122, 0.04);
+    gap: 4.5px;
 }
 .ai-typing-dot {
-    width: 6.5px;
-    height: 6.5px;
+    width: 6px;
+    height: 6px;
     background: #2563eb;
     border-radius: 50%;
-    animation: typingBounce 1.4s infinite ease-in-out both;
+    animation: aiBounceNavy 1.4s infinite ease-in-out both;
 }
 .ai-typing-dot:nth-child(1) { animation-delay: -0.32s; }
 .ai-typing-dot:nth-child(2) { animation-delay: -0.16s; }
-@keyframes typingBounce {
+@keyframes aiBounceNavy {
     0%, 80%, 100% { transform: scale(0); opacity: 0.35; }
     40% { transform: scale(1); opacity: 1; }
 }
 
 /* -------------------------------------------------------------------------
-   Footer & Prompt Input Area (Modern Clean Card Style)
+   Footer & Input Box (Solid Clean Borders)
    ------------------------------------------------------------------------- */
-.ai-drawer-footer {
-    padding: 12px 16px 14px 16px;
+.ai-widget-footer {
+    padding: 10px 14px 12px 14px;
     background: #ffffff;
-    border-top: 1px solid #E2E8F0;
-    box-shadow: 0 -2px 12px rgba(15, 23, 42, 0.04);
+    border-top: 1px solid #e2e8f0;
+    flex-shrink: 0;
+    box-shadow: 0 -2px 10px rgba(45, 75, 122, 0.03);
 }
 
-.ai-prompt-card {
+.ai-input-container {
+    border: 1.5px solid #2563eb;
+    border-radius: 12px;
+    padding: 7px 12px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 8px;
     background: #ffffff;
-    border: 1.5px solid #cbd5e1;
-    border-radius: 14px;
-    padding: 10px 12px 8px 12px;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);
+    transition: all 0.2s ease;
 }
 
-.ai-prompt-card:focus-within {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.12), 0 2px 8px rgba(37, 99, 235, 0.06);
-    background: #ffffff;
+.ai-input-container:focus-within {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+    border-color: #1e40af;
 }
 
-.ai-prompt-textarea {
-    width: 100%;
+.ai-input-field {
     border: none;
+    outline: none;
+    width: 100%;
+    font-size: 12.5px;
+    color: #1e293b;
     background: transparent;
     resize: none;
-    outline: none;
-    font-size: 13px;
-    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif !important;
-    line-height: 1.5;
-    min-height: 38px;
-    max-height: 120px;
-    color: #1e293b;
-    padding: 0;
-    margin-bottom: 6px;
+    min-height: 22px;
+    max-height: 80px;
+    font-family: inherit;
+    line-height: 1.4;
+    padding: 2px 0;
     scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 transparent;
 }
 
-.ai-prompt-textarea::-webkit-scrollbar {
-    width: 4px;
-}
-
-.ai-prompt-textarea::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
-}
-
-.ai-prompt-textarea::placeholder {
+.ai-input-field::placeholder {
     color: #94a3b8;
     font-size: 12.5px;
 }
 
-.ai-prompt-action-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding-top: 4px;
-    border-top: 1px solid #f1f5f9;
-}
-
-.ai-prompt-hints {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    color: #94a3b8;
-    user-select: none;
-}
-
-.ai-key-hint,
-.ai-key-hint-sub {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-}
-
-.ai-key-hint kbd,
-.ai-key-hint-sub kbd {
-    background: #f1f5f9;
-    border: 1px solid #cbd5e1;
-    border-radius: 4px;
-    padding: 1px 4px;
-    font-size: 9.5px;
-    font-family: inherit;
-    font-weight: 600;
-    color: #475569;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
-}
-
-.ai-btn-submit {
-    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
-    color: #ffffff;
+.ai-input-send-btn {
+    background: none;
     border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
+    color: #2563eb;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.18s ease;
+    transition: all 0.2s ease;
     flex-shrink: 0;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.28);
-    font-size: 12.5px;
 }
 
-.ai-btn-submit:hover:not(:disabled) {
-    transform: scale(1.08);
-    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.38);
+.ai-input-send-btn:hover:not(:disabled) {
+    color: #1e40af;
+    transform: scale(1.15);
 }
 
-.ai-btn-submit:disabled {
-    opacity: 0.45;
+.ai-input-send-btn:disabled {
+    color: #cbd5e1;
     cursor: not-allowed;
     transform: none;
 }
 
-.ai-footer-disclaimer {
-    font-size: 11px;
+.ai-widget-disclaimer {
+    font-size: 9.5px;
     color: #64748b;
     text-align: center;
-    margin-top: 8px;
+    margin-top: 6px;
     margin-bottom: 0;
     line-height: 1.35;
+    user-select: none;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
 }
 
-@media (max-width: 576px) {
-    .ai-prompt-hints .ai-key-hint-sub {
-        display: none !important;
-    }
-    .ai-drawer-footer {
-        padding: 10px 12px 12px 12px;
-    }
-}
-
 /* -------------------------------------------------------------------------
-   Navbar Button "Tanya AI" (DESIGN.md Primary Palette)
+   Mobile Responsiveness
    ------------------------------------------------------------------------- */
-.btn-tanya-ai {
-    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%) !important;
-    color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.28) !important;
-    border-radius: 24px !important;
-    padding: 7px 15px !important;
-    font-size: 12.5px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.2px !important;
-    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25) !important;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    cursor: pointer;
-    text-decoration: none !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 7px !important;
-    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif !important;
-}
-.btn-tanya-ai:hover {
-    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%) !important;
-    transform: translateY(-1.5px) !important;
-    box-shadow: 0 5px 14px rgba(37, 99, 235, 0.38) !important;
-    color: #ffffff !important;
-}
-.ai-agent-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #38bdf8;
-    font-size: 14px;
-    filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.6));
-    animation: robotGlow 2.8s infinite ease-in-out;
-}
-@keyframes robotGlow {
-    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.5)); }
-    50% { transform: scale(1.14); filter: drop-shadow(0 0 7px rgba(56, 189, 248, 0.9)); color: #7dd3fc; }
-}
-@media (max-width: 767.98px) {
-    .ai-btn-text,
-    .ai-btn-badge {
+@media (max-width: 576px) {
+    .ai-floating-launcher {
+        bottom: 16px;
+        right: 16px;
+    }
+    .ai-launcher-label {
         display: none !important;
     }
-    .btn-tanya-ai {
-        width: 38px !important;
-        height: 38px !important;
-        min-width: 38px !important;
-        padding: 0 !important;
-        border-radius: 50% !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 0 !important;
-    }
-    .btn-tanya-ai .ai-agent-icon {
-        font-size: 16px !important;
-        margin: 0 !important;
+    .ai-floating-widget {
+        bottom: 12px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+        height: calc(100vh - 24px);
+        max-height: calc(100vh - 24px);
+        border-radius: 16px;
     }
 }
 </style>
 
-<!-- Backdrop Overlay -->
-<div class="ai-assistant-backdrop" id="aiAssistantBackdrop"></div>
+<!-- Floating Trigger Button (Bottom Right) -->
+<div class="ai-floating-launcher" id="aiFloatingLauncher" title="Tanya AI Asisten Terapi &amp; Klinis">
+    <div class="ai-launcher-label d-none d-md-flex">
+        <i class="fa-solid fa-sparkles text-warning mr-1"></i>
+        <span>Tanya AI</span>
+    </div>
+    <button type="button" class="ai-launcher-btn" id="btnToggleAiWidget" aria-label="Buka Chat AI">
+        <div class="ai-launcher-pulse"></div>
+        <i class="fa-solid fa-robot" id="aiLauncherIcon"></i>
+        <div class="ai-launcher-badge"></div>
+    </button>
+</div>
 
-<!-- Slide-Over Drawer Container -->
-<div class="ai-assistant-drawer" id="aiAssistantDrawer">
+<!-- Floating Chat Window (Popup Box) -->
+<div class="ai-floating-widget" id="aiFloatingWidget">
     
-    <!-- Drawer Header -->
-    <div class="ai-drawer-header">
-        <div class="ai-header-left">
-            <div class="ai-avatar-wrap">
-                <i class="fa-solid fa-robot"></i>
-                <div class="ai-status-dot" title="AI Asisten Aktif"></div>
+    <!-- Widget Header -->
+    <div class="ai-widget-header">
+        <div class="ai-head-left">
+            <div class="ai-head-avatar">
+                <i class="fa-solid fa-wand-magic-sparkles" style="color: #38bdf8;"></i>
+                <div class="ai-head-status" title="AI Online"></div>
             </div>
-            <div class="ai-header-title">
-                <h5>AI Asisten Terapi & Klinis</h5>
-                <span>Omah Terapi-KU &bull; Konsultan Medis</span>
+            <div class="ai-head-info">
+                <h5>AI Asisten Klinis</h5>
+                <span>Omah Terapi-KU &bull; AI Chat Assistant</span>
             </div>
         </div>
-        <div class="ai-header-actions">
-            <button type="button" class="ai-header-btn" id="btnClearAiChat" title="Mulai Obrolan Baru">
+        <div class="ai-head-actions">
+            <button type="button" class="ai-head-btn" id="btnClearAiChat" title="Mulai Obrolan Baru">
                 <i class="fa-solid fa-rotate-right"></i>
             </button>
-            <button type="button" class="ai-header-btn" id="btnCloseAiDrawer" title="Tutup">
+            <button type="button" class="ai-head-btn btn-close-widget" id="btnCloseAiWidget" title="Tutup">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
     </div>
 
-    <!-- Drawer Chat Body -->
-    <div class="ai-drawer-body" id="aiChatBody">
+    <!-- Widget Body -->
+    <div class="ai-widget-body" id="aiChatBody">
         
-        <!-- Welcome Card -->
-        <div class="ai-welcome-box" id="aiWelcomeBox">
-            <div class="ai-welcome-title">
-                Halo, Rekan Terapis & Medis!
-            </div>
-            <div class="ai-welcome-desc">
-                Saya adalah asisten klinis cerdas khusus <strong>Omah Terapi-KU</strong>. Saya siap membantu Anda merumuskan rekomendasi intervensi terapi, diagnosa fungsional, dan penyusunan program latihan rumahan.
-            </div>
+        <!-- Timestamp Divider -->
+        <div class="ai-timestamp-divider" id="aiTimeStamp">
+            Hari ini, {{ date('H:i') }} WIB
+        </div>
 
-            <div class="ai-quick-prompts-title">
-                Rekomendasi Pertanyaan Cepat:
+        <!-- Initial Welcome Messages (Avatar + Bubble) -->
+        <div class="ai-msg-group assistant" id="aiWelcomeBubble1">
+            <div class="ai-msg-mini-avatar">
+                <i class="fa-solid fa-robot"></i>
             </div>
-            <button type="button" class="ai-prompt-chip" data-prompt="Berikan rekomendasi rencana intervensi fisioterapi untuk anak Cerebral Palsy spastik diplegia usia 4 tahun">
-                Rencana fisioterapi anak CP spastik diplegia 4 tahun
+            <div class="ai-msg-bubble-assistant">
+                Halo! Saya <strong>AI Asisten</strong> dari Omah Terapi-KU Dinas Sosial Provinsi Jawa Timur. Saya siap membantu Anda menganalisa kasus klinis, rekomendasi intervensi fisioterapi, terapi okupasi, wicara, sensori integrasi, hingga penyusunan Home Program untuk anak disabilitas.
+            </div>
+        </div>
+
+        <div class="ai-msg-group assistant" id="aiWelcomeBubble2">
+            <div class="ai-msg-mini-avatar">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+            <div class="ai-msg-bubble-assistant">
+                Silakan pilih topik rekomendasi cepat di bawah ini atau ketik langsung pertanyaan klinis Anda:
+            </div>
+        </div>
+
+        <!-- Suggestion Chips (Solid Royal Blue Pills) -->
+        <div class="ai-quick-chips-wrap" id="aiQuickChipsWrap">
+            <button type="button" class="ai-quick-pill" data-prompt="Berikan rekomendasi rencana intervensi fisioterapi untuk anak Cerebral Palsy spastik diplegia usia 4 tahun">
+                <i class="fa-solid fa-person-walking mr-1"></i> Fisioterapi CP Spastik
             </button>
-            <button type="button" class="ai-prompt-chip" data-prompt="Apa saja tahapan dan ide stimulasi untuk anak Speech Delay (terlambat bicara) usia 3 tahun di klinik dan di rumah?">
-                Ide stimulasi Speech Delay usia 3 tahun
+            <button type="button" class="ai-quick-pill" data-prompt="Apa saja tahapan dan ide stimulasi untuk anak Speech Delay (terlambat bicara) usia 3 tahun di klinik dan di rumah?">
+                <i class="fa-solid fa-comments mr-1"></i> Stimulasi Speech Delay
             </button>
-            <button type="button" class="ai-prompt-chip" data-prompt="Berikan 3 ide modul program latihan rumahan (Home Program) untuk melatih kemandirian makan & memegang sendok anak disabilitas">
-                3 Ide Home Program melatih memegang sendok
+            <button type="button" class="ai-quick-pill" data-prompt="Berikan 3 ide modul program latihan rumahan (Home Program) untuk melatih kemandirian makan & memegang sendok anak disabilitas">
+                <i class="fa-solid fa-house-chimney-medical mr-1"></i> Ide Home Program ADL
             </button>
-            <button type="button" class="ai-prompt-chip" data-prompt="Bagaimana strategi sensori integrasi taktil & vestibular untuk anak ASD yang hiper-reaktif terhadap sentuhan?">
-                Strategi Sensori Integrasi untuk anak ASD
+            <button type="button" class="ai-quick-pill" data-prompt="Bagaimana strategi sensori integrasi taktil & vestibular untuk anak ASD yang hiper-reaktif terhadap sentuhan?">
+                <i class="fa-solid fa-brain mr-1"></i> Sensori Integrasi ASD
+            </button>
+            <button type="button" class="ai-quick-pill" data-prompt="Bagaimana cara menentukan diagnosa fungsional dan target SOAP terapi okupasi untuk anak GDD?">
+                <i class="fa-solid fa-file-medical mr-1"></i> Diagnosa Fungsional SOAP
             </button>
         </div>
 
-        <!-- Dynamic Chat Messages will be appended here -->
+        <!-- Dynamic Chat Content will be inserted here -->
 
         <!-- Typing Indicator -->
-        <div class="ai-typing-indicator" id="aiTypingIndicator">
-            <div class="ai-chat-avatar" style="background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%); color: #fff; width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 13.5px;">
+        <div class="ai-typing-wrap" id="aiTypingIndicator">
+            <div class="ai-msg-mini-avatar">
                 <i class="fa-solid fa-robot"></i>
             </div>
-            <div class="ai-typing-bubble">
+            <div class="ai-typing-box">
                 <div class="ai-typing-dot"></div>
                 <div class="ai-typing-dot"></div>
                 <div class="ai-typing-dot"></div>
-                <span class="text-muted ml-1" style="font-size: 11.5px; font-weight: 500;">Menganalisa kasus klinis...</span>
+                <span class="text-muted ml-1" style="font-size: 11px; font-weight: 600; color: #1e40af !important;">Menganalisis kasus klinis...</span>
             </div>
         </div>
 
     </div>
 
-    <!-- Drawer Footer Input -->
-    <div class="ai-drawer-footer">
+    <!-- Widget Footer Input Form -->
+    <div class="ai-widget-footer">
         <form id="aiChatForm" onsubmit="handleSendAiMessage(event)">
-            <div class="ai-prompt-card">
+            <div class="ai-input-container">
                 <textarea 
                     id="aiPromptInput" 
-                    class="ai-prompt-textarea" 
+                    class="ai-input-field" 
                     rows="1" 
-                    placeholder="Tanyakan rekomendasi terapi, SOAP, atau kasus klinis..."
+                    placeholder="Enter a message..." 
                     onkeydown="handleAiTextareaKey(event)"
                 ></textarea>
-                <div class="ai-prompt-action-bar">
-                    <div class="ai-prompt-hints">
-                        <span class="ai-key-hint"><kbd>Enter</kbd> kirim</span>
-                        <span class="ai-key-hint-sub"><kbd>Shift+Enter</kbd> baris baru</span>
-                    </div>
-                    <button type="submit" class="ai-btn-submit" id="btnSendAi" title="Kirim Pertanyaan">
-                        <i class="fa-solid fa-arrow-up"></i>
-                    </button>
-                </div>
+                <button type="submit" class="ai-input-send-btn" id="btnSendAi" title="Kirim Pesan">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
             </div>
-            <div class="ai-footer-disclaimer">
-                <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Khusus referensi klinis &amp; konsultasi terapi di Omah Terapi-KU Jawa Timur.
-            </div>
+            <p class="ai-widget-disclaimer">
+                <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Referensi klinis &amp; terapi Omah Terapi-KU Dinas Sosial Jatim &bull; Gemini AI
+            </p>
         </form>
     </div>
 
@@ -729,12 +733,26 @@
 var aiChatHistory = [];
 var isAiGenerating = false;
 
+function toggleAiAssistant() {
+    var widget = document.getElementById('aiFloatingWidget');
+    var icon = document.getElementById('aiLauncherIcon');
+    if (!widget) return;
+
+    if (widget.classList.contains('active')) {
+        closeAiAssistant();
+    } else {
+        openAiAssistant();
+    }
+}
+
 function openAiAssistant(initialPrompt = null) {
-    var drawer = document.getElementById('aiAssistantDrawer');
-    var backdrop = document.getElementById('aiAssistantBackdrop');
-    if (drawer && backdrop) {
-        backdrop.classList.add('show');
-        drawer.classList.add('open');
+    var widget = document.getElementById('aiFloatingWidget');
+    var icon = document.getElementById('aiLauncherIcon');
+    if (widget) {
+        widget.classList.add('active');
+        if (icon) {
+            icon.className = 'fa-solid fa-xmark';
+        }
         var input = document.getElementById('aiPromptInput');
         if (input) {
             setTimeout(function() {
@@ -743,17 +761,19 @@ function openAiAssistant(initialPrompt = null) {
                     input.value = initialPrompt;
                     handleSendAiMessage();
                 }
-            }, 300);
+            }, 250);
         }
     }
 }
 
 function closeAiAssistant() {
-    var drawer = document.getElementById('aiAssistantDrawer');
-    var backdrop = document.getElementById('aiAssistantBackdrop');
-    if (drawer && backdrop) {
-        drawer.classList.remove('open');
-        backdrop.classList.remove('show');
+    var widget = document.getElementById('aiFloatingWidget');
+    var icon = document.getElementById('aiLauncherIcon');
+    if (widget) {
+        widget.classList.remove('active');
+        if (icon) {
+            icon.className = 'fa-solid fa-robot';
+        }
     }
 }
 
@@ -761,13 +781,19 @@ function clearAiChat() {
     if (confirm('Mulai obrolan baru dan bersihkan riwayat chat saat ini?')) {
         aiChatHistory = [];
         var chatBody = document.getElementById('aiChatBody');
-        var welcomeBox = document.getElementById('aiWelcomeBox');
+        var timeStamp = document.getElementById('aiTimeStamp');
+        var b1 = document.getElementById('aiWelcomeBubble1');
+        var b2 = document.getElementById('aiWelcomeBubble2');
+        var chips = document.getElementById('aiQuickChipsWrap');
         var typing = document.getElementById('aiTypingIndicator');
-        
+
         chatBody.innerHTML = '';
-        if (welcomeBox) chatBody.appendChild(welcomeBox);
+        if (timeStamp) chatBody.appendChild(timeStamp);
+        if (b1) chatBody.appendChild(b1);
+        if (b2) chatBody.appendChild(b2);
+        if (chips) chatBody.appendChild(chips);
         if (typing) chatBody.appendChild(typing);
-        
+
         var input = document.getElementById('aiPromptInput');
         if (input) {
             input.value = '';
@@ -791,7 +817,6 @@ function renderFormattedMarkdown(text) {
             console.error(e);
         }
     }
-    // Fallback format sederhana jika marked belum termuat
     var escaped = text
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -806,14 +831,11 @@ function appendUserMessage(text) {
     var typing = document.getElementById('aiTypingIndicator');
     
     var div = document.createElement('div');
-    div.className = 'ai-chat-item user';
+    div.className = 'ai-msg-group user';
     
     var escapedText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
     
-    div.innerHTML = `
-        <div class="ai-chat-avatar"><i class="fa-solid fa-user"></i></div>
-        <div class="ai-chat-content">${escapedText}</div>
-    `;
+    div.innerHTML = `<div class="ai-msg-bubble-user">${escapedText}</div>`;
     
     if (typing) {
         chatBody.insertBefore(div, typing);
@@ -829,15 +851,15 @@ function appendAssistantMessage(rawText) {
     var typing = document.getElementById('aiTypingIndicator');
     
     var div = document.createElement('div');
-    div.className = 'ai-chat-item assistant';
+    div.className = 'ai-msg-group assistant';
     
     var formattedHtml = renderFormattedMarkdown(rawText);
     
     div.innerHTML = `
-        <div class="ai-chat-avatar"><i class="fa-solid fa-robot"></i></div>
-        <div class="ai-chat-content">
-            <button type="button" class="ai-btn-copy" onclick="copyAiText(this)" title="Salin Jawaban"><i class="fa-regular fa-copy mr-1"></i>Salin</button>
-            <div class="ai-rendered-markdown">${formattedHtml}</div>
+        <div class="ai-msg-mini-avatar"><i class="fa-solid fa-robot"></i></div>
+        <div class="ai-msg-bubble-dynamic">
+            <button type="button" class="ai-btn-copy-bubble" onclick="copyAiText(this)" title="Salin Jawaban"><i class="fa-regular fa-copy mr-1"></i>Salin</button>
+            <div class="ai-markdown-content">${formattedHtml}</div>
         </div>
     `;
     
@@ -851,7 +873,7 @@ function appendAssistantMessage(rawText) {
 }
 
 function copyAiText(btn) {
-    var contentDiv = btn.closest('.ai-chat-content').querySelector('.ai-rendered-markdown');
+    var contentDiv = btn.closest('.ai-msg-bubble-dynamic').querySelector('.ai-markdown-content');
     if (contentDiv) {
         var text = contentDiv.innerText || contentDiv.textContent;
         navigator.clipboard.writeText(text).then(function() {
@@ -930,38 +952,36 @@ function handleSendAiMessage(event) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    var btnOpen = document.getElementById('btnOpenAiAssistant');
-    if (btnOpen) {
-        btnOpen.addEventListener('click', function(e) {
+    var launcher = document.getElementById('aiFloatingLauncher');
+    if (launcher) {
+        launcher.addEventListener('click', function(e) {
             e.preventDefault();
-            openAiAssistant();
+            toggleAiAssistant();
         });
     }
 
-    var btnClose = document.getElementById('btnCloseAiDrawer');
+    var btnClose = document.getElementById('btnCloseAiWidget');
     if (btnClose) {
-        btnClose.addEventListener('click', function() {
-            closeAiAssistant();
-        });
-    }
-
-    var backdrop = document.getElementById('aiAssistantBackdrop');
-    if (backdrop) {
-        backdrop.addEventListener('click', function() {
+        btnClose.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             closeAiAssistant();
         });
     }
 
     var btnClear = document.getElementById('btnClearAiChat');
     if (btnClear) {
-        btnClear.addEventListener('click', function() {
+        btnClear.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             clearAiChat();
         });
     }
 
-    var chips = document.querySelectorAll('.ai-prompt-chip');
+    var chips = document.querySelectorAll('.ai-quick-pill');
     chips.forEach(function(chip) {
-        chip.addEventListener('click', function() {
+        chip.addEventListener('click', function(e) {
+            e.preventDefault();
             var prompt = this.getAttribute('data-prompt');
             if (prompt) {
                 var input = document.getElementById('aiPromptInput');
@@ -975,8 +995,15 @@ document.addEventListener("DOMContentLoaded", function() {
     if (textarea) {
         textarea.addEventListener('input', function() {
             this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            this.style.height = Math.min(this.scrollHeight, 80) + 'px';
         });
     }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAiAssistant();
+        }
+    });
 });
 </script>
