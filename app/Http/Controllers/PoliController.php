@@ -61,6 +61,8 @@ class PoliController extends Controller
             'nama' => 'required|unique:omahterapiku,nama',
             'alamat' => 'nullable|string',
             'no_telp' => 'nullable|string|max:50',
+            'latitude' => 'nullable|string|max:50',
+            'longitude' => 'nullable|string|max:50',
             'fokus_layanan' => 'nullable|string',
             'status' => 'nullable|integer',
         ]);
@@ -69,12 +71,19 @@ class PoliController extends Controller
             'nama' => $request->nama,
             'alamat' => $request->alamat,
             'no_telp' => $request->no_telp,
+            'latitude' => $request->latitude ? trim($request->latitude) : null,
+            'longitude' => $request->longitude ? trim($request->longitude) : null,
             'fokus_layanan' => $request->fokus_layanan,
             'status' => $request->status ?? 1,
         ]);
 
         if ($request->has('terapis_ids') && is_array($request->terapis_ids)) {
-            Dokter::whereIn('id', $request->terapis_ids)->update(['poli' => $poli->nama]);
+            // Hanya assign terapis yang belum bertugas di UPT manapun
+            Dokter::whereIn('id', $request->terapis_ids)
+                ->where(function ($q) {
+                    $q->whereNull('poli')->orWhere('poli', '');
+                })
+                ->update(['poli' => $poli->nama]);
         }
 
         return redirect()->route('omahterapiku')->with('sukses', 'Data Omah Terapiku (UPT) berhasil ditambahkan');
@@ -86,6 +95,8 @@ class PoliController extends Controller
             'nama' => 'required|unique:omahterapiku,nama,' . $id,
             'alamat' => 'nullable|string',
             'no_telp' => 'nullable|string|max:50',
+            'latitude' => 'nullable|string|max:50',
+            'longitude' => 'nullable|string|max:50',
             'fokus_layanan' => 'nullable|string',
             'status' => 'nullable|integer',
         ]);
@@ -98,6 +109,8 @@ class PoliController extends Controller
             'nama' => $newNama,
             'alamat' => $request->alamat,
             'no_telp' => $request->no_telp,
+            'latitude' => $request->latitude ? trim($request->latitude) : null,
+            'longitude' => $request->longitude ? trim($request->longitude) : null,
             'fokus_layanan' => $request->fokus_layanan,
             'status' => $request->status ?? 1,
         ]);
@@ -110,12 +123,21 @@ class PoliController extends Controller
         // Kelola penugasan terapis yang dipilih
         $selectedTerapis = $request->terapis_ids ?: [];
         if (is_array($selectedTerapis)) {
-            // Assign terapis terpilih ke UPT ini
+            // Assign terapis terpilih yang masih kosong atau memang sudah berada di UPT ini
             if (count($selectedTerapis) > 0) {
-                Dokter::whereIn('id', $selectedTerapis)->update(['poli' => $newNama]);
+                Dokter::whereIn('id', $selectedTerapis)
+                    ->where(function ($q) use ($oldNama, $newNama) {
+                        $q->whereNull('poli')
+                          ->orWhere('poli', '')
+                          ->orWhere('poli', $oldNama)
+                          ->orWhere('poli', $newNama);
+                    })
+                    ->update(['poli' => $newNama]);
             }
-            // Lepaskan penugasan terapis yang uncheck di UPT ini
-            Dokter::where('poli', $newNama)->whereNotIn('id', $selectedTerapis)->update(['poli' => null]);
+            // Lepaskan penugasan terapis yang di-uncheck dari UPT ini
+            Dokter::where(function ($q) use ($oldNama, $newNama) {
+                $q->where('poli', $newNama)->orWhere('poli', $oldNama);
+            })->whereNotIn('id', $selectedTerapis)->update(['poli' => null]);
         }
 
         return redirect()->route('omahterapiku')->with('sukses', 'Data Omah Terapiku (UPT) berhasil diperbaharui');

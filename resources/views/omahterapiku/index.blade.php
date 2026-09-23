@@ -1,6 +1,7 @@
 @extends('layout.apps')
 
 @section('style')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <style>
     .focus-badge {
         display: inline-flex;
@@ -61,6 +62,36 @@
         box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15) !important;
         outline: none !important;
     }
+    /* Map Marker & Pulse Ring for Pickers */
+    .custom-balai-marker {
+        background: #ef4444;
+        border: 2px solid #ffffff;
+        color: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 8px rgba(239, 68, 68, 0.45);
+        font-size: 12px;
+    }
+    .custom-pulse-ring {
+        position: absolute;
+        border: 2px solid #ef4444;
+        border-radius: 50%;
+        animation: pulseMap 1.8s infinite;
+        opacity: 0.8;
+    }
+    @keyframes pulseMap {
+        0% { transform: scale(0.9); opacity: 0.8; }
+        70% { transform: scale(2.2); opacity: 0; }
+        100% { transform: scale(2.2); opacity: 0; }
+    }
+    .map-picker-toolbar {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
     /* Checkbox & Radio - Royal Blue Theme */
     .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
         background-color: #2563eb !important;
@@ -87,9 +118,15 @@
         align-items: center;
         justify-content: space-between;
     }
-    .terapis-check-card:hover {
+    .terapis-check-card:hover:not(.disabled) {
         background: #f0f7ff;
         border-color: #bfdbfe;
+    }
+    .terapis-check-card.disabled {
+        background: #f8fafc !important;
+        border-color: #e2e8f0 !important;
+        opacity: 0.75;
+        cursor: not-allowed !important;
     }
     .terapis-check-card input[type="checkbox"]:checked + label {
         color: #1e40af;
@@ -251,7 +288,7 @@
 <!-- MODAL TAMBAH UPT BARU -->
 <!-- ============================================================= -->
 <div class="modal fade" id="addUptModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content ot-modal-content">
             <div class="modal-header ot-modal-header d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
@@ -271,12 +308,22 @@
                 <form action="{{ Route('omahterapiku.store') }}" method="POST">
                     {{ csrf_field() }}
 
-                    <!-- 1. Nama UPT -->
-                    <div class="form-group mb-3">
-                        <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                            Nama UPT / Lokasi Pelayanan <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" name="nama" required class="form-control ot-input-modern" placeholder="Contoh: UPT PPSAB Sidoarjo">
+                    <div class="row">
+                        <!-- 1. Nama UPT -->
+                        <div class="col-md-6 form-group mb-3">
+                            <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
+                                Nama UPT / Lokasi Pelayanan <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="nama" required class="form-control ot-input-modern" placeholder="Contoh: UPT PPSAB Sidoarjo">
+                        </div>
+
+                        <!-- 2b. No. Telp / Kontak UPT -->
+                        <div class="col-md-6 form-group mb-3">
+                            <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
+                                No. Telp / Hotline UPT
+                            </label>
+                            <input type="text" name="no_telp" class="form-control ot-input-modern" placeholder="Contoh: (031) 8921234 / 081234567890" value="{{ old('no_telp') }}">
+                        </div>
                     </div>
 
                     <!-- 2. Alamat Lengkap -->
@@ -287,13 +334,50 @@
                         <textarea name="alamat" class="form-control" rows="2" placeholder="Jl. Monginsidi No. 25, Sidoklumpuk, Sidoarjo..." style="font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">{{ old('alamat') }}</textarea>
                     </div>
 
-                    <!-- 2b. No. Telp / Kontak UPT -->
-                    <div class="form-group mb-3">
-                        <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                            No. Telp / Hotline UPT
-                        </label>
-                        <input type="text" name="no_telp" class="form-control ot-input-modern" placeholder="Contoh: (031) 8921234 / 081234567890" value="{{ old('no_telp') }}">
-                        <small class="text-muted" style="font-size: 11px;">Nomor kontak ini dapat tercantum pada lembar cetak SOAP dan Latihan Rumahan.</small>
+                    <!-- 2c. Koordinat Lokasi & Interactive Map Picker Leaflet -->
+                    <div class="form-group mb-3 p-3.5 rounded" style="background: #f8fafc; border: 1.5px solid #e2e8f0;">
+                        <div class="d-flex align-items-center justify-content-between mb-2.5 flex-wrap" style="gap: 8px;">
+                            <label class="form-label font-w700 text-dark mb-0" style="font-size: 13px;">
+                                <i class="fa-solid fa-map-location-dot text-primary mr-1"></i> Titik Koordinat Peta (Latitude &amp; Longitude)
+                            </label>
+                            <div class="d-flex align-items-center" style="gap: 6px;">
+                                <button type="button" class="btn btn-xs font-w600" id="btnGpsAdd" style="font-size: 11px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;" title="Deteksi posisi GPS saat ini">
+                                    <i class="fa-solid fa-location-crosshairs mr-1"></i> Lokasi Saya
+                                </button>
+                                <button type="button" class="btn btn-xs font-w600" id="btnResetJatimAdd" style="font-size: 11px; padding: 4px 10px; border-radius: 6px; background: #ffffff; color: #475569; border: 1px solid #cbd5e1;" title="Pusatkan peta ke Jawa Timur">
+                                    <i class="fa-solid fa-arrows-rotate mr-1"></i> Jatim
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 2 Kolom Input Lat & Lng -->
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-2 mb-md-0">
+                                <label class="text-muted font-w600 mb-1 d-block" style="font-size: 11.5px;">Latitude (Garis Lintang):</label>
+                                <div class="input-group">
+                                    <input type="text" name="latitude" id="latAdd" class="form-control ot-input-modern" placeholder="-7.4526000" style="font-size: 12.5px;" value="{{ old('latitude') }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted font-w600 mb-1 d-block" style="font-size: 11.5px;">Longitude (Garis Bujur):</label>
+                                <div class="input-group">
+                                    <input type="text" name="longitude" id="lngAdd" class="form-control ot-input-modern" placeholder="112.7135000" style="font-size: 12.5px;" value="{{ old('longitude') }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Map Container dengan Spacing Nyaman -->
+                        <div style="position: relative; margin-top: 6px;">
+                            <div id="mapPickerAdd" style="height: 230px; width: 100%; border-radius: 8px; border: 1.5px solid #cbd5e1; box-shadow: inset 0 1px 3px rgba(0,0,0,0.06); z-index: 1;"></div>
+                            
+                            <!-- Helper Info & Realtime Lat/Lng Display berjarak lega -->
+                            <div class="d-flex align-items-center justify-content-between flex-wrap mt-2.5 pt-1 px-1" style="gap: 6px;">
+                                <small class="text-muted" style="font-size: 11.5px; line-height: 1.4;">
+                                    <i class="fa-solid fa-circle-info text-primary mr-1"></i> Klik pada peta atau seret marker merah untuk memilih lokasi.
+                                </small>
+                                <small id="addCoordDisplay" class="font-w600 text-primary" style="font-size: 11.5px;"></small>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- 3. Fokus Layanan -->
@@ -317,19 +401,31 @@
 
                     <!-- 4. Pilih Terapis Bertugas -->
                     <div class="form-group mb-3">
-                        <label class="form-label font-w600 text-dark mb-1 d-block" style="font-size: 13px;">
-                            Pilih Terapis Bertugas di UPT Ini:
-                        </label>
-                        <div class="p-2.5 rounded" style="max-height: 170px; overflow-y: auto; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px;">
+                        <div class="d-flex align-items-center justify-content-between mb-1.5 flex-wrap" style="gap: 6px;">
+                            <label class="form-label font-w600 text-dark mb-0" style="font-size: 13px;">
+                                Pilih Terapis Bertugas di UPT Ini:
+                            </label>
+                            <small class="text-muted" style="font-size: 11px;">Terapis di UPT lain terkunci</small>
+                        </div>
+                        <div class="p-2.5 rounded" style="max-height: 165px; overflow-y: auto; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px;">
                             @if(isset($allTerapis) && count($allTerapis) > 0)
                                 @foreach($allTerapis as $terapisOpt)
-                                    <div class="terapis-check-card mb-1.5">
+                                    @php
+                                        $isAssignedOther = !empty($terapisOpt->poli);
+                                    @endphp
+                                    <div class="terapis-check-card mb-1.5 {{ $isAssignedOther ? 'disabled' : '' }}" title="{{ $isAssignedOther ? 'Terapis ini sudah bertugas di ' . $terapisOpt->poli : 'Terapis tersedia untuk ditugaskan' }}">
                                         <div class="custom-control custom-checkbox w-100">
-                                            <input type="checkbox" name="terapis_ids[]" value="{{ $terapisOpt->id }}" class="custom-control-input" id="tAdd_{{ $terapisOpt->id }}">
-                                            <label class="custom-control-label font-w600 text-dark d-flex justify-content-between align-items-center mb-0" for="tAdd_{{ $terapisOpt->id }}" style="cursor: pointer; font-size: 12.5px;">
-                                                <span class="font-w600 text-dark">{{ $terapisOpt->nama }}</span>
-                                                @if($terapisOpt->poli)
-                                                    <small class="badge badge-light font-w500 text-muted" style="font-size: 10.5px; border: 1px solid #e2e8f0;">{{ $terapisOpt->poli }}</small>
+                                            <input type="checkbox" name="terapis_ids[]" value="{{ $terapisOpt->id }}" class="custom-control-input" id="tAdd_{{ $terapisOpt->id }}" {{ $isAssignedOther ? 'disabled' : '' }}>
+                                            <label class="custom-control-label font-w600 {{ $isAssignedOther ? 'text-muted' : 'text-dark' }} d-flex justify-content-between align-items-center mb-0" for="tAdd_{{ $terapisOpt->id }}" style="{{ $isAssignedOther ? 'cursor: not-allowed;' : 'cursor: pointer;' }} font-size: 12.5px;">
+                                                <span>{{ $terapisOpt->nama }}</span>
+                                                @if($isAssignedOther)
+                                                    <span class="badge badge-light font-w600 text-danger" style="font-size: 10.5px; border: 1px solid #fecaca; background: #fef2f2;">
+                                                        <i class="fa-solid fa-lock mr-1"></i> Bertugas di {{ $terapisOpt->poli }}
+                                                    </span>
+                                                @else
+                                                    <span class="badge badge-success light font-w600" style="font-size: 10.5px; border: 1px solid #bbf7d0;">
+                                                        <i class="fa-solid fa-circle-check mr-1"></i> Tersedia
+                                                    </span>
                                                 @endif
                                             </label>
                                         </div>
@@ -379,10 +475,241 @@
 @endsection
 
 @section('script')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
+    // Global Icon & Map Instances
+    const defaultJatimCenter = [-7.5360639, 112.2384017];
+    
+    function createBalaiIcon() {
+        return L.divIcon({
+            className: 'custom-balai-icon-wrapper',
+            html: `
+                <div style="position: relative; width: 28px; height: 28px;">
+                    <div class="custom-pulse-ring" style="width: 28px; height: 28px; top: 0; left: 0;"></div>
+                    <div class="custom-balai-marker" style="width: 28px; height: 28px; position: relative; z-index: 2;">
+                        <i class="fa-solid fa-hospital-user"></i>
+                    </div>
+                </div>
+            `,
+            iconSize: [28, 28],
+            iconAnchor: [14, 14]
+        });
+    }
+
+    // 1. Map Picker for Modal Tambah UPT
+    let mapAdd = null;
+    let markerAdd = null;
+
+    function initMapPickerAdd() {
+        const mapEl = document.getElementById('mapPickerAdd');
+        if (!mapEl) return;
+
+        if (mapAdd !== null) {
+            mapAdd.invalidateSize();
+            return;
+        }
+
+        let curLat = parseFloat($('#latAdd').val());
+        let curLng = parseFloat($('#lngAdd').val());
+        let hasCoords = !isNaN(curLat) && !isNaN(curLng);
+
+        let initLat = hasCoords ? curLat : defaultJatimCenter[0];
+        let initLng = hasCoords ? curLng : defaultJatimCenter[1];
+        let zoomLevel = hasCoords ? 14 : 8;
+
+        mapAdd = L.map('mapPickerAdd', {
+            center: [initLat, initLng],
+            zoom: zoomLevel,
+            attributionControl: false
+        });
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 18,
+            subdomains: 'abcd',
+        }).addTo(mapAdd);
+
+        markerAdd = L.marker([initLat, initLng], {
+            icon: createBalaiIcon(),
+            draggable: true
+        }).addTo(mapAdd);
+
+        function updateAddInputs(lat, lng) {
+            $('#latAdd').val(lat.toFixed(7));
+            $('#lngAdd').val(lng.toFixed(7));
+            $('#addCoordDisplay').html(`<i class="fa-solid fa-check-circle text-success mr-1"></i> Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`);
+        }
+
+        if (hasCoords) {
+            updateAddInputs(initLat, initLng);
+        }
+
+        markerAdd.on('dragend', function(e) {
+            const pos = e.target.getLatLng();
+            updateAddInputs(pos.lat, pos.lng);
+        });
+
+        mapAdd.on('click', function(e) {
+            markerAdd.setLatLng(e.latlng);
+            updateAddInputs(e.latlng.lat, e.latlng.lng);
+        });
+
+        $('#latAdd, #lngAdd').on('input change', function() {
+            const lat = parseFloat($('#latAdd').val());
+            const lng = parseFloat($('#lngAdd').val());
+            if (!isNaN(lat) && !isNaN(lng)) {
+                markerAdd.setLatLng([lat, lng]);
+                mapAdd.panTo([lat, lng]);
+                $('#addCoordDisplay').html(`<i class="fa-solid fa-check-circle text-success mr-1"></i> Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`);
+            }
+        });
+
+        $('#btnGpsAdd').on('click', function() {
+            if (navigator.geolocation) {
+                const btn = $(this);
+                btn.html('<i class="fa-solid fa-spinner fa-spin mr-1"></i> Mencari...');
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    markerAdd.setLatLng([lat, lng]);
+                    mapAdd.setView([lat, lng], 15);
+                    updateAddInputs(lat, lng);
+                    btn.html('<i class="fa-solid fa-location-crosshairs mr-1"></i> Lokasi Saya');
+                }, function(error) {
+                    alert('Gagal mendeteksi lokasi: ' + error.message);
+                    btn.html('<i class="fa-solid fa-location-crosshairs mr-1"></i> Lokasi Saya');
+                }, { enableHighAccuracy: true });
+            } else {
+                alert('Browser tidak mendukung Geolocation.');
+            }
+        });
+
+        $('#btnResetJatimAdd').on('click', function() {
+            mapAdd.setView(defaultJatimCenter, 8);
+            markerAdd.setLatLng(defaultJatimCenter);
+            updateAddInputs(defaultJatimCenter[0], defaultJatimCenter[1]);
+        });
+    }
+
+    // 2. Map Picker Dictionary for Modal Edit UPT
+    let editMaps = {};
+
+    function initMapPickerEdit(id) {
+        const mapEl = document.getElementById('mapPickerEdit_' + id);
+        if (!mapEl) return;
+
+        if (editMaps[id]) {
+            editMaps[id].map.invalidateSize();
+            return;
+        }
+
+        let curLat = parseFloat($('#latEdit_' + id).val());
+        let curLng = parseFloat($('#lngEdit_' + id).val());
+        let hasCoords = !isNaN(curLat) && !isNaN(curLng);
+
+        let initLat = hasCoords ? curLat : defaultJatimCenter[0];
+        let initLng = hasCoords ? curLng : defaultJatimCenter[1];
+        let zoomLevel = hasCoords ? 14 : 8;
+
+        let mapEdit = L.map('mapPickerEdit_' + id, {
+            center: [initLat, initLng],
+            zoom: zoomLevel,
+            attributionControl: false
+        });
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 18,
+            subdomains: 'abcd',
+        }).addTo(mapEdit);
+
+        let markerEdit = L.marker([initLat, initLng], {
+            icon: createBalaiIcon(),
+            draggable: true
+        }).addTo(mapEdit);
+
+        function updateEditInputs(lat, lng) {
+            $('#latEdit_' + id).val(lat.toFixed(7));
+            $('#lngEdit_' + id).val(lng.toFixed(7));
+            $('#editCoordDisplay_' + id).html(`<i class="fa-solid fa-check-circle text-success mr-1"></i> Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`);
+        }
+
+        if (hasCoords) {
+            updateEditInputs(initLat, initLng);
+        }
+
+        markerEdit.on('dragend', function(e) {
+            const pos = e.target.getLatLng();
+            updateEditInputs(pos.lat, pos.lng);
+        });
+
+        mapEdit.on('click', function(e) {
+            markerEdit.setLatLng(e.latlng);
+            updateEditInputs(e.latlng.lat, e.latlng.lng);
+        });
+
+        $('#latEdit_' + id + ', #lngEdit_' + id).on('input change', function() {
+            const lat = parseFloat($('#latEdit_' + id).val());
+            const lng = parseFloat($('#lngEdit_' + id).val());
+            if (!isNaN(lat) && !isNaN(lng)) {
+                markerEdit.setLatLng([lat, lng]);
+                mapEdit.panTo([lat, lng]);
+                $('#editCoordDisplay_' + id).html(`<i class="fa-solid fa-check-circle text-success mr-1"></i> Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`);
+            }
+        });
+
+        $('#btnGpsEdit_' + id).on('click', function() {
+            if (navigator.geolocation) {
+                const btn = $(this);
+                btn.html('<i class="fa-solid fa-spinner fa-spin mr-1"></i> Mencari...');
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    markerEdit.setLatLng([lat, lng]);
+                    mapEdit.setView([lat, lng], 15);
+                    updateEditInputs(lat, lng);
+                    btn.html('<i class="fa-solid fa-location-crosshairs mr-1"></i> Lokasi Saya');
+                }, function(error) {
+                    alert('Gagal mendeteksi lokasi: ' + error.message);
+                    btn.html('<i class="fa-solid fa-location-crosshairs mr-1"></i> Lokasi Saya');
+                }, { enableHighAccuracy: true });
+            } else {
+                alert('Browser tidak mendukung Geolocation.');
+            }
+        });
+
+        $('#btnResetJatimEdit_' + id).on('click', function() {
+            mapEdit.setView(defaultJatimCenter, 8);
+            markerEdit.setLatLng(defaultJatimCenter);
+            updateEditInputs(defaultJatimCenter[0], defaultJatimCenter[1]);
+        });
+
+        editMaps[id] = { map: mapEdit, marker: markerEdit };
+    }
+
     $(document).ready(function () {
         let currentAjax = null;
         let searchDebounceTimer = null;
+
+        // Inisialisasi Map Picker saat Modal Tambah UPT dibuka
+        $('#addUptModal').on('shown.bs.modal', function () {
+            initMapPickerAdd();
+            setTimeout(function () {
+                if (mapAdd) mapAdd.invalidateSize();
+            }, 100);
+        });
+
+        // Inisialisasi Map Picker saat Modal Edit UPT dibuka (Event Delegation)
+        $(document).on('shown.bs.modal', '.modal[id^="editModal"]', function () {
+            let modalId = $(this).attr('id');
+            let id = modalId.replace('editModal', '');
+            if (id) {
+                initMapPickerEdit(id);
+                setTimeout(function () {
+                    if (editMaps[id] && editMaps[id].map) {
+                        editMaps[id].map.invalidateSize();
+                    }
+                }, 100);
+            }
+        });
 
         // Function to fetch data via AJAX
         function fetchUptData(page = 1, updateUrl = true) {
@@ -421,6 +748,9 @@
                 success: function (res) {
                     $('#tableContentWrapper').html(res.html);
                     
+                    // Reset edit maps cache on table refresh
+                    editMaps = {};
+
                     // Update total count
                     if (res.total !== undefined) {
                         let formattedTotal = new Intl.NumberFormat('id-ID').format(res.total);

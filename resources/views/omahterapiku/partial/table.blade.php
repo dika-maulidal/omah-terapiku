@@ -65,6 +65,12 @@
                                     <i class="fa-solid fa-phone mr-1" style="font-size: 10px;"></i> {{ $row->no_telp }}
                                 </div>
                             @endif
+                            @if($row->latitude && $row->longitude)
+                                <div class="mt-1 text-muted" style="font-size: 11px;">
+                                    <i class="fa-solid fa-crosshairs text-primary mr-1" style="font-size: 10px;"></i>
+                                    <span style="font-family: monospace; color: #64748b;">{{ $row->latitude }}, {{ $row->longitude }}</span>
+                                </div>
+                            @endif
                         </td>
                         <td style="vertical-align: middle;">
                             <span class="focus-badge" style="{{ $badgeStyle }}">
@@ -173,7 +179,7 @@
                             </div>
                             <div>
                                 <h5 class="modal-title ot-modal-title">Detail Omah Terapi-KU</h5>
-                                <small class="ot-modal-subtitle">Informasi Unit Pelaksana Teknis & Tenaga Terapis</small>
+                                <small class="ot-modal-subtitle">Informasi Unit Pelaksana Teknis &amp; Tenaga Terapis</small>
                             </div>
                         </div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; color: #64748b; opacity: 0.8; transition: all 0.2s ease;">
@@ -207,6 +213,21 @@
                                             -
                                         @endif
                                     </span>
+                                </div>
+                                <div class="mb-2.5">
+                                    <small class="text-muted d-block font-w600" style="font-size: 11px;">Titik Koordinat Lokasi:</small>
+                                    @if($row->latitude && $row->longitude)
+                                        <div class="d-flex align-items-center justify-content-between mt-1 flex-wrap" style="gap: 6px;">
+                                            <span class="badge badge-light font-w600 text-dark" style="font-size: 12px; border: 1.5px solid #cbd5e1; font-family: monospace;">
+                                                <i class="fa-solid fa-location-crosshairs text-primary mr-1"></i> {{ $row->latitude }}, {{ $row->longitude }}
+                                            </span>
+                                            <a href="https://www.google.com/maps?q={{ $row->latitude }},{{ $row->longitude }}" target="_blank" class="btn btn-xs btn-outline-primary font-w600" style="border-radius: 6px; font-size: 11px; padding: 3px 8px;">
+                                                <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Buka Google Maps
+                                            </a>
+                                        </div>
+                                    @else
+                                        <span class="text-muted font-w500" style="font-size: 12px;">Belum diatur koordinat</span>
+                                    @endif
                                 </div>
                                 <div class="mb-2.5">
                                     <small class="text-muted d-block font-w600" style="font-size: 11px;">Fokus Layanan:</small>
@@ -292,7 +313,7 @@
 
         <!-- MODAL FORM EDIT UPT -->
         <div class="modal fade" id="editModal{{ $row->id }}" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content ot-modal-content">
                     <div class="modal-header ot-modal-header d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
@@ -313,12 +334,22 @@
                         <form action="{{ Route('omahterapiku.update', $row->id) }}" method="POST">
                             {{ csrf_field() }}
 
-                            <!-- 1. Nama UPT -->
-                            <div class="form-group mb-3">
-                                <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                                    Nama UPT / Lokasi Pelayanan <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" name="nama" value="{{ $row->nama }}" required class="form-control ot-input-modern" placeholder="Contoh: UPT PPSAB Sidoarjo">
+                            <div class="row">
+                                <!-- 1. Nama UPT -->
+                                <div class="col-md-6 form-group mb-3">
+                                    <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
+                                        Nama UPT / Lokasi Pelayanan <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" name="nama" value="{{ $row->nama }}" required class="form-control ot-input-modern" placeholder="Contoh: UPT PPSAB Sidoarjo">
+                                </div>
+
+                                <!-- 2b. No. Telp / Kontak UPT -->
+                                <div class="col-md-6 form-group mb-3">
+                                    <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
+                                        No. Telp / Hotline UPT
+                                    </label>
+                                    <input type="text" name="no_telp" value="{{ $row->no_telp }}" class="form-control ot-input-modern" placeholder="Contoh: (031) 8921234 / 081234567890">
+                                </div>
                             </div>
 
                             <!-- 2. Alamat Lengkap -->
@@ -329,13 +360,50 @@
                                 <textarea name="alamat" class="form-control" rows="2" placeholder="Jl. Monginsidi No. 25, Sidoklumpuk, Sidoarjo..." style="font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">{{ $row->alamat }}</textarea>
                             </div>
 
-                            <!-- 2b. No. Telp / Kontak UPT -->
-                            <div class="form-group mb-3">
-                                <label class="form-label font-w600 text-dark mb-1" style="font-size: 13px;">
-                                    No. Telp / Hotline UPT
-                                </label>
-                                <input type="text" name="no_telp" value="{{ $row->no_telp }}" class="form-control ot-input-modern" placeholder="Contoh: (031) 8921234 / 081234567890">
-                                <small class="text-muted" style="font-size: 11px;">Nomor kontak ini dapat tercantum pada lembar cetak SOAP dan Latihan Rumahan.</small>
+                            <!-- 2c. Koordinat Lokasi & Interactive Map Picker Leaflet -->
+                            <div class="form-group mb-3 p-3.5 rounded" style="background: #f8fafc; border: 1.5px solid #e2e8f0;">
+                                <div class="d-flex align-items-center justify-content-between mb-2.5 flex-wrap" style="gap: 8px;">
+                                    <label class="form-label font-w700 text-dark mb-0" style="font-size: 13px;">
+                                        <i class="fa-solid fa-map-location-dot text-primary mr-1"></i> Titik Koordinat Peta (Latitude &amp; Longitude)
+                                    </label>
+                                    <div class="d-flex align-items-center" style="gap: 6px;">
+                                        <button type="button" class="btn btn-xs font-w600" id="btnGpsEdit_{{ $row->id }}" style="font-size: 11px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;" title="Deteksi posisi GPS saat ini">
+                                            <i class="fa-solid fa-location-crosshairs mr-1"></i> Lokasi Saya
+                                        </button>
+                                        <button type="button" class="btn btn-xs font-w600" id="btnResetJatimEdit_{{ $row->id }}" style="font-size: 11px; padding: 4px 10px; border-radius: 6px; background: #ffffff; color: #475569; border: 1px solid #cbd5e1;" title="Pusatkan peta ke Jawa Timur">
+                                            <i class="fa-solid fa-arrows-rotate mr-1"></i> Jatim
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 2 Kolom Input Lat & Lng -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6 mb-2 mb-md-0">
+                                        <label class="text-muted font-w600 mb-1 d-block" style="font-size: 11.5px;">Latitude (Garis Lintang):</label>
+                                        <div class="input-group">
+                                            <input type="text" name="latitude" id="latEdit_{{ $row->id }}" class="form-control ot-input-modern" placeholder="-7.4526000" style="font-size: 12.5px;" value="{{ $row->latitude }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="text-muted font-w600 mb-1 d-block" style="font-size: 11.5px;">Longitude (Garis Bujur):</label>
+                                        <div class="input-group">
+                                            <input type="text" name="longitude" id="lngEdit_{{ $row->id }}" class="form-control ot-input-modern" placeholder="112.7135000" style="font-size: 12.5px;" value="{{ $row->longitude }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Map Container dengan Spacing Nyaman -->
+                                <div style="position: relative; margin-top: 6px;">
+                                    <div id="mapPickerEdit_{{ $row->id }}" style="height: 230px; width: 100%; border-radius: 8px; border: 1.5px solid #cbd5e1; box-shadow: inset 0 1px 3px rgba(0,0,0,0.06); z-index: 1;"></div>
+                                    
+                                    <!-- Helper Info & Realtime Lat/Lng Display berjarak lega -->
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap mt-2.5 pt-1 px-1" style="gap: 6px;">
+                                        <small class="text-muted" style="font-size: 11.5px; line-height: 1.4;">
+                                            <i class="fa-solid fa-circle-info text-primary mr-1"></i> Klik pada peta atau seret marker merah untuk memilih lokasi.
+                                        </small>
+                                        <small id="editCoordDisplay_{{ $row->id }}" class="font-w600 text-primary" style="font-size: 11.5px;"></small>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- 3. Fokus Layanan -->
@@ -360,24 +428,36 @@
 
                             <!-- 4. Pilih Terapis Bertugas -->
                             <div class="form-group mb-3">
-                                <label class="form-label font-w600 text-dark mb-1 d-block" style="font-size: 13px;">
-                                    Pilih Terapis Bertugas di UPT Ini:
-                                </label>
-                                <div class="p-2.5 rounded" style="max-height: 170px; overflow-y: auto; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px;">
+                                <div class="d-flex align-items-center justify-content-between mb-1.5 flex-wrap" style="gap: 6px;">
+                                    <label class="form-label font-w600 text-dark mb-0" style="font-size: 13px;">
+                                        Pilih Terapis Bertugas di UPT Ini:
+                                    </label>
+                                    <small class="text-muted" style="font-size: 11px;">Terapis di UPT lain terkunci</small>
+                                </div>
+                                <div class="p-2.5 rounded" style="max-height: 165px; overflow-y: auto; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px;">
                                     @if(isset($allTerapis) && count($allTerapis) > 0)
                                         @foreach($allTerapis as $terapisOpt)
                                             @php
-                                                $isAssigned = ($terapisOpt->poli === $row->nama);
+                                                $isAssignedHere = ($terapisOpt->poli === $row->nama);
+                                                $isAssignedOther = (!empty($terapisOpt->poli) && $terapisOpt->poli !== $row->nama);
                                             @endphp
-                                            <div class="terapis-check-card mb-1.5">
+                                            <div class="terapis-check-card mb-1.5 {{ $isAssignedOther ? 'disabled' : '' }}" title="{{ $isAssignedOther ? 'Terapis ini sudah bertugas di ' . $terapisOpt->poli : ($isAssignedHere ? 'Bertugas di UPT ini' : 'Terapis tersedia untuk ditugaskan') }}">
                                                 <div class="custom-control custom-checkbox w-100">
-                                                    <input type="checkbox" name="terapis_ids[]" value="{{ $terapisOpt->id }}" class="custom-control-input" id="tEdit_{{ $row->id }}_{{ $terapisOpt->id }}" {{ $isAssigned ? 'checked' : '' }}>
-                                                    <label class="custom-control-label font-w600 text-dark d-flex justify-content-between align-items-center mb-0" for="tEdit_{{ $row->id }}_{{ $terapisOpt->id }}" style="cursor: pointer; font-size: 12.5px;">
-                                                        <span class="font-w600 text-dark">{{ $terapisOpt->nama }}</span>
-                                                        @if($terapisOpt->poli && $terapisOpt->poli !== $row->nama)
-                                                            <small class="badge badge-light font-w500 text-muted" style="font-size: 10.5px; border: 1px solid #e2e8f0;">Di {{ $terapisOpt->poli }}</small>
-                                                        @elseif($isAssigned)
-                                                            <small class="badge badge-primary light font-w600" style="font-size: 10.5px;">UPT Ini</small>
+                                                    <input type="checkbox" name="terapis_ids[]" value="{{ $terapisOpt->id }}" class="custom-control-input" id="tEdit_{{ $row->id }}_{{ $terapisOpt->id }}" {{ $isAssignedHere ? 'checked' : '' }} {{ $isAssignedOther ? 'disabled' : '' }}>
+                                                    <label class="custom-control-label font-w600 {{ $isAssignedOther ? 'text-muted' : 'text-dark' }} d-flex justify-content-between align-items-center mb-0" for="tEdit_{{ $row->id }}_{{ $terapisOpt->id }}" style="{{ $isAssignedOther ? 'cursor: not-allowed;' : 'cursor: pointer;' }} font-size: 12.5px;">
+                                                        <span>{{ $terapisOpt->nama }}</span>
+                                                        @if($isAssignedOther)
+                                                            <span class="badge badge-light font-w600 text-danger" style="font-size: 10.5px; border: 1px solid #fecaca; background: #fef2f2;">
+                                                                <i class="fa-solid fa-lock mr-1"></i> Bertugas di {{ $terapisOpt->poli }}
+                                                            </span>
+                                                        @elseif($isAssignedHere)
+                                                            <span class="badge badge-primary light font-w600" style="font-size: 10.5px;">
+                                                                <i class="fa-solid fa-check mr-1"></i> UPT Ini
+                                                            </span>
+                                                        @else
+                                                            <span class="badge badge-success light font-w600" style="font-size: 10.5px; border: 1px solid #bbf7d0;">
+                                                                <i class="fa-solid fa-circle-check mr-1"></i> Tersedia
+                                                            </span>
                                                         @endif
                                                     </label>
                                                 </div>

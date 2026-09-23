@@ -408,7 +408,7 @@
                     <div class="d-flex flex-wrap align-items-center justify-content-between pt-2.5 mt-2 border-top" style="border-color: #f1f5f9; font-size: 11.5px;">
                         <div class="d-flex align-items-center mr-3 mb-1">
                             <span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; border: 1.5px solid #ffffff; box-shadow: 0 0 0 1.5px #ef4444; display: inline-block; margin-right: 6px;"></span>
-                            <strong class="text-dark font-w600">3 Balai / UPT Omah Terapi-KU</strong>
+                            <strong class="text-dark font-w600">{{ count($data['map_balai_points'] ?? []) }} Balai / UPT Omah Terapi-KU</strong>
                         </div>
                         <div class="d-flex align-items-center mb-1">
                             <span style="width: 10px; height: 10px; border-radius: 50%; background: #2563eb; display: inline-block; margin-right: 6px;"></span>

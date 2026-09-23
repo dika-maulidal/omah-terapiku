@@ -327,32 +327,37 @@ class LaporanController extends Controller
             'batu' => ['lat' => -7.8712, 'lng' => 112.5270],
         ];
 
-        $mapBalaiPoints = [
-            [
-                'nama' => 'UPT PPSAB Sidoarjo',
-                'lat' => -7.4526,
-                'lng' => 112.7135,
-                'alamat' => 'Jl. Monginsidi No. 25, Sidoklumpuk, Sidoarjo',
-                'fokus' => 'Anak Berkebutuhan Khusus (ABK)',
-                'badge' => 'Balai Pelayanan ABK'
-            ],
-            [
-                'nama' => 'Balai PRS PMKS Sidoarjo',
-                'lat' => -7.4530,
-                'lng' => 112.7160,
-                'alamat' => 'Jl. Pahlawan No. 5, Sidokumpul, Sidoarjo',
-                'fokus' => 'Dewasa, Lansia, ODGJ, Pasca-Stroke',
-                'badge' => 'Balai Pelayanan PMKS'
-            ],
-            [
-                'nama' => 'UPT RSBN Malang',
-                'lat' => -8.0080,
-                'lng' => 112.6320,
-                'alamat' => 'Jl. Beringin No. 13, Bandungrejosari, Sukun, Malang',
-                'fokus' => 'Disabilitas Netra & Fisioterapi Olahraga',
-                'badge' => 'Balai Disabilitas Netra'
-            ]
-        ];
+        // Titik Balai Omah Terapi-KU (Dinamis dari Database Poli / Omahterapiku)
+        $activeBalais = Poli::where('status', 1)
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->where('latitude', '!=', '')
+            ->where('longitude', '!=', '')
+            ->orderBy('nama', 'asc')
+            ->get();
+
+        $mapBalaiPoints = [];
+        foreach ($activeBalais as $balai) {
+            $fokus = $balai->fokus_layanan ?: 'Pelayanan Terpadu';
+            $badge = 'Balai Omah Terapi-KU';
+
+            if (str_contains($fokus, 'ABK') || str_contains($fokus, 'Anak') || str_contains($balai->nama, 'PPSAB')) {
+                $badge = 'Balai Pelayanan ABK';
+            } elseif (str_contains($fokus, 'Netra') || str_contains($fokus, 'Olahraga') || str_contains($balai->nama, 'RSBN')) {
+                $badge = 'Balai Disabilitas Netra';
+            } elseif (str_contains($fokus, 'ODGJ') || str_contains($fokus, 'PMKS') || str_contains($fokus, 'Stroke') || str_contains($balai->nama, 'PMKS')) {
+                $badge = 'Balai Pelayanan PMKS';
+            }
+
+            $mapBalaiPoints[] = [
+                'nama' => $balai->nama,
+                'lat' => (float) $balai->latitude,
+                'lng' => (float) $balai->longitude,
+                'alamat' => $balai->alamat ?: '-',
+                'fokus' => $fokus,
+                'badge' => $badge
+            ];
+        }
 
         $mapPatientPoints = [];
         $totalPasienWilayah = array_sum($wilayahBreakdown);
