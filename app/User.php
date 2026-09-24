@@ -57,4 +57,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function terapis()
+    {
+        return $this->hasOne(\App\Models\Dokter::class, 'user_id');
+    }
+
+    public function dokter()
+    {
+        return $this->hasOne(\App\Models\Dokter::class, 'user_id');
+    }
 }
+

@@ -498,7 +498,7 @@
             order: [],
             language: {
                 search: "_INPUT_",
-                searchPlaceholder: "Ketik untuk mencari...",
+                searchPlaceholder: "Cari Nama, NIK, No. HP, No. RM...",
                 paginate: {
                     previous: '<i class="fa-solid fa-chevron-left mr-1"></i> Prev',
                     next: 'Next <i class="fa-solid fa-chevron-right ml-1"></i>'

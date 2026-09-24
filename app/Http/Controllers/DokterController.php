@@ -33,6 +33,7 @@ class DokterController extends Controller
                   ->orWhere('no_hp', 'like', "%{$keyword}%")
                   ->orWhere('poli', 'like', "%{$keyword}%")
                   ->orWhere('alamat', 'like', "%{$keyword}%")
+                  ->orWhere('no_str', 'like', "%{$keyword}%")
                   ->orWhereHas('user', function ($u) use ($keyword) {
                       $u->where('nip', 'like', "%{$keyword}%")
                         ->orWhere('name', 'like', "%{$keyword}%");
@@ -73,12 +74,17 @@ class DokterController extends Controller
             'no_hp' => 'required|string|max:30',
             'poli' => 'required',
             'nip' => 'nullable|string|max:50|unique:users,nip',
+            'no_str' => 'nullable|string|max:100',
+            'masa_berlaku_str' => 'nullable|string|max:100',
+            'file_str' => 'nullable|mimes:pdf,jpg,jpeg,png|max:5120',
             'password' => 'required|min:4'
         ], [
             'nama.required' => 'Nama terapis wajib diisi.',
             'no_hp.required' => 'Nomor HP wajib diisi.',
             'poli.required' => 'Omah Terapiku wajib dipilih.',
             'nip.unique' => 'NIP sudah digunakan oleh akun lain.',
+            'file_str.mimes' => 'Format file scan STR harus berupa PDF, JPG, JPEG, atau PNG.',
+            'file_str.max' => 'Ukuran file scan STR maksimal 5MB.',
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal 4 karakter.'
         ]);
@@ -108,18 +114,30 @@ class DokterController extends Controller
                 'status' => 1
             ]);
 
-            $request->merge([
-                'user_id' => $user->id,
-                'status' => 1
-            ]);
+            $fileNameStr = null;
+            if ($request->hasFile('file_str')) {
+                $file = $request->file('file_str');
+                $ext = $file->getClientOriginalExtension();
+                $cleanName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $request->nama);
+                $fileNameStr = 'STR_' . $cleanName . '_' . time() . '.' . $ext;
+                $targetDir = public_path('images/terapis/str');
+                if (!file_exists($targetDir)) {
+                    mkdir($targetDir, 0777, true);
+                }
+                $file->move($targetDir, $fileNameStr);
+            }
 
-            Dokter::create($request->all());
+            $dokterData = $request->except(['file_str']);
+            $dokterData['user_id'] = $user->id;
+            $dokterData['status'] = 1;
+            $dokterData['file_str'] = $fileNameStr;
+
+            Dokter::create($dokterData);
 
             DB::commit();
             return redirect()->route('dokter')->with('sukses', 'Data terapis berhasil ditambahkan');
         } catch (\Throwable $th) {
             DB::rollBack();
-            // Menampilkan pesan error asli agar mudah dilacak jika masih gagal
             return redirect()->route('dokter')->with('gagal', 'Data gagal ditambahkan: ' . $th->getMessage());
         }
     }
@@ -127,16 +145,47 @@ class DokterController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'nama' => 'required',
-            'no_hp' => 'required',
+            'nama' => 'required|string|max:255',
+            'no_hp' => 'required|string|max:30',
             'poli' => 'required',
-            'nip' => 'nullable|unique:users,nip,' . optional(Dokter::find($id))->user_id
+            'nip' => 'nullable|unique:users,nip,' . optional(Dokter::find($id))->user_id,
+            'no_str' => 'nullable|string|max:100',
+            'masa_berlaku_str' => 'nullable|string|max:100',
+            'file_str' => 'nullable|mimes:pdf,jpg,jpeg,png|max:5120'
+        ], [
+            'nama.required' => 'Nama terapis wajib diisi.',
+            'no_hp.required' => 'Nomor HP wajib diisi.',
+            'poli.required' => 'Omah Terapiku wajib dipilih.',
+            'nip.unique' => 'NIP sudah digunakan oleh akun lain.',
+            'file_str.mimes' => 'Format file scan STR harus berupa PDF, JPG, JPEG, atau PNG.',
+            'file_str.max' => 'Ukuran file scan STR maksimal 5MB.'
         ]);
 
         DB::beginTransaction();
         try {
             $dokter = Dokter::findOrFail($id);
-            $dokter->update($request->all());
+            $dokterData = $request->except(['file_str']);
+
+            if ($request->hasFile('file_str')) {
+                $file = $request->file('file_str');
+                $ext = $file->getClientOriginalExtension();
+                $cleanName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $request->nama);
+                $fileNameStr = 'STR_' . $cleanName . '_' . time() . '.' . $ext;
+                $targetDir = public_path('images/terapis/str');
+                if (!file_exists($targetDir)) {
+                    mkdir($targetDir, 0777, true);
+                }
+
+                // Hapus file lama jika ada
+                if ($dokter->file_str && file_exists(public_path('images/terapis/str/' . $dokter->file_str))) {
+                    @unlink(public_path('images/terapis/str/' . $dokter->file_str));
+                }
+
+                $file->move($targetDir, $fileNameStr);
+                $dokterData['file_str'] = $fileNameStr;
+            }
+
+            $dokter->update($dokterData);
 
             $user = User::findOrFail($dokter->user_id);
             $userData = [
@@ -152,7 +201,7 @@ class DokterController extends Controller
             $user->update($userData);
 
             DB::commit();
-            return redirect()->route('dokter')->with('sukses', 'Data berhasil diperbaharui');
+            return redirect()->route('dokter')->with('sukses', 'Data terapis berhasil diperbaharui');
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->route('dokter')->with('gagal', 'Data gagal diperbaharui: ' . $th->getMessage());

@@ -590,7 +590,16 @@
                     <strong>Terapis Pembimbing / Pemeriksa</strong>
                     <div style="height: 55px;"></div>
                     <strong style="text-decoration: underline;">( {{ $rekam->dokter->nama ?? 'Terapis Omah Terapi' }} )</strong><br>
-                    <small style="font-size: 8pt; color: #333;">NIP / STR: {{ $rekam->dokter->user->nip ?? ($rekam->dokter->nip ?? '-') }}</small>
+                    @php
+                        $dokterObj = $rekam->dokter ?? null;
+                        $nipVal = $dokterObj->user->nip ?? ($dokterObj->nip ?? null);
+                        $strVal = $dokterObj->no_str ?? null;
+                        $idParts = [];
+                        if ($strVal) { $idParts[] = 'STR: ' . $strVal; }
+                        if ($nipVal) { $idParts[] = 'NIP: ' . $nipVal; }
+                        $idText = count($idParts) > 0 ? implode(' | ', $idParts) : 'NIP / STR: -';
+                    @endphp
+                    <small style="font-size: 8pt; color: #333;">{{ $idText }}</small>
                 </td>
             </tr>
         </table>

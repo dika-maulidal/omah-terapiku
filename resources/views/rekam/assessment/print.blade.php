@@ -1910,9 +1910,18 @@
                     <div style="font-weight: bold; text-decoration: underline;">
                         ( {{ $assessment->dokter->nama ?? ($rekam->dokter->nama ?? '..........................................') }} )
                     </div>
-                    @if(isset($assessment->dokter->nip) || (isset($rekam->dokter) && $rekam->dokter->nip))
-                        <div style="font-size: 8pt; margin-top: 1px;">
-                            NIP. {{ $assessment->dokter->nip ?? $rekam->dokter->nip }}
+                    @php
+                        $terapisDokter = $assessment->dokter ?? ($rekam->dokter ?? null);
+                        $nipVal = $terapisDokter->user->nip ?? ($terapisDokter->nip ?? null);
+                        $strVal = $terapisDokter->no_str ?? null;
+                        $idParts = [];
+                        if ($strVal) { $idParts[] = 'STR: ' . $strVal; }
+                        if ($nipVal) { $idParts[] = 'NIP: ' . $nipVal; }
+                        $idText = count($idParts) > 0 ? implode(' | ', $idParts) : '';
+                    @endphp
+                    @if($idText)
+                        <div style="font-size: 8pt; margin-top: 1px; color: #333;">
+                            {{ $idText }}
                         </div>
                     @endif
                 </td>

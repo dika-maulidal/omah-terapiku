@@ -30,6 +30,20 @@ class PasienController extends Controller
                 }
                 $query->orderBy('id', 'desc');
             })
+            ->filter(function ($query) use ($request) {
+                if ($keyword = $request->input('search.value')) {
+                    $query->where(function ($q) use ($keyword) {
+                        $q->where('no_rm', 'LIKE', "%{$keyword}%")
+                          ->orWhere('nama', 'LIKE', "%{$keyword}%")
+                          ->orWhere('nik', 'LIKE', "%{$keyword}%")
+                          ->orWhere('no_hp', 'LIKE', "%{$keyword}%")
+                          ->orWhere('no_bpjs', 'LIKE', "%{$keyword}%")
+                          ->orWhere('nama_wali', 'LIKE', "%{$keyword}%")
+                          ->orWhere('jenis_disabilitas', 'LIKE', "%{$keyword}%")
+                          ->orWhere('alamat_lengkap', 'LIKE', "%{$keyword}%");
+                    });
+                }
+            })
             ->editColumn('cara_bayar', function () {
                 return 'Gratis, tidak dipungut biaya';
             })
@@ -52,8 +66,9 @@ class PasienController extends Controller
                 return '<span class="text-dark font-w600" style="font-size: 12px;">'.$hp.'</span>'.$wali;
             })
             ->editColumn('no_bpjs', function($data) {
-                $nik = $data->nik ? '<small class="text-muted d-block" style="font-size: 11px;">NIK: '.$data->nik.'</small>' : '';
-                return '<span class="text-dark font-w600" style="font-size: 12px;">'.($data->no_bpjs ?: '-').'</span>'.$nik;
+                $nik = $data->nik ? '<span class="badge font-w600 mt-1" style="font-size: 11px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;"><i class="fa-solid fa-id-badge mr-1 text-primary"></i>NIK: '.$data->nik.'</span>' : '<small class="text-muted d-block font-italic">NIK: -</small>';
+                $bpjs = $data->no_bpjs ? '<span class="text-dark font-w600 d-block" style="font-size: 12px;">BPJS: '.$data->no_bpjs.'</span>' : '';
+                return $bpjs.$nik;
             })
             ->addColumn('action', function($data) {
                 $kategori = $data->kategori_usia;
