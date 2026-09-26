@@ -32,6 +32,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/toastr/css/toastr.min.css') }}">
+    <!-- Leaflet Maps CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
     <style>
         :root {
@@ -138,7 +140,6 @@
             border-radius: 8px;
             transition: all 0.2s ease;
             text-decoration: none;
-            backdrop-filter: blur(4px);
         }
 
         .btn-nav-help:hover {
@@ -947,7 +948,6 @@
             justify-content: center;
             padding: 16px;
             z-index: 1000;
-            backdrop-filter: blur(4px);
         }
 
         .modal-overlay.active {
@@ -1565,20 +1565,234 @@
             }
         }
 
-        @media (max-width: 380px) {
-            .tab-btn {
-                padding: 9px 12px;
-                font-size: 11.5px;
-            }
+        /* =========================================================================
+           PETA LOKASI UPT OMAH TERAPI-KU (CLEAN FULL-WIDTH MAP)
+           ========================================================================= */
+        .sebaran-maps-card {
+            margin-top: 28px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+        }
 
-            .brand-link .logo-abbr {
-                max-height: 32px;
-                max-width: 36px;
-            }
+        .sebaran-maps-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+            border-bottom: 1.5px solid #dbeafe;
+            padding: 20px 24px;
+        }
 
-            .brand-link .brand-title {
-                max-height: 24px;
-                max-width: 110px;
+        .sebaran-header-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            background: #ffffff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 1.5px solid #bfdbfe;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+            flex-shrink: 0;
+        }
+
+        .sebaran-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1e40af;
+            margin: 0 0 2px 0;
+            letter-spacing: -0.3px;
+        }
+
+        .sebaran-subtitle {
+            font-size: 12.5px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.45;
+        }
+
+        .sebaran-leaflet-canvas {
+            width: 100%;
+            height: 480px;
+            min-height: 480px;
+            z-index: 10;
+        }
+
+        /* Custom Leaflet Marker Pins (Uniform Omah Terapi Style) */
+        .upt-custom-marker-wrapper {
+            position: relative;
+        }
+
+        .upt-marker-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 42px;
+            height: 42px;
+            margin-top: -21px;
+            margin-left: -21px;
+            border-radius: 50%;
+            background: #2563eb;
+            opacity: 0.35;
+            animation: uptMarkerPulse 2s infinite ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes uptMarkerPulse {
+            0% { transform: scale(0.6); opacity: 0.7; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        .upt-marker-pin {
+            width: 36px;
+            height: 36px;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+            border: 2px solid #ffffff;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .upt-marker-pin i {
+            transform: rotate(45deg);
+        }
+
+        .upt-marker-pin:hover {
+            transform: rotate(-45deg) scale(1.15);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.45);
+        }
+
+        /* Leaflet Popup Card */
+        .upt-leaflet-popup-card .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+            border: 1.5px solid #bfdbfe;
+        }
+
+        .upt-leaflet-popup-card .leaflet-popup-content {
+            margin: 0;
+            line-height: 1.4;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .upt-map-popup {
+            padding: 16px 18px;
+            min-width: 250px;
+        }
+
+        .upt-map-popup .popup-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10.5px;
+            font-weight: 800;
+            color: #2563eb;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 4px;
+        }
+
+        .upt-map-popup .popup-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: #10b981;
+            border-radius: 50%;
+        }
+
+        .upt-map-popup .popup-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 0 0 6px 0;
+            line-height: 1.3;
+        }
+
+        .upt-map-popup .popup-fokus {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #1d4ed8;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            margin-bottom: 8px;
+        }
+
+        .upt-map-popup .popup-alamat {
+            font-size: 12px;
+            color: #475569;
+            margin-bottom: 8px;
+            line-height: 1.45;
+        }
+
+        .upt-map-popup .popup-tel-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .upt-map-popup .popup-tel-btn:hover {
+            background: #d1fae5;
+            color: #047857;
+            text-decoration: none;
+        }
+
+        .btn-popup-gmaps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff !important;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 7px;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .btn-popup-gmaps:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 576px) {
+            .sebaran-maps-header {
+                padding: 16px 16px;
+            }
+            .sebaran-title {
+                font-size: 16px;
+            }
+            .sebaran-leaflet-canvas {
+                height: 380px;
+                min-height: 380px;
             }
         }
     </style>
@@ -1595,6 +1809,10 @@
 
             <!-- Desktop Actions -->
             <div class="navbar-actions-desktop">
+                <a href="#sebaran-upt-section" class="btn-nav-help" title="Peta Sebaran & Lokasi UPT">
+                    <i class="fa-solid fa-map-location-dot" style="color: #60a5fa;"></i>
+                    <span>Lokasi UPT</span>
+                </a>
                 <button type="button" class="btn-nav-help btn-help-trigger" title="Petunjuk Akses">
                     <i class="fa-regular fa-circle-question" style="color: #2563eb;"></i>
                     <span>Bantuan</span>
@@ -1641,6 +1859,10 @@
                         <div class="mobile-tab-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
                         <span class="mobile-tab-label">Lacak Status Pendaftaran</span>
                     </button>
+                    <a href="#sebaran-upt-section" class="mobile-tab-item" style="text-decoration: none;" onclick="var m=document.getElementById('navbarMobileMenu'); if(m) m.classList.remove('active'); var t=document.getElementById('navToggleBtn'); if(t) t.setAttribute('aria-expanded','false'); var i=document.getElementById('navToggleIcon'); if(i) i.className='fa-solid fa-bars';">
+                        <div class="mobile-tab-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                        <span class="mobile-tab-label">Peta Lokasi UPT</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -2129,21 +2351,61 @@
                             </label>
                             @php
                                 $currJam = old('jam_rencana_kunjungan', 'Sesi 1 (08.00 - 08.45 WIB)');
+                                $isCustomSesi = str_starts_with($currJam, 'Sesi Khusus') || $currJam === 'Sesi Khusus / Fleksibel';
+                                $defMulai = '13:00';
+                                $defSelesai = '13:45';
+                                if ($isCustomSesi && preg_match('/(\d{2})[.:](\d{2})\s*-\s*(\d{2})[.:](\d{2})/', $currJam, $m)) {
+                                    $defMulai = $m[1] . ':' . $m[2];
+                                    $defSelesai = $m[3] . ':' . $m[4];
+                                }
                             @endphp
-                            <select name="jam_rencana_kunjungan" class="form-control" required>
+                            <select id="reg_jam_rencana_select" class="form-control" required>
                                 <option value="">--Pilih Slot Sesi Waktu--</option>
-                                <option value="Sesi 1 (08.00 - 08.45 WIB)" {{ $currJam == 'Sesi 1 (08.00 - 08.45 WIB)' ? 'selected' : '' }}>Sesi 1 (08.00 - 08.45 WIB)</option>
-                                <option value="Sesi 2 (08.45 - 09.30 WIB)" {{ $currJam == 'Sesi 2 (08.45 - 09.30 WIB)' ? 'selected' : '' }}>Sesi 2 (08.45 - 09.30 WIB)</option>
-                                <option value="Sesi 3 (09.30 - 10.15 WIB)" {{ $currJam == 'Sesi 3 (09.30 - 10.15 WIB)' ? 'selected' : '' }}>Sesi 3 (09.30 - 10.15 WIB)</option>
-                                <option value="Sesi 4 (10.15 - 11.00 WIB)" {{ $currJam == 'Sesi 4 (10.15 - 11.00 WIB)' ? 'selected' : '' }}>Sesi 4 (10.15 - 11.00 WIB)</option>
-                                <option value="Sesi 5 (11.00 - 11.45 WIB)" {{ $currJam == 'Sesi 5 (11.00 - 11.45 WIB)' ? 'selected' : '' }}>Sesi 5 (11.00 - 11.45 WIB)</option>
-                                <option value="Sesi 6 (11.45 - 12.30 WIB)" {{ $currJam == 'Sesi 6 (11.45 - 12.30 WIB)' ? 'selected' : '' }}>Sesi 6 (11.45 - 12.30 WIB)</option>
-                                <option value="Sesi 7 (12.30 - 13.00 WIB)" {{ $currJam == 'Sesi 7 (12.30 - 13.00 WIB)' ? 'selected' : '' }}>Sesi 7 (12.30 - 13.00 WIB)</option>
-                                <option value="Sesi Khusus / Fleksibel" {{ $currJam == 'Sesi Khusus / Fleksibel' ? 'selected' : '' }}>Sesi Khusus / Fleksibel</option>
+                                <option value="Sesi 1 (08.00 - 08.45 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 1 (08.00 - 08.45 WIB)') ? 'selected' : '' }}>Sesi 1 (08.00 - 08.45 WIB)</option>
+                                <option value="Sesi 2 (08.45 - 09.30 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 2 (08.45 - 09.30 WIB)') ? 'selected' : '' }}>Sesi 2 (08.45 - 09.30 WIB)</option>
+                                <option value="Sesi 3 (09.30 - 10.15 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 3 (09.30 - 10.15 WIB)') ? 'selected' : '' }}>Sesi 3 (09.30 - 10.15 WIB)</option>
+                                <option value="Sesi 4 (10.15 - 11.00 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 4 (10.15 - 11.00 WIB)') ? 'selected' : '' }}>Sesi 4 (10.15 - 11.00 WIB)</option>
+                                <option value="Sesi 5 (11.00 - 11.45 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 5 (11.00 - 11.45 WIB)') ? 'selected' : '' }}>Sesi 5 (11.00 - 11.45 WIB)</option>
+                                <option value="Sesi 6 (11.45 - 12.30 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 6 (11.45 - 12.30 WIB)') ? 'selected' : '' }}>Sesi 6 (11.45 - 12.30 WIB)</option>
+                                <option value="Sesi 7 (12.30 - 13.00 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 7 (12.30 - 13.00 WIB)') ? 'selected' : '' }}>Sesi 7 (12.30 - 13.00 WIB)</option>
+                                <option value="Sesi Khusus / Fleksibel" {{ $isCustomSesi ? 'selected' : '' }}>Sesi Khusus / Fleksibel (Input Jam Sendiri)</option>
                             </select>
+                            <input type="hidden" name="jam_rencana_kunjungan" id="reg_jam_rencana_kunjungan" value="{{ $currJam }}">
                             @error('jam_rencana_kunjungan')
                                 <div class="invalid-feedback d-block" style="color: #ef4444; font-size: 11.5px; margin-top: 4px;">{{ $message }}</div>
                             @enderror
+                        </div>
+
+                        <!-- Input Jam Sesi Khusus / Fleksibel (Maksimal 45 Menit) -->
+                        <div class="col-12 mb-3 {{ $isCustomSesi ? '' : 'd-none' }}" id="wrapper_reg_sesi_khusus">
+                            <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #eff6ff 100%); border: 1.5px solid #93c5fd; border-radius: 12px; padding: 14px 18px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.05);">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" style="gap: 8px;">
+                                    <div style="font-size: 13px; font-weight: 700; color: #1e40af;">
+                                        <i class="fa-solid fa-clock mr-1 text-primary"></i> Atur Jam Sesi Khusus / Fleksibel
+                                    </div>
+                                    <span class="badge" id="badge_reg_durasi" style="background: #e0f2fe; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11.5px; font-weight: 700; padding: 5px 12px; border-radius: 8px;">
+                                        Durasi: 45 Menit (Maks. 45 Mnt)
+                                    </span>
+                                </div>
+                                <div class="row align-items-center">
+                                    <div class="col-md-5 col-sm-6 mb-2 mb-md-0">
+                                        <label class="form-label font-w600 mb-1" style="font-size: 12px; color: #1e40af;">Jam Mulai (WIB):</label>
+                                        <input type="time" id="reg_custom_mulai" class="form-control" value="{{ $defMulai }}" style="height: 38px; font-size: 13px; font-weight: 600; background: #ffffff; border: 1.5px solid #bfdbfe; border-radius: 8px; color: #1e293b;">
+                                    </div>
+                                    <div class="col-md-5 col-sm-6 mb-2 mb-md-0">
+                                        <label class="form-label font-w600 mb-1" style="font-size: 12px; color: #1e40af;">Jam Selesai (WIB - Maks +45 Menit):</label>
+                                        <input type="time" id="reg_custom_selesai" class="form-control" value="{{ $defSelesai }}" style="height: 38px; font-size: 13px; font-weight: 600; background: #ffffff; border: 1.5px solid #bfdbfe; border-radius: 8px; color: #1e293b;">
+                                    </div>
+                                    <div class="col-md-2 col-12 text-md-right">
+                                        <button type="button" class="btn btn-sm font-w700 mt-md-4 w-100" id="btn_reg_auto_45" title="Set otomatis 45 menit" style="background: #ffffff; color: #2563eb; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 7px 10px; font-size: 12px; box-shadow: 0 1px 3px rgba(37,99,235,0.08);">
+                                            +45 Mnt
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="d-block mt-2 font-w500" style="font-size: 11.5px; color: #2563eb; line-height: 1.4;">
+                                    <i class="fa-solid fa-circle-info mr-1 text-primary"></i> Standar pelayanan terapi Omah Terapi-KU adalah 30 hingga <strong>maksimal 45 menit</strong> per sesi.
+                                </small>
+                            </div>
                         </div>
 
                         <div class="col-12 mb-3">
@@ -2253,6 +2515,29 @@
 
                 <!-- Live Status Result Wrapper -->
                 <div id="trackResultWrapper" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- PETA LOKASI UPT OMAH TERAPI-KU                                -->
+        <!-- ============================================================= -->
+        <div class="portal-card sebaran-maps-card" id="sebaran-upt-section">
+            <div class="sebaran-maps-header">
+                <div class="d-flex align-items-center" style="gap: 14px;">
+                    <div class="sebaran-header-icon">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </div>
+                    <div>
+                        <h2 class="sebaran-title">Peta Lokasi UPT Omah Terapi-KU</h2>
+                        <p class="sebaran-subtitle">
+                            Persebaran lokasi Unit Pelaksana Teknis (UPT) Omah Terapi-KU Dinas Sosial Provinsi Jawa Timur. Klik pin untuk info dan rute navigasi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sebaran-maps-body" style="padding: 0;">
+                <div id="uptLeafletMap" class="sebaran-leaflet-canvas"></div>
             </div>
         </div>
     </main>
@@ -2367,6 +2652,8 @@
     <script src="{{ asset('vendor/global/global.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('vendor/toastr/js/toastr.min.js') }}"></script>
+    <!-- Leaflet Maps JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <script>
         // Native Tab Navigation with Smooth Auto-Scroll
@@ -2632,6 +2919,94 @@
                     $('#wrapper_alat_bantu_lainnya').addClass('d-none');
                 }
             });
+
+            // Handler Sesi Khusus / Fleksibel (Maksimal 45 Menit)
+            function initCustomSesiHandler(selectId, wrapperId, mulaiId, selesaiId, badgeId, hiddenId, btnAuto45Id) {
+                var $select = $('#' + selectId);
+                var $wrapper = $('#' + wrapperId);
+                var $mulai = $('#' + mulaiId);
+                var $selesai = $('#' + selesaiId);
+                var $badge = $('#' + badgeId);
+                var $hidden = $('#' + hiddenId);
+                var $btnAuto = $('#' + btnAuto45Id);
+
+                function syncCustomSesi(isMulaiChanged) {
+                    var mVal = $mulai.val();
+                    var sVal = $selesai.val();
+
+                    if (!mVal) return;
+
+                    var mParts = mVal.split(':').map(Number);
+                    var mMnt = mParts[0] * 60 + mParts[1];
+
+                    if (isMulaiChanged || !sVal) {
+                        var newSelesaiMnt = mMnt + 45;
+                        var sH = Math.floor(newSelesaiMnt / 60) % 24;
+                        var sM = newSelesaiMnt % 60;
+                        sVal = String(sH).padStart(2, '0') + ':' + String(sM).padStart(2, '0');
+                        $selesai.val(sVal);
+                    }
+
+                    var sParts = sVal.split(':').map(Number);
+                    var sMnt = sParts[0] * 60 + sParts[1];
+                    var diff = sMnt - mMnt;
+
+                    if (diff <= 0) {
+                        diff = 45;
+                        var sTot = mMnt + 45;
+                        var calcH = Math.floor(sTot / 60) % 24;
+                        var calcM = sTot % 60;
+                        sVal = String(calcH).padStart(2, '0') + ':' + String(calcM).padStart(2, '0');
+                        $selesai.val(sVal);
+                    } else if (diff > 45) {
+                        diff = 45;
+                        var sTot = mMnt + 45;
+                        var calcH = Math.floor(sTot / 60) % 24;
+                        var calcM = sTot % 60;
+                        sVal = String(calcH).padStart(2, '0') + ':' + String(calcM).padStart(2, '0');
+                        $selesai.val(sVal);
+                        if (typeof toastr !== 'undefined') {
+                            toastr.info('Durasi per sesi dibatasi maksimal 45 menit (otomatis disesuaikan).', 'Info Sesi', { timeOut: 2000 });
+                        }
+                    }
+
+                    if ($badge.length) {
+                        $badge.text('Durasi: ' + diff + ' Menit (Maks. 45 Mnt)');
+                    }
+
+                    var fMulai = $mulai.val().replace(':', '.');
+                    var fSelesai = $selesai.val().replace(':', '.');
+                    var finalVal = 'Sesi Khusus (' + fMulai + ' - ' + fSelesai + ' WIB)';
+                    $hidden.val(finalVal);
+                }
+
+                $select.on('change', function() {
+                    var val = $(this).val();
+                    if (val === 'Sesi Khusus / Fleksibel') {
+                        $wrapper.removeClass('d-none');
+                        syncCustomSesi(false);
+                    } else {
+                        $wrapper.addClass('d-none');
+                        $hidden.val(val);
+                    }
+                });
+
+                $mulai.on('change input', function() { syncCustomSesi(true); });
+                $selesai.on('change input', function() { syncCustomSesi(false); });
+                if ($btnAuto.length) {
+                    $btnAuto.on('click', function(e) {
+                        e.preventDefault();
+                        syncCustomSesi(true);
+                    });
+                }
+
+                // Initial sync if Sesi Khusus selected
+                if ($select.val() === 'Sesi Khusus / Fleksibel') {
+                    syncCustomSesi(false);
+                }
+            }
+
+            initCustomSesiHandler('reg_jam_rencana_select', 'wrapper_reg_sesi_khusus', 'reg_custom_mulai', 'reg_custom_selesai', 'badge_reg_durasi', 'reg_jam_rencana_kunjungan', 'btn_reg_auto_45');
 
             // Tracking Search
             $('#btnTrackSearch').on('click', function() {
@@ -3260,6 +3635,139 @@
                 }
             }
         };
+
+        /* =========================================================================
+           UPT MAP MANAGER (LEAFLET & OPENSTREETMAP - CLEAN FULL-WIDTH)
+           ========================================================================= */
+        @php
+            $uptJsonList = isset($polis) ? $polis->map(function($p) {
+                return [
+                    'id' => $p->id,
+                    'nama' => $p->nama,
+                    'alamat' => $p->alamat ?: 'Jawa Timur',
+                    'no_telp' => $p->no_telp ?: '',
+                    'fokus' => $p->fokus_layanan ?: '',
+                    'lat' => $p->latitude ? (float) $p->latitude : (strpos($p->nama, 'Malang') !== false ? -8.0080 : (strpos($p->nama, 'PMKS') !== false ? -7.4530 : -7.4526)),
+                    'lng' => $p->longitude ? (float) $p->longitude : (strpos($p->nama, 'Malang') !== false ? 112.6320 : (strpos($p->nama, 'PMKS') !== false ? 112.7160 : 112.7135)),
+                ];
+            }) : collect([]);
+        @endphp
+
+        const UptMapManager = {
+            map: null,
+            markers: {},
+            markersGroup: null,
+            locations: @json($uptJsonList),
+
+            init() {
+                if (!document.getElementById('uptLeafletMap')) return;
+
+                // Center around East Java
+                const defaultLat = -7.5360;
+                const defaultLng = 112.4500;
+                const defaultZoom = 9;
+
+                this.map = L.map('uptLeafletMap', {
+                    center: [defaultLat, defaultLng],
+                    zoom: defaultZoom,
+                    zoomControl: true,
+                    scrollWheelZoom: false
+                });
+
+                // Smooth scroll-wheel zoom activation on focus/blur
+                this.map.on('focus', () => { this.map.scrollWheelZoom.enable(); });
+                this.map.on('blur', () => { this.map.scrollWheelZoom.disable(); });
+
+                // OpenStreetMap Tile Layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | Omah Terapi-KU Dinas Sosial Jatim'
+                }).addTo(this.map);
+
+                this.markersGroup = L.featureGroup().addTo(this.map);
+                this.renderMarkers(this.locations);
+
+                if (this.locations.length > 0) {
+                    setTimeout(() => {
+                        this.fitAllMarkers();
+                    }, 350);
+                }
+
+                // Handle tab switch / resize
+                window.addEventListener('resize', () => {
+                    if (this.map) this.map.invalidateSize();
+                });
+            },
+
+            createCustomIcon() {
+                // Uniform Omah Terapi Pin Icon for all UPT locations
+                return L.divIcon({
+                    className: 'upt-custom-marker-wrapper',
+                    html: `
+                        <div class="upt-marker-pulse"></div>
+                        <div class="upt-marker-pin">
+                            <i class="fa-solid fa-hospital-user"></i>
+                        </div>
+                    `,
+                    iconSize: [42, 42],
+                    iconAnchor: [21, 42],
+                    popupAnchor: [0, -42]
+                });
+            },
+
+            renderMarkers(locations) {
+                this.markersGroup.clearLayers();
+                this.markers = {};
+
+                locations.forEach((loc) => {
+                    if (!loc.lat || !loc.lng) return;
+
+                    const icon = this.createCustomIcon();
+                    const marker = L.marker([loc.lat, loc.lng], { icon: icon });
+
+                    const gmapsDirUrl = `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}`;
+                    const telLink = loc.no_telp ? `<a href="tel:${loc.no_telp.replace(/[^0-9]/g, '')}" class="popup-tel-btn"><i class="fa-solid fa-phone mr-1"></i> ${loc.no_telp}</a>` : '';
+
+                    const popupContent = `
+                        <div class="upt-map-popup">
+                            <div class="popup-header">
+                                <span class="popup-badge"><span class="dot"></span> UPT OMAH TERAPI-KU</span>
+                                <h4 class="popup-title">${loc.nama}</h4>
+                            </div>
+                            ${loc.fokus ? `<div class="popup-fokus"><i class="fa-solid fa-tag mr-1 text-primary"></i> ${loc.fokus}</div>` : ''}
+                            <div class="popup-alamat">
+                                <i class="fa-solid fa-location-dot mr-1 text-danger"></i> ${loc.alamat || 'Wilayah Jawa Timur'}
+                            </div>
+                            ${telLink ? `<div class="popup-contact mb-2">${telLink}</div>` : ''}
+                            <div class="popup-actions" style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #e2e8f0;">
+                                <a href="${gmapsDirUrl}" target="_blank" rel="noopener noreferrer" class="btn-popup-gmaps">
+                                    <i class="fa-solid fa-diamond-turn-right mr-1.5"></i> Buka Rute Google Maps
+                                </a>
+                            </div>
+                        </div>
+                    `;
+
+                    marker.bindPopup(popupContent, { maxWidth: 320, className: 'upt-leaflet-popup-card' });
+
+                    this.markersGroup.addLayer(marker);
+                    this.markers[loc.id] = marker;
+                });
+            },
+
+            fitAllMarkers() {
+                if (this.markersGroup && this.markersGroup.getLayers().length > 0) {
+                    this.map.fitBounds(this.markersGroup.getBounds().pad(0.15), {
+                        animate: true,
+                        duration: 0.8
+                    });
+                }
+            }
+        };
+
+        // Initialize Map on Document Ready
+        $(document).ready(function() {
+            UptMapManager.init();
+        });
     </script>
 </body>
 

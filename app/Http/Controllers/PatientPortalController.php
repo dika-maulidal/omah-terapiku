@@ -40,7 +40,7 @@ class PatientPortalController extends Controller
             return redirect()->route('portal.dashboard');
         }
 
-        $polis = Poli::where('status', 1)->get();
+        $polis = Poli::where('status', 1)->with('terapis')->get();
 
         return view('portal.login', compact('polis'));
     }

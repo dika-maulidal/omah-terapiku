@@ -14,22 +14,25 @@
 <div class="row">
     @foreach($masterSlots as $slotName => $meta)
         @php
+            $isKhususSlot = ($slotName === 'Sesi Khusus / Fleksibel');
             $pasienDiSlot = $jadwalPerSlot[$slotName] ?? [];
             $hasPasien = count($pasienDiSlot) > 0;
+            $cardTopBorder = $isKhususSlot ? '#0284c7' : '#2563eb';
+            $slotBadgeBg = $isKhususSlot ? 'background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;' : 'background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;';
         @endphp
 
         <div class="col-xl-6 col-12 mb-4">
-            <div class="slot-session-card h-100 p-3" style="{{ $hasPasien ? 'border-top: 3.5px solid #2563eb; background: #ffffff;' : 'background: #fafbfc;' }}">
+            <div class="slot-session-card h-100 p-3" style="{{ $hasPasien ? "border-top: 3.5px solid {$cardTopBorder}; background: #ffffff;" : ($isKhususSlot ? 'background: #f8fafc; border: 1.5px dashed #93c5fd;' : 'background: #fafbfc;') }}">
                 
                 <!-- Header Slot Sesi -->
                 <div class="d-flex justify-content-between align-items-center pb-2 mb-3" style="border-bottom: 1px solid #edf2f7;">
                     <div class="d-flex align-items-center">
-                        <span class="badge font-w700 mr-2 py-1 px-2" style="font-size: 11.5px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
+                        <span class="badge font-w700 mr-2 py-1 px-2" style="font-size: 11.5px; border-radius: 6px; {{ $slotBadgeBg }}">
                             <i class="fa-solid {{ $meta['icon'] }} mr-1"></i> {{ explode(' (', $slotName)[0] }}
                         </span>
                         <strong class="text-dark" style="font-size: 13.5px;">{{ $meta['jam'] }}</strong>
                     </div>
-                    <span class="badge {{ $hasPasien ? 'font-w700' : 'font-w600 text-muted' }}" style="font-size: 11.5px; padding: 4px 10px; border-radius: 20px; {{ $hasPasien ? 'background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;' : 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;' }}">
+                    <span class="badge {{ $hasPasien ? 'font-w700' : 'font-w600 text-muted' }}" style="font-size: 11.5px; padding: 4px 10px; border-radius: 20px; {{ $hasPasien ? $slotBadgeBg : 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;' }}">
                         {{ count($pasienDiSlot) }} Penerima Manfaat
                     </span>
                 </div>
@@ -43,7 +46,7 @@
                                 $layanan = $pRecord->layanan_terapi ?: 'Fisioterapi';
                                 
                                 // Color badge border
-                                $borderClr = '#2563eb';
+                                $borderClr = $isKhususSlot ? '#0284c7' : '#2563eb';
                                 $layananBadge = 'background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;';
                                 if (str_contains($layanan, 'Okupasi')) {
                                     $borderClr = '#d97706';
@@ -74,6 +77,11 @@
                                                 <span class="badge font-w600" style="font-size: 10.5px; padding: 2px 8px; border-radius: 4px; {{ $layananBadge }}">
                                                     {{ $layanan }}
                                                 </span>
+                                                @if($pRecord->sesi_waktu && ($isKhususSlot || str_contains($pRecord->sesi_waktu, 'Sesi Khusus')))
+                                                    <span class="badge font-w700" style="font-size: 10.5px; padding: 2px 8px; border-radius: 4px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
+                                                        <i class="fa-regular fa-clock mr-1"></i> {{ $pRecord->sesi_waktu }}
+                                                    </span>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -131,7 +139,7 @@
                         <i class="fa-solid fa-calendar-xmark text-muted mb-1" style="font-size: 20px; opacity: 0.4;"></i>
                         <p class="mb-0 text-muted" style="font-size: 12px;">Slot waktu kosong &bull; Belum ada penerima manfaat</p>
                         <a href="{{ Route('rekam.add', array_filter(['tanggal' => $tanggal, 'sesi' => $slotName, 'upt' => ($uptFilter != 'all' && $uptFilter) ? $uptFilter : null, 'layanan' => ($layananFilter != 'all' && $layananFilter) ? $layananFilter : null, 'dokter_id' => ($dokterFilter != 'all' && $dokterFilter) ? $dokterFilter : null])) }}" class="btn btn-xs btn-primary font-w600 mt-2" style="font-size: 11.5px; border-radius: 6px; padding: 4px 12px; text-decoration: none;">
-                            <i class="fa-solid fa-plus mr-1"></i> + Jadwalkan di Slot Ini
+                            <i class="fa-solid fa-plus mr-1"></i> Jadwalkan di Slot Ini
                         </a>
                     </div>
                 @endif

@@ -304,7 +304,7 @@
 <!-- ======================================================== -->
 <!-- MODAL POPUP PREVIEW BERKAS DOKUMEN PASIEN (INTERAKTIF)   -->
 <!-- ======================================================== -->
-<div class="modal fade" id="modalPreviewBerkas" tabindex="-1" role="dialog" aria-hidden="true" style="backdrop-filter: blur(4px); z-index: 1065;">
+<div class="modal fade" id="modalPreviewBerkas" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1065;">
     <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 880px; z-index: 1066;" role="document">
         <div class="modal-content" style="border-radius: 14px; border: 1px solid #bfdbfe; box-shadow: 0 16px 45px rgba(15, 23, 42, 0.25); overflow: hidden;">
             

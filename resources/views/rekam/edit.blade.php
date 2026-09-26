@@ -420,20 +420,66 @@
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label font-w600 text-dark" style="font-size: 13px; margin-bottom: 6px;">
-                                    Jadwal Sesi Terapi <small class="text-muted font-w400">(Rabu, 30-45 mnt)</small>
+                                    Jadwal Sesi Terapi <span class="text-danger">*</span> <small class="text-muted font-w400">(Rabu, 30-45 mnt)</small>
                                 </label>
-                                @php $currentSesi = old('sesi_waktu', $data->sesi_waktu); @endphp
-                                <select name="sesi_waktu" class="form-control" style="height: 44px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">
+                                @php 
+                                    $currentSesi = old('sesi_waktu', $data->sesi_waktu); 
+                                    $isCustomSesi = str_starts_with($currentSesi, 'Sesi Khusus') || $currentSesi === 'Sesi Khusus / Fleksibel';
+                                    $defMulai = '13:00';
+                                    $defSelesai = '13:45';
+                                    if ($isCustomSesi && preg_match('/(\d{2})[.:](\d{2})\s*-\s*(\d{2})[.:](\d{2})/', $currentSesi, $m)) {
+                                        $defMulai = $m[1] . ':' . $m[2];
+                                        $defSelesai = $m[3] . ':' . $m[4];
+                                    }
+                                @endphp
+                                <select id="rekam_sesi_waktu_select" class="form-control" required style="height: 44px; font-size: 13px; border-radius: 8px; border: 1.5px solid #cbd5e1;">
                                     <option value="">--Pilih Slot Sesi Waktu--</option>
-                                    <option value="Sesi 1 (08.00 - 08.45 WIB)" {{ $currentSesi == 'Sesi 1 (08.00 - 08.45 WIB)' ? 'selected' : '' }}>Sesi 1 (08.00 - 08.45 WIB)</option>
-                                    <option value="Sesi 2 (08.45 - 09.30 WIB)" {{ $currentSesi == 'Sesi 2 (08.45 - 09.30 WIB)' ? 'selected' : '' }}>Sesi 2 (08.45 - 09.30 WIB)</option>
-                                    <option value="Sesi 3 (09.30 - 10.15 WIB)" {{ $currentSesi == 'Sesi 3 (09.30 - 10.15 WIB)' ? 'selected' : '' }}>Sesi 3 (09.30 - 10.15 WIB)</option>
-                                    <option value="Sesi 4 (10.15 - 11.00 WIB)" {{ $currentSesi == 'Sesi 4 (10.15 - 11.00 WIB)' ? 'selected' : '' }}>Sesi 4 (10.15 - 11.00 WIB)</option>
-                                    <option value="Sesi 5 (11.00 - 11.45 WIB)" {{ $currentSesi == 'Sesi 5 (11.00 - 11.45 WIB)' ? 'selected' : '' }}>Sesi 5 (11.00 - 11.45 WIB)</option>
-                                    <option value="Sesi 6 (11.45 - 12.30 WIB)" {{ $currentSesi == 'Sesi 6 (11.45 - 12.30 WIB)' ? 'selected' : '' }}>Sesi 6 (11.45 - 12.30 WIB)</option>
-                                    <option value="Sesi 7 (12.30 - 13.00 WIB)" {{ $currentSesi == 'Sesi 7 (12.30 - 13.00 WIB)' ? 'selected' : '' }}>Sesi 7 (12.30 - 13.00 WIB)</option>
-                                    <option value="Sesi Khusus / Fleksibel" {{ $currentSesi == 'Sesi Khusus / Fleksibel' ? 'selected' : '' }}>Sesi Khusus / Fleksibel</option>
+                                    <option value="Sesi 1 (08.00 - 08.45 WIB)" data-base-label="Sesi 1 (08.00 - 08.45 WIB)" {{ (!$isCustomSesi && $currentSesi == 'Sesi 1 (08.00 - 08.45 WIB)') ? 'selected' : '' }}>Sesi 1 (08.00 - 08.45 WIB)</option>
+                                    <option value="Sesi 2 (08.45 - 09.30 WIB)" data-base-label="Sesi 2 (08.45 - 09.30 WIB)" {{ (!$isCustomSesi && $currentSesi == 'Sesi 2 (08.45 - 09.30 WIB)') ? 'selected' : '' }}>Sesi 2 (08.45 - 09.30 WIB)</option>
+                                    <option value="Sesi 3 (09.30 - 10.15 WIB)" data-base-label="Sesi 3 (09.30 - 10.15 WIB)" {{ (!$isCustomSesi && $currentSesi == 'Sesi 3 (09.30 - 10.15 WIB)') ? 'selected' : '' }}>Sesi 3 (09.30 - 10.15 WIB)</option>
+                                    <option value="Sesi 4 (10.15 - 11.00 WIB)" data-base-label="Sesi 4 (10.15 - 11.00 WIB)" {{ (!$isCustomSesi && $currentSesi == 'Sesi 4 (10.15 - 11.00 WIB)') ? 'selected' : '' }}>Sesi 4 (10.15 - 11.00 WIB)</option>
+                                    <option value="Sesi 5 (11.00 - 11.45 WIB)" data-base-label="Sesi 5 (11.00 - 11.45 WIB)" {{ (!$isCustomSesi && $currentSesi == 'Sesi 5 (11.00 - 11.45 WIB)') ? 'selected' : '' }}>Sesi 5 (11.00 - 11.45 WIB)</option>
+                                    <option value="Sesi 6 (11.45 - 12.30 WIB)" data-base-label="Sesi 6 (11.45 - 12.30 WIB)" {{ (!$isCustomSesi && $currentSesi == 'Sesi 6 (11.45 - 12.30 WIB)') ? 'selected' : '' }}>Sesi 6 (11.45 - 12.30 WIB)</option>
+                                    <option value="Sesi 7 (12.30 - 13.00 WIB)" data-base-label="Sesi 7 (12.30 - 13.00 WIB)" {{ (!$isCustomSesi && $currentSesi == 'Sesi 7 (12.30 - 13.00 WIB)') ? 'selected' : '' }}>Sesi 7 (12.30 - 13.00 WIB)</option>
+                                    <option value="Sesi Khusus / Fleksibel" data-base-label="Sesi Khusus / Fleksibel" {{ $isCustomSesi ? 'selected' : '' }}>Sesi Khusus / Fleksibel (Input Jam Sendiri)</option>
                                 </select>
+                                <input type="hidden" name="sesi_waktu" id="sesi_waktu" value="{{ $currentSesi }}">
+                                <div id="sesiConflictHint" class="mt-2" style="display: none;"></div>
+                                @error('sesi_waktu')
+                                    <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Input Jam Sesi Khusus / Fleksibel (Maksimal 45 Menit) -->
+                            <div class="col-12 mb-3 {{ $isCustomSesi ? '' : 'd-none' }}" id="wrapper_rekam_sesi_khusus">
+                                <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #eff6ff 100%); border: 1.5px solid #93c5fd; border-radius: 12px; padding: 14px 18px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.05);">
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" style="gap: 8px;">
+                                        <div style="font-size: 13px; font-weight: 700; color: #1e40af;">
+                                            <i class="fa-solid fa-clock mr-1 text-primary"></i> Atur Jam Sesi Khusus / Fleksibel
+                                        </div>
+                                        <span class="badge" id="badge_rekam_durasi" style="background: #e0f2fe; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11.5px; font-weight: 700; padding: 5px 12px; border-radius: 8px;">
+                                            Durasi: 45 Menit (Maks. 45 Mnt)
+                                        </span>
+                                    </div>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-5 col-sm-6 mb-2 mb-md-0">
+                                            <label class="form-label font-w600 mb-1" style="font-size: 12px; color: #1e40af;">Jam Mulai (WIB):</label>
+                                            <input type="time" id="rekam_custom_mulai" class="form-control" value="{{ $defMulai }}" style="height: 38px; font-size: 13px; font-weight: 600; background: #ffffff; border: 1.5px solid #bfdbfe; border-radius: 8px; color: #1e293b;">
+                                        </div>
+                                        <div class="col-md-5 col-sm-6 mb-2 mb-md-0">
+                                            <label class="form-label font-w600 mb-1" style="font-size: 12px; color: #1e40af;">Jam Selesai (WIB - Maks +45 Menit):</label>
+                                            <input type="time" id="rekam_custom_selesai" class="form-control" value="{{ $defSelesai }}" style="height: 38px; font-size: 13px; font-weight: 600; background: #ffffff; border: 1.5px solid #bfdbfe; border-radius: 8px; color: #1e293b;">
+                                        </div>
+                                        <div class="col-md-2 col-12 text-md-right">
+                                            <button type="button" class="btn btn-sm font-w700 mt-md-4 w-100" id="btn_rekam_auto_45" title="Set otomatis 45 menit" style="background: #ffffff; color: #2563eb; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 7px 10px; font-size: 12px; box-shadow: 0 1px 3px rgba(37,99,235,0.08);">
+                                                +45 Mnt
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <small class="d-block mt-2 font-w500" style="font-size: 11.5px; color: #2563eb; line-height: 1.4;">
+                                        <i class="fa-solid fa-circle-info mr-1 text-primary"></i> Durasi pelayanan terapi dibatasi <strong>maksimal 45 menit per sesi</strong>.
+                                    </small>
+                                </div>
                             </div>
                         </div>
 
@@ -508,34 +554,201 @@
         });
     });
 
+    function loadDokter(selectedDokterId = null) {
+        var poli = $("#poli").val();
+        if (!poli) {
+            $("#dokter_id").html('<option value="">--Pilih Terapis--</option>');
+            checkTherapistSlotConflict();
+            return;
+        }
+
+        $.get("{{ route('getDokter') }}", { poli: poli }, function(response) {
+            var stringUtama = '<option value="">--Pilih Terapis--</option>';
+            var listDokter = response.data ? response.data : response;
+
+            $.each(listDokter, function(index, value) {
+                var isSelectedUtama = (selectedDokterId && selectedDokterId == value.id) ? 'selected' : '';
+                stringUtama += `<option value="${value.id}" ${isSelectedUtama}>${value.nama}</option>`;
+            });
+
+            $("#dokter_id").html(stringUtama);
+            checkTherapistSlotConflict();
+        });
+    }
+
+    function checkTherapistSlotConflict() {
+        var dokterId = $("#dokter_id").val();
+        var tanggal = $("input[name='tgl_rekam']").val();
+        var selectedSesi = $("#sesi_waktu").val();
+        var hintContainer = $("#sesiConflictHint");
+        var submitBtn = $("button[type='submit']");
+        var excludeId = "{{ $data->id }}";
+
+        if (!dokterId || !tanggal) {
+            $("#rekam_sesi_waktu_select option").each(function() {
+                var baseLabel = $(this).data('base-label') || $(this).val();
+                if ($(this).val() !== '') {
+                    $(this).text(baseLabel).prop('disabled', false).css({'color': '', 'background-color': ''});
+                }
+            });
+            hintContainer.hide().empty();
+            submitBtn.prop('disabled', false);
+            return;
+        }
+
+        $.get("{{ route('jadwal.check-terapis') }}", {
+            dokter_id: dokterId,
+            tanggal: tanggal,
+            sesi_waktu: selectedSesi,
+            exclude_id: excludeId
+        }, function(res) {
+            if (!res.success) return;
+
+            var occupied = res.occupied_slots || {};
+
+            // Update each option in sesi_waktu dropdown
+            $("#rekam_sesi_waktu_select option").each(function() {
+                var val = $(this).val();
+                if (!val) return;
+
+                var baseLabel = $(this).data('base-label') || val;
+
+                if (occupied[val]) {
+                    var occ = occupied[val];
+                    $(this).text(baseLabel + " [TERISI - " + occ.pasien_nama + " (RM#" + occ.no_rm + ")]");
+                    $(this).prop('disabled', true);
+                    $(this).css({'color': '#dc2626', 'background-color': '#fef2f2'});
+                } else {
+                    $(this).text(baseLabel);
+                    $(this).prop('disabled', false);
+                    $(this).css({'color': '', 'background-color': ''});
+                }
+            });
+
+            // If currently selected slot is occupied, show alert and disable button
+            if (selectedSesi && occupied[selectedSesi]) {
+                var occ = occupied[selectedSesi];
+                hintContainer.html(`
+                    <div class="alert alert-danger py-2 px-3 mb-0 d-flex align-items-center" style="font-size: 12px; border-radius: 8px; border: 1.5px solid #fecaca; background: #fef2f2; color: #b91c1c;">
+                        <i class="fa-solid fa-triangle-exclamation mr-2" style="font-size: 14px; flex-shrink: 0;"></i>
+                        <div>
+                            <strong>Jadwal Bentrok:</strong> ${res.terapis_nama} sudah memiliki jadwal sesi dengan <strong>${occ.pasien_nama} (RM# ${occ.no_rm})</strong> pada sesi ini. Satu terapis hanya dapat melayani 1 penerima manfaat per sesi. Silakan pilih slot lain.
+                        </div>
+                    </div>
+                `).fadeIn(150);
+                submitBtn.prop('disabled', true);
+            } else if (selectedSesi && !occupied[selectedSesi]) {
+                hintContainer.html(`
+                    <div class="text-success font-w600" style="font-size: 12px;">
+                        <i class="fa-solid fa-circle-check mr-1"></i> Terapis ${res.terapis_nama} tersedia pada sesi ini (1 terapis 1 penerima manfaat).
+                    </div>
+                `).fadeIn(150);
+                submitBtn.prop('disabled', false);
+            } else {
+                hintContainer.hide().empty();
+                submitBtn.prop('disabled', false);
+            }
+        });
+    }
+
     $(document).ready(function() {
-        function loadDokter(selectedDokterId = null) {
-            var poli = $("#poli").val();
-            if (!poli) {
-                $("#dokter_id").html('<option value="">--Pilih Terapis--</option>');
-                return;
+        // Sesi Khusus / Fleksibel Custom Time Handler
+        var $select = $('#rekam_sesi_waktu_select');
+        var $wrapper = $('#wrapper_rekam_sesi_khusus');
+        var $mulai = $('#rekam_custom_mulai');
+        var $selesai = $('#rekam_custom_selesai');
+        var $badge = $('#badge_rekam_durasi');
+        var $hidden = $('#sesi_waktu');
+        var $btnAuto = $('#btn_rekam_auto_45');
+
+        function syncRekamCustomSesi(isMulaiChanged) {
+            var mVal = $mulai.val();
+            var sVal = $selesai.val();
+
+            if (!mVal) return;
+
+            var mParts = mVal.split(':').map(Number);
+            var mMnt = mParts[0] * 60 + mParts[1];
+
+            if (isMulaiChanged || !sVal) {
+                var newSelesaiMnt = mMnt + 45;
+                var sH = Math.floor(newSelesaiMnt / 60) % 24;
+                var sM = newSelesaiMnt % 60;
+                sVal = String(sH).padStart(2, '0') + ':' + String(sM).padStart(2, '0');
+                $selesai.val(sVal);
             }
 
-            $.get("{{ route('getDokter') }}", { poli: poli }, function(response) {
-                var stringUtama = '<option value="">--Pilih Terapis--</option>';
-                var listDokter = response.data ? response.data : response;
+            var sParts = sVal.split(':').map(Number);
+            var sMnt = sParts[0] * 60 + sParts[1];
+            var diff = sMnt - mMnt;
 
-                $.each(listDokter, function(index, value) {
-                    var isSelectedUtama = (selectedDokterId && selectedDokterId == value.id) ? 'selected' : '';
-                    stringUtama += `<option value="${value.id}" ${isSelectedUtama}>${value.nama}</option>`;
-                });
+            if (diff <= 0) {
+                diff = 45;
+                var sTot = mMnt + 45;
+                var calcH = Math.floor(sTot / 60) % 24;
+                var calcM = sTot % 60;
+                sVal = String(calcH).padStart(2, '0') + ':' + String(calcM).padStart(2, '0');
+                $selesai.val(sVal);
+            } else if (diff > 45) {
+                diff = 45;
+                var sTot = mMnt + 45;
+                var calcH = Math.floor(sTot / 60) % 24;
+                var calcM = sTot % 60;
+                sVal = String(calcH).padStart(2, '0') + ':' + String(calcM).padStart(2, '0');
+                $selesai.val(sVal);
+                if (typeof toastr !== 'undefined') {
+                    toastr.info('Durasi per sesi dibatasi maksimal 45 menit.', 'Info Sesi', { timeOut: 2000 });
+                }
+            }
 
-                $("#dokter_id").html(stringUtama);
+            if ($badge.length) {
+                $badge.text('Durasi: ' + diff + ' Menit (Maks. 45 Mnt)');
+            }
+
+            var fMulai = $mulai.val().replace(':', '.');
+            var fSelesai = $selesai.val().replace(':', '.');
+            $hidden.val('Sesi Khusus (' + fMulai + ' - ' + fSelesai + ' WIB)');
+            checkTherapistSlotConflict();
+        }
+
+        $select.on('change', function() {
+            var val = $(this).val();
+            if (val === 'Sesi Khusus / Fleksibel') {
+                $wrapper.removeClass('d-none');
+                syncRekamCustomSesi(false);
+            } else {
+                $wrapper.addClass('d-none');
+                $hidden.val(val);
+                checkTherapistSlotConflict();
+            }
+        });
+
+        $mulai.on('change input', function() { syncRekamCustomSesi(true); });
+        $selesai.on('change input', function() { syncRekamCustomSesi(false); });
+        if ($btnAuto.length) {
+            $btnAuto.on('click', function(e) {
+                e.preventDefault();
+                syncRekamCustomSesi(true);
             });
+        }
+
+        if ($select.val() === 'Sesi Khusus / Fleksibel') {
+            syncRekamCustomSesi(false);
         }
 
         $("#poli").on("change", function() {
             loadDokter();
         });
 
+        $("#dokter_id, #sesi_waktu, input[name='tgl_rekam']").on("change input", function() {
+            checkTherapistSlotConflict();
+        });
+
         var initialDokterId = "{{ $data->dokter_id }}";
         if ($("#poli").val() !== '') {
             loadDokter(initialDokterId);
+        } else {
+            checkTherapistSlotConflict();
         }
     });
 

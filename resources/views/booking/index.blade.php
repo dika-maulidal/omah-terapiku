@@ -357,19 +357,48 @@
                         <!-- Jam Sesi -->
                         <div class="col-md-6 form-group mb-0">
                             <label class="font-w600 text-dark mb-1" style="font-size: 13px;">
-                                <i class="fa-regular fa-clock text-primary mr-1"></i> Jam Sesi Terapi <small class="text-muted font-w400">(Rabu, 30-45 mnt)</small>
+                                <i class="fa-regular fa-clock text-primary mr-1"></i> Jam Sesi Terapi <span class="text-danger">*</span> <small class="text-muted font-w400">(Maks 45 mnt)</small>
                             </label>
-                            <select name="jam_sesi" id="bkgModalJamSesi" class="form-control ot-input-modern font-w600">
+                            <select id="bkgModalJamSesiSelect" class="form-control ot-input-modern font-w600" required>
                                 <option value="">--Pilih Slot Sesi Waktu--</option>
-                                <option value="Sesi 1 (08.00 - 08.45 WIB)">Sesi 1 (08.00 - 08.45 WIB)</option>
-                                <option value="Sesi 2 (08.45 - 09.30 WIB)">Sesi 2 (08.45 - 09.30 WIB)</option>
-                                <option value="Sesi 3 (09.30 - 10.15 WIB)">Sesi 3 (09.30 - 10.15 WIB)</option>
-                                <option value="Sesi 4 (10.15 - 11.00 WIB)">Sesi 4 (10.15 - 11.00 WIB)</option>
-                                <option value="Sesi 5 (11.00 - 11.45 WIB)">Sesi 5 (11.00 - 11.45 WIB)</option>
-                                <option value="Sesi 6 (11.45 - 12.30 WIB)">Sesi 6 (11.45 - 12.30 WIB)</option>
-                                <option value="Sesi 7 (12.30 - 13.00 WIB)">Sesi 7 (12.30 - 13.00 WIB)</option>
-                                <option value="Sesi Khusus / Fleksibel">Sesi Khusus / Fleksibel</option>
+                                <option value="Sesi 1 (08.00 - 08.45 WIB)" data-base-label="Sesi 1 (08.00 - 08.45 WIB)">Sesi 1 (08.00 - 08.45 WIB)</option>
+                                <option value="Sesi 2 (08.45 - 09.30 WIB)" data-base-label="Sesi 2 (08.45 - 09.30 WIB)">Sesi 2 (08.45 - 09.30 WIB)</option>
+                                <option value="Sesi 3 (09.30 - 10.15 WIB)" data-base-label="Sesi 3 (09.30 - 10.15 WIB)">Sesi 3 (09.30 - 10.15 WIB)</option>
+                                <option value="Sesi 4 (10.15 - 11.00 WIB)" data-base-label="Sesi 4 (10.15 - 11.00 WIB)">Sesi 4 (10.15 - 11.00 WIB)</option>
+                                <option value="Sesi 5 (11.00 - 11.45 WIB)" data-base-label="Sesi 5 (11.00 - 11.45 WIB)">Sesi 5 (11.00 - 11.45 WIB)</option>
+                                <option value="Sesi 6 (11.45 - 12.30 WIB)" data-base-label="Sesi 6 (11.45 - 12.30 WIB)">Sesi 6 (11.45 - 12.30 WIB)</option>
+                                <option value="Sesi 7 (12.30 - 13.00 WIB)" data-base-label="Sesi 7 (12.30 - 13.00 WIB)">Sesi 7 (12.30 - 13.00 WIB)</option>
+                                <option value="Sesi Khusus / Fleksibel" data-base-label="Sesi Khusus / Fleksibel">Sesi Khusus / Fleksibel (Input Jam Sendiri)</option>
                             </select>
+                            <input type="hidden" name="jam_sesi" id="bkgModalJamSesi" value="Sesi 1 (08.00 - 08.45 WIB)">
+                        </div>
+                    </div>
+                    <div id="bkgModalConflictHint" class="mt-2" style="display: none;"></div>
+
+                    <!-- Input Jam Sesi Khusus / Fleksibel (Maksimal 45 Menit) -->
+                    <div class="form-group mb-0 mt-3 d-none" id="wrapper_bkg_modal_sesi_khusus">
+                        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #eff6ff 100%); border: 1.5px solid #93c5fd; border-radius: 12px; padding: 14px 18px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.05);">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" style="gap: 8px;">
+                                <div style="font-size: 13px; font-weight: 700; color: #1e40af;">
+                                    <i class="fa-solid fa-clock mr-1 text-primary"></i> Atur Jam Sesi Khusus Petugas
+                                </div>
+                                <span class="badge" id="badge_bkg_modal_durasi" style="background: #e0f2fe; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11.5px; font-weight: 700; padding: 5px 12px; border-radius: 8px;">
+                                    Durasi: 45 Menit (Maks. 45 Mnt)
+                                </span>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-sm-6 mb-2 mb-sm-0">
+                                    <label class="form-label font-w600 mb-1" style="font-size: 12px; color: #1e40af;">Jam Mulai (WIB):</label>
+                                    <input type="time" id="bkg_modal_custom_mulai" class="form-control form-control-sm ot-input-modern" value="13:00" style="height: 38px; font-size: 13px; font-weight: 600; background: #ffffff; border: 1.5px solid #bfdbfe; border-radius: 8px; color: #1e293b;">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="form-label font-w600 mb-1" style="font-size: 12px; color: #1e40af;">Jam Selesai (Maks +45 Menit):</label>
+                                    <input type="time" id="bkg_modal_custom_selesai" class="form-control form-control-sm ot-input-modern" value="13:45" style="height: 38px; font-size: 13px; font-weight: 600; background: #ffffff; border: 1.5px solid #bfdbfe; border-radius: 8px; color: #1e293b;">
+                                </div>
+                            </div>
+                            <small class="d-block mt-2 font-w500" style="font-size: 11.5px; color: #2563eb; line-height: 1.4;">
+                                <i class="fa-solid fa-circle-info mr-1 text-primary"></i> Standar pelayanan terapi dibatasi <strong>maksimal 45 menit per sesi</strong>.
+                            </small>
                         </div>
                     </div>
 
@@ -610,9 +639,159 @@
             }
         }
 
+        // Function to check slot clash in approval modal
+        function checkBkgModalConflict() {
+            var dokterId = $('#bkgModalDokterId').val();
+            var tanggal = $('#bkgModalTgl').val();
+            var selectedSesi = $('#bkgModalJamSesi').val();
+            var hintContainer = $('#bkgModalConflictHint');
+            var submitBtn = $('#formApproveBooking button[type="submit"]');
+
+            if (!dokterId || !tanggal) {
+                $('#bkgModalJamSesiSelect option').each(function() {
+                    var baseLabel = $(this).data('base-label') || $(this).val();
+                    if ($(this).val() !== '') {
+                        $(this).text(baseLabel).prop('disabled', false).css({'color': '', 'background-color': ''});
+                    }
+                });
+                hintContainer.hide().empty();
+                submitBtn.prop('disabled', false);
+                return;
+            }
+
+            $.get("{{ route('jadwal.check-terapis') }}", {
+                dokter_id: dokterId,
+                tanggal: tanggal,
+                sesi_waktu: selectedSesi
+            }, function(res) {
+                if (!res.success) return;
+
+                var occupied = res.occupied_slots || {};
+
+                // Update each option in sesi_waktu dropdown
+                $('#bkgModalJamSesiSelect option').each(function() {
+                    var val = $(this).val();
+                    if (!val) return;
+
+                    var baseLabel = $(this).data('base-label') || val;
+
+                    if (occupied[val]) {
+                        var occ = occupied[val];
+                        $(this).text(baseLabel + " [TERISI - " + occ.pasien_nama + " (RM#" + occ.no_rm + ")]");
+                        $(this).prop('disabled', true);
+                        $(this).css({'color': '#dc2626', 'background-color': '#fef2f2'});
+                    } else {
+                        $(this).text(baseLabel);
+                        $(this).prop('disabled', false);
+                        $(this).css({'color': '', 'background-color': ''});
+                    }
+                });
+
+                // If currently selected slot is occupied, show alert and disable button
+                if (selectedSesi && occupied[selectedSesi]) {
+                    var occ = occupied[selectedSesi];
+                    hintContainer.html(`
+                        <div class="alert alert-danger py-2 px-3 mb-0 d-flex align-items-center" style="font-size: 12px; border-radius: 8px; border: 1.5px solid #fecaca; background: #fef2f2; color: #b91c1c;">
+                            <i class="fa-solid fa-triangle-exclamation mr-2" style="font-size: 14px; flex-shrink: 0;"></i>
+                            <div>
+                                <strong>Jadwal Bentrok:</strong> ${res.terapis_nama} sudah memiliki jadwal sesi dengan <strong>${occ.pasien_nama} (RM# ${occ.no_rm})</strong> pada tanggal ${res.tanggal_formatted} di sesi ini. Satu terapis hanya dapat melayani 1 penerima manfaat per sesi.
+                            </div>
+                        </div>
+                    `).fadeIn(150);
+                    submitBtn.prop('disabled', true);
+                } else if (selectedSesi && !occupied[selectedSesi]) {
+                    hintContainer.html(`
+                        <div class="text-success font-w600" style="font-size: 12px;">
+                            <i class="fa-solid fa-circle-check mr-1"></i> Terapis ${res.terapis_nama} tersedia pada sesi ini (1 terapis 1 penerima manfaat).
+                        </div>
+                    `).fadeIn(150);
+                    submitBtn.prop('disabled', false);
+                } else {
+                    hintContainer.hide().empty();
+                    submitBtn.prop('disabled', false);
+                }
+            });
+        }
+
+        // Sesi Khusus in Booking Approve Modal Handler
+        function syncBkgModalCustomSesi(isMulaiChanged) {
+            var $mulai = $('#bkg_modal_custom_mulai');
+            var $selesai = $('#bkg_modal_custom_selesai');
+            var $badge = $('#badge_bkg_modal_durasi');
+            var $hidden = $('#bkgModalJamSesi');
+
+            var mVal = $mulai.val();
+            var sVal = $selesai.val();
+
+            if (!mVal) return;
+
+            var mParts = mVal.split(':').map(Number);
+            var mMnt = mParts[0] * 60 + mParts[1];
+
+            if (isMulaiChanged || !sVal) {
+                var newSelesaiMnt = mMnt + 45;
+                var sH = Math.floor(newSelesaiMnt / 60) % 24;
+                var sM = newSelesaiMnt % 60;
+                sVal = String(sH).padStart(2, '0') + ':' + String(sM).padStart(2, '0');
+                $selesai.val(sVal);
+            }
+
+            var sParts = sVal.split(':').map(Number);
+            var sMnt = sParts[0] * 60 + sParts[1];
+            var diff = sMnt - mMnt;
+
+            if (diff <= 0) {
+                diff = 45;
+                var sTot = mMnt + 45;
+                var calcH = Math.floor(sTot / 60) % 24;
+                var calcM = sTot % 60;
+                sVal = String(calcH).padStart(2, '0') + ':' + String(calcM).padStart(2, '0');
+                $selesai.val(sVal);
+            } else if (diff > 45) {
+                diff = 45;
+                var sTot = mMnt + 45;
+                var calcH = Math.floor(sTot / 60) % 24;
+                var calcM = sTot % 60;
+                sVal = String(calcH).padStart(2, '0') + ':' + String(calcM).padStart(2, '0');
+                $selesai.val(sVal);
+                if (typeof toastr !== 'undefined') {
+                    toastr.info('Durasi per sesi dibatasi maksimal 45 menit.', 'Info Sesi', { timeOut: 2000 });
+                }
+            }
+
+            if ($badge.length) {
+                $badge.text('Durasi: ' + diff + ' Menit (Maks. 45 Mnt)');
+            }
+
+            var fMulai = $mulai.val().replace(':', '.');
+            var fSelesai = $selesai.val().replace(':', '.');
+            $hidden.val('Sesi Khusus (' + fMulai + ' - ' + fSelesai + ' WIB)');
+            checkBkgModalConflict();
+        }
+
+        $('#bkgModalJamSesiSelect').on('change', function() {
+            var val = $(this).val();
+            if (val === 'Sesi Khusus / Fleksibel') {
+                $('#wrapper_bkg_modal_sesi_khusus').removeClass('d-none');
+                syncBkgModalCustomSesi(false);
+            } else {
+                $('#wrapper_bkg_modal_sesi_khusus').addClass('d-none');
+                $('#bkgModalJamSesi').val(val);
+                checkBkgModalConflict();
+            }
+        });
+
+        $('#bkg_modal_custom_mulai').on('change input', function() { syncBkgModalCustomSesi(true); });
+        $('#bkg_modal_custom_selesai').on('change input', function() { syncBkgModalCustomSesi(false); });
+
         // On UPT Selection change inside Approve Modal, re-filter doctors
         $('#bkgModalUpt').on('change', function() {
             updateDokterDropdown('#bkgModalDokterId', '#bkgModalDokterHint', $(this).val());
+            checkBkgModalConflict();
+        });
+
+        $('#bkgModalDokterId, #bkgModalTgl, #bkgModalJamSesi').on('change input', function() {
+            checkBkgModalConflict();
         });
 
         // Approve Booking Modal Handler (Delegated)
@@ -627,9 +806,26 @@
             $('#bkgModalPasien').text(nama);
             $('#bkgModalLayanan').text(layanan || 'Layanan Terapi Terpadu');
             $('#bkgModalTgl').val(tgl);
-            if (jam) {
+
+            var isCustom = jam && (jam.indexOf('Sesi Khusus') !== -1 || jam === 'Sesi Khusus / Fleksibel');
+            if (isCustom) {
+                $('#bkgModalJamSesiSelect').val('Sesi Khusus / Fleksibel');
+                $('#wrapper_bkg_modal_sesi_khusus').removeClass('d-none');
+                var match = jam.match(/(\d{2})[.:](\d{2})\s*-\s*(\d{2})[.:](\d{2})/);
+                if (match) {
+                    $('#bkg_modal_custom_mulai').val(match[1] + ':' + match[2]);
+                    $('#bkg_modal_custom_selesai').val(match[3] + ':' + match[4]);
+                } else {
+                    $('#bkg_modal_custom_mulai').val('13:00');
+                    $('#bkg_modal_custom_selesai').val('13:45');
+                }
+                syncBkgModalCustomSesi(false);
+            } else if (jam) {
+                $('#bkgModalJamSesiSelect').val(jam);
+                $('#wrapper_bkg_modal_sesi_khusus').addClass('d-none');
                 $('#bkgModalJamSesi').val(jam);
             }
+
             if (upt) {
                 $('#bkgModalUpt').val(upt);
             }
@@ -637,6 +833,7 @@
             // Re-filter therapist list according to current UPT
             var currentUpt = $('#bkgModalUpt').val();
             updateDokterDropdown('#bkgModalDokterId', '#bkgModalDokterHint', currentUpt);
+            checkBkgModalConflict();
 
             $('#formApproveBooking').attr('action', '/booking-sesi/' + id + '/approve');
             $('#modalApproveBooking').modal('show');

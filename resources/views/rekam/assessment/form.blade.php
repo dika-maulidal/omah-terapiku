@@ -3422,7 +3422,7 @@
 
 
     <!-- Floating Sticky Bottom Action Bar (Selalu Terlihat di Layar) -->
-    <div class="assessment-sticky-action-bar mb-4" style="position: sticky; bottom: 15px; z-index: 1040; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12); padding: 12px 20px;">
+    <div class="assessment-sticky-action-bar mb-4" style="position: sticky; bottom: 15px; z-index: 1040; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12); padding: 12px 20px;">
         <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 12px;">
             <div class="d-flex align-items-center flex-wrap" style="gap: 10px;">
                 <span class="badge font-w700" style="font-size: 12px; padding: 6px 12px; border-radius: 6px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">

@@ -40,8 +40,7 @@
             position: sticky;
             top: 0;
             z-index: 999;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(8px);
+            background: #ffffff;
             border-bottom: 1px solid #cbd5e1;
             padding: 8px 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);

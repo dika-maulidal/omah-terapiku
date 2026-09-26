@@ -422,18 +422,53 @@
                         </label>
                         @php
                             $currJam = old('jam_sesi', 'Sesi 1 (08.00 - 08.45 WIB)');
+                            $isCustomSesi = str_starts_with($currJam, 'Sesi Khusus') || $currJam === 'Sesi Khusus / Fleksibel';
+                            $defMulai = '13:00';
+                            $defSelesai = '13:45';
+                            if ($isCustomSesi && preg_match('/(\d{2})[.:](\d{2})\s*-\s*(\d{2})[.:](\d{2})/', $currJam, $m)) {
+                                $defMulai = $m[1] . ':' . $m[2];
+                                $defSelesai = $m[3] . ':' . $m[4];
+                            }
                         @endphp
-                        <select name="jam_sesi" class="form-control form-control-booking" required style="height: 42px;">
+                        <select id="bkg_jam_sesi_select" class="form-control form-control-booking" required style="height: 42px;">
                             <option value="">--Pilih Slot Sesi Waktu--</option>
-                            <option value="Sesi 1 (08.00 - 08.45 WIB)" {{ $currJam == 'Sesi 1 (08.00 - 08.45 WIB)' ? 'selected' : '' }}>Sesi 1 (08.00 - 08.45 WIB)</option>
-                            <option value="Sesi 2 (08.45 - 09.30 WIB)" {{ $currJam == 'Sesi 2 (08.45 - 09.30 WIB)' ? 'selected' : '' }}>Sesi 2 (08.45 - 09.30 WIB)</option>
-                            <option value="Sesi 3 (09.30 - 10.15 WIB)" {{ $currJam == 'Sesi 3 (09.30 - 10.15 WIB)' ? 'selected' : '' }}>Sesi 3 (09.30 - 10.15 WIB)</option>
-                            <option value="Sesi 4 (10.15 - 11.00 WIB)" {{ $currJam == 'Sesi 4 (10.15 - 11.00 WIB)' ? 'selected' : '' }}>Sesi 4 (10.15 - 11.00 WIB)</option>
-                            <option value="Sesi 5 (11.00 - 11.45 WIB)" {{ $currJam == 'Sesi 5 (11.00 - 11.45 WIB)' ? 'selected' : '' }}>Sesi 5 (11.00 - 11.45 WIB)</option>
-                            <option value="Sesi 6 (11.45 - 12.30 WIB)" {{ $currJam == 'Sesi 6 (11.45 - 12.30 WIB)' ? 'selected' : '' }}>Sesi 6 (11.45 - 12.30 WIB)</option>
-                            <option value="Sesi 7 (12.30 - 13.00 WIB)" {{ $currJam == 'Sesi 7 (12.30 - 13.00 WIB)' ? 'selected' : '' }}>Sesi 7 (12.30 - 13.00 WIB)</option>
-                            <option value="Sesi Khusus / Fleksibel" {{ $currJam == 'Sesi Khusus / Fleksibel' ? 'selected' : '' }}>Sesi Khusus / Fleksibel</option>
+                            <option value="Sesi 1 (08.00 - 08.45 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 1 (08.00 - 08.45 WIB)') ? 'selected' : '' }}>Sesi 1 (08.00 - 08.45 WIB)</option>
+                            <option value="Sesi 2 (08.45 - 09.30 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 2 (08.45 - 09.30 WIB)') ? 'selected' : '' }}>Sesi 2 (08.45 - 09.30 WIB)</option>
+                            <option value="Sesi 3 (09.30 - 10.15 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 3 (09.30 - 10.15 WIB)') ? 'selected' : '' }}>Sesi 3 (09.30 - 10.15 WIB)</option>
+                            <option value="Sesi 4 (10.15 - 11.00 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 4 (10.15 - 11.00 WIB)') ? 'selected' : '' }}>Sesi 4 (10.15 - 11.00 WIB)</option>
+                            <option value="Sesi 5 (11.00 - 11.45 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 5 (11.00 - 11.45 WIB)') ? 'selected' : '' }}>Sesi 5 (11.00 - 11.45 WIB)</option>
+                            <option value="Sesi 6 (11.45 - 12.30 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 6 (11.45 - 12.30 WIB)') ? 'selected' : '' }}>Sesi 6 (11.45 - 12.30 WIB)</option>
+                            <option value="Sesi 7 (12.30 - 13.00 WIB)" {{ (!$isCustomSesi && $currJam == 'Sesi 7 (12.30 - 13.00 WIB)') ? 'selected' : '' }}>Sesi 7 (12.30 - 13.00 WIB)</option>
+                            <option value="Sesi Khusus / Fleksibel" {{ $isCustomSesi ? 'selected' : '' }}>Sesi Khusus / Fleksibel (Input Jam Sendiri)</option>
                         </select>
+                        <input type="hidden" name="jam_sesi" id="bkg_jam_sesi_hidden" value="{{ $currJam }}">
+                    </div>
+
+                    <!-- Input Jam Sesi Khusus / Fleksibel (Maksimal 45 Menit) -->
+                    <div class="mb-3 {{ $isCustomSesi ? '' : 'd-none' }}" id="wrapper_bkg_sesi_khusus">
+                        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #eff6ff 100%); border: 1.5px solid #93c5fd; border-radius: 12px; padding: 14px 18px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.05);">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" style="gap: 8px;">
+                                <div style="font-size: 13px; font-weight: 700; color: #1e40af;">
+                                    <i class="fa-solid fa-clock mr-1 text-primary"></i> Atur Jam Sesi Khusus / Fleksibel
+                                </div>
+                                <span class="badge" id="badge_bkg_durasi" style="background: #e0f2fe; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11.5px; font-weight: 700; padding: 5px 12px; border-radius: 8px;">
+                                    Durasi: 45 Menit (Maks. 45 Mnt)
+                                </span>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-sm-6 mb-2 mb-sm-0">
+                                    <label class="form-label font-w600 mb-1" style="font-size: 12px; color: #1e40af;">Jam Mulai (WIB):</label>
+                                    <input type="time" id="bkg_custom_mulai" class="form-control form-control-sm" value="{{ $defMulai }}" style="height: 38px; font-size: 13px; font-weight: 600; background: #ffffff; border: 1.5px solid #bfdbfe; border-radius: 8px; color: #1e293b;">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="form-label font-w600 mb-1" style="font-size: 12px; color: #1e40af;">Jam Selesai (WIB - Maks +45 Mnt):</label>
+                                    <input type="time" id="bkg_custom_selesai" class="form-control form-control-sm" value="{{ $defSelesai }}" style="height: 38px; font-size: 13px; font-weight: 600; background: #ffffff; border: 1.5px solid #bfdbfe; border-radius: 8px; color: #1e293b;">
+                                </div>
+                            </div>
+                            <small class="d-block mt-2 font-w500" style="font-size: 11.5px; color: #2563eb; line-height: 1.4;">
+                                <i class="fa-solid fa-circle-info mr-1 text-primary"></i> Standar pelayanan terapi Omah Terapi-KU dibatasi <strong>maksimal 45 menit per sesi</strong>.
+                            </small>
+                        </div>
                     </div>
 
                     <!-- Keluhan / Catatan Khusus -->
@@ -694,7 +729,7 @@
 
 <!-- Modal Success Booking Popup (Matches UPT & Sesi Modal Theme) -->
 @if(Session::has('booking_success'))
-    <div class="modal fade show" id="modalSuccessBooking" tabindex="-1" role="dialog" style="display: block; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px);">
+    <div class="modal fade show" id="modalSuccessBooking" tabindex="-1" role="dialog" style="display: block; background: rgba(15, 23, 42, 0.55);">
         <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 520px;">
             <div class="modal-content ot-success-modal-box">
                 <!-- Modal Header -->
@@ -795,28 +830,81 @@
         }
     }
 
-    function filterBookings(status, btnElement) {
-        // Toggle active button style
-        document.querySelectorAll('.tracking-filter-btn').forEach(function(btn) {
-            btn.classList.remove('active');
-        });
-        if (btnElement) {
-            btnElement.classList.add('active');
-        }
+    // Handler Sesi Khusus / Fleksibel Booking
+    $(document).ready(function() {
+        var $select = $('#bkg_jam_sesi_select');
+        var $wrapper = $('#wrapper_bkg_sesi_khusus');
+        var $mulai = $('#bkg_custom_mulai');
+        var $selesai = $('#bkg_custom_selesai');
+        var $badge = $('#badge_bkg_durasi');
+        var $hidden = $('#bkg_jam_sesi_hidden');
 
-        const items = document.querySelectorAll('.booking-item');
-        items.forEach(function(item) {
-            if (status === 'all') {
-                item.style.display = 'block';
-            } else {
-                const itemStatus = item.getAttribute('data-status');
-                if (itemStatus === status) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
+        function syncBkgCustomSesi(isMulaiChanged) {
+            var mVal = $mulai.val();
+            var sVal = $selesai.val();
+
+            if (!mVal) return;
+
+            var mParts = mVal.split(':').map(Number);
+            var mMnt = mParts[0] * 60 + mParts[1];
+
+            if (isMulaiChanged || !sVal) {
+                var newSelesaiMnt = mMnt + 45;
+                var sH = Math.floor(newSelesaiMnt / 60) % 24;
+                var sM = newSelesaiMnt % 60;
+                sVal = String(sH).padStart(2, '0') + ':' + String(sM).padStart(2, '0');
+                $selesai.val(sVal);
+            }
+
+            var sParts = sVal.split(':').map(Number);
+            var sMnt = sParts[0] * 60 + sParts[1];
+            var diff = sMnt - mMnt;
+
+            if (diff <= 0) {
+                diff = 45;
+                var sTot = mMnt + 45;
+                var calcH = Math.floor(sTot / 60) % 24;
+                var calcM = sTot % 60;
+                sVal = String(calcH).padStart(2, '0') + ':' + String(calcM).padStart(2, '0');
+                $selesai.val(sVal);
+            } else if (diff > 45) {
+                diff = 45;
+                var sTot = mMnt + 45;
+                var calcH = Math.floor(sTot / 60) % 24;
+                var calcM = sTot % 60;
+                sVal = String(calcH).padStart(2, '0') + ':' + String(calcM).padStart(2, '0');
+                $selesai.val(sVal);
+                if (typeof toastr !== 'undefined') {
+                    toastr.info('Durasi per sesi dibatasi maksimal 45 menit.', 'Info Sesi', { timeOut: 2000 });
                 }
             }
+
+            if ($badge.length) {
+                $badge.text('Durasi: ' + diff + ' Menit (Maks. 45 Mnt)');
+            }
+
+            var fMulai = $mulai.val().replace(':', '.');
+            var fSelesai = $selesai.val().replace(':', '.');
+            $hidden.val('Sesi Khusus (' + fMulai + ' - ' + fSelesai + ' WIB)');
+        }
+
+        $select.on('change', function() {
+            var val = $(this).val();
+            if (val === 'Sesi Khusus / Fleksibel') {
+                $wrapper.removeClass('d-none');
+                syncBkgCustomSesi(false);
+            } else {
+                $wrapper.addClass('d-none');
+                $hidden.val(val);
+            }
         });
-    }
+
+        $mulai.on('change input', function() { syncBkgCustomSesi(true); });
+        $selesai.on('change input', function() { syncBkgCustomSesi(false); });
+
+        if ($select.val() === 'Sesi Khusus / Fleksibel') {
+            syncBkgCustomSesi(false);
+        }
+    });
 </script>
 @endsection

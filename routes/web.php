@@ -94,6 +94,7 @@ Route::group(['middleware' => 'auth'], function () {
     // AJAX dropdown helpers (Accessible by all logged in users)
     Route::get('/getDokter', [DokterController::class, 'getDokter'])->name('getDokter');
     Route::get('/getTerapis', [DokterController::class, 'getDokter'])->name('getTerapis');
+    Route::get('/check-jadwal-terapis', [JadwalController::class, 'checkTerapisAvailability'])->name('jadwal.check-terapis');
     Route::get('/getNoRM', [PasienController::class, 'getLastRM'])->name('getNoRM');
     Route::get('/icd/data', [IcdController::class, 'data'])->name('icd.data');
 

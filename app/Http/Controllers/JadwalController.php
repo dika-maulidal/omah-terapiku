@@ -80,6 +80,8 @@ class JadwalController extends Controller
             $slot = $item->sesi_waktu ?: 'Sesi Khusus / Fleksibel';
             if (isset($jadwalPerSlot[$slot])) {
                 $jadwalPerSlot[$slot][] = $item;
+            } elseif (str_starts_with($slot, 'Sesi Khusus')) {
+                $jadwalPerSlot['Sesi Khusus / Fleksibel'][] = $item;
             } else {
                 $jadwalPerSlot['Lainnya'][] = $item;
             }
@@ -241,5 +243,78 @@ class JadwalController extends Controller
         }
 
         return response()->json($events);
+    }
+
+    /**
+     * AJAX Helper: Cek Ketersediaan Slot Jadwal Terapis (Anti-Bentrok 1 Terapis 1 Pasien per Sesi)
+     */
+    public function checkTerapisAvailability(Request $request)
+    {
+        $dokterId = $request->get('dokter_id');
+        $tanggal = $request->get('tanggal') ?: date('Y-m-d');
+        $sesiWaktu = $request->get('sesi_waktu');
+        $excludeRekamId = $request->get('exclude_id');
+
+        if (!$dokterId) {
+            return response()->json([
+                'success' => true,
+                'is_available' => true,
+                'conflict' => null,
+                'occupied_slots' => (object)[],
+                'occupied_slot_keys' => [],
+                'message' => 'Pilih terapis terlebih dahulu.'
+            ]);
+        }
+
+        $query = Rekam::where('dokter_id', $dokterId)
+            ->whereDate('tgl_rekam', $tanggal)
+            ->with(['pasien', 'dokter']);
+
+        if ($excludeRekamId) {
+            $query->where('id', '!=', $excludeRekamId);
+        }
+
+        $records = $query->get();
+
+        $occupiedSlots = [];
+        foreach ($records as $r) {
+            $slotKey = $r->sesi_waktu ?: 'Sesi Khusus / Fleksibel';
+            $occupiedSlots[$slotKey] = [
+                'rekam_id' => $r->id,
+                'pasien_nama' => $r->pasien ? $r->pasien->nama : 'Penerima Manfaat',
+                'no_rm' => $r->pasien ? $r->pasien->no_rm : '-',
+                'layanan_terapi' => $r->layanan_terapi ?: 'Layanan Terapi',
+                'sesi_waktu' => $r->sesi_waktu,
+                'tgl_rekam' => $r->tgl_rekam,
+            ];
+        }
+
+        $isAvailable = true;
+        $conflictDetail = null;
+
+        if ($sesiWaktu && isset($occupiedSlots[$sesiWaktu])) {
+            $isAvailable = false;
+            $conflictDetail = $occupiedSlots[$sesiWaktu];
+        }
+
+        $terapis = Dokter::find($dokterId);
+        $terapisNama = $terapis ? $terapis->nama : 'Terapis';
+        $tglFormatted = Carbon::parse($tanggal)->isoFormat('D MMMM Y');
+
+        $message = $isAvailable
+            ? "Terapis {$terapisNama} tersedia pada sesi ini (1 terapis 1 penerima manfaat)."
+            : "Jadwal Bentrok: {$terapisNama} sudah memiliki jadwal sesi dengan {$conflictDetail['pasien_nama']} (RM# {$conflictDetail['no_rm']}) pada tanggal {$tglFormatted} di {$sesiWaktu}.";
+
+        return response()->json([
+            'success' => true,
+            'is_available' => $isAvailable,
+            'conflict' => $conflictDetail,
+            'occupied_slots' => $occupiedSlots,
+            'occupied_slot_keys' => array_keys($occupiedSlots),
+            'terapis_nama' => $terapisNama,
+            'tanggal' => $tanggal,
+            'tanggal_formatted' => $tglFormatted,
+            'message' => $message,
+        ]);
     }
 }

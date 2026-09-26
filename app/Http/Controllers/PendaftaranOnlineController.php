@@ -918,9 +918,13 @@ class PendaftaranOnlineController extends Controller
         $this->validate($request, [
             'dokter_id' => 'required|exists:terapis,id',
             'tgl_sesi' => 'required|date',
-            'jam_sesi' => 'nullable|string|max:100',
+            'jam_sesi' => 'required|string|max:100',
             'layanan_terapi' => 'nullable|string|max:191',
             'catatan_petugas' => 'nullable|string|max:500',
+        ], [
+            'dokter_id.required' => 'Terapis Penanggung Jawab wajib dipilih.',
+            'tgl_sesi.required' => 'Tanggal Sesi Terapi wajib ditentukan.',
+            'jam_sesi.required' => 'Sesi Waktu Terapi wajib dipilih.',
         ]);
 
         $pendaftaran = PendaftaranPasien::findOrFail($id);
@@ -929,7 +933,28 @@ class PendaftaranOnlineController extends Controller
             return redirect()->back()->with('gagal', 'Pendaftaran ini sudah disetujui sebelumnya.');
         }
 
-        return DB::transaction(function () use ($request, $pendaftaran) {
+        $layanan = $request->layanan_terapi ?: ($pendaftaran->layanan_terapi ?: 'Layanan Terapi Terpadu');
+        $tglSesi = $request->tgl_sesi ?: ($pendaftaran->tgl_rencana_kunjungan ?: date('Y-m-d'));
+        $jamSesi = $request->jam_sesi ?: ($pendaftaran->jam_rencana_kunjungan ?: 'Sesi 1 (08.00 - 08.45 WIB)');
+
+        // Validasi Anti-Bentrok: 1 Terapis hanya 1 Penerima Manfaat di Sesi Tersebut
+        $bentrokTerapis = Rekam::where('dokter_id', $request->dokter_id)
+            ->whereDate('tgl_rekam', $tglSesi)
+            ->where('sesi_waktu', $jamSesi)
+            ->with(['pasien', 'dokter'])
+            ->first();
+
+        if ($bentrokTerapis) {
+            $terapisNama = $bentrokTerapis->dokter ? $bentrokTerapis->dokter->nama : 'Terapis';
+            $pasienBentrok = $bentrokTerapis->pasien ? $bentrokTerapis->pasien->nama : 'Penerima Manfaat lain';
+            $noRmBentrok = $bentrokTerapis->pasien ? ' (RM# ' . $bentrokTerapis->pasien->no_rm . ')' : '';
+            $tglFormatted = Carbon::parse($tglSesi)->isoFormat('D MMMM Y');
+
+            return redirect()->back()->withInput()
+                ->with('gagal', "Gagal Menyetujui: Jadwal Terapis Bentrok! {$terapisNama} sudah terjadwal menangani {$pasienBentrok}{$noRmBentrok} pada tanggal {$tglFormatted} di {$jamSesi}. Satu terapis hanya dapat menangani satu penerima manfaat per sesi. Silakan pilih slot sesi atau terapis lain.");
+        }
+
+        return DB::transaction(function () use ($request, $pendaftaran, $layanan, $tglSesi, $jamSesi) {
             // 1. Cek / Buat record resmi di tabel pasien (Master Pasien)
             $pasien = null;
             if ($pendaftaran->pasien_id) {
@@ -1256,9 +1281,13 @@ class PendaftaranOnlineController extends Controller
     {
         $this->validate($request, [
             'dokter_id' => 'required|exists:terapis,id',
-            'jam_sesi' => 'nullable|string|max:50',
+            'jam_sesi' => 'required|string|max:100',
             'tgl_rekam' => 'required|date',
             'upt_lokasi' => 'nullable|string|max:191',
+        ], [
+            'dokter_id.required' => 'Terapis Penanggung Jawab wajib dipilih.',
+            'tgl_rekam.required' => 'Tanggal Sesi Terapi wajib ditentukan.',
+            'jam_sesi.required' => 'Jam Sesi Terapi wajib dipilih.',
         ]);
 
         $booking = BookingSesi::with('pasien')->findOrFail($id);
@@ -1267,7 +1296,27 @@ class PendaftaranOnlineController extends Controller
             return redirect()->back()->with('gagal', 'Permohonan booking ini sudah disetujui.');
         }
 
-        return DB::transaction(function () use ($request, $booking) {
+        $tglSesi = $request->tgl_rekam ?: ($booking->tgl_rencana ?: date('Y-m-d'));
+        $jamSesi = $request->jam_sesi ?: ($booking->jam_sesi ?: 'Sesi 1 (08.00 - 08.45 WIB)');
+
+        // Validasi Anti-Bentrok: 1 Terapis hanya 1 Penerima Manfaat di Sesi Tersebut
+        $bentrokTerapis = Rekam::where('dokter_id', $request->dokter_id)
+            ->whereDate('tgl_rekam', $tglSesi)
+            ->where('sesi_waktu', $jamSesi)
+            ->with(['pasien', 'dokter'])
+            ->first();
+
+        if ($bentrokTerapis) {
+            $terapisNama = $bentrokTerapis->dokter ? $bentrokTerapis->dokter->nama : 'Terapis';
+            $pasienBentrok = $bentrokTerapis->pasien ? $bentrokTerapis->pasien->nama : 'Penerima Manfaat lain';
+            $noRmBentrok = $bentrokTerapis->pasien ? ' (RM# ' . $bentrokTerapis->pasien->no_rm . ')' : '';
+            $tglFormatted = Carbon::parse($tglSesi)->isoFormat('D MMMM Y');
+
+            return redirect()->back()->withInput()
+                ->with('gagal', "Gagal Menyetujui: Jadwal Terapis Bentrok! {$terapisNama} sudah terjadwal menangani {$pasienBentrok}{$noRmBentrok} pada tanggal {$tglFormatted} di {$jamSesi}. Satu terapis hanya dapat menangani satu penerima manfaat per sesi. Silakan pilih slot sesi atau terapis lain.");
+        }
+
+        return DB::transaction(function () use ($request, $booking, $tglSesi, $jamSesi) {
             // Generate No. Registrasi Rekam Medis unik
             $noRekam = "REG#" . date('Ymd') . $booking->pasien_id;
             $existingCount = Rekam::where('no_rekam', 'LIKE', $noRekam . '%')->count();

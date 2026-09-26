@@ -355,16 +355,19 @@ class RekamController extends Controller
     function store(Request $request)
     {
         $this->validate($request, [
-            'tgl_rekam' => 'required',
+            'tgl_rekam' => 'required|date',
             'pasien_id' => 'required',
             'pasien_nama' => 'required',
             'layanan_terapi' => 'required|string',
             'keluhan' => 'required',
             'poli' => 'required',
-            'dokter_id' => 'required'
+            'dokter_id' => 'required',
+            'sesi_waktu' => 'required|string',
         ], [
             'layanan_terapi.required' => 'Jenis Layanan Terapi yang Dituju wajib dipilih.',
-            'pasien_nama.required' => 'Nama Penerima Manfaat wajib dipilih.'
+            'pasien_nama.required' => 'Nama Penerima Manfaat wajib dipilih.',
+            'dokter_id.required' => 'Terapis Pemeriksa wajib dipilih.',
+            'sesi_waktu.required' => 'Jadwal Sesi Terapi wajib dipilih.',
         ]);
 
         $pasien = Pasien::where('id', $request->pasien_id)->first();
@@ -379,6 +382,24 @@ class RekamController extends Controller
         if ($rekam_ada) {
             return redirect()->back()->withInput($request->input())
                                     ->withErrors(['pasien_id' => 'Pasien ini masih belum selesai periksa, harap selesaikan pemeriksaan sebelumnya']);
+        }
+
+        // Validasi Anti-Bentrok: 1 Terapis hanya boleh menangani 1 Penerima Manfaat per Sesi pada tanggal yang sama
+        $bentrokTerapis = Rekam::where('dokter_id', $request->dokter_id)
+            ->whereDate('tgl_rekam', $request->tgl_rekam)
+            ->where('sesi_waktu', $request->sesi_waktu)
+            ->with(['pasien', 'dokter'])
+            ->first();
+
+        if ($bentrokTerapis) {
+            $terapisNama = $bentrokTerapis->dokter ? $bentrokTerapis->dokter->nama : 'Terapis';
+            $pasienBentrok = $bentrokTerapis->pasien ? $bentrokTerapis->pasien->nama : 'Penerima Manfaat lain';
+            $noRmBentrok = $bentrokTerapis->pasien ? ' (RM# ' . $bentrokTerapis->pasien->no_rm . ')' : '';
+            $tglFormatted = Carbon::parse($request->tgl_rekam)->isoFormat('D MMMM Y');
+
+            return redirect()->back()->withInput($request->input())
+                ->withErrors(['sesi_waktu' => "Jadwal Bentrok: {$terapisNama} sudah terjadwal melayani {$pasienBentrok}{$noRmBentrok} pada {$tglFormatted} di {$request->sesi_waktu}. Satu terapis hanya dapat melayani satu penerima manfaat per sesi."])
+                ->with('gagal', "Jadwal Bentrok: {$terapisNama} sudah memiliki jadwal sesi dengan {$pasienBentrok} pada {$tglFormatted} ({$request->sesi_waktu}). Silakan pilih slot sesi waktu atau terapis lain.");
         }
 
         $upt = $request->upt_lokasi ?: ($request->poli ?: null);
@@ -412,15 +433,19 @@ class RekamController extends Controller
     function update(Request $request, $id)
     {
         $this->validate($request, [
-            'tgl_rekam' => 'required',
+            'tgl_rekam' => 'required|date',
             'pasien_id' => 'required',
             'pasien_nama' => 'required',
             'layanan_terapi' => 'required|string',
             'keluhan' => 'required',
             'poli' => 'required',
-            'dokter_id' => 'required'
+            'dokter_id' => 'required',
+            'sesi_waktu' => 'required|string',
         ], [
-            'layanan_terapi.required' => 'Jenis Layanan Terapi yang Dituju wajib dipilih.'
+            'layanan_terapi.required' => 'Jenis Layanan Terapi yang Dituju wajib dipilih.',
+            'pasien_nama.required' => 'Nama Penerima Manfaat wajib dipilih.',
+            'dokter_id.required' => 'Terapis Pemeriksa wajib dipilih.',
+            'sesi_waktu.required' => 'Jadwal Sesi Terapi wajib dipilih.',
         ]);
 
         $pasien = Pasien::where('id', $request->pasien_id)->first();
@@ -431,6 +456,25 @@ class RekamController extends Controller
         
         $rekam = Rekam::findOrFail($id);
         $oldDokterId = $rekam->dokter_id;
+
+        // Validasi Anti-Bentrok: 1 Terapis hanya boleh menangani 1 Penerima Manfaat per Sesi pada tanggal yang sama (kecualikan rekam ini)
+        $bentrokTerapis = Rekam::where('dokter_id', $request->dokter_id)
+            ->whereDate('tgl_rekam', $request->tgl_rekam)
+            ->where('sesi_waktu', $request->sesi_waktu)
+            ->where('id', '!=', $id)
+            ->with(['pasien', 'dokter'])
+            ->first();
+
+        if ($bentrokTerapis) {
+            $terapisNama = $bentrokTerapis->dokter ? $bentrokTerapis->dokter->nama : 'Terapis';
+            $pasienBentrok = $bentrokTerapis->pasien ? $bentrokTerapis->pasien->nama : 'Penerima Manfaat lain';
+            $noRmBentrok = $bentrokTerapis->pasien ? ' (RM# ' . $bentrokTerapis->pasien->no_rm . ')' : '';
+            $tglFormatted = Carbon::parse($request->tgl_rekam)->isoFormat('D MMMM Y');
+
+            return redirect()->back()->withInput($request->input())
+                ->withErrors(['sesi_waktu' => "Jadwal Bentrok: {$terapisNama} sudah terjadwal melayani {$pasienBentrok}{$noRmBentrok} pada {$tglFormatted} di {$request->sesi_waktu}. Satu terapis hanya dapat melayani satu penerima manfaat per sesi."])
+                ->with('gagal', "Jadwal Bentrok: {$terapisNama} sudah memiliki jadwal sesi dengan {$pasienBentrok} pada {$tglFormatted} ({$request->sesi_waktu}). Silakan pilih slot sesi waktu atau terapis lain.");
+        }
         
         $upt = $request->upt_lokasi ?: ($request->poli ?: ($rekam->upt_lokasi ?: null));
 
