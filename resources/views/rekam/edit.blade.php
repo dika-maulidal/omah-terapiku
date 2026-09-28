@@ -532,7 +532,7 @@
             order: [],
             language: {
                 search: "_INPUT_",
-                searchPlaceholder: "Cari Nama, NIK, No. HP, No. RM...",
+                searchPlaceholder: "Ketik Nama, NIK, No. RM, atau No. HP...",
                 paginate: {
                     previous: '<i class="fa-solid fa-chevron-left mr-1"></i> Prev',
                     next: 'Next <i class="fa-solid fa-chevron-right ml-1"></i>'
@@ -549,7 +549,8 @@
                 {data: 'nama', name: 'nama'},
                 {data: 'tgl_lahir', name: 'tgl_lahir'},
                 {data: 'no_hp', name: 'no_hp'},
-                {data: 'no_bpjs', name: 'no_bpjs'}              
+                {data: 'no_bpjs', name: 'no_bpjs'},
+                {data: 'nik', name: 'nik', visible: false, searchable: true}
             ]
         });
     });

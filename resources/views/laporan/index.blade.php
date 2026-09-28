@@ -13,29 +13,23 @@
         margin: 12px 14px;
         line-height: 1.4;
     }
-    .custom-balai-marker {
-        background: #ef4444;
-        border: 2px solid #ffffff;
-        color: #ffffff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 3px 8px rgba(239, 68, 68, 0.45);
-        font-size: 11.5px;
+    /* Custom Leaflet Marker Pins (Uniform Omah Terapi Style) */
+    .upt-custom-marker-wrapper { position: relative; }
+    .upt-marker-pulse {
+        position: absolute; top: 50%; left: 50%; width: 36px; height: 36px; margin-top: -18px; margin-left: -18px;
+        border-radius: 50%; background: #2563eb; opacity: 0.35; animation: uptMarkerPulse 2s infinite ease-out; pointer-events: none;
     }
-    .custom-pulse-ring {
-        position: absolute;
-        border: 2px solid #ef4444;
-        border-radius: 50%;
-        animation: pulseMap 1.8s infinite;
-        opacity: 0.8;
-    }
-    @keyframes pulseMap {
-        0% { transform: scale(0.9); opacity: 0.8; }
-        70% { transform: scale(2.2); opacity: 0; }
+    @keyframes uptMarkerPulse {
+        0% { transform: scale(0.6); opacity: 0.7; }
         100% { transform: scale(2.2); opacity: 0; }
     }
+    .upt-marker-pin {
+        width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center;
+        justify-content: center; color: #ffffff; font-size: 12px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        border: 2px solid #ffffff; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); cursor: pointer; transition: transform 0.2s ease;
+    }
+    .upt-marker-pin i { transform: rotate(45deg); }
+    .upt-marker-pin:hover { transform: rotate(-45deg) scale(1.15); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.45); }
 </style>
 @endsection
 
@@ -221,25 +215,24 @@
             attributionControl: false
         });
 
-        // Tile layer CartoDB Voyager
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            maxZoom: 18,
-            subdomains: 'abcd',
+        // Tile layer OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | Omah Terapi-KU'
         }).addTo(mapJatim);
 
-        // Custom Red Icon untuk Balai UPT
+        // Custom Pin Icon untuk Balai UPT (Samakan Tampilan Halaman Awal)
         const balaiIcon = L.divIcon({
-            className: 'custom-balai-icon-wrapper',
+            className: 'upt-custom-marker-wrapper',
             html: `
-                <div style="position: relative; width: 28px; height: 28px;">
-                    <div class="custom-pulse-ring" style="width: 28px; height: 28px; top: 0; left: 0;"></div>
-                    <div class="custom-balai-marker" style="width: 28px; height: 28px; position: relative; z-index: 2;">
-                        <i class="fa-solid fa-hospital-user"></i>
-                    </div>
+                <div class="upt-marker-pulse"></div>
+                <div class="upt-marker-pin">
+                    <i class="fa-solid fa-hospital-user"></i>
                 </div>
             `,
-            iconSize: [28, 28],
-            iconAnchor: [14, 14]
+            iconSize: [36, 36],
+            iconAnchor: [18, 36],
+            popupAnchor: [0, -36]
         });
 
         // Tambahkan Titik Balai Omah Terapi-KU
@@ -286,6 +279,10 @@
                 `);
             });
         }
+
+        setTimeout(function() {
+            if (mapJatim) mapJatim.invalidateSize();
+        }, 200);
     }
 
     function switchGeoView(type) {

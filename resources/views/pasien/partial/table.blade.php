@@ -47,12 +47,12 @@
                         </td>
                         <td style="vertical-align: middle; text-align: center;">
                             @if ($row->desil)
-                                @if (in_array($row->desil, ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4']))
+                                @if (in_array($row->desil, ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4', 'Desil 5']))
                                     <span class="badge badge-success light font-w700" style="font-size: 11px; padding: 4px 8px;">
                                         <i class="fa-solid fa-check mr-1"></i>{{$row->desil}}
                                     </span>
                                 @else
-                                    <span class="badge badge-warning light font-w600" style="font-size: 11px; padding: 4px 8px;">
+                                    <span class="badge badge-secondary light font-w600" style="font-size: 11px; padding: 4px 8px;">
                                         {{$row->desil}}
                                     </span>
                                 @endif

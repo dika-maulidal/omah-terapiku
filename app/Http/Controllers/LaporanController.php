@@ -166,7 +166,6 @@ class LaporanController extends Controller
             'Desil 3' => 0,
             'Desil 4' => 0,
             'Desil 5' => 0,
-            'Desil 6-10' => 0,
             'Non-Desil / Belum Terdata' => 0,
         ];
         
@@ -188,8 +187,6 @@ class LaporanController extends Controller
                     $desilBreakdown['Desil 4'] += $pd->total;
                 } elseif (preg_match('/^desil\s*5$/i', $d)) {
                     $desilBreakdown['Desil 5'] += $pd->total;
-                } elseif (preg_match('/^desil\s*(6|7|8|9|10)$/i', $d)) {
-                    $desilBreakdown['Desil 6-10'] += $pd->total;
                 } else {
                     $desilBreakdown['Non-Desil / Belum Terdata'] += $pd->total;
                 }

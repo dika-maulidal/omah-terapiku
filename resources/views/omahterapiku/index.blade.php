@@ -62,30 +62,23 @@
         box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15) !important;
         outline: none !important;
     }
-    /* Map Marker & Pulse Ring for Pickers */
-    .custom-balai-marker {
-        background: #ef4444;
-        border: 2px solid #ffffff;
-        color: #ffffff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 3px 8px rgba(239, 68, 68, 0.45);
-        font-size: 12px;
+    /* Custom Leaflet Marker Pins (Uniform Omah Terapi Style) */
+    .upt-custom-marker-wrapper { position: relative; }
+    .upt-marker-pulse {
+        position: absolute; top: 50%; left: 50%; width: 36px; height: 36px; margin-top: -18px; margin-left: -18px;
+        border-radius: 50%; background: #2563eb; opacity: 0.35; animation: uptMarkerPulse 2s infinite ease-out; pointer-events: none;
     }
-    .custom-pulse-ring {
-        position: absolute;
-        border: 2px solid #ef4444;
-        border-radius: 50%;
-        animation: pulseMap 1.8s infinite;
-        opacity: 0.8;
-    }
-    @keyframes pulseMap {
-        0% { transform: scale(0.9); opacity: 0.8; }
-        70% { transform: scale(2.2); opacity: 0; }
+    @keyframes uptMarkerPulse {
+        0% { transform: scale(0.6); opacity: 0.7; }
         100% { transform: scale(2.2); opacity: 0; }
     }
+    .upt-marker-pin {
+        width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center;
+        justify-content: center; color: #ffffff; font-size: 12px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        border: 2px solid #ffffff; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); cursor: pointer; transition: transform 0.2s ease;
+    }
+    .upt-marker-pin i { transform: rotate(45deg); }
+    .upt-marker-pin:hover { transform: rotate(-45deg) scale(1.15); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.45); }
     .map-picker-toolbar {
         background: #f8fafc;
         border: 1px solid #e2e8f0;
@@ -482,17 +475,16 @@
     
     function createBalaiIcon() {
         return L.divIcon({
-            className: 'custom-balai-icon-wrapper',
+            className: 'upt-custom-marker-wrapper',
             html: `
-                <div style="position: relative; width: 28px; height: 28px;">
-                    <div class="custom-pulse-ring" style="width: 28px; height: 28px; top: 0; left: 0;"></div>
-                    <div class="custom-balai-marker" style="width: 28px; height: 28px; position: relative; z-index: 2;">
-                        <i class="fa-solid fa-hospital-user"></i>
-                    </div>
+                <div class="upt-marker-pulse"></div>
+                <div class="upt-marker-pin">
+                    <i class="fa-solid fa-hospital-user"></i>
                 </div>
             `,
-            iconSize: [28, 28],
-            iconAnchor: [14, 14]
+            iconSize: [36, 36],
+            iconAnchor: [18, 36],
+            popupAnchor: [0, -36]
         });
     }
 
@@ -505,7 +497,9 @@
         if (!mapEl) return;
 
         if (mapAdd !== null) {
-            mapAdd.invalidateSize();
+            setTimeout(function() {
+                if (mapAdd) mapAdd.invalidateSize();
+            }, 100);
             return;
         }
 
@@ -523,9 +517,9 @@
             attributionControl: false
         });
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            maxZoom: 18,
-            subdomains: 'abcd',
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | Omah Terapi-KU'
         }).addTo(mapAdd);
 
         markerAdd = L.marker([initLat, initLng], {
@@ -598,7 +592,9 @@
         if (!mapEl) return;
 
         if (editMaps[id]) {
-            editMaps[id].map.invalidateSize();
+            setTimeout(function() {
+                if (editMaps[id] && editMaps[id].map) editMaps[id].map.invalidateSize();
+            }, 100);
             return;
         }
 
@@ -616,9 +612,9 @@
             attributionControl: false
         });
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            maxZoom: 18,
-            subdomains: 'abcd',
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | Omah Terapi-KU'
         }).addTo(mapEdit);
 
         let markerEdit = L.marker([initLat, initLng], {

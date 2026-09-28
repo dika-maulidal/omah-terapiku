@@ -226,6 +226,9 @@
 
         <!-- Footer -->
         @include('portal.layout.footer')
+
+        <!-- AI Asisten Penerima Manfaat & Keluarga -->
+        @include('portal.layout.partial.ai-assistant-portal')
     </div>
 
     <!-- Scripts -->

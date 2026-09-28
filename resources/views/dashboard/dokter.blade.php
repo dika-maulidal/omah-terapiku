@@ -1083,9 +1083,9 @@ $(document).ready(function() {
             attributionControl: false
         });
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            maxZoom: 18,
-            subdomains: 'abcd',
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | Omah Terapi-KU'
         }).addTo(dashMapJatim);
 
         dashPatientPoints.forEach(function(p) {
@@ -1117,7 +1117,11 @@ $(document).ready(function() {
 
         setTimeout(function() {
             if (dashMapJatim) dashMapJatim.invalidateSize();
-        }, 300);
+        }, 200);
+
+        window.addEventListener('resize', function() {
+            if (dashMapJatim) dashMapJatim.invalidateSize();
+        });
     }
 
     initDashboardMapJatim();

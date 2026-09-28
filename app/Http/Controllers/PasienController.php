@@ -17,19 +17,6 @@ class PasienController extends Controller
         $query = Pasien::query()->whereNull('deleted_at');
 
         return DataTables::of($query)
-            ->order(function ($query) use ($request) {
-                if ($request->has('order') && count($request->get('order')) > 0) {
-                    $orderColIdx = $request->input('order.0.column');
-                    $orderDir = $request->input('order.0.dir', 'desc');
-                    $columns = $request->input('columns');
-                    $colName = $columns[$orderColIdx]['data'] ?? null;
-                    if ($colName && in_array($colName, ['no_rm', 'nama', 'tgl_lahir', 'no_hp', 'no_bpjs', 'created_at', 'id'])) {
-                        $query->orderBy($colName, $orderDir);
-                        return;
-                    }
-                }
-                $query->orderBy('id', 'desc');
-            })
             ->filter(function ($query) use ($request) {
                 if ($keyword = $request->input('search.value')) {
                     $query->where(function ($q) use ($keyword) {
@@ -43,6 +30,41 @@ class PasienController extends Controller
                           ->orWhere('alamat_lengkap', 'LIKE', "%{$keyword}%");
                     });
                 }
+            })
+            ->filterColumn('no_bpjs', function($query, $keyword) {
+                $clean = preg_replace('/\D/', '', $keyword);
+                $query->where(function($q) use ($keyword, $clean) {
+                    $q->where('no_bpjs', 'like', "%{$keyword}%")
+                      ->orWhere('nik', 'like', "%{$keyword}%");
+                    if (!empty($clean) && strlen($clean) >= 3) {
+                        $q->orWhere('nik', 'like', "%{$clean}%")
+                          ->orWhere('no_bpjs', 'like', "%{$clean}%");
+                    }
+                });
+            })
+            ->filterColumn('nik', function($query, $keyword) {
+                $clean = preg_replace('/\D/', '', $keyword);
+                $query->where(function($q) use ($keyword, $clean) {
+                    $q->where('nik', 'like', "%{$keyword}%");
+                    if (!empty($clean) && strlen($clean) >= 3) {
+                        $q->orWhere('nik', 'like', "%{$clean}%");
+                    }
+                });
+            })
+            ->filterColumn('nama', function($query, $keyword) {
+                $query->where(function($q) use ($keyword) {
+                    $q->where('nama', 'like', "%{$keyword}%")
+                      ->orWhere('nama_wali', 'like', "%{$keyword}%");
+                });
+            })
+            ->filterColumn('no_hp', function($query, $keyword) {
+                $clean = preg_replace('/\D/', '', $keyword);
+                $query->where(function($q) use ($keyword, $clean) {
+                    $q->where('no_hp', 'like', "%{$keyword}%");
+                    if (!empty($clean) && strlen($clean) >= 3) {
+                        $q->orWhere('no_hp', 'like', "%{$clean}%");
+                    }
+                });
             })
             ->editColumn('cara_bayar', function () {
                 return 'Gratis, tidak dipungut biaya';
@@ -66,9 +88,9 @@ class PasienController extends Controller
                 return '<span class="text-dark font-w600" style="font-size: 12px;">'.$hp.'</span>'.$wali;
             })
             ->editColumn('no_bpjs', function($data) {
-                $nik = $data->nik ? '<span class="badge font-w600 mt-1" style="font-size: 11px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;"><i class="fa-solid fa-id-badge mr-1 text-primary"></i>NIK: '.$data->nik.'</span>' : '<small class="text-muted d-block font-italic">NIK: -</small>';
-                $bpjs = $data->no_bpjs ? '<span class="text-dark font-w600 d-block" style="font-size: 12px;">BPJS: '.$data->no_bpjs.'</span>' : '';
-                return $bpjs.$nik;
+                $bpjs = $data->no_bpjs ? '<span class="text-dark font-w600" style="font-size: 12px;">'.$data->no_bpjs.'</span>' : '<span class="text-muted" style="font-size: 12px;">-</span>';
+                $nik = $data->nik ? '<small class="text-muted d-block font-w500" style="font-size: 11px;"><i class="fa-solid fa-address-card text-primary mr-1"></i>NIK: <strong class="text-dark">'.$data->nik.'</strong></small>' : '<small class="text-muted d-block" style="font-size: 11px;">NIK: -</small>';
+                return $bpjs . $nik;
             })
             ->addColumn('action', function($data) {
                 $kategori = $data->kategori_usia;
@@ -76,6 +98,7 @@ class PasienController extends Controller
                     data-id="'.$data->id.'"
                     data-nama="'.htmlspecialchars($data->nama, ENT_QUOTES).'"
                     data-no="'.$data->no_rm.'"
+                    data-nik="'.htmlspecialchars($data->nik ?? '', ENT_QUOTES).'"
                     data-metode="'.$data->cara_bayar.'"
                     data-nohp="'.($data->no_hp ?? '').'"
                     data-tgllahir="'.($data->tgl_lahir ?? '').'"
@@ -137,9 +160,7 @@ class PasienController extends Controller
                 ->when($request->desil, function ($query) use ($request) {
                     $desil = $request->desil;
                     if ($desil === 'prioritas') {
-                        $query->whereIn('desil', ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4']);
-                    } elseif ($desil === 'desil_5_10' || $desil === 'desil_6_10') {
-                        $query->whereIn('desil', ['Desil 5', 'Desil 6', 'Desil 7', 'Desil 8', 'Desil 9', 'Desil 10']);
+                        $query->whereIn('desil', ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4', 'Desil 5']);
                     } elseif ($desil === 'non_desil') {
                         $query->where(function ($q) {
                             $q->where('desil', 'Non-Desil')
@@ -230,9 +251,7 @@ class PasienController extends Controller
                 ->when($request->desil, function ($query) use ($request) {
                     $desil = $request->desil;
                     if ($desil === 'prioritas') {
-                        $query->whereIn('desil', ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4']);
-                    } elseif ($desil === 'desil_5_10' || $desil === 'desil_6_10') {
-                        $query->whereIn('desil', ['Desil 5', 'Desil 6', 'Desil 7', 'Desil 8', 'Desil 9', 'Desil 10']);
+                        $query->whereIn('desil', ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4', 'Desil 5']);
                     } elseif ($desil === 'non_desil') {
                         $query->where(function ($q) {
                             $q->where('desil', 'Non-Desil')

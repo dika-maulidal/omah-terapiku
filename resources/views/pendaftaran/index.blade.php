@@ -829,7 +829,7 @@
                         html += '  <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 14px 18px;"><span class="text-muted d-block font-w600 mb-1" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-solid fa-graduation-cap text-primary mr-1"></i> Pendidikan Terakhir:</span> <strong class="text-dark font-w700" style="font-size: 13.5px;">' + (d.pendidikan || '-') + '</strong></div>';
                         
                         var desilHtml = d.desil ? d.desil : 'Non-Desil / Umum';
-                        if (d.desil && ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4'].indexOf(d.desil) !== -1) {
+                        if (d.desil && ['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4', 'Desil 5'].indexOf(d.desil) !== -1) {
                             desilHtml = '<span class="badge badge-success light font-w800" style="font-size: 12px; padding: 4px 8px; border-radius: 6px;"><i class="fa-solid fa-check-circle mr-1"></i>' + d.desil + ' (Prioritas)</span>';
                         } else if (d.desil) {
                             desilHtml = '<span class="badge badge-warning light font-w700" style="font-size: 12px; padding: 4px 8px; border-radius: 6px;">' + d.desil + '</span>';

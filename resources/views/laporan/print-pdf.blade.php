@@ -389,13 +389,13 @@
             </td>
             @php
                 $totalDesilPasien = array_sum($data['desil_breakdown']);
-                $desil12Count = ($data['desil_breakdown']['Desil 1'] ?? 0) + ($data['desil_breakdown']['Desil 2'] ?? 0);
-                $desil12Pct = $totalDesilPasien > 0 ? round(($desil12Count / $totalDesilPasien) * 100, 1) : 0;
+                $desilPrioritasCount = ($data['desil_breakdown']['Desil 1'] ?? 0) + ($data['desil_breakdown']['Desil 2'] ?? 0) + ($data['desil_breakdown']['Desil 3'] ?? 0) + ($data['desil_breakdown']['Desil 4'] ?? 0) + ($data['desil_breakdown']['Desil 5'] ?? 0);
+                $desilPrioritasPct = $totalDesilPasien > 0 ? round(($desilPrioritasCount / $totalDesilPasien) * 100, 1) : 0;
             @endphp
             <td style="width: 25%;">
-                <span class="kpi-matrix-val">{{ $desil12Pct }}%</span>
-                <span class="kpi-matrix-lbl">Prioritas Desil 1 &amp; 2</span>
-                <small style="font-size: 7.5pt; color: #475569;">({{ $desil12Count }} Pasien DTKS Terverifikasi)</small>
+                <span class="kpi-matrix-val">{{ $desilPrioritasPct }}%</span>
+                <span class="kpi-matrix-lbl">Prioritas Desil 1 - 5</span>
+                <small style="font-size: 7.5pt; color: #475569;">({{ $desilPrioritasCount }} Pasien DTKS Terverifikasi)</small>
             </td>
         </tr>
     </table>
@@ -419,11 +419,11 @@
             @php
                 $no = 1;
                 $desilKeterangan = [
-                    'Desil 1' => 'Rumah Tangga dengan tingkat kemiskinan ekstrem / Sangat Miskin',
-                    'Desil 2' => 'Rumah Tangga miskin dengan keterbatasan akses dasar',
-                    'Desil 3' => 'Rumah Tangga hampir miskin dengan kerentanan sosial ekonomi',
-                    'Desil 4' => 'Rumah Tangga rentan miskin dengan penyandang disabilitas',
-                    'Desil 5' => 'Penerima manfaat dengan kebutuhan terapi rehabilitatif khusus',
+                    'Desil 1' => 'Rumah Tangga kemiskinan ekstrem / Sangat Miskin (Prioritas)',
+                    'Desil 2' => 'Rumah Tangga miskin dengan keterbatasan akses dasar (Prioritas)',
+                    'Desil 3' => 'Rumah Tangga hampir miskin dengan kerentanan sosial (Prioritas)',
+                    'Desil 4' => 'Rumah Tangga rentan miskin penyandang disabilitas (Prioritas)',
+                    'Desil 5' => 'Rumah Tangga menengah bawah (Masuk Prioritas Program Dinsos)',
                     'Non-Desil / Belum Terdata' => 'Penerima manfaat rujukan klinis atau pendataan mandiri',
                 ];
             @endphp

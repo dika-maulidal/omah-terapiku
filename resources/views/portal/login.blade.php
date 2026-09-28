@@ -2198,12 +2198,7 @@
                                 <option value="Desil 2" {{ old('desil') == 'Desil 2' ? 'selected' : '' }}>Desil 2 (Miskin)</option>
                                 <option value="Desil 3" {{ old('desil') == 'Desil 3' ? 'selected' : '' }}>Desil 3 (Hampir Miskin)</option>
                                 <option value="Desil 4" {{ old('desil') == 'Desil 4' ? 'selected' : '' }}>Desil 4 (Rentan Miskin)</option>
-                                <option value="Desil 5" {{ old('desil') == 'Desil 5' ? 'selected' : '' }}>Desil 5 (Menengah Bawah)</option>
-                                <option value="Desil 6" {{ old('desil') == 'Desil 6' ? 'selected' : '' }}>Desil 6</option>
-                                <option value="Desil 7" {{ old('desil') == 'Desil 7' ? 'selected' : '' }}>Desil 7</option>
-                                <option value="Desil 8" {{ old('desil') == 'Desil 8' ? 'selected' : '' }}>Desil 8</option>
-                                <option value="Desil 9" {{ old('desil') == 'Desil 9' ? 'selected' : '' }}>Desil 9</option>
-                                <option value="Desil 10" {{ old('desil') == 'Desil 10' ? 'selected' : '' }}>Desil 10</option>
+                                <option value="Desil 5" {{ old('desil') == 'Desil 5' ? 'selected' : '' }}>Desil 5 (Menengah Bawah / Prioritas Program)</option>
                                 <option value="Non-Desil" {{ old('desil') == 'Non-Desil' ? 'selected' : '' }}>Non-Desil / Belum Terdata</option>
                             </select>
                             <div id="desilBadge" class="mt-2 d-none"></div>
@@ -2864,8 +2859,8 @@
                     return;
                 }
                 $badge.removeClass('d-none');
-                if (['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4'].indexOf(val) !== -1) {
-                    $badge.html('<div style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; font-size: 11.5px; font-weight: 700; color: #059669;"><i class="fa-solid fa-circle-check"></i> PRIORITAS PROGRAM (' + val + ' - Masuk Kuota Prioritas)</div>');
+                if (['Desil 1', 'Desil 2', 'Desil 3', 'Desil 4', 'Desil 5'].indexOf(val) !== -1) {
+                    $badge.html('<div style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; font-size: 11.5px; font-weight: 700; color: #059669;"><i class="fa-solid fa-circle-check"></i> PRIORITAS PROGRAM (' + val + ' - Masuk Kuota Prioritas Dinsos)</div>');
                 } else if (val === 'Non-Desil') {
                     $badge.html('<div style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11.5px; font-weight: 700; color: #475569;"><i class="fa-solid fa-circle-info"></i> NON-DESIL / BELUM TERDATA (Layanan Tetap Terbuka)</div>');
                 } else {
@@ -3769,6 +3764,9 @@
             UptMapManager.init();
         });
     </script>
+
+    <!-- AI Asisten Penerima Manfaat & Keluarga -->
+    @include('portal.layout.partial.ai-assistant-portal')
 </body>
 
 </html>

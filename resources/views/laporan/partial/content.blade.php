@@ -1,7 +1,7 @@
 @php
     $totalDesilPasien = array_sum($data['desil_breakdown']);
-    $desil12Count = ($data['desil_breakdown']['Desil 1'] ?? 0) + ($data['desil_breakdown']['Desil 2'] ?? 0);
-    $desil12Pct = $totalDesilPasien > 0 ? round(($desil12Count / $totalDesilPasien) * 100, 1) : 0;
+    $desilPrioritasCount = ($data['desil_breakdown']['Desil 1'] ?? 0) + ($data['desil_breakdown']['Desil 2'] ?? 0) + ($data['desil_breakdown']['Desil 3'] ?? 0) + ($data['desil_breakdown']['Desil 4'] ?? 0) + ($data['desil_breakdown']['Desil 5'] ?? 0);
+    $desilPrioritasPct = $totalDesilPasien > 0 ? round(($desilPrioritasCount / $totalDesilPasien) * 100, 1) : 0;
 @endphp
 
 <!-- Info Ringkasan Periode Aktif -->
@@ -95,15 +95,15 @@
         <div class="ot-stat-card ot-yellow">
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <p class="ot-stat-title">Prioritas Desil 1 & 2</p>
-                    <h2 class="ot-stat-number">{{ $desil12Pct }}%</h2>
+                    <p class="ot-stat-title">Prioritas Desil 1 - 5</p>
+                    <h2 class="ot-stat-number">{{ $desilPrioritasPct }}%</h2>
                 </div>
                 <div class="ot-stat-icon-wrap">
                     <i class="fa-solid fa-hand-holding-heart"></i>
                 </div>
             </div>
             <div class="ot-stat-footer">
-                <span class="badge badge-pill badge-warning light">{{ $desil12Count }} Pasien Desil 1-2</span>
+                <span class="badge badge-pill badge-warning light">{{ $desilPrioritasCount }} Pasien Desil 1-5</span>
                 <span>Tepat Sasaran</span>
             </div>
         </div>
@@ -128,12 +128,12 @@
             <div class="card-body p-4">
                 @php
                     $desilColors = [
-                        'Desil 1' => ['bar' => '#ef4444', 'bg' => '#fef2f2', 'text' => 'Sangat Miskin'],
-                        'Desil 2' => ['bar' => '#f97316', 'bg' => '#fff7ed', 'text' => 'Miskin'],
-                        'Desil 3' => ['bar' => '#eab308', 'bg' => '#fefce8', 'text' => 'Hampir Miskin'],
-                        'Desil 4' => ['bar' => '#3b82f6', 'bg' => '#eff6ff', 'text' => 'Rentan Miskin'],
-                        'Desil 5' => ['bar' => '#10b981', 'bg' => '#ecfdf5', 'text' => 'Menengah Bawah'],
-                        'Non-Desil / Belum Terdata' => ['bar' => '#94a3b8', 'bg' => '#f8fafc', 'text' => 'Non-Desil / Terdata Mandiri'],
+                        'Desil 1' => ['bar' => '#ef4444', 'bg' => '#fef2f2', 'text' => 'Sangat Miskin / Ekstrem (Prioritas)'],
+                        'Desil 2' => ['bar' => '#f97316', 'bg' => '#fff7ed', 'text' => 'Miskin (Prioritas)'],
+                        'Desil 3' => ['bar' => '#eab308', 'bg' => '#fefce8', 'text' => 'Hampir Miskin (Prioritas)'],
+                        'Desil 4' => ['bar' => '#3b82f6', 'bg' => '#eff6ff', 'text' => 'Rentan Miskin (Prioritas)'],
+                        'Desil 5' => ['bar' => '#10b981', 'bg' => '#ecfdf5', 'text' => 'Menengah Bawah (Prioritas Program)'],
+                        'Non-Desil / Belum Terdata' => ['bar' => '#94a3b8', 'bg' => '#f8fafc', 'text' => 'Non-Desil / Belum Terdata'],
                     ];
                 @endphp
 

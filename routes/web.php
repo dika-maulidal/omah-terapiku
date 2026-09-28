@@ -55,6 +55,9 @@ Route::get('/portal/booking/{kode}/cetak', [PendaftaranOnlineController::class, 
 Route::get('/portal/lacak-status', [PendaftaranOnlineController::class, 'lacakStatus'])->name('portal.lacak.status');
 Route::post('/portal/booking/store', [PendaftaranOnlineController::class, 'storeBookingSesi'])->name('portal.booking.store');
 
+// Public AI Chat Assistant API Endpoint
+Route::post('/ai-assistant/chat', [AiAssistantController::class, 'chat'])->name('ai.chat');
+
 Route::get('test', function () {
     StatusRekamUpdate::dispatch("5", "REG002", "INI TEST AJA", "http://sss", "25 05 1993");
     return "Event has been sent!";
@@ -89,7 +92,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/setting/password', [SettingController::class, 'updatePassword'])->name('setting.password');
     Route::post('/setting/profile', [SettingController::class, 'updateProfile'])->name('setting.profile');
     Route::post('/gantipassword/{id}', [AuthController::class, 'updatepassword'])->name('gantipassword');
-    Route::post('/ai-assistant/chat', [AiAssistantController::class, 'chat'])->name('ai.chat');
 
     // AJAX dropdown helpers (Accessible by all logged in users)
     Route::get('/getDokter', [DokterController::class, 'getDokter'])->name('getDokter');

@@ -60,14 +60,13 @@
                                 <i class="fa-solid fa-layer-group"></i>
                                 <select name="desil" class="form-control form-control-sm ot-filter-select filter-select" title="Filter Tingkat Desil" style="width: 100%;">
                                     <option value="">Semua Desil</option>
-                                    <option value="prioritas" {{ request('desil') == 'prioritas' ? 'selected' : '' }}>Prioritas (1-4)</option>
+                                    <option value="prioritas" {{ request('desil') == 'prioritas' ? 'selected' : '' }}>Prioritas (Desil 1-5)</option>
                                     <option value="Desil 1" {{ request('desil') == 'Desil 1' ? 'selected' : '' }}>Desil 1</option>
                                     <option value="Desil 2" {{ request('desil') == 'Desil 2' ? 'selected' : '' }}>Desil 2</option>
                                     <option value="Desil 3" {{ request('desil') == 'Desil 3' ? 'selected' : '' }}>Desil 3</option>
                                     <option value="Desil 4" {{ request('desil') == 'Desil 4' ? 'selected' : '' }}>Desil 4</option>
                                     <option value="Desil 5" {{ request('desil') == 'Desil 5' ? 'selected' : '' }}>Desil 5</option>
-                                    <option value="desil_5_10" {{ (request('desil') == 'desil_5_10' || request('desil') == 'desil_6_10') ? 'selected' : '' }}>Desil 5-10</option>
-                                    <option value="non_desil" {{ request('desil') == 'non_desil' ? 'selected' : '' }}>Non-Desil</option>
+                                    <option value="non_desil" {{ request('desil') == 'non_desil' ? 'selected' : '' }}>Non-Desil / Belum Terdata</option>
                                 </select>
                             </div>
 
