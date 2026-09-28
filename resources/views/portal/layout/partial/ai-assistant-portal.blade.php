@@ -404,7 +404,7 @@
     box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 6px;
     text-align: left;
     line-height: 1.3;
 }
@@ -422,7 +422,8 @@
 
 .ai-portal-quick-pill i {
     color: #ffffff;
-    margin-right: 6px;
+    margin: 0 !important;
+    font-size: 11.5px;
     transition: color 0.2s ease;
 }
 
@@ -631,25 +632,19 @@
             </div>
         </div>
 
-        <!-- Pertanyaan Singkat Khusus Penerima Manfaat Baru & Keluarga -->
+        <!-- Pertanyaan Singkat Khusus Penerima Manfaat Baru & Keluarga (2 Rows) -->
         <div class="ai-portal-quick-chips-wrap" id="aiPortalQuickChips">
             <button type="button" class="ai-portal-quick-pill" onclick="sendAiPortalQuickPrompt(this)" data-prompt="Bagaimana syarat dan langkah alur pendaftaran penerima manfaat baru di Omah Terapi-KU Dinas Sosial Jawa Timur?">
-                <i class="fa-solid fa-file-signature mr-2"></i> Syarat &amp; Alur Daftar Baru
+                <i class="fa-solid fa-file-signature"></i>Syarat &amp; Alur Daftar
             </button>
             <button type="button" class="ai-portal-quick-pill" onclick="sendAiPortalQuickPrompt(this)" data-prompt="Layanan terapi apa saja yang tersedia di Omah Terapi-KU (Fisioterapi, Terapi Okupasi, Terapi Wicara, Sensori Integrasi) dan apakah gratis?">
-                <i class="fa-solid fa-hand-holding-medical mr-2"></i> Layanan Terapi Gratis
-            </button>
-            <button type="button" class="ai-portal-quick-pill" onclick="sendAiPortalQuickPrompt(this)" data-prompt="Apa saja tanda-tanda tumbuh kembang anak yang memerlukan intervensi fisioterapi, terapi okupasi, atau terapi wicara sejak dini?">
-                <i class="fa-solid fa-child mr-2"></i> Tanda Anak Butuh Terapi
+                <i class="fa-solid fa-hand-holding-medical"></i>Layanan Terapi Gratis
             </button>
             <button type="button" class="ai-portal-quick-pill" onclick="sendAiPortalQuickPrompt(this)" data-prompt="Bagaimana alur dan cara melakukan booking jadwal sesi terapi online untuk anak saya yang sudah terverifikasi?">
-                <i class="fa-solid fa-calendar-check mr-2"></i> Cara Booking Sesi Terapi
+                <i class="fa-solid fa-calendar-check"></i>Booking Sesi Terapi
             </button>
             <button type="button" class="ai-portal-quick-pill" onclick="sendAiPortalQuickPrompt(this)" data-prompt="Bagaimana cara mengecek atau melacak status verifikasi pendaftaran pendaftaran pasien dan mendapatkan No. Rekam Medis?">
-                <i class="fa-solid fa-magnifying-glass-location mr-2"></i> Lacak Status Pendaftaran
-            </button>
-            <button type="button" class="ai-portal-quick-pill" onclick="sendAiPortalQuickPrompt(this)" data-prompt="Hal apa saja yang perlu disiapkan oleh orang tua sebelum mendampingi anak menjalani sesi terapi pertama kali di Omah Terapi-KU?">
-                <i class="fa-solid fa-house-medical mr-2"></i> Persiapan Terapi Pertama
+                <i class="fa-solid fa-magnifying-glass-location"></i>Lacak Pendaftaran
             </button>
         </div>
 

@@ -2443,6 +2443,33 @@
                         </div>
                     </div>
 
+                    <!-- BAGIAN: PERNYATAAN & KETENTUAN PENDAFTARAN -->
+                    <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
+                        <h5 class="font-w700 mb-0" style="color: #1e40af !important; font-size: 14.5px;">
+                            <i class="fa-solid fa-clipboard-check mr-2" style="color: #2563eb;"></i> Pernyataan &amp; Ketentuan Pendaftaran
+                        </h5>
+                    </div>
+
+                    <div class="mb-4" style="background: #f8fafc; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);">
+                        <div class="mb-3">
+                            <h6 style="font-size: 13.5px; font-weight: 700; color: #1e40af; margin-bottom: 6px;">Ketentuan Layanan &amp; Tanggung Jawab Data:</h6>
+                            <ul style="font-size: 12px; color: #475569; margin-bottom: 0; padding-left: 18px; line-height: 1.65;">
+                                <li>Seluruh data identitas, rekam kondisi fisik, dan berkas pendukung yang diisi adalah <strong>benar, sah, dan dapat dipertanggungjawabkan</strong>.</li>
+                                <li>Penerima manfaat atau orang tua/wali bersedia mematuhi tata tertib, jadwal sesi asesmen, dan alur pelayanan di <strong>Omah Terapi-KU Dinas Sosial Provinsi Jawa Timur</strong>.</li>
+                                <li>Pelayanan terapi diberikan secara <strong>gratis (bebas biaya)</strong> sesuai dengan hasil evaluasi dan rekomendasi asesmen klinis tim terapis.</li>
+                            </ul>
+                        </div>
+
+                        <div class="pt-3" style="border-top: 1px dashed #cbd5e1;">
+                            <label class="d-flex align-items-start mb-0" style="cursor: pointer; user-select: none; gap: 10px;">
+                                <input type="checkbox" name="setuju_ketentuan" id="setuju_ketentuan" value="1" required style="width: 18px; height: 18px; cursor: pointer; accent-color: #2563eb; margin-top: 2px; flex-shrink: 0;">
+                                <span class="font-w600 text-dark" style="font-size: 12.5px; line-height: 1.5;">
+                                    Saya telah membaca, memahami, dan <strong>menyetujui seluruh ketentuan layanan</strong> di atas serta menyatakan bahwa data yang diisi pada formulir ini adalah benar dan valid. <span class="text-danger">*</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- Submit Button -->
                     <div class="submit-action-wrapper mt-4 pt-3" style="border-top: 1px solid #edf2f7;">
                         <button type="submit" class="btn-submit btn-submit-daftar" id="btnSubmitDaftar">

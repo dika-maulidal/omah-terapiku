@@ -430,6 +430,33 @@
                             </div>
                         </div>
 
+                        <!-- BAGIAN 5: PERNYATAAN & KETENTUAN PENDAFTARAN -->
+                        <div class="d-flex align-items-center mb-3 mt-4 pb-2" style="border-bottom: 2px solid #edf2f7;">
+                            <h5 class="font-w700 mb-0" style="color: #1e40af !important; font-size: 15px;">
+                                <i class="fa-solid fa-clipboard-check mr-2" style="color: #2563eb;"></i> Pernyataan &amp; Ketentuan Pendaftaran
+                            </h5>
+                        </div>
+
+                        <div class="mb-4" style="background: #f8fafc; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);">
+                            <div class="mb-3">
+                                <h6 style="font-size: 13.5px; font-weight: 700; color: #1e40af; margin-bottom: 6px;">Ketentuan Layanan &amp; Validitas Berkas:</h6>
+                                <ul style="font-size: 12px; color: #475569; margin-bottom: 0; padding-left: 18px; line-height: 1.65;">
+                                    <li>Seluruh data identitas dan dokumen pendukung yang diinput telah diverifikasi <strong>benar, sah, dan sesuai dokumen asli</strong>.</li>
+                                    <li>Penerima manfaat didaftarkan untuk program layanan rehabilitasi terapi terpadu <strong>Omah Terapi-KU Dinas Sosial Provinsi Jawa Timur</strong>.</li>
+                                    <li>Pelayanan terapi diberikan secara <strong>gratis (bebas biaya)</strong> sesuai ketentuan UPT dan hasil asesmen klinis.</li>
+                                </ul>
+                            </div>
+
+                            <div class="pt-3" style="border-top: 1px dashed #cbd5e1;">
+                                <label class="d-flex align-items-start mb-0" style="cursor: pointer; user-select: none; gap: 10px;">
+                                    <input type="checkbox" name="setuju_ketentuan" id="pasien_setuju_ketentuan" value="1" required style="width: 18px; height: 18px; cursor: pointer; accent-color: #2563eb; margin-top: 2px; flex-shrink: 0;">
+                                    <span class="font-w600 text-dark" style="font-size: 12.5px; line-height: 1.5;">
+                                        Saya menyatakan data penerima manfaat yang diinput telah <strong>sesuai ketentuan dan valid</strong> untuk diproses ke tahap rekam medis &amp; asesmen terapi. <span class="text-danger">*</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
                         <!-- TOMBOL AKSI SIMPAN -->
                         <div class="d-flex align-items-center justify-content-between pt-3 mt-4" style="border-top: 1px solid #edf2f7;">
                             <a href="{{Route('penerima-manfaat')}}" class="btn btn-sm btn-light font-w600" style="padding: 8px 18px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569;">

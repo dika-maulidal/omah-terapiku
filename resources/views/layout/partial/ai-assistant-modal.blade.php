@@ -335,13 +335,14 @@
     box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 6px;
     text-align: left;
     line-height: 1.3;
 }
 
 .ai-quick-pill i {
-    margin-right: 6px;
+    margin: 0 !important;
+    font-size: 11.5px;
 }
 
 .ai-quick-pill:hover {
@@ -673,22 +674,19 @@
             </div>
         </div>
 
-        <!-- Suggestion Chips (Solid Royal Blue Pills) -->
+        <!-- Suggestion Chips (Solid Royal Blue Pills - 2 Rows) -->
         <div class="ai-quick-chips-wrap" id="aiQuickChipsWrap">
             <button type="button" class="ai-quick-pill" data-prompt="Berikan rekomendasi rencana intervensi fisioterapi untuk anak Cerebral Palsy spastik diplegia usia 4 tahun">
-                <i class="fa-solid fa-person-walking mr-2"></i> Fisioterapi CP Spastik
+                <i class="fa-solid fa-person-walking"></i>Fisioterapi CP Spastik
             </button>
             <button type="button" class="ai-quick-pill" data-prompt="Apa saja tahapan dan ide stimulasi untuk anak Speech Delay (terlambat bicara) usia 3 tahun di klinik dan di rumah?">
-                <i class="fa-solid fa-comments mr-2"></i> Stimulasi Speech Delay
+                <i class="fa-solid fa-comments"></i>Stimulasi Speech Delay
             </button>
             <button type="button" class="ai-quick-pill" data-prompt="Berikan 3 ide modul program latihan rumahan (Home Program) untuk melatih kemandirian makan & memegang sendok anak disabilitas">
-                <i class="fa-solid fa-house-chimney-medical mr-2"></i> Ide Home Program ADL
+                <i class="fa-solid fa-house-chimney-medical"></i>Ide Home Program ADL
             </button>
             <button type="button" class="ai-quick-pill" data-prompt="Bagaimana strategi sensori integrasi taktil & vestibular untuk anak ASD yang hiper-reaktif terhadap sentuhan?">
-                <i class="fa-solid fa-brain mr-2"></i> Sensori Integrasi ASD
-            </button>
-            <button type="button" class="ai-quick-pill" data-prompt="Bagaimana cara menentukan diagnosa fungsional dan target SOAP terapi okupasi untuk anak GDD?">
-                <i class="fa-solid fa-file-medical mr-2"></i> Diagnosa Fungsional SOAP
+                <i class="fa-solid fa-brain"></i>Sensori Integrasi ASD
             </button>
         </div>
 
