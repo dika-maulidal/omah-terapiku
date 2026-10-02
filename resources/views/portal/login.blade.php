@@ -1924,7 +1924,7 @@
                         Cek Rekam Medis Pasien Terdaftar
                     </h2>
                     <p style="font-size: 13px; color: #64748b; margin: 0; line-height: 1.5;">
-                        Masukkan Nomor Rekam Medis (No. RM) dan Tanggal Lahir pasien untuk mengakses data rekam medis.
+                        Masukkan Nomor Rekam Medis (No. RM) atau NIK dan Tanggal Lahir pasien untuk mengakses data rekam medis.
                     </p>
                 </div>
 
@@ -1933,18 +1933,18 @@
                         {{ csrf_field() }}
 
                         <div class="form-grid-rm" style="gap: 22px;">
-                            <!-- No. RM -->
+                            <!-- No. RM / NIK -->
                             <div class="form-group" style="margin-bottom: 0;">
                                 <label for="inputNoRm" class="form-label" style="font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">
                                     <i class="fa-solid fa-id-card text-primary mr-1"></i>
-                                    <span>No. Rekam Medis</span>
+                                    <span>No. Rekam Medis / NIK Pasien</span>
                                 </label>
                                 <input 
                                     type="text" 
                                     id="inputNoRm" 
                                     name="no_rm" 
                                     class="form-input" 
-                                    placeholder="Contoh: OTK-24-00001" 
+                                    placeholder="Contoh: OTK-26-00001 atau 3515XXXXXXXXXXXX" 
                                     value="{{ old('no_rm') }}" 
                                     required 
                                     autofocus

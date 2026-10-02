@@ -129,7 +129,7 @@
                                     @endif
                                     <a href="{{ Route('rekam.detail', $pRecord->pasien_id) }}" class="btn btn-xs font-w600" style="font-size: 11px; padding: 4px 10px; border-radius: 6px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;">
                                         <i class="fa-solid fa-folder-open mr-1"></i> Detail Sesi
-                                    </a>
+                                    </a>TOL
                                 </div>
                             </div>
                         @endforeach

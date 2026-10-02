@@ -97,12 +97,17 @@
 
                     <!-- Textarea Catatan Tindakan / Plan -->
                     <div class="form-group mb-3">
-                        <label class="font-w700 mb-1" style="font-size: 13px; color: #1e293b;">
-                            <i class="fa-solid fa-hand-holding-medical mr-1.5" style="color: #2563eb;"></i> Rincian Intervensi / Rencana Tindakan Terapi <span class="text-danger">*</span>
-                        </label>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="font-w700 mb-0" style="font-size: 13px; color: #1e293b;">
+                                <i class="fa-solid fa-hand-holding-medical mr-1.5" style="color: #2563eb;"></i> Rincian Intervensi / Rencana Tindakan Terapi <span class="text-danger">*</span>
+                            </label>
+                            <button type="button" id="btnAiSuggestTindakan" class="btn btn-xs btn-ai-suggest-tindakan font-w700" title="Otomatis rumuskan rekomendasi rencana tindakan klinis di klinik berbasis asesmen & diagnosa">
+                                <i class="fa-solid fa-wand-magic-sparkles mr-1 text-primary"></i> Saran Tindakan AI
+                            </button>
+                        </div>
                         <textarea name="tindakan" id="modalTindakanTextarea" required class="form-control" rows="4" 
-                                  placeholder="Klik opsi tindakan di atas atau tuliskan detail intervensi, modalitas, manipulasi, latihan fungsional..." 
-                                  style="font-size: 13.5px; line-height: 1.6; border-radius: 10px; border: 1.5px solid #cbd5e1; padding: 12px 14px;"></textarea>
+                                  placeholder="Klik opsi tindakan di atas, ketik rincian intervensi, atau klik 'Saran Tindakan AI' untuk perumusan otomatis..." 
+                                  style="font-size: 13.5px; line-height: 1.6; border-radius: 10px; border: 1.5px solid #cbd5e1; padding: 12px 14px; transition: all 0.3s ease;"></textarea>
                         @error('tindakan')
                             <div class="invalid-feedback animated fadeInUp" style="display: block;">{{$message}}</div>
                         @enderror
@@ -110,15 +115,17 @@
 
                     <!-- Textarea Program Latihan Rumahan & Edukasi Keluarga (Home Program) -->
                     <div class="form-group mb-3">
-                        <label class="font-w700 mb-1 d-flex justify-content-between align-items-center" style="font-size: 13px; color: #1e293b;">
-                            <span>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="font-w700 mb-0" style="font-size: 13px; color: #1e293b;">
                                 <i class="fa-solid fa-house-user text-success mr-1.5"></i> Program Latihan Rumahan & Edukasi Keluarga (Home Program)
-                            </span>
-                            <span class="badge font-w600" style="font-size: 11px; background: #ecfdf5; color: #166534; border: 1px solid #bbf7d0; padding: 3px 8px; border-radius: 6px;">Latihan Mandiri / Keluarga</span>
-                        </label>
+                            </label>
+                            <button type="button" id="btnAiSuggestHome" class="btn btn-xs btn-ai-suggest-home font-w700" title="Otomatis rumuskan rekomendasi panduan latihan mandiri di rumah untuk orang tua / wali">
+                                <i class="fa-solid fa-wand-magic-sparkles mr-1 text-success"></i> Saran Home Program AI
+                            </button>
+                        </div>
                         <textarea name="latihan_rumahan" id="modalLatihanRumahanTextarea" class="form-control" rows="3" 
-                                  placeholder="Tuliskan instruksi latihan mandiri di rumah untuk keluarga/wali, seperti: posisi berbaring/duduk yang benar, latihan peregangan 2x sehari (10 repetisi), stimulasi bicara interaktif, aktivitas motorik harian..." 
-                                  style="font-size: 13.5px; line-height: 1.6; border-radius: 10px; border: 1.5px solid #bbf7d0; background: #fafffc; padding: 12px 14px;"></textarea>
+                                  placeholder="Tuliskan instruksi latihan mandiri di rumah untuk keluarga/wali, atau klik 'Saran Home Program AI' untuk perumusan otomatis..." 
+                                  style="font-size: 13.5px; line-height: 1.6; border-radius: 10px; border: 1.5px solid #bbf7d0; background: #fafffc; padding: 12px 14px; transition: all 0.3s ease;"></textarea>
                         <small class="text-muted d-block mt-1" style="font-size: 11.5px;">
                             <i class="fa-solid fa-circle-info text-info mr-1"></i> Panduan tugas dan latihan yang dapat dipraktikkan orang tua / wali penerima manfaat di rumah untuk percepatan hasil terapi.
                         </small>
@@ -170,6 +177,92 @@
     .tdk-chip-item:hover i {
         color: #1d4ed8 !important;
     }
+
+    /* Button AI Saran Tindakan (Royal Blue) */
+    .btn-ai-suggest-tindakan {
+        background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
+        color: #1e40af;
+        border: 1.5px solid #bfdbfe;
+        border-radius: 8px;
+        padding: 4px 12px;
+        font-size: 11.5px;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
+        transition: all 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+    .btn-ai-suggest-tindakan:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: #ffffff !important;
+        border-color: #1d4ed8;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+        transform: translateY(-1px);
+    }
+    .btn-ai-suggest-tindakan:hover i {
+        color: #ffffff !important;
+    }
+
+    /* Button AI Saran Home Program (Emerald Green) */
+    .btn-ai-suggest-home {
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        color: #065f46;
+        border: 1.5px solid #a7f3d0;
+        border-radius: 8px;
+        padding: 4px 12px;
+        font-size: 11.5px;
+        box-shadow: 0 2px 6px rgba(16, 185, 129, 0.1);
+        transition: all 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+    .btn-ai-suggest-home:hover {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #ffffff !important;
+        border-color: #059669;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.28);
+        transform: translateY(-1px);
+    }
+    .btn-ai-suggest-home:hover i {
+        color: #ffffff !important;
+    }
+
+    /* Highlight Animasi Biru (Tindakan) */
+    .ai-pulse-blue {
+        animation: aiGlowPulseBlue 1.4s ease-out;
+    }
+    @keyframes aiGlowPulseBlue {
+        0% {
+            background-color: #e0f2fe;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
+        }
+        100% {
+            background-color: #ffffff;
+            border-color: #cbd5e1;
+            box-shadow: none;
+        }
+    }
+
+    /* Highlight Animasi Hijau (Home Program) */
+    .ai-pulse-green {
+        animation: aiGlowPulseGreen 1.4s ease-out;
+    }
+    @keyframes aiGlowPulseGreen {
+        0% {
+            background-color: #d1fae5;
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+        }
+        100% {
+            background-color: #fafffc;
+            border-color: #bbf7d0;
+            box-shadow: none;
+        }
+    }
 </style>
 
 <script>
@@ -189,6 +282,130 @@
                         chip.style.display = "inline-flex";
                     } else {
                         chip.style.display = "none";
+                    }
+                });
+            });
+        }
+
+        // Handler 1: Saran Tindakan AI (Hanya mengisi kolom Tindakan / Plan di Klinik)
+        var btnAiSuggestTdk = document.getElementById("btnAiSuggestTindakan");
+        if (btnAiSuggestTdk) {
+            btnAiSuggestTdk.addEventListener("click", function() {
+                var rekamId = document.getElementById("modalTindakanRekamId")?.value || '0';
+                var pasienId = document.getElementById("modalTindakanPasienId")?.value || '';
+
+                var btn = $(this);
+                var originalHtml = btn.html();
+                btn.prop("disabled", true).html('<i class="fa-solid fa-spinner fa-spin mr-1"></i> Merumuskan Tindakan...');
+
+                $.ajax({
+                    url: "{{ route('ai.suggest.plan') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        rekam_id: rekamId,
+                        pasien_id: pasienId,
+                        type: 'tindakan'
+                    },
+                    success: function(res) {
+                        btn.prop("disabled", false).html(originalHtml);
+
+                        if (res.success && res.tindakan) {
+                            var tindakanTextarea = $("#modalTindakanTextarea");
+                            var currentTdk = tindakanTextarea.val().trim();
+
+                            if (!currentTdk || currentTdk === 'Belum ada catatan tindakan / rencana intervensi.') {
+                                tindakanTextarea.val(res.tindakan);
+                            } else {
+                                tindakanTextarea.val(currentTdk + "\n\n" + res.tindakan);
+                            }
+
+                            // Efek animasi highlight biru
+                            tindakanTextarea.addClass("ai-pulse-blue");
+                            setTimeout(function() {
+                                tindakanTextarea.removeClass("ai-pulse-blue");
+                            }, 1500);
+
+                            if (typeof toastr !== "undefined") {
+                                toastr.success("Saran tindakan klinis berhasil diisi otomatis sesuai hasil asesmen & diagnosa.", "Saran Tindakan AI", { timeOut: 3500 });
+                            }
+                        } else {
+                            if (typeof toastr !== "undefined") {
+                                toastr.warning(res.message || "Tidak dapat merumuskan saran tindakan saat ini.", "Peringatan");
+                            }
+                        }
+                    },
+                    error: function(xhr) {
+                        btn.prop("disabled", false).html(originalHtml);
+                        var errMsg = "Gagal memuat saran tindakan AI.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errMsg = xhr.responseJSON.message;
+                        }
+                        if (typeof toastr !== "undefined") {
+                            toastr.error(errMsg, "AI Error");
+                        }
+                    }
+                });
+            });
+        }
+
+        // Handler 2: Saran Home Program AI (Hanya mengisi kolom Home Program / Latihan Mandiri)
+        var btnAiSuggestHome = document.getElementById("btnAiSuggestHome");
+        if (btnAiSuggestHome) {
+            btnAiSuggestHome.addEventListener("click", function() {
+                var rekamId = document.getElementById("modalTindakanRekamId")?.value || '0';
+                var pasienId = document.getElementById("modalTindakanPasienId")?.value || '';
+
+                var btn = $(this);
+                var originalHtml = btn.html();
+                btn.prop("disabled", true).html('<i class="fa-solid fa-spinner fa-spin mr-1"></i> Merumuskan Home Program...');
+
+                $.ajax({
+                    url: "{{ route('ai.suggest.plan') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        rekam_id: rekamId,
+                        pasien_id: pasienId,
+                        type: 'home_program'
+                    },
+                    success: function(res) {
+                        btn.prop("disabled", false).html(originalHtml);
+
+                        if (res.success && res.latihan_rumahan) {
+                            var homeTextarea = $("#modalLatihanRumahanTextarea");
+                            var currentHome = homeTextarea.val().trim();
+
+                            if (!currentHome) {
+                                homeTextarea.val(res.latihan_rumahan);
+                            } else {
+                                homeTextarea.val(currentHome + "\n\n" + res.latihan_rumahan);
+                            }
+
+                            // Efek animasi highlight hijau
+                            homeTextarea.addClass("ai-pulse-green");
+                            setTimeout(function() {
+                                homeTextarea.removeClass("ai-pulse-green");
+                            }, 1500);
+
+                            if (typeof toastr !== "undefined") {
+                                toastr.success("Saran program latihan rumahan berhasil diisi otomatis sesuai kondisi pasien.", "Saran Home Program AI", { timeOut: 3500 });
+                            }
+                        } else {
+                            if (typeof toastr !== "undefined") {
+                                toastr.warning(res.message || "Tidak dapat merumuskan saran home program saat ini.", "Peringatan");
+                            }
+                        }
+                    },
+                    error: function(xhr) {
+                        btn.prop("disabled", false).html(originalHtml);
+                        var errMsg = "Gagal memuat saran home program AI.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errMsg = xhr.responseJSON.message;
+                        }
+                        if (typeof toastr !== "undefined") {
+                            toastr.error(errMsg, "AI Error");
+                        }
                     }
                 });
             });

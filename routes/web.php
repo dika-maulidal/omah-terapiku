@@ -115,6 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/rekam/{id}/soap/print', [RekamController::class, 'printSoap'])->name('rekam.soap.print');
     Route::get('/rekam/{id}/home-program/print', [RekamController::class, 'printHomeProgram'])->name('rekam.home-program.print');
     Route::get('/rekam/status/{id}/{status}/update', [RekamController::class, 'rekam_status'])->name('rekam.status');
+    Route::post('/rekam/ai-suggest-plan', [AiAssistantController::class, 'suggestPlan'])->name('ai.suggest.plan');
 
     Route::get('/penerima-manfaat', [PasienController::class, 'index'])->name('penerima-manfaat');
     Route::get('/penerima-manfaat/export-csv', [PasienController::class, 'exportCsv'])->name('penerima-manfaat.export-csv');

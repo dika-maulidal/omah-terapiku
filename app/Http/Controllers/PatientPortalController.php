@@ -46,7 +46,7 @@ class PatientPortalController extends Controller
     }
 
     /**
-     * Proses Verifikasi No. RM & Tanggal Lahir
+     * Proses Verifikasi No. RM / NIK & Tanggal Lahir
      */
     public function login(Request $request)
     {
@@ -54,11 +54,11 @@ class PatientPortalController extends Controller
             'no_rm' => 'required|string',
             'tgl_lahir' => 'required',
         ], [
-            'no_rm.required' => 'Nomor Rekam Medis wajib diisi.',
+            'no_rm.required' => 'Nomor Rekam Medis atau NIK wajib diisi.',
             'tgl_lahir.required' => 'Tanggal Lahir wajib diisi.',
         ]);
 
-        $noRm = trim($request->input('no_rm'));
+        $identifier = trim($request->input('no_rm'));
         $rawTglLahir = trim($request->input('tgl_lahir'));
 
         try {
@@ -69,9 +69,10 @@ class PatientPortalController extends Controller
                 ->with('gagal', 'Format tanggal lahir tidak valid.');
         }
 
-        $pasien = Pasien::where(function ($query) use ($noRm) {
-                $query->where('no_rm', $noRm)
-                      ->orWhereRaw('LOWER(no_rm) = ?', [strtolower($noRm)]);
+        $pasien = Pasien::where(function ($query) use ($identifier) {
+                $query->where('no_rm', $identifier)
+                      ->orWhereRaw('LOWER(no_rm) = ?', [strtolower($identifier)])
+                      ->orWhere('nik', $identifier);
             })
             ->whereDate('tgl_lahir', $formattedTgl)
             ->first();
@@ -79,7 +80,7 @@ class PatientPortalController extends Controller
         if (!$pasien) {
             return redirect()->back()
                 ->withInput()
-                ->with('gagal', 'Nomor Rekam Medis atau Tanggal Lahir tidak cocok. Mohon periksa kembali kartu berobat Anda.');
+                ->with('gagal', 'Nomor Rekam Medis / NIK atau Tanggal Lahir tidak cocok. Mohon periksa kembali kartu berobat atau NIK Anda.');
         }
 
         session([
